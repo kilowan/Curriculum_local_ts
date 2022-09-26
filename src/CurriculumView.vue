@@ -1,109 +1,77 @@
 <template>
-	<div id="page-wrap">
-		<b-link v-if="!iconsHidden" @click="iconsHidden = true">
-			<b-icon icon="eye-slash-fill"/>
-		</b-link>
-		<div id="contact-info" class="vcard">
-			<h1 class="fn">{{ ddata.fullName }}</h1>
-			<div v-if="ddata.phoneNumber">
-				<b-icon icon="telephone-fill" aria-hidden="true"/> <span>{{ ddata.phoneNumber.number }}</span><br />
+	<div>
+		<div v-if="active" id="page-wrap">
+			<div id="contact-info" class="vcard">
+				<h1 class="fn">
+					<label>Nombre completo:</label> 
+					<input type="text" v-model="ddata.fullName" />
+				</h1>
+				<div>
+					<b-icon icon="telephone-fill" aria-hidden="true"/> 
+					<input type="text" v-model="ddata.phoneNumber.number" /><br />
+				</div>
+				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="ddata.email.fullEmail" /> 
 			</div>
-			<div v-if="ddata.email">
-				<b-icon icon="envelope" aria-hidden="true"/> <a :href="'mailto:'+ ddata.email.fullEmail">{{ ddata.email.name }}</a><br />
+			<div id="objective">
+				<textarea v-model="ddata.description" />
 			</div>
+			<div class="clear">{{EditMode('')}}</div>	
+			<dl>
+			</dl>
+			<dd class="clear"></dd>
 		</div>
-		<social-media-list-view 
-			:token="token" 
-			:socialMedia="ddata.socialMedia"
-			:iconsHidden="iconsHidden"
-		/>				
-		<div id="objective">
-			<p>{{ ddata.description }}</p>
-		</div>		
-		<div class="clear">{{EditMode('')}}</div>	
-		<dl>
-			<professional-experience-list-view 
-				v-if="ddata.experience.length > 0"
-				:token="token"
-				:experience="ddata.experience"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@contract="EditMode"
-				@refresh="getCurriculum(curriculumId)"
-			/>
-			<academic-training-list-view 
-				v-if="ddata.academicTraining.length > 0" 
-				:token="token" 
-				:academicTraining="ddata.academicTraining"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@sizeChange="EditMode"
-				@refresh="getCurriculum(curriculumId)" 
-			/>
-			<skill-list-view 
-				v-if="ddata.otherTraining.length > 0" 
-				:token="token"  
-				:otherTraining="ddata.otherTraining"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@sizeChange="EditMode"
-				@contract="EditMode" 
-				@refresh="getCurriculum(curriculumId)" 
-			/>
-			<language-list-view 
-				v-if="ddata.languageList.length > 0" 
-				:token="token" 
-				:languageList="ddata.languageList"
-				:userId="ddata.userId"
-				:curriculumId="curriculumId"
-				:iconsHidden="iconsHidden"
-				@sizeChange="EditMode"
-				@refresh="getCurriculum(curriculumId)"
-			/>			
-			<other-list-view
-				v-if="ddata.otherData"  
-				:token="token"
-				:curriculumId="curriculumId"
-				:other="ddata.otherData"
-				:iconsHidden="iconsHidden"
-				@sizeChange="EditMode"
-				@refresh="getCurriculum(curriculumId)"
-			/>
-		</dl>
-		<dd class="clear"></dd>
+		<div  v-else id="page-wrap">
+			<div id="contact-info" class="vcard">
+				<h1 class="fn">{{ ddata.fullName }}</h1>
+				<div>
+					<b-icon icon="telephone-fill" aria-hidden="true"/> <span>{{ ddata.phoneNumber.number }}</span><br />
+				</div>
+				<div>
+					<b-icon icon="envelope" aria-hidden="true"/> <a :href="'mailto:'+ ddata.email.fullEmail">{{ ddata.email.fullEmail }}</a><br />
+				</div>
+			</div>
+			<div id="objective">
+				<p>{{ ddata.description }}</p>
+			</div>
+			<div class="clear">{{EditMode('')}}</div>	
+			<dl>
+			</dl>
+			<dd class="clear"></dd>
+		</div>
+		<div>
+			<b-button v-if="active" @click="active=false">Guardar</b-button>
+			<b-button v-else @click="active=true">Desacer</b-button>
+		</div>
 	</div>
 </template>
 
 
 <script lang="ts">
-import  AcademicTrainingListView from './AcademicTrainingListView.vue';
-import  OtherListView from './OtherListView.vue';
-import ProfessionalExperienceListView from './ProfessionalExperienceListView.vue';
-import SkillListView from './SkillListView.vue';
-import LanguageListView from './LanguageListView.vue';
-import SocialMediaListView from './SocialMediaListView.vue';
-import axios from 'axios';
 import { SocialMediaType } from './Config/types';
 
 export default {
   name: 'CurriculumView',
   components: {
-	AcademicTrainingListView,
-	OtherListView,
-	ProfessionalExperienceListView,
-	SkillListView,
-	LanguageListView,
-	SocialMediaListView
   },
   data() {
 		return {
+			active:true,
 			edit: false,
 			page: 'select',
 			selected: undefined,
 			name: '',
 			add: false,
 			message: '',
-			ddata: {},
+			ddata: {
+				email: {
+					fullEmail:''
+				},
+				phoneNumber:{
+					number:''
+				},
+				fullName:'',
+				description:''
+			},
 			token: '',
 			curriculumId: '',
 			SocialMediaType: SocialMediaType,
@@ -146,7 +114,7 @@ export default {
 		let other: HTMLElement|null = document.querySelector('#other');
 		if(otros && other) otros.style.height = other.clientHeight + 'px';
 	},
-	async getCurriculum(id: any) {
+	/*async getCurriculum(id: any) {
 		await axios({
 			method: 'get',
 			headers: { Authorization: `Bearer ${this.token}` },
@@ -155,7 +123,7 @@ export default {
 		.then((data: any) => {
 			this.ddata = data.data;
 		});
-	}
+	}*/
 	/*save: function() {
 		const data = JSON.stringify(this.inputData)
 		const blob = new Blob([data], {type: 'text/plain'})
@@ -169,11 +137,11 @@ export default {
 	},*/
   },
   async mounted() {
-	  	if(this.$route.params.token) {
-			this.curriculumId = this.$route.params.curriculumId;
-			this.token = this.$route.params.token;
-			this.ddata = this.getCurriculum(this.$route.params.curriculumId);
-		}
+	  	//if(this.$route.params.token) {
+			//this.curriculumId = this.$route.params.curriculumId;
+			//this.token = this.$route.params.token;
+			//this.ddata = this.getCurriculum(this.$route.params.curriculumId);
+		//}
   	}
 }
 </script>

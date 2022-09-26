@@ -1,19 +1,19 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Login from "../Login.vue";
-import PasswordRecovery from "../PasswordRecovery.vue";
+//import Login from "../Login.vue";
+//import PasswordRecovery from "../PasswordRecovery.vue";
 import CurriculumView from '../CurriculumView.vue';
-import CurriculumList from '../CurriculumList.vue';
-
+//import CurriculumList from '../CurriculumList.vue';
+/* eslint-disable */
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Login",
-    component: Login,
+    name: "CurriculumView",
+    component: CurriculumView,
   },
-  {
+  /*{
     path: "/PasswordRecovery",
     name: "PasswordRecovery",
     component: PasswordRecovery,
@@ -27,7 +27,7 @@ const routes: Array<RouteConfig> = [
     path: "/CurriculumView",
     name: "CurriculumView",
     component: CurriculumView,
-  },
+  },*/
   /*{
     path: "/about",
     name: "About",
