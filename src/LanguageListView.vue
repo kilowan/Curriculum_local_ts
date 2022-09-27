@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!hide">
-		<dt id="idiomas" class="idiomas" v-if="languageList.length > 0">Idiomas
+		<dt id="idiomas" class="idiomas">Idiomas
 			<b-link v-if="!iconsHidden" @click="hide = true, $emit('hide')">
 				<b-icon icon="eye-slash-fill"/>
 			</b-link>
@@ -113,19 +113,20 @@ export default {
 		},
 		async save() {
 			if (this.language.name !== '') {
-				await axios({
-				method: 'post',
-				headers: { Authorization: `Bearer ${this.token}` },
-				url: `http://localhost:8080/api/Language`,
-				data: {
-					name: this.language.name,
-					userId: this.userId,
-					level: this.language.level !== ''? this.language.level: null,
-				}
-				}).then((data: any) =>{
-					this.cancel();
-					this.$emit('refresh');
-				});
+        this.$emit('refresh', this.language);
+				//await axios({
+				//method: 'post',
+				//headers: { Authorization: `Bearer ${this.token}` },
+				//url: `http://localhost:8080/api/Language`,
+				//data: {
+					//name: this.language.name,
+					//userId: this.userId,
+					//level: this.language.level !== ''? this.language.level: null,
+				//}
+				//}).then((data: any) =>{
+					//this.cancel();
+					//this.$emit('refresh', );
+				//});
 			}
 		}
   },

@@ -12,6 +12,11 @@
 				</div>
 				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="ddata.email.fullEmail" /> 
 			</div>
+				<social-media-list-view 
+				:token="token" 
+				:socialMedia="ddata.socialMedia"
+				:iconsHidden="iconsHidden"
+			/>	
 			<div id="objective">
 				<textarea v-model="ddata.description" />
 			</div>
@@ -19,6 +24,47 @@
 			<dl>
 			</dl>
 			<dd class="clear"></dd>
+			<dl>
+			<professional-experience-list-view 
+				:token="token"
+				:experience="ddata.experience"
+				:iconsHidden="iconsHidden"
+				:curriculumId="curriculumId"
+				@contract="EditMode"
+			/>
+			<academic-training-list-view 
+				:token="token" 
+				:academicTraining="ddata.academicTraining"
+				:iconsHidden="iconsHidden"
+				:curriculumId="curriculumId"
+				@sizeChange="EditMode" 
+			/>
+			<skill-list-view 
+				:token="token"  
+				:otherTraining="ddata.otherTraining"
+				:iconsHidden="iconsHidden"
+				:curriculumId="curriculumId"
+				@sizeChange="EditMode"
+				@contract="EditMode" 
+			/>
+			<language-list-view 
+				:token="token" 
+				:languageList="ddata.languageList"
+				:userId="ddata.userId"
+				:curriculumId="curriculumId"
+				:iconsHidden="iconsHidden"
+				@sizeChange="EditMode"
+			/>			
+			<other-list-view
+				:token="token"
+				:curriculumId="curriculumId"
+				:other="ddata.otherData"
+				:iconsHidden="iconsHidden"
+				@sizeChange="EditMode"
+			/>
+		</dl>
+		<dd class="clear"></dd>
+			<b-button @click="active=false">Guardar</b-button>
 		</div>
 		<div  v-else id="page-wrap">
 			<div id="contact-info" class="vcard">
@@ -37,10 +83,47 @@
 			<dl>
 			</dl>
 			<dd class="clear"></dd>
-		</div>
-		<div>
-			<b-button v-if="active" @click="active=false">Guardar</b-button>
-			<b-button v-else @click="active=true">Desacer</b-button>
+			<dl>
+			<professional-experience-list-view 
+				:token="token"
+				:experience="ddata.experience"
+				:iconsHidden="iconsHidden"
+				:curriculumId="curriculumId"
+				@contract="EditMode"
+			/>
+			<academic-training-list-view 
+				:token="token" 
+				:academicTraining="ddata.academicTraining"
+				:iconsHidden="iconsHidden"
+				:curriculumId="curriculumId"
+				@sizeChange="EditMode" 
+			/>
+			<skill-list-view 
+				:token="token"  
+				:otherTraining="ddata.otherTraining"
+				:iconsHidden="iconsHidden"
+				:curriculumId="curriculumId"
+				@sizeChange="EditMode"
+				@contract="EditMode" 
+			/>
+			<language-list-view 
+				:token="token" 
+				:languageList="ddata.languageList"
+				:userId="ddata.userId"
+				:curriculumId="curriculumId"
+				:iconsHidden="iconsHidden"
+				@sizeChange="EditMode"
+				@refresh="addLanguage($event)"
+			/>			
+			<other-list-view
+				:token="token"
+				:curriculumId="curriculumId"
+				:other="ddata.otherData"
+				:iconsHidden="iconsHidden"
+				@sizeChange="EditMode"
+			/>
+		</dl>
+			<b-button @click="active=true">Desacer</b-button>
 		</div>
 	</div>
 </template>
@@ -48,10 +131,22 @@
 
 <script lang="ts">
 import { SocialMediaType } from './Config/types';
+import  AcademicTrainingListView from './AcademicTrainingListView.vue';
+import  OtherListView from './OtherListView.vue';
+import ProfessionalExperienceListView from './ProfessionalExperienceListView.vue';
+import SkillListView from './SkillListView.vue';
+import LanguageListView from './LanguageListView.vue';
+import SocialMediaListView from './SocialMediaListView.vue';
 
 export default {
   name: 'CurriculumView',
   components: {
+	AcademicTrainingListView,
+	OtherListView,
+	ProfessionalExperienceListView,
+	SkillListView,
+	LanguageListView,
+	SocialMediaListView
   },
   data() {
 		return {
@@ -63,6 +158,9 @@ export default {
 			add: false,
 			message: '',
 			ddata: {
+				experience:[],
+				otherTraining:[],
+				languageList:[],
 				email: {
 					fullEmail:''
 				},
@@ -70,7 +168,8 @@ export default {
 					number:''
 				},
 				fullName:'',
-				description:''
+				description:'',
+				academicTraining:[]
 			},
 			token: '',
 			curriculumId: '',
@@ -88,6 +187,11 @@ export default {
 			this.other();
 			return data;
         });
+	},
+	addLanguage: function(data: any){
+		this.$nextTick(() => {
+			this.ddata.languageList.add(data);
+		});
 	},
 	exp: function () {
 		let experiencia: HTMLElement|null = document.querySelector('#experiencia');
@@ -113,17 +217,7 @@ export default {
 		let otros: HTMLElement|null = document.querySelector('#otros');
 		let other: HTMLElement|null = document.querySelector('#other');
 		if(otros && other) otros.style.height = other.clientHeight + 'px';
-	},
-	/*async getCurriculum(id: any) {
-		await axios({
-			method: 'get',
-			headers: { Authorization: `Bearer ${this.token}` },
-			url: `http://localhost:8080/api/Curriculum/${id}`,
-		})
-		.then((data: any) => {
-			this.ddata = data.data;
-		});
-	}*/
+	}
 	/*save: function() {
 		const data = JSON.stringify(this.inputData)
 		const blob = new Blob([data], {type: 'text/plain'})
