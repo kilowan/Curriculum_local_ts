@@ -3,14 +3,13 @@
 		<div v-if="active" id="page-wrap">
 			<div id="contact-info" class="vcard">
 				<h1 class="fn">
-					<label>Nombre completo:</label> 
-					<input type="text" v-model="ddata.fullName" />
+					<input type="text" v-model="ddata.fullName" placeholder="Nombre completo" />
 				</h1>
 				<div>
 					<b-icon icon="telephone-fill" aria-hidden="true"/> 
-					<input type="text" v-model="ddata.phoneNumber.number" /><br />
+					<input type="text" v-model="ddata.phoneNumber.number" placeholder="Teléfono"/><br />
 				</div>
-				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="ddata.email.fullEmail" /> 
+				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="ddata.email.fullEmail" placeholder="Email"/> 
 			</div>
 				<social-media-list-view 
 				:token="token" 
@@ -18,7 +17,7 @@
 				:iconsHidden="iconsHidden"
 			/>	
 			<div id="objective">
-				<textarea v-model="ddata.description" />
+				<textarea v-model="ddata.description" placeholder="Descripción"/>
 			</div>
 			<div class="clear">{{EditMode('')}}</div>	
 			<dl>
@@ -197,7 +196,7 @@ export default {
 	addLanguage: function(data: any){
 		this.$nextTick(() => {
 			this.ddata.languageList.push(data);
-			
+
 		});
 	},
 	exp: function () {

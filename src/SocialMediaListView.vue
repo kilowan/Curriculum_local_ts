@@ -7,6 +7,20 @@
           :iconsHidden="iconsHidden"
         />
 			</div>
+			<b-link @click="$bvModal.show('add-social-media')">
+				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Red social
+			</b-link>
+      <b-modal
+			:id="'add-social-media'"
+			title="Añadir Red Social"
+			ok-title="Guardar"
+			@ok="save"
+      @ok-prevent="socialmedia.name == ''"
+			@cancel="cancel"
+		>
+      <label>Tipo</label> <input type="text" v-model="socialmedia.type" /> <br />
+      <label>Data</label> <input type="text" v-model="socialmedia.name" /> <br />
+		</b-modal>
 	</div>
 </template>
 
@@ -33,7 +47,12 @@ export default {
     },
   },
   data() {
-		return {}
+		return {
+      socialmedia: {
+        name:'',
+        type:[]
+      }
+    }
 	},
 }
 </script>
