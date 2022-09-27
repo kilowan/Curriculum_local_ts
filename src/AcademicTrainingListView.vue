@@ -56,7 +56,7 @@ export default {
       required: true
     },
     curriculumId: {
-      type: Number,
+      type: String,
       required: true
     },
     token: {

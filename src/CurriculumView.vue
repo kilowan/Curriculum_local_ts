@@ -93,6 +93,7 @@
 			/>
 			<academic-training-list-view 
 				:token="token" 
+				:userId="ddata.userId"
 				:academicTraining="ddata.academicTraining"
 				:iconsHidden="iconsHidden"
 				:curriculumId="curriculumId"
@@ -169,7 +170,11 @@ export default {
 				},
 				fullName:'',
 				description:'',
-				academicTraining:[]
+				academicTraining:[],
+				otherData:[],
+				socialMedia:[],
+				userId: 0,
+				token:''
 			},
 			token: '',
 			curriculumId: '',

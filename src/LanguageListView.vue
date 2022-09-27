@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import LanguageView from './LanguageView.vue';
-import axios from 'axios';
+//import axios from 'axios';
 
 export default {
   name: 'AcademicTrainingView',
@@ -53,7 +53,7 @@ export default {
       required: true
     },
     curriculumId: {
-      type: Number,
+      type: String,
       required: true
     },
     userId: {
@@ -89,7 +89,7 @@ export default {
       this.$emit('refresh');
     },
     async getLanguages() {
-      await axios({
+      /*await axios({
         method: 'get',
         headers: { Authorization: `Bearer ${this.token}` },
         url: `http://localhost:8080/api/Language/${this.curriculumId}`
@@ -97,7 +97,7 @@ export default {
         this.langList = data.data.map((lang: any) => {
           return { value: lang.id, text: lang.name };
         });
-      });
+      });*/
     },
     hiden() {
       this.counter--;
