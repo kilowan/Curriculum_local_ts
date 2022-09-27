@@ -111,9 +111,14 @@ export default {
       this.language.name = '';
       this.language.level = '';
 		},
-		async save() {
+		save() {
 			if (this.language.name !== '') {
-        this.$emit('refresh', this.language);
+        var lang = {
+          level: this.language.level,
+          name: this.language.name
+        };
+        this.language = {};
+        this.$emit('refresh', lang);
 				//await axios({
 				//method: 'post',
 				//headers: { Authorization: `Bearer ${this.token}` },

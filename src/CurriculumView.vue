@@ -54,6 +54,7 @@
 				:curriculumId="curriculumId"
 				:iconsHidden="iconsHidden"
 				@sizeChange="EditMode"
+				@refresh="addLanguage($event)"
 			/>			
 			<other-list-view
 				:token="token"
@@ -195,7 +196,8 @@ export default {
 	},
 	addLanguage: function(data: any){
 		this.$nextTick(() => {
-			this.ddata.languageList.add(data);
+			this.ddata.languageList.push(data);
+			
 		});
 	},
 	exp: function () {
