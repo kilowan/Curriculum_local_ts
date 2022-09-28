@@ -7,7 +7,7 @@
           @update="edit($event)"
         />
 			</div>
-			<b-link v-if="!(linkedin && infojobs && github)" @click="$bvModal.show('add-social-media')">
+			<b-link :disabled="disabled" @click="$bvModal.show('add-social-media')">
 				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Red social
 			</b-link>
       <b-modal
@@ -44,20 +44,28 @@ export default {
   data() {
 		return {
       types:[
-          { value: SocialMediaType.Linkedin, text: 'Linkedin' },
-          { value: SocialMediaType.Infojobs, text: 'Infojobs' },
-          { value: SocialMediaType.GitHub, text: 'GitHub' }
+          { value: SocialMediaType.Linkedin, text: 'Linkedin', disabled: false },
+          { value: SocialMediaType.Infojobs, text: 'Infojobs', disabled: false },
+          { value: SocialMediaType.GitHub, text: 'GitHub', disabled: false  }
       ],
       socialmedia: {
         name:'',
         type:''
       },
-      linkedin: false,
-      infojobs: false,
-      Github: false,
+      disabled: false,
       socialMediaList:[]
     }
 	},
+  watch: {
+    disable(){
+      var data = this.types.find((element: any) => element.disabled !== true);
+      if(data.length === 0) {
+        this.$nextTick(() => {
+          this.disabled = true;
+			});
+      }
+    }
+  },
   methods: {
 		add() {
       var socialmedia = {
@@ -66,18 +74,14 @@ export default {
       };
       this.socialmedia = {};
       this.socialMediaList.push(socialmedia);
+      var type = this.types.find((element: any) => element.value === socialmedia.type);
+      type.disabled = true;
 		},
     edit(data: any){
       var sm = this.socialMediaList.find((element: any) => element.type === data.type);
       sm.name = data.name;
     }
   },
-
-  /*mounted(){
-    this.types.map((lang: any) => {
-          return { value: lang.id, text: SocialMediaType };
-        });
-  },*/
 }
 </script>
 
