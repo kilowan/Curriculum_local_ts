@@ -18,7 +18,7 @@
       @ok-prevent="socialmedia.name == ''"
 			@cancel="cancel"
 		>
-      <label>Tipo</label> <input type="text" v-model="socialmedia.type" /> <br />
+      <label>Tipo</label> <b-form-select :options="types" v-model="socialmedia.type" /> <br />
       <label>Data</label> <input type="text" v-model="socialmedia.name" /> <br />
 		</b-modal>
 	</div>
@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import SocialMediaView from './SocialMediaView.vue';
+import { SocialMediaType } from './Config/types';
 
 export default {
   name: 'SocialMediaListView',
@@ -48,12 +49,22 @@ export default {
   },
   data() {
 		return {
+      types:[
+          { value: 1, text: 'Linkedin' },
+          { value: 2, text: 'Infojobs' },
+          { value: 3, text: 'GitHub' }
+      ],
       socialmedia: {
         name:'',
-        type:[]
+        type:''
       }
     }
 	},
+  /*mounted(){
+    this.types.map((lang: any) => {
+          return { value: lang.id, text: SocialMediaType };
+        });
+  },*/
 }
 </script>
 
