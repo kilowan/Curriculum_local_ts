@@ -1,17 +1,34 @@
 <template>
 	<div>	
-			<div v-for="(socialMediaData, index) in socialMedia" v-bind:key="index">
+			<div v-for="(socialMediaData, index) in socialMediaList" v-bind:key="index">
         <social-media-view 
-          :token="token" 
           :socialMediaData="socialMediaData"
           :iconsHidden="iconsHidden"
+          @update="edit($event)"
         />
 			</div>
+			<b-link :disabled="disabled" @click="$bvModal.show('add-social-media')">
+				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Red social
+			</b-link>
+      <b-modal
+			:id="'add-social-media'"
+			title="Añadir Red Social"
+			ok-title="Guardar"
+			@ok="add"
+      @ok-prevent="socialmedia.name == ''"
+			@cancel="$bvModal.hide('add-social-media')"
+		>
+      <label>Tipo</label> <b-form-select :options="types" v-model="socialmedia.type" /> <br />
+      <div v-if="socialmedia.type === 1"><label>Id linkedin</label> <input type="text" v-model="socialmedia.name" /></div>
+      <div v-else-if="socialmedia.type === 2"><label>Id infojobs</label> <input type="text" v-model="socialmedia.name" /></div>
+      <div v-else ><label>Id github</label> <input type="text" v-model="socialmedia.name" /> </div><br />
+		</b-modal>
 	</div>
 </template>
 
 <script lang="ts">
 import SocialMediaView from './SocialMediaView.vue';
+import { SocialMediaType } from './Config/types';
 
 export default {
   name: 'SocialMediaListView',
@@ -19,22 +36,52 @@ export default {
     SocialMediaView
   },
   props:{
-    socialMedia: {
-      type: Array,
-      required: true
-    },
-    token: {
-      type: String,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true
     },
   },
   data() {
-		return {}
+		return {
+      types:[
+          { value: SocialMediaType.Linkedin, text: 'Linkedin', disabled: false },
+          { value: SocialMediaType.Infojobs, text: 'Infojobs', disabled: false },
+          { value: SocialMediaType.GitHub, text: 'GitHub', disabled: false  }
+      ],
+      socialmedia: {
+        name:'',
+        type:''
+      },
+      disabled: false,
+      socialMediaList:[]
+    }
 	},
+  watch: {
+    disable(){
+      var data = this.types.find((element: any) => element.disabled !== true);
+      if(data.length === 0) {
+        this.$nextTick(() => {
+          this.disabled = true;
+			});
+      }
+    }
+  },
+  methods: {
+		add() {
+      var socialmedia = {
+        name: this.socialmedia.name,
+        type: this.socialmedia.type
+      };
+      this.socialmedia = {};
+      this.socialMediaList.push(socialmedia);
+      var type = this.types.find((element: any) => element.value === socialmedia.type);
+      type.disabled = true;
+		},
+    edit(data: any){
+      var sm = this.socialMediaList.find((element: any) => element.type === data.type);
+      sm.name = data.name;
+    }
+  },
 }
 </script>
 

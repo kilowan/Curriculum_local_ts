@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!hide">
-		<dt id="idiomas" class="idiomas" v-if="languageList.length > 0">Idiomas
+		<dt id="idiomas" class="idiomas">Idiomas
 			<b-link v-if="!iconsHidden" @click="hide = true, $emit('hide')">
 				<b-icon icon="eye-slash-fill"/>
 			</b-link>
@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import LanguageView from './LanguageView.vue';
-import axios from 'axios';
+//import axios from 'axios';
 
 export default {
   name: 'AcademicTrainingView',
@@ -53,7 +53,7 @@ export default {
       required: true
     },
     curriculumId: {
-      type: Number,
+      type: String,
       required: true
     },
     userId: {
@@ -89,7 +89,7 @@ export default {
       this.$emit('refresh');
     },
     async getLanguages() {
-      await axios({
+      /*await axios({
         method: 'get',
         headers: { Authorization: `Bearer ${this.token}` },
         url: `http://localhost:8080/api/Language/${this.curriculumId}`
@@ -97,7 +97,7 @@ export default {
         this.langList = data.data.map((lang: any) => {
           return { value: lang.id, text: lang.name };
         });
-      });
+      });*/
     },
     hiden() {
       this.counter--;
@@ -111,21 +111,27 @@ export default {
       this.language.name = '';
       this.language.level = '';
 		},
-		async save() {
+		save() {
 			if (this.language.name !== '') {
-				await axios({
-				method: 'post',
-				headers: { Authorization: `Bearer ${this.token}` },
-				url: `http://localhost:8080/api/Language`,
-				data: {
-					name: this.language.name,
-					userId: this.userId,
-					level: this.language.level !== ''? this.language.level: null,
-				}
-				}).then((data: any) =>{
-					this.cancel();
-					this.$emit('refresh');
-				});
+        var lang = {
+          level: this.language.level,
+          name: this.language.name
+        };
+        this.language = {};
+        this.$emit('refresh', lang);
+				//await axios({
+				//method: 'post',
+				//headers: { Authorization: `Bearer ${this.token}` },
+				//url: `http://localhost:8080/api/Language`,
+				//data: {
+					//name: this.language.name,
+					//userId: this.userId,
+					//level: this.language.level !== ''? this.language.level: null,
+				//}
+				//}).then((data: any) =>{
+					//this.cancel();
+					//this.$emit('refresh', );
+				//});
 			}
 		}
   },
