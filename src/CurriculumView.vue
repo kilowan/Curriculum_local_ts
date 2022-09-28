@@ -11,11 +11,7 @@
 				</div>
 				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="ddata.email.fullEmail" placeholder="Email"/> 
 			</div>
-				<social-media-list-view 
-				:token="token" 
-				:socialMedia="ddata.socialMedia"
-				:iconsHidden="iconsHidden"
-			/>	
+				<social-media-list-view :iconsHidden="iconsHidden"/>	
 			<div id="objective">
 				<textarea v-model="ddata.description" placeholder="Descripción"/>
 			</div>
@@ -131,7 +127,7 @@
 
 
 <script lang="ts">
-import { SocialMediaType } from './Config/types';
+import { SocialMedia, SocialMediaType } from './Config/types';
 import  AcademicTrainingListView from './AcademicTrainingListView.vue';
 import  OtherListView from './OtherListView.vue';
 import ProfessionalExperienceListView from './ProfessionalExperienceListView.vue';
@@ -196,7 +192,11 @@ export default {
 	addLanguage: function(data: any){
 		this.$nextTick(() => {
 			this.ddata.languageList.push(data);
-
+		});
+	},
+	addSocialMedia: function(data: SocialMedia){
+		this.$nextTick(() => {
+			this.ddata.socialMedia.push(data);
 		});
 	},
 	exp: function () {
@@ -236,7 +236,7 @@ export default {
 		a.dispatchEvent(e);
 	},*/
   },
-  async mounted() {
+  mounted() {
 	  	//if(this.$route.params.token) {
 			//this.curriculumId = this.$route.params.curriculumId;
 			//this.token = this.$route.params.token;

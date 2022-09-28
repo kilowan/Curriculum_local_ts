@@ -1,25 +1,27 @@
 <template>
 	<div>	
-			<div v-for="(socialMediaData, index) in socialMedia" v-bind:key="index">
+			<div v-for="(socialMediaData, index) in socialMediaList" v-bind:key="index">
         <social-media-view 
-          :token="token" 
           :socialMediaData="socialMediaData"
           :iconsHidden="iconsHidden"
+          @update="edit($event)"
         />
 			</div>
-			<b-link @click="$bvModal.show('add-social-media')">
+			<b-link v-if="!(linkedin && infojobs && github)" @click="$bvModal.show('add-social-media')">
 				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Red social
 			</b-link>
       <b-modal
 			:id="'add-social-media'"
 			title="Añadir Red Social"
 			ok-title="Guardar"
-			@ok="save"
+			@ok="add"
       @ok-prevent="socialmedia.name == ''"
-			@cancel="cancel"
+			@cancel="$bvModal.hide('add-social-media')"
 		>
       <label>Tipo</label> <b-form-select :options="types" v-model="socialmedia.type" /> <br />
-      <label>Data</label> <input type="text" v-model="socialmedia.name" /> <br />
+      <div v-if="socialmedia.type === 1"><label>Id linkedin</label> <input type="text" v-model="socialmedia.name" /></div>
+      <div v-else-if="socialmedia.type === 2"><label>Id infojobs</label> <input type="text" v-model="socialmedia.name" /></div>
+      <div v-else ><label>Id github</label> <input type="text" v-model="socialmedia.name" /> </div><br />
 		</b-modal>
 	</div>
 </template>
@@ -34,14 +36,6 @@ export default {
     SocialMediaView
   },
   props:{
-    socialMedia: {
-      type: Array,
-      required: true
-    },
-    token: {
-      type: String,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true
@@ -50,16 +44,35 @@ export default {
   data() {
 		return {
       types:[
-          { value: 1, text: 'Linkedin' },
-          { value: 2, text: 'Infojobs' },
-          { value: 3, text: 'GitHub' }
+          { value: SocialMediaType.Linkedin, text: 'Linkedin' },
+          { value: SocialMediaType.Infojobs, text: 'Infojobs' },
+          { value: SocialMediaType.GitHub, text: 'GitHub' }
       ],
       socialmedia: {
         name:'',
         type:''
-      }
+      },
+      linkedin: false,
+      infojobs: false,
+      Github: false,
+      socialMediaList:[]
     }
 	},
+  methods: {
+		add() {
+      var socialmedia = {
+        name: this.socialmedia.name,
+        type: this.socialmedia.type
+      };
+      this.socialmedia = {};
+      this.socialMediaList.push(socialmedia);
+		},
+    edit(data: any){
+      var sm = this.socialMediaList.find((element: any) => element.type === data.type);
+      sm.name = data.name;
+    }
+  },
+
   /*mounted(){
     this.types.map((lang: any) => {
           return { value: lang.id, text: SocialMediaType };
