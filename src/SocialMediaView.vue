@@ -9,6 +9,9 @@
 			<b-link v-if="!iconsHidden" @click="editMedia(media)">
 				<b-icon icon="pencil-square" aria-hidden="true"/>
 			</b-link>
+			<b-link @click="$bvModal.show(`delete-media-${media.name}`)">
+				<b-icon icon="x-circle-fill" aria-hidden="true"/>
+			</b-link>
 		<b-modal 
 			:id="`edit-social-media-${media.name}`"
 			title="Editar red social"
@@ -19,6 +22,16 @@
 			<label>Url:</label> <input type="text" v-model="media.name" /> <br />
 			<label>Tipo:</label> <b-form-select disabled :options="sociamMediaTypes" v-model="media.type" ></b-form-select> <br />
 		</b-modal>
+		<b-modal 
+			:id="`delete-media-${media.name}`" 
+			title="Eliminar Red social"
+			ok-title="Eliminar"
+			@ok="del(media)"
+			>
+			<div style="text-align: center; margin: 0 auto; width:380px;">
+				<h1>¿Seguro que quieres eliminar el elemento '{{ media.name }}'?</h1>
+			</div>
+			</b-modal>
 	</div>
 </template>
 
@@ -44,9 +57,9 @@ export default {
       hide: false,
 	  media: {},
       sociamMediaTypes:[
-          { value: SocialMediaType.Linkedin, text: 'Linkedin' },
-          { value: SocialMediaType.Infojobs, text: 'Infojobs' },
-          { value: SocialMediaType.GitHub, text: 'GitHub' }
+          { value: SocialMediaType.Linkedin, text: 'Linkedin'},
+          { value: SocialMediaType.Infojobs, text: 'Infojobs'},
+          { value: SocialMediaType.GitHub, text: 'GitHub'}
 		]
 		}
 	},
@@ -71,6 +84,15 @@ export default {
 		},
 		cancel(){
 			this.$bvModal.hide(`edit-social-media-${this.media.name}`);
+		},
+		del(media: any) {
+			this.media = {};
+			//var type = this.sociamMediaTypes.find((element: any) => element.value === media.type);
+			//type.disabled = false;
+
+			//var social = this.socialMediaList.find((element: any) => element.type === media.type);
+			//var index = this.socialMediaList.indexOf(social);
+			//this.socialMediaList.splice(index, 1);
 		}
   },
 }
