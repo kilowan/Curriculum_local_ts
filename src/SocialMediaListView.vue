@@ -23,7 +23,7 @@
 			@cancel="cancel(index)"
 		>
 			<label>Url:</label> <input type="text" v-model="socialMediaData.name" /> <br />
-			<label>Tipo:</label> <b-form-select disabled :options="sociamMediaTypes" v-model="socialMediaData.type" ></b-form-select> <br />
+			<label>Tipo:</label> <b-form-select disabled :options="types" v-model="socialMediaData.type" ></b-form-select> <br />
 		</b-modal>
 		<b-modal 
 			:id="`delete-media-${index}`" 
@@ -36,7 +36,7 @@
 			</div>
 			</b-modal>
 			</div>
-			<b-link :disabled="disabled" @click="$bvModal.show('add-social-media')">
+			<b-link :hidden="count === 0" @click="$bvModal.show('add-social-media')">
 				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Red social
 			</b-link>
       <b-modal
@@ -51,7 +51,7 @@
       <div v-if="socialmedia.type === 1"><label>Id linkedin</label> <input type="text" v-model="socialmedia.name" /></div>
       <div v-else-if="socialmedia.type === 2"><label>Id infojobs</label> <input type="text" v-model="socialmedia.name" /></div>
       <div v-else ><label>Id github</label> <input type="text" v-model="socialmedia.name" /> </div><br />
-		</b-modal>
+		</b-modal><br />
 	</div>
 </template>
 
@@ -81,7 +81,7 @@ export default {
         name:'',
         type:''
       },
-      disabled: false,
+      count: 3,
       socialMediaList:[]
     }
 	},
@@ -105,12 +105,14 @@ export default {
       this.socialMediaList.push(socialmedia);
       var type = this.types.find((element: any) => element.value === socialmedia.type);
       type.disabled = true;
+      this.count--;
 		},
 		del(media: any, index: number) {
 			this.$nextTick(() => {
         var type = this.types.find((element: any) => element.value === media.type);
         type.disabled = false;
         this.socialMediaList.splice(index, 1);
+        this.count++;
 			});
 		},
     edit(data: any){
