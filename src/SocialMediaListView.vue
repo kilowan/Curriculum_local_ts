@@ -23,7 +23,7 @@
 			@cancel="cancel(index)"
 		>
 			<label>Url:</label> <input type="text" v-model="socialMediaData.name" /> <br />
-			<label>Tipo:</label> <b-form-select disabled :options="sociamMediaTypes" v-model="socialMediaData.type" ></b-form-select> <br />
+			<label>Tipo:</label> <b-form-select disabled :options="types" v-model="socialMediaData.type" ></b-form-select> <br />
 		</b-modal>
 		<b-modal 
 			:id="`delete-media-${index}`" 
@@ -51,7 +51,7 @@
       <div v-if="socialmedia.type === 1"><label>Id linkedin</label> <input type="text" v-model="socialmedia.name" /></div>
       <div v-else-if="socialmedia.type === 2"><label>Id infojobs</label> <input type="text" v-model="socialmedia.name" /></div>
       <div v-else ><label>Id github</label> <input type="text" v-model="socialmedia.name" /> </div><br />
-		</b-modal>
+		</b-modal><br />
 	</div>
 </template>
 
