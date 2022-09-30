@@ -36,7 +36,7 @@
 			</div>
 			</b-modal>
 			</div>
-			<b-link :disabled="disabled" @click="$bvModal.show('add-social-media')">
+			<b-link :hidden="count === 0" @click="$bvModal.show('add-social-media')">
 				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Red social
 			</b-link>
       <b-modal
@@ -81,7 +81,7 @@ export default {
         name:'',
         type:''
       },
-      disabled: false,
+      count: 3,
       socialMediaList:[]
     }
 	},
@@ -105,12 +105,14 @@ export default {
       this.socialMediaList.push(socialmedia);
       var type = this.types.find((element: any) => element.value === socialmedia.type);
       type.disabled = true;
+      this.count--;
 		},
 		del(media: any, index: number) {
 			this.$nextTick(() => {
         var type = this.types.find((element: any) => element.value === media.type);
         type.disabled = false;
         this.socialMediaList.splice(index, 1);
+        this.count++;
 			});
 		},
     edit(data: any){
