@@ -1,11 +1,40 @@
 <template>
-	<div>	
-			<div v-for="(socialMediaData, index) in socialMediaList" v-bind:key="index">
-        <social-media-view 
+	<div>
+    <div v-for="(socialMediaData, index) in socialMediaList" v-bind:key="index" class="d-flex">
+        <social-media-view
           :socialMediaData="socialMediaData"
           :iconsHidden="iconsHidden"
           @update="edit($event)"
         />
+        <!--<b-link v-if="!iconsHidden" @click="socialMediaData.hidden = true, $emit('contract')">
+				<b-icon icon="eye-slash-fill"/>
+			</b-link>-->
+			<b-link v-if="!iconsHidden" @click="editMedia(index)">
+				<b-icon icon="pencil-square" aria-hidden="true"/>
+			</b-link>
+			<b-link @click="$bvModal.show(`delete-media-${index}`)">
+				<b-icon icon="x-circle-fill" aria-hidden="true"/>
+			</b-link>
+		<b-modal 
+			:id="`edit-social-media-${index}`"
+			title="Editar red social"
+			ok-title="Guardar"
+			@ok="edit(socialMediaData)"
+			@cancel="cancel(index)"
+		>
+			<label>Url:</label> <input type="text" v-model="socialMediaData.name" /> <br />
+			<label>Tipo:</label> <b-form-select disabled :options="sociamMediaTypes" v-model="socialMediaData.type" ></b-form-select> <br />
+		</b-modal>
+		<b-modal 
+			:id="`delete-media-${index}`" 
+			title="Eliminar Red social"
+			ok-title="Eliminar"
+			@ok="del(socialMediaData, index)"
+			>
+			<div style="text-align: center; margin: 0 auto; width:380px;">
+				<h1>¿Seguro que quieres eliminar el elemento '{{ socialMediaData.name }}'?</h1>
+			</div>
+			</b-modal>
 			</div>
 			<b-link :disabled="disabled" @click="$bvModal.show('add-social-media')">
 				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Red social
@@ -68,7 +97,7 @@ export default {
   },
   methods: {
 		add() {
-      var socialmedia = {
+        var socialmedia = {
         name: this.socialmedia.name,
         type: this.socialmedia.type
       };
@@ -77,11 +106,26 @@ export default {
       var type = this.types.find((element: any) => element.value === socialmedia.type);
       type.disabled = true;
 		},
+		del(media: any, index: number) {
+			this.$nextTick(() => {
+        var type = this.types.find((element: any) => element.value === media.type);
+        type.disabled = false;
+        this.socialMediaList.splice(index, 1);
+			});
+		},
     edit(data: any){
       var sm = this.socialMediaList.find((element: any) => element.type === data.type);
       sm.name = data.name;
-    }
-  },
+    },
+		editMedia(index: number) {
+			this.$nextTick(() => {
+				this.$bvModal.show(`edit-social-media-${index}`);
+        });
+		},
+		cancel(index: number){
+			this.$bvModal.hide(`edit-social-media-${index}`);
+		},
+  }
 }
 </script>
 
