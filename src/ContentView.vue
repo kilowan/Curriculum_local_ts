@@ -2,9 +2,6 @@
 	<div v-if="!hide">
     <li>
       {{ contentData.name }}
-      <b-link v-if="!iconsHidden" @click="hide = true, $emit('hide')">
-        <b-icon icon="eye-slash-fill"/>
-      </b-link>
       <b-link v-if="editMode" @click="$bvModal.show(`edit-content-${contentData.id}`)">
         <b-icon icon="pencil-square" aria-hidden="true"/>
       </b-link>
@@ -18,7 +15,6 @@
         <div v-for="(subcontent, thirdindex) in content.subContents" v-bind:key="thirdindex">
           <sub-content
             :editMode="editMode" 
-            :token="token" 
             :subContent="subcontent" 
             :type="type"
             :iconsHidden="iconsHidden"
@@ -99,10 +95,6 @@ export default {
       required: true
     },
     type: {
-      type: String,
-      required: true
-    },
-    token: {
       type: String,
       required: true
     },

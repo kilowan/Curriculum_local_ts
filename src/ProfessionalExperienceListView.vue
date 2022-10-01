@@ -1,21 +1,45 @@
 <template>
-	<div v-if="!hide">	
-		<dt id="experiencia" v-if="experience">Experiencia
-			<b-link v-if="!iconsHidden" @click="hide = true, $emit('contract')">
-				<b-icon icon="eye-slash-fill"/>
-			</b-link>
+	<div>	
+		<dt id="experiencia">Experiencia
 		</dt>
-		<dd id="experience" v-if="experience">
+		<dd id="experience">
 			<ul>
-				<div v-for="(company, firstindex) in experience" v-bind:key="firstindex">
-					<professional-experience-view 
-						:token="token" 
-						:company="company"
-						:iconsHidden="iconsHidden"
-						@refresh="$emit('refresh')"
-						@contract="$emit('contract')"
-						@hide="hidden"
-					/>
+				<div v-for="(company, firstindex) in experienceList" v-bind:key="firstindex">
+					<li>
+						{{company.name}}
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-experience-${firstindex}`)">
+							<b-icon icon="pencil-square" aria-hidden="true"/>
+						</b-link>
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-experience-${firstindex}`)">
+							<b-icon icon="x-circle-fill" aria-hidden="true"/>
+						</b-link>
+						<professional-experience-view :company="company" :iconsHidden="iconsHidden" @refresh="$emit('refresh')" />
+					</li>
+					<b-modal 
+						:id="`edit-experience-${firstindex}`"
+						title="Editar Experiencia"
+						ok-title="Guardar"
+						@cancel="cancel"
+					>
+						<label>Nombre</label> <input type="text" v-model="company.name" /> <br />
+						<label>Centro/Lugar:</label> <input type="text" v-model="company.place" /> <br />
+						<label>Fecha de inicio</label> <b-form-datepicker
+							v-model="company.initDate"
+							min="2015-01-01" max="2030-12-31"></b-form-datepicker> <br />
+						<label>Fecha de fin</label> <b-form-datepicker
+							v-model="company.finishDate"
+							min="2015-01-01" max="2030-12-31"></b-form-datepicker> <br />
+					</b-modal>
+					<b-modal 
+						:id="`delete-experience-${firstindex}`" 
+						title="Eliminar Contrato"
+						ok-title="Eliminar"
+						@ok="deleteExperience"
+					>
+						<div style="text-align: center; margin: 0 auto; width:380px;">
+							<h1>¿Seguro que quieres eliminar el contrato '{{ company.name }}'?</h1>
+						</div>
+					</b-modal>
 				</div>
 			</ul>
 			<b-link v-if="!iconsHidden" @click="$bvModal.show('add-experience')">
@@ -27,11 +51,11 @@
 			:id="'add-experience'" 
 			title="Añadir Experiencia"
 			ok-title="Guardar"
-			@ok="save"
+			@ok="save(experience)"
 			@cancel="cancel"
 		>
-			<label>Nombre</label> <input type="text" v-model="experienceNew" /> <br />
-			<label>Centro/Lugar:</label> <input type="text" v-model="place" /> <br />
+			<label>Nombre</label> <input type="text" v-model="experience.name" /> <br />
+			<label>Centro/Lugar:</label> <input type="text" v-model="experience.place" /> <br />
 			<label>Tipo</label> <b-form-select :options="options()" v-model="typeSelected"></b-form-select> <br />
 			<label>Fecha de inicio</label> <input type="date"
 				v-model="initDate"
@@ -39,16 +63,15 @@
 			<label>Fecha de fin</label> <input type="date"
 				v-model="finishDate"
 				min="2015-01-01" max="2030-12-31"> <br />
-		</b-modal>
+		</b-modal>	
 	</div>
 </template>
 
 
 <script lang="ts">
 
-import ProfessionalExperienceView from './ProfessionalExperienceView.vue';
-import axios from 'axios';
 //import { ExperienceType } from './Config/types';
+import ProfessionalExperienceView from './ProfessionalExperienceView.vue';
 
 export default {
   name: 'ProfessionalExperienceListView',
@@ -56,18 +79,6 @@ export default {
 	ProfessionalExperienceView
   },
   props:{
-    experience: {
-      type: Array,
-      required: true
-    },
-    curriculumId: {
-      type: String,
-      required: true
-    },
-    token: {
-      type: String,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true
@@ -75,10 +86,14 @@ export default {
   },
   data() {
 		return {
-			hide: false,
+			experienceList:[],
+			experience: {
+				initDate: '2021-12-08',
+				finishDate: '2021-12-08',
+				place: '',
+				name: ''
+			},
 			add: false,
-			counter: 0,
-			experienceNew: '',
 			typeSelected: 1,
 			initDate: '2021-12-08',
 			finishDate: '2021-12-08',
@@ -86,15 +101,7 @@ export default {
 		}
 	},
 	methods: {
-		hidden() {
-			this.counter--;
-			if (this.counter == 0 && this.experience.length >= 1) {
-				this.hide = true;
-			}
-			this.$emit('contract');
-		},
 		cancel() {
-          this.experienceNew = '';
 		  this.initDate = '2021-12-08';
 		  this.finishDate = '2021-12-08'
 		  this.place = '';
@@ -107,35 +114,30 @@ export default {
 					{ value: 2, text: 'professional' }
 				];
 		},
-		async save() {
-			if (this.experienceNew !== '') {
-				await axios({
-					method: 'post',
-					headers: { Authorization: `Bearer ${this.token}` },
-					url: `http://localhost:8080/api/Experience`,
-					data: {
-					curriculumId: this.curriculumId,
-					name: this.experienceNew,
-					initDate: this.initDate,
-					finishDate: this.finishDate !== ''? this.finishDate : null,
-					place: this.place,
-					type: this.typeSelected
-					}
-				}).then((data: any) =>{
-					this.experienceNew = '';
-					this.initDate = '2021-12-08';
-					this.finishDate = '2021-12-08'
-					this.place = '';
-					this.typeSelected = 1;
-					this.add = false;
-					this.$emit('refresh');
+		save(experience: any){
+			this.$nextTick(() => {
+				this.experienceList.push({
+					initDate: experience.initDate,
+					finishDate: experience.finishDate,
+					place: experience.place,
+					name: experience.name
 				});
-			}
+				this.experience = {
+				initDate: '2021-12-08',
+				finishDate: '2021-12-08',
+				place: '',
+				name: ''
+			};
+			this.$emit('refresh');
+			});
+		},
+		deleteExperience(index: number) {
+			this.$nextTick(() => {
+				this.experienceList.splice(index, 1);
+				//this.$emit('refresh');
+			});
 		}
 	},
-	mounted() {
-		this.counter = this.experience.length;
-	}
 }
 </script>
 

@@ -14,7 +14,6 @@
           :editMode="editMode"
           :content="content"
           :type="type"
-          :token="token"
           :iconsHidden="iconsHidden"
           @editMode="$emit('sizeChange')"
           @hide="hidden"
@@ -46,10 +45,6 @@ export default {
     },
     trainingId: {
       type: Number,
-      required: true
-    },
-    token: {
-      type: String,
       required: true
     },
     iconsHidden: {

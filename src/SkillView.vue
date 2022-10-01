@@ -20,7 +20,6 @@
 					<contents-view
 						:type="ContentType.complementary"
 						:contents="skill.contents"
-						:token="token"
 						:trainingId="skill.id"
 						:iconsHidden="iconsHidden"
 						@sizeChange="$emit('sizeChange')"
@@ -75,10 +74,6 @@ export default {
   props:{
     skill: {
       type: Object,
-      required: true
-    },
-    token: {
-      type: String,
       required: true
     },
     iconsHidden: {

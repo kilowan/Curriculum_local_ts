@@ -3,16 +3,12 @@
     <div v-for="(socialMediaData, index) in socialMediaList" v-bind:key="index" class="d-flex">
         <social-media-view
           :socialMediaData="socialMediaData"
-          :iconsHidden="iconsHidden"
           @update="edit($event)"
         />
-        <!--<b-link v-if="!iconsHidden" @click="socialMediaData.hidden = true, $emit('contract')">
-				<b-icon icon="eye-slash-fill"/>
-			</b-link>-->
 			<b-link v-if="!iconsHidden" @click="editMedia(index)">
 				<b-icon icon="pencil-square" aria-hidden="true"/>
 			</b-link>
-			<b-link @click="$bvModal.show(`delete-media-${index}`)">
+			<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-media-${index}`)">
 				<b-icon icon="x-circle-fill" aria-hidden="true"/>
 			</b-link>
 		<b-modal 
@@ -63,12 +59,6 @@ export default {
   name: 'SocialMediaListView',
   components: {
     SocialMediaView
-  },
-  props:{
-    iconsHidden: {
-      type: Boolean,
-      required: true
-    },
   },
   data() {
 		return {

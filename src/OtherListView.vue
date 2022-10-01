@@ -10,7 +10,6 @@
 				<div v-for="(otherData, firstindex) in other" v-bind:key="firstindex">
           <other-view
             :otherData="otherData"
-            :token="token"
             :iconsHidden="iconsHidden"
             @hide="hidden"
             @sizeChange="$emit('sizeChange')"
@@ -47,10 +46,6 @@ export default {
       required: true
     },
     curriculumId: {
-      type: String,
-      required: true
-    },
-    token: {
       type: String,
       required: true
     },

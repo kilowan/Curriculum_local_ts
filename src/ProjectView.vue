@@ -19,7 +19,6 @@
         <div v-for="(description, fourthindex) in project.descriptionList" v-bind:key="fourthindex">
           <description-view
             :iconsHidden="iconsHidden"
-            :token="token"
             :description="description"
             @refresh="$emit('refresh')"
             @hide="hidden"
@@ -73,10 +72,6 @@ export default {
   props:{
     project: {
       type: Object,
-      required: true
-    },
-    token: {
-      type: String,
       required: true
     },
     iconsHidden: {

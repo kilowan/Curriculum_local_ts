@@ -10,7 +10,6 @@
 				<div v-for="(academic, firstindex) in academicTraining" v-bind:key="firstindex">
 					<academic-training-view 
             :academic="academic"
-            :token="token"
             :iconsHidden="iconsHidden"
             @hide="hidden"
             @sizeChange="$emit('sizeChange')"
@@ -56,10 +55,6 @@ export default {
       required: true
     },
     curriculumId: {
-      type: String,
-      required: true
-    },
-    token: {
       type: String,
       required: true
     },
