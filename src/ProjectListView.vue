@@ -3,14 +3,16 @@
 		Proyectos:
 		<ul>
 			<div v-for="(project, thirdindex) in projects" v-bind:key="thirdindex">
-				{{ project.name }}
-				<project-view 
-					:project="project"
-					:iconsHidden="iconsHidden"
-					@contract="$emit('contract')"
-					@refresh="$emit('refresh')"
-					@hide="hidden"
-				/>
+				<li>
+					{{ project.name }}
+					<project-view 
+						:project="project"
+						:iconsHidden="iconsHidden"
+						@contract="$emit('contract')"
+						@refresh="$emit('refresh')"
+						@hide="hidden"
+					/>
+				</li>
 				<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-project-${thirdindex}`)">
 					<b-icon icon="pencil-square" aria-hidden="true"/>
 				</b-link>
@@ -21,7 +23,6 @@
 					:id="`edit-project-${thirdindex}`"
 					title="Editar proyecto"
 					ok-title="Guardar"
-					@ok="update"
 					@cancel="cancel"
 				>
 					<input type="text" v-model="project.name" /> <br />
@@ -30,7 +31,7 @@
 					:id="`delete-project-${thirdindex}`" 
 					title="Eliminar Proyecto"
 					ok-title="Eliminar"
-					@ok="deleteProject"
+					@ok="deleteProject(thirdindex)"
 				>
 					<div style="text-align: center; margin: 0 auto; width:380px;">
 						<h1>¿Seguro que quieres eliminar el proyecto '{{ project.name }}'?</h1>
@@ -76,6 +77,11 @@ export default {
 			}
 			this.$emit('sizeChange');
 		},
+		deleteProject(thirdindex: number) {
+			this.$nextTick(() => {
+				this.projects.splice(thirdindex, 1);
+			});
+		}
 	},
 	mounted() {
 		this.counter = this.projects.length;

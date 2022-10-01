@@ -1,6 +1,5 @@
 <template>
   <div>
-    <li>
       <ul v-if="contract">
         <div v-for="(description, fourthindex) in project.descriptionList" v-bind:key="fourthindex">
           <description-view
@@ -22,7 +21,6 @@
       <b-link v-if="!add && !contract" @click="add = true">
         <br /><b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir descripción
       </b-link>
-    </li>
   </div>
 </template>
 
@@ -84,28 +82,7 @@ export default {
           this.$emit('refresh');
         });
       }
-    },
-		async update() {
-			await axios({
-			method: 'put',
-			headers: { Authorization: `Bearer ${this.token}` },
-			url: `http://localhost:8080/api/Project/${this.project.id}`,
-			data: {
-					name: this.project.name,
-				}
-			}).then((data: any) =>{
-				this.$emit('refresh');
-			});
-		},
-		async deleteProject() {
-			await axios({
-			method: 'delete',
-			headers: { Authorization: `Bearer ${this.token}` },
-			url: `http://localhost:8080/api/Project/${this.project.id}`,
-			}).then((data: any) =>{
-				this.$emit('refresh');
-			});
-		}
+    }
   },
   mounted() {
     this.counter = this.project.descriptionList.length;

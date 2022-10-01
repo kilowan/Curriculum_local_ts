@@ -12,7 +12,7 @@
       <b-button class="m-2" @click="cancel">Cancelar</b-button>
     </div>
     <div>
-      <b-link v-if="!add && !iconsHidden" @click="addProject(contract)">
+      <b-link v-if="!add && !iconsHidden" @click="add = true">
         <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir proyecto
       </b-link>
     </div>
