@@ -44,10 +44,6 @@ export default {
       type: Object,
       required: true
     },
-    token: {
-      type: String,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true

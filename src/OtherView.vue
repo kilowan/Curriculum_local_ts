@@ -19,7 +19,6 @@
         <div v-for="(value, secondindex) in otherData.values" v-bind:key="secondindex">
           <value-view
             :value="value"
-            :token="token"
             :iconsHidden="iconsHidden"
             @hide="$emit('sizeChange')"
             @refresh="$emit('refresh')"
@@ -77,10 +76,6 @@ export default {
   props:{
     otherData: {
       type: Object,
-      required: true
-    },
-    token: {
-      type: String,
       required: true
     },
     iconsHidden: {

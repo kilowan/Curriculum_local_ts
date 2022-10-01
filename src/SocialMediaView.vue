@@ -4,7 +4,6 @@
       <div v-else><b-icon icon="link" aria-hidden="true"/> <a :href="'https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=' + socialMediaData.name">{{ 'https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=' + socialMediaData.name }}</a></div>
 </template>
 
-
 <script lang="ts">
 import { SocialMediaType } from './Config/types';
 
@@ -14,15 +13,10 @@ export default {
     socialMediaData: {
       type: Object,
       required: true
-    },
-    iconsHidden: {
-      type: Boolean,
-      required: true
-    },
+    }
   },
   data() {
 		return {
-      SocialMediaType: SocialMediaType,
       sociamMediaTypes:[
           { value: SocialMediaType.Linkedin, text: 'Linkedin'},
           { value: SocialMediaType.Infojobs, text: 'Infojobs'},

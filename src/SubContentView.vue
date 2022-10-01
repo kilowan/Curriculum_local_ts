@@ -51,10 +51,6 @@ export default {
       type: String,
       required: true
     },
-    token: {
-      type: String,
-      required: true
-    },
     editMode: {
       type: Boolean,
       required: true

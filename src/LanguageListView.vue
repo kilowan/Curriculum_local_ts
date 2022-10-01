@@ -10,7 +10,6 @@
 				<div v-for="(languages, firstindex) in languageList" v-bind:key="firstindex">
           <language-view 
             :language="languages"
-            :token="token"
             :iconsHidden="iconsHidden"
             :userId="userId"
             @hide="hiden"
@@ -60,10 +59,6 @@ export default {
       type: Number,
       required: true,
       default: null
-    },
-    token: {
-      type: String,
-      required: true
     },
     iconsHidden: {
       type: Boolean,

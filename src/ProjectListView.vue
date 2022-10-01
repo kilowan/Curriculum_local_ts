@@ -10,7 +10,6 @@
 				<project-view 
 					:project="project"
 					:iconsHidden="iconsHidden"
-					:token="token"
 					@contract="$emit('contract')"
 					@refresh="$emit('refresh')"
 					@hide="hidden"
@@ -32,10 +31,6 @@ export default {
   props:{
     projects: {
       type: Array,
-      required: true
-    },
-    token: {
-      type: String,
       required: true
     },
     iconsHidden: {

@@ -1,16 +1,48 @@
 <template>
-	<li v-if="!hide">
+	<li>
 		Contratos (ordenados de manera cronológica): 
-    <b-link v-if="!iconsHidden" @click="contract = !contract, $emit('contract')">
-      <b-icon v-if="contract" icon="chevron-up"/>
-      <b-icon v-if="!contract" icon="chevron-down"/>
-    </b-link>
-		<ul v-if="contract">
-			<div v-for="(contract, secondindex) in contracts" v-bind:key="secondindex">
+		<ul>
+      <div v-for="(contract, secondindex) in contracts" v-bind:key="secondindex">
+        <li>
+          {{contract.name}}
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-contract-${secondindex}`)">
+            <b-icon icon="pencil-square" aria-hidden="true"/>
+          </b-link>
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-contract-${secondindex}`)">
+            <b-icon icon="x-circle-fill" aria-hidden="true"/>
+          </b-link>
+          <div v-if="contract.add">
+            <input class="m-2" type="text" v-model="projectData" />
+            <b-button class="m-2" @click="contract.push({name: projectData}), projectData = '', contract.add = false">Guardar</b-button>
+            <b-button class="m-2" @click="cancel">Cancelar</b-button>
+          </div>
+          <div>
+            <b-link v-if="!contract.add && !iconsHidden" @click="contract.add = true">
+              <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir proyecto
+            </b-link>
+          </div>
+        </li>
+        <b-modal 
+          :id="`edit-contract-${secondindex}`"
+          title="Editar contrato"
+          ok-title="Guardar"
+          @cancel="cancel"
+        >
+          <input type="text" v-model="contract.name" /> <br />
+        </b-modal>
+        <b-modal 
+          :id="`delete-contract-${secondindex}`" 
+          title="Eliminar Contrato"
+          ok-title="Eliminar"
+          @ok="contracts.splice(secondindex, 1), $emit('refresh')"
+        >
+          <div style="text-align: center; margin: 0 auto; width:380px;">
+            <h1>¿Seguro que quieres eliminar el contrato '{{ contract.name }}'?</h1>
+          </div>
+        </b-modal>
         <contract-view
           :iconsHidden="iconsHidden"
           :contract="contract"
-          :token="token"
           @contract="$emit('contract')"
           @refresh="$emit('refresh')"
           @hide="hidden"
@@ -34,10 +66,6 @@ export default {
       type: Array,
       required: true
     },
-    token: {
-      type: String,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true
@@ -49,6 +77,7 @@ export default {
       contracted: false,
       hide: false,
       counter: 0,
+      projects:[]
     }
 	},
   methods: {
@@ -59,6 +88,29 @@ export default {
       }
       this.$emit('contract');
     },
+    save(projectData: any) {
+      this.$nextTick(() => {
+        this.contracts.projects.push({ name: projectData });
+        this.projectData = '';
+        this.$emit('refresh');
+      });
+    },
+    cancel(contract: any) {
+      this.$nextTick(() => {
+        this.projectData = '';
+        contract.add = false;
+      });
+    },
+		deleteContract() {
+			this.$nextTick(() => {
+			//method: 'delete',
+			//headers: { Authorization: `Bearer ${this.token}` },
+			//url: `http://localhost:8080/api/Contract/${this.contract.id}`,
+			//}).then((data: any) =>{
+				//this.$emit('refresh');
+
+			});
+		}
   },
   mounted() {
     this.counter = this.contracts.length;

@@ -9,7 +9,6 @@
 			<ul>
 				<div v-for="(skill, firstindex) in otherTraining" v-bind:key="firstindex">
 					<skill-view
-						:token="token" 
 						:skill="skill"
 						:iconsHidden="iconsHidden"
 						@sizeChange="$emit('sizeChange')"
@@ -47,10 +46,6 @@ export default {
       required: true
     },
     curriculumId: {
-      type: String,
-      required: true
-    },
-    token: {
       type: String,
       required: true
     },

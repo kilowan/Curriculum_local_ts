@@ -20,22 +20,14 @@
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 
-				:token="token"
-				:experience="ddata.experience"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@contract="EditMode"
-			/>
+			<professional-experience-list-view 	:iconsHidden="iconsHidden" @refresh="exp" />
 			<academic-training-list-view 
-				:token="token" 
 				:academicTraining="ddata.academicTraining"
 				:iconsHidden="iconsHidden"
 				:curriculumId="curriculumId"
 				@sizeChange="EditMode" 
 			/>
 			<skill-list-view 
-				:token="token"  
 				:otherTraining="ddata.otherTraining"
 				:iconsHidden="iconsHidden"
 				:curriculumId="curriculumId"
@@ -43,7 +35,6 @@
 				@contract="EditMode" 
 			/>
 			<language-list-view 
-				:token="token" 
 				:languageList="ddata.languageList"
 				:userId="ddata.userId"
 				:curriculumId="curriculumId"
@@ -81,14 +72,12 @@
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 
-				:token="token"
 				:experience="ddata.experience"
 				:iconsHidden="iconsHidden"
 				:curriculumId="curriculumId"
 				@contract="EditMode"
 			/>
 			<academic-training-list-view 
-				:token="token" 
 				:userId="ddata.userId"
 				:academicTraining="ddata.academicTraining"
 				:iconsHidden="iconsHidden"
@@ -96,7 +85,6 @@
 				@sizeChange="EditMode" 
 			/>
 			<skill-list-view 
-				:token="token"  
 				:otherTraining="ddata.otherTraining"
 				:iconsHidden="iconsHidden"
 				:curriculumId="curriculumId"
@@ -104,7 +92,6 @@
 				@contract="EditMode" 
 			/>
 			<language-list-view 
-				:token="token" 
 				:languageList="ddata.languageList"
 				:userId="ddata.userId"
 				:curriculumId="curriculumId"
@@ -113,7 +100,6 @@
 				@refresh="addLanguage($event)"
 			/>			
 			<other-list-view
-				:token="token"
 				:curriculumId="curriculumId"
 				:other="ddata.otherData"
 				:iconsHidden="iconsHidden"

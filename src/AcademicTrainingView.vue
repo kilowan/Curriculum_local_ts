@@ -22,7 +22,6 @@
 					<contents-view
 						:contents="academic.contents"
 						:type="ContentType.academic"
-						:token="token" :trainingId="academic.id"
 						:iconsHidden="iconsHidden"
 						@sizeChange="$emit('sizeChange')"
 						@refresh="$emit('refresh')"
@@ -80,10 +79,6 @@ export default {
   props:{
     academic: {
       type: Object,
-      required: true
-    },
-    token: {
-      type: String,
       required: true
     },
     iconsHidden: {
