@@ -5,22 +5,19 @@
       <div v-for="(contract, secondindex) in contracts" v-bind:key="secondindex">
         <li>
           {{contract.name}}
+          <contract-view
+            :iconsHidden="iconsHidden"
+            :contract="contract"
+            @contract="$emit('contract')"
+            @refresh="$emit('refresh')"
+            @hide="hidden"
+          />
           <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-contract-${secondindex}`)">
             <b-icon icon="pencil-square" aria-hidden="true"/>
           </b-link>
           <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-contract-${secondindex}`)">
             <b-icon icon="x-circle-fill" aria-hidden="true"/>
           </b-link>
-          <div v-if="contract.add">
-            <input class="m-2" type="text" v-model="projectData" />
-            <b-button class="m-2" @click="contract.push({name: projectData}), projectData = '', contract.add = false">Guardar</b-button>
-            <b-button class="m-2" @click="cancel">Cancelar</b-button>
-          </div>
-          <div>
-            <b-link v-if="!contract.add && !iconsHidden" @click="contract.add = true">
-              <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir proyecto
-            </b-link>
-          </div>
         </li>
         <b-modal 
           :id="`edit-contract-${secondindex}`"
@@ -40,13 +37,6 @@
             <h1>¿Seguro que quieres eliminar el contrato '{{ contract.name }}'?</h1>
           </div>
         </b-modal>
-        <contract-view
-          :iconsHidden="iconsHidden"
-          :contract="contract"
-          @contract="$emit('contract')"
-          @refresh="$emit('refresh')"
-          @hide="hidden"
-        />
 			</div>
 		</ul>
 	</li>
