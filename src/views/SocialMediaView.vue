@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { SocialMediaType } from './Config/types';
+import { SocialMediaType } from '../Config/types';
 
 export default {
   name: 'SocialMediaView',

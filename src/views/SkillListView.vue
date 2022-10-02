@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import SkillView from './SkillView.vue';
-import { ContentType } from './Config/types'
+import { ContentType } from '../Config/types'
 
 export default {
   name: 'ComplementaryExperienceListView',

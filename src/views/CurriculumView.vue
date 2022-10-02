@@ -61,7 +61,7 @@
 
 
 <script lang="ts">
-import { SocialMedia, SocialMediaType } from './Config/types';
+import { SocialMedia, SocialMediaType } from '../Config/types';
 import  AcademicTrainingListView from './AcademicTrainingListView.vue';
 import  OtherListView from './OtherListView.vue';
 import ProfessionalExperienceListView from './ProfessionalExperienceListView.vue';
@@ -182,7 +182,7 @@ export default {
 
 <style>
 * { margin: 0; padding: 0; }
-body { font: 16px Helvetica, Sans-Serif; line-height: 24px; background: url(./images/noise.jpg); }
+body { font: 16px Helvetica, Sans-Serif; line-height: 24px; background: url(../images/noise.jpg); }
 .clear { clear: both; }
 .idiomas { border-right: 1px solid #999; }
 .otros { border-right: 1px solid #999; }
