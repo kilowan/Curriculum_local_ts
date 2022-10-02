@@ -6,9 +6,9 @@
 				<li>
 					{{ project.name }}
 					<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-project-${thirdindex}`)">
-					<b-icon icon="pencil-square" aria-hidden="true"/>
+						<b-icon icon="pencil-square" aria-hidden="true"/>
 					</b-link>
-					<b-link @click="$bvModal.show(`delete-project-${thirdindex}`)">
+					<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-project-${thirdindex}`)">
 						<b-icon icon="x-circle-fill" aria-hidden="true"/>
 					</b-link>
 					<project-view 
@@ -22,7 +22,6 @@
 					:id="`edit-project-${thirdindex}`"
 					title="Editar proyecto"
 					ok-title="Guardar"
-					@cancel="cancel"
 				>
 					<input type="text" v-model="project.name" /> <br />
 				</b-modal>

@@ -5,10 +5,10 @@
 			<div v-for="(content, i) in contents" v-bind:key="i">
         <li>
           {{ content.name }}
-          <b-link @click="$bvModal.show(`edit-content-${i}`)">
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-content-${i}`)">
             <b-icon icon="pencil-square" aria-hidden="true"/>
           </b-link>
-          <b-link @click="$bvModal.show(`delete-content-${i}`)">
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-content-${i}`)">
             <b-icon icon="x-circle-fill" aria-hidden="true"/>
           </b-link>
           <content-view

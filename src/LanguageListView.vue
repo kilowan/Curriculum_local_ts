@@ -5,14 +5,37 @@
 				<b-icon icon="eye-slash-fill"/>
 			</b-link>
     </dt>
-		<dd id="languages" v-if="languageList">
+		<dd id="languages">
 			<ul>
-				<div v-for="(languages, firstindex) in languageList" v-bind:key="firstindex">
-          <language-view 
-            :language="languages"
-            :iconsHidden="iconsHidden"
-            @refresh="refresh"
-          />
+				<div v-for="(language, firstindex) in languageList" v-bind:key="firstindex">
+          <li>
+            <strong>{{ language.name }}:</strong> {{ language.level }}
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-language-${firstindex}`)">
+              <b-icon icon="pencil-square" aria-hidden="true"/>
+            </b-link>
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-language-${firstindex}`)">
+              <b-icon icon="x-circle-fill" aria-hidden="true"/>
+            </b-link>
+          </li>
+          <b-modal 
+            :id="`edit-language-${firstindex}`"
+            title="Editar Idioma"
+            ok-title="Guardar"
+            @cancel="cancel"
+          >
+              <label>Nombre:</label> <input type="text" v-model="language.name" /> <br />
+              <label>Nivel:</label> <input type="text" v-model="language.level" /> <br />
+          </b-modal>
+          <b-modal 
+            :id="`delete-language-${firstindex}`" 
+            title="Quitar idioma"
+            ok-title="Quitar"
+            @ok="languageList.splice(firstindex, 1)"
+          >
+            <div style="text-align: center; margin: 0 auto; width:380px;">
+              <h1>¿Seguro que quieres quitar el idioma '{{ language.name }}'?</h1>
+            </div>
+          </b-modal>
 				</div>
 			</ul>
 			<b-link v-if="!iconsHidden" @click="$bvModal.show('add-language')">
@@ -24,8 +47,7 @@
 			:id="'add-language'"
 			title="Añadir Idioma"
 			ok-title="Guardar"
-			@ok="save"
-      @ok-prevent="language.name == ''"
+			@ok="save(language)"
 			@cancel="cancel"
 		>
       <label>Nombre</label> <input type="text" v-model="language.name" /> <br />
@@ -36,19 +58,10 @@
 
 
 <script lang="ts">
-import LanguageView from './LanguageView.vue';
-//import axios from 'axios';
 
 export default {
   name: 'AcademicTrainingView',
-  components:{
-    LanguageView
-  },
   props:{
-    languageList: {
-      type: Array,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true
@@ -60,7 +73,7 @@ export default {
       add: false,
       counter: 0,
       languageLevelList: [],
-      langList: [],
+      languageList: [],
       language: {
         name: '',
         level: ''
@@ -69,19 +82,7 @@ export default {
 	},
   methods: {
     refresh() {
-      this.getLanguages();
       this.$emit('refresh');
-    },
-    async getLanguages() {
-      /*await axios({
-        method: 'get',
-        headers: { Authorization: `Bearer ${this.token}` },
-        url: `http://localhost:8080/api/Language/${this.curriculumId}`
-      }).then((data: any) => {
-        this.langList = data.data.map((lang: any) => {
-          return { value: lang.id, text: lang.name };
-        });
-      });*/
     },
     hiden() {
       this.counter--;
@@ -95,34 +96,14 @@ export default {
       this.language.name = '';
       this.language.level = '';
 		},
-		save() {
-			if (this.language.name !== '') {
-        var lang = {
-          level: this.language.level,
-          name: this.language.name
-        };
+		save(language: any) {
+      this.$nextTick(() => {
+        this.languageList.push({ name: language.name, level: language.level })
         this.language = {};
-        this.$emit('refresh', lang);
-				//await axios({
-				//method: 'post',
-				//headers: { Authorization: `Bearer ${this.token}` },
-				//url: `http://localhost:8080/api/Language`,
-				//data: {
-					//name: this.language.name,
-					//userId: this.userId,
-					//level: this.language.level !== ''? this.language.level: null,
-				//}
-				//}).then((data: any) =>{
-					//this.cancel();
-					//this.$emit('refresh', );
-				//});
-			}
+        this.$emit('refresh');
+			});
 		}
-  },
-  async mounted() {
-    this.counter = this.languageList.length;
-    this.getLanguages();
-  },
+  }
 }
 </script>
 
