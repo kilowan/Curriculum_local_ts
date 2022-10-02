@@ -1,19 +1,42 @@
 <template>
 	<li v-if="!hide">
 		Proyectos:
-		<b-link v-if="!iconsHidden && projects.length >0" @click="contract = !contract, $emit('contract')">
-			<b-icon v-if="contract" icon="chevron-up"/>
-			<b-icon v-if="!contract" icon="chevron-down"/>
-		</b-link>
-		<ul v-if="contract">
+		<ul>
 			<div v-for="(project, thirdindex) in projects" v-bind:key="thirdindex">
-				<project-view 
-					:project="project"
-					:iconsHidden="iconsHidden"
-					@contract="$emit('contract')"
-					@refresh="$emit('refresh')"
-					@hide="hidden"
-				/>
+				<li>
+					{{ project.name }}
+					<project-view 
+						:project="project"
+						:iconsHidden="iconsHidden"
+						@contract="$emit('contract')"
+						@refresh="$emit('refresh')"
+						@hide="hidden"
+					/>
+				</li>
+				<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-project-${thirdindex}`)">
+					<b-icon icon="pencil-square" aria-hidden="true"/>
+				</b-link>
+				<b-link @click="$bvModal.show(`delete-project-${thirdindex}`)">
+					<b-icon icon="x-circle-fill" aria-hidden="true"/>
+				</b-link>
+				<b-modal 
+					:id="`edit-project-${thirdindex}`"
+					title="Editar proyecto"
+					ok-title="Guardar"
+					@cancel="cancel"
+				>
+					<input type="text" v-model="project.name" /> <br />
+				</b-modal>
+				<b-modal 
+					:id="`delete-project-${thirdindex}`" 
+					title="Eliminar Proyecto"
+					ok-title="Eliminar"
+					@ok="deleteProject(thirdindex)"
+				>
+					<div style="text-align: center; margin: 0 auto; width:380px;">
+						<h1>¿Seguro que quieres eliminar el proyecto '{{ project.name }}'?</h1>
+					</div>
+				</b-modal>
 			</div>
 		</ul>
 	</li>
@@ -54,6 +77,11 @@ export default {
 			}
 			this.$emit('sizeChange');
 		},
+		deleteProject(thirdindex: number) {
+			this.$nextTick(() => {
+				this.projects.splice(thirdindex, 1);
+			});
+		}
 	},
 	mounted() {
 		this.counter = this.projects.length;

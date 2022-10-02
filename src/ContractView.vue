@@ -1,12 +1,21 @@
 <template>
   <div>
     <project-list-view
-      v-if="contracted"
       :projects="projects"
       :iconsHidden="iconsHidden"
       @contract="$emit('contract')"
       @refresh="$emit('refresh')"
     />
+    <div v-if="add">
+      <input class="m-2" type="text" v-model="projectData" />
+      <b-button class="m-2" @click="projects.push({name: projectData}), projectData = '', add = false">Guardar</b-button>
+      <b-button class="m-2" @click="cancel">Cancelar</b-button>
+    </div>
+    <div>
+      <b-link v-if="!add && !iconsHidden" @click="add = true">
+        <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir proyecto
+      </b-link>
+    </div>
 </div>
 </template>
 
@@ -36,13 +45,7 @@ export default {
       projectData: '',
       projects: []
     }
-	},
-  methods: {
-    cancel() {
-      this.projectData = '';
-      this.add = false;
-    },
-  },
+	}
 }
 </script>
 
