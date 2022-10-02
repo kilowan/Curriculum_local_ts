@@ -49,15 +49,6 @@ export default {
       type: Array,
       required: true
     },
-    curriculumId: {
-      type: String,
-      required: true
-    },
-    userId: {
-      type: Number,
-      required: true,
-      default: null
-    },
     iconsHidden: {
       type: Boolean,
       required: true
