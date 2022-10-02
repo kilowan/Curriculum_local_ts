@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 //import Login from "../Login.vue";
 //import PasswordRecovery from "../PasswordRecovery.vue";
-import CurriculumView from '../CurriculumView.vue';
+import CurriculumView from '../views/CurriculumView.vue';
 //import CurriculumList from '../CurriculumList.vue';
 /* eslint-disable */
 Vue.use(VueRouter);

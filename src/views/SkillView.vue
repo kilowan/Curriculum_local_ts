@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import ContentsView from './ContentsView.vue';
-import { ContentType } from './Config/types'
+import { ContentType } from '../Config/types'
 import axios from 'axios';
 
 export default {

@@ -71,9 +71,8 @@
 
 
 <script lang="ts">
-import { ContentType } from './Config/types'
+import { ContentType } from '../Config/types'
 import AcademicTrainingView from './AcademicTrainingView.vue';
-import axios from 'axios';
 
 export default {
   name: 'AcademicTrainingListView',
