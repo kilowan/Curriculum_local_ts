@@ -91,16 +91,6 @@ export default {
         contract.add = false;
       });
     },
-		deleteContract() {
-			this.$nextTick(() => {
-			//method: 'delete',
-			//headers: { Authorization: `Bearer ${this.token}` },
-			//url: `http://localhost:8080/api/Contract/${this.contract.id}`,
-			//}).then((data: any) =>{
-				//this.$emit('refresh');
-
-			});
-		}
   },
   mounted() {
     this.counter = this.contracts.length;

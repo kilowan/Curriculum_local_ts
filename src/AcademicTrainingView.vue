@@ -5,7 +5,6 @@
 		<div v-if="contents.length >0">
 			<contents-view
 				:contents="contents"
-				:type="ContentType.academic"
 				:iconsHidden="iconsHidden"
 				@sizeChange="$emit('sizeChange')"
 				@refresh="$emit('refresh')"
@@ -13,7 +12,7 @@
 		</div>
 		<div v-if="add">
 			<input class="m-2" type="text" v-model="element" />
-			<b-button class="m-2" @click="save">Guardar</b-button>
+			<b-button class="m-2" @click="save(element)">Guardar</b-button>
 			<b-button class="m-2" @click="cancel">Cancelar</b-button>
 		</div>
 		<b-link v-if="!iconsHidden" @click="add = true">
@@ -58,22 +57,13 @@ export default {
 			this.element = '';
 			this.add = false;
 		},
-		async save() {
-			if (this.element !== '') {
-				await axios({
-				method: 'post',
-				headers: { Authorization: `Bearer ${this.token}` },
-				url: `http://localhost:8080/api/Content`,
-				data: {
-					name: this.element,
-					trainingId: this.academic.id,
-				}
-				}).then((data: any) =>{
-					this.element = '';
-					this.add = false;
-					this.$emit('refresh');
-				});
-			}
+		save(content: string) {
+			this.$nextTick(() => {
+				this.contents.push({ name: content });
+				this.element = '';
+				this.add = false;
+				this.$emit('refresh');
+			});
 		},
 		async update() {
 			await axios({
