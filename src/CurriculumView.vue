@@ -21,12 +21,7 @@
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="iconsHidden" @refresh="exp" />
-			<academic-training-list-view 
-				:academicTraining="ddata.academicTraining"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@sizeChange="EditMode" 
-			/>
+			<academic-training-list-view :iconsHidden="iconsHidden"	@sizeChange="EditMode"/>
 			<skill-list-view 
 				:otherTraining="ddata.otherTraining"
 				:iconsHidden="iconsHidden"
@@ -71,19 +66,8 @@
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 
-				:experience="ddata.experience"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@contract="EditMode"
-			/>
-			<academic-training-list-view 
-				:userId="ddata.userId"
-				:academicTraining="ddata.academicTraining"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@sizeChange="EditMode" 
-			/>
+			<professional-experience-list-view 	:iconsHidden="iconsHidden"	@contract="EditMode"/>
+			<academic-training-list-view  :iconsHidden="iconsHidden" @sizeChange="EditMode" />
 			<skill-list-view 
 				:otherTraining="ddata.otherTraining"
 				:iconsHidden="iconsHidden"

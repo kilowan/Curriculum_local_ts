@@ -1,13 +1,6 @@
 <template>
 	<li v-if="!hide && contents.length > 0">	
 		<strong class="m-2">Contenido:</strong>
-    <b-link 
-      v-if="!iconsHidden" class="m-2" 
-      @click="editMode = !editMode, $emit('sizeChange')"
-    >
-      <b-icon v-if="!editMode" icon="toggle-off" aria-hidden="true"/>
-      <b-icon v-if="editMode" icon="toggle-on" aria-hidden="true"/>
-    </b-link>
 		<ul>
 			<div v-for="(content, i) in contents" v-bind:key="i">
         <content-view
@@ -27,7 +20,6 @@
 
 <script lang="ts">
 import ContentView from './ContentView.vue'
-import axios from 'axios';
 
 export default {
   name: 'ContentsView',
