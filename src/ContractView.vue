@@ -9,7 +9,7 @@
     <div v-if="add">
       <input class="m-2" type="text" v-model="projectData" />
       <b-button class="m-2" @click="projects.push({name: projectData}), projectData = '', add = false">Guardar</b-button>
-      <b-button class="m-2" @click="cancel">Cancelar</b-button>
+      <b-button class="m-2">Cancelar</b-button>
     </div>
     <div>
       <b-link v-if="!add && !iconsHidden" @click="add = true">
@@ -28,10 +28,6 @@ export default {
 	ProjectListView
   },
   props:{
-    contract: {
-      type: Object,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true

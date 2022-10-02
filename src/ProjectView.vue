@@ -2,21 +2,19 @@
   <div>
       <ul>
         <div v-for="(description, fourthindex) in descriptions" v-bind:key="fourthindex">
+          <li>
             {{ description }}
-            <b-link v-if="!iconsHidden" @click="$emit('hide'), hide = true">
-              <b-icon icon="eye-slash-fill"/>
-            </b-link>
             <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-description-${fourthindex}`)">
               <b-icon icon="pencil-square" aria-hidden="true"/>
             </b-link>
-            <b-link @click="$bvModal.show(`delete-description-${fourthindex}`)">
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-description-${fourthindex}`)">
               <b-icon icon="x-circle-fill" aria-hidden="true"/>
             </b-link>
+          </li>
           <b-modal 
 			      :id="`edit-description-${fourthindex}`"
 			      title="Editar descripción"
 			      ok-title="Guardar"
-			      @ok="update"
 			      @cancel="cancel"
 		      >
 			      <input type="text" v-model="description.name" /> <br />
@@ -38,7 +36,7 @@
         <b-button @click="save(desc)">Guardar</b-button>
         <b-button @click="cancel">Cancelar</b-button>
       </div>
-      <b-link v-if="!add" @click="add = true">
+      <b-link v-if="!add && !iconsHidden" @click="add = true">
         <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir descripción
       </b-link>
   </div>
@@ -90,9 +88,6 @@ export default {
         this.$emit('refresh');
       });
     },
-  },
-  mounted() {
-    this.counter = this.project.descriptionList.length;
   }
 }
 </script>

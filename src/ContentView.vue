@@ -4,10 +4,10 @@
       <div v-for="(sub, thirdindex) in subContents" v-bind:key="thirdindex">
         <li>
           {{ sub }}
-          <b-link @click="$bvModal.show(`edit-subcontent-${thirdindex}`)">
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-subcontent-${thirdindex}`)">
             <b-icon icon="pencil-square" aria-hidden="true"/>
           </b-link>
-          <b-link @click="$bvModal.show(`delete-subcontent-${thirdindex}`)">
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-subcontent-${thirdindex}`)">
             <b-icon icon="x-circle-fill" aria-hidden="true"/>
           </b-link>
         </li>
@@ -32,7 +32,7 @@
           </div>
         </b-modal>
       </div>
-      <b-link @click="$bvModal.show(`add-subcontent`)">
+      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-subcontent`)">
         <b-icon icon="plus-circle-fill" aria-hidden="true"/>Añadir SubContenido
       </b-link>
     </ul>

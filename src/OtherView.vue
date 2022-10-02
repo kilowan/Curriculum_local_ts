@@ -31,9 +31,9 @@
         </b-modal>
       </div>
       <div v-if="!iconsHidden">
-      <b-link @click="$bvModal.show(`add-value`)">
-        <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir valor
-      </b-link>
+        <b-link @click="$bvModal.show(`add-value`)">
+          <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir valor
+        </b-link>
     </div>
     </ul>
     <b-modal 

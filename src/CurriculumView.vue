@@ -11,7 +11,7 @@
 				</div>
 				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="ddata.email.fullEmail" placeholder="Email"/> 
 			</div>
-				<social-media-list-view :iconsHidden="iconsHidden"/>	
+				<social-media-list-view :iconsHidden="iconsHidden"/>
 			<div id="objective">
 				<textarea v-model="ddata.description" placeholder="Descripción"/>
 			</div>
@@ -39,6 +39,7 @@
 					<b-icon icon="envelope" aria-hidden="true"/> <a :href="'mailto:'+ ddata.email.fullEmail">{{ ddata.email.fullEmail }}</a><br />
 				</div>
 			</div>
+			<social-media-list-view :iconsHidden="true"/>
 			<div id="objective">
 				<p>{{ ddata.description }}</p>
 			</div>
@@ -47,11 +48,11 @@
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 	:iconsHidden="iconsHidden"	@refresh="EditMode"/>
-			<academic-training-list-view  :iconsHidden="iconsHidden" @refresh="EditMode" />
-			<skill-list-view :iconsHidden="iconsHidden"	@refresh="EditMode" />
-			<language-list-view :languageList="ddata.languageList" :iconsHidden="iconsHidden" @refresh="EditMode"/>			
-			<other-list-view :other="ddata.otherData" :iconsHidden="iconsHidden" @refresh="EditMode"/>
+			<professional-experience-list-view 	:iconsHidden="true"	@refresh="EditMode"/>
+			<academic-training-list-view  :iconsHidden="true" @refresh="EditMode" />
+			<skill-list-view :iconsHidden="true"	@refresh="EditMode" />
+			<language-list-view :languageList="ddata.languageList" :iconsHidden="true" @refresh="EditMode"/>			
+			<other-list-view :other="ddata.otherData" :iconsHidden="true" @refresh="EditMode"/>
 		</dl>
 			<b-button @click="active=true">Desacer</b-button>
 		</div>

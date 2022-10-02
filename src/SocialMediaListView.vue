@@ -59,6 +59,12 @@ export default {
   components: {
     SocialMediaView
   },
+  props:{
+    iconsHidden: {
+      type: Boolean,
+      required: true
+    },
+  },
   data() {
 		return {
       types:[

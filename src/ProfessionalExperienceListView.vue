@@ -1,6 +1,9 @@
 <template>
-	<div>	
+	<div v-if="!hide">	
 		<dt id="experiencia">Experiencia
+			<b-link v-if="!iconsHidden" @click="hide = true, $emit('sizeChange')">
+				<b-icon icon="eye-slash-fill"/>
+			</b-link>
 		</dt>
 		<dd id="experience">
 			<ul>
@@ -94,6 +97,7 @@ export default {
 				name: ''
 			},
 			add: false,
+			hide: false,
 			typeSelected: 1,
 			initDate: '2021-12-08',
 			finishDate: '2021-12-08',
