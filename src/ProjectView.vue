@@ -1,39 +1,54 @@
 <template>
   <div>
-      <ul v-if="contract">
-        <div v-for="(description, fourthindex) in project.descriptionList" v-bind:key="fourthindex">
-          <description-view
-            :iconsHidden="iconsHidden"
-            :description="description"
-            @refresh="$emit('refresh')"
-            @hide="hidden"
-          />
+      <ul>
+        <div v-for="(description, fourthindex) in descriptions" v-bind:key="fourthindex">
+            {{ description }}
+            <b-link v-if="!iconsHidden" @click="$emit('hide'), hide = true">
+              <b-icon icon="eye-slash-fill"/>
+            </b-link>
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-description-${fourthindex}`)">
+              <b-icon icon="pencil-square" aria-hidden="true"/>
+            </b-link>
+            <b-link @click="$bvModal.show(`delete-description-${fourthindex}`)">
+              <b-icon icon="x-circle-fill" aria-hidden="true"/>
+            </b-link>
+          <b-modal 
+			      :id="`edit-description-${fourthindex}`"
+			      title="Editar descripción"
+			      ok-title="Guardar"
+			      @ok="update"
+			      @cancel="cancel"
+		      >
+			      <input type="text" v-model="description.name" /> <br />
+		      </b-modal>
+          <b-modal 
+            :id="`delete-description-${fourthindex}`" 
+            title="Eliminar Proyecto"
+            ok-title="Eliminar"
+            @ok="descriptions.splice(fourthindex, 1)"
+          >
+            <div style="text-align: center; margin: 0 auto; width:380px;">
+              <h1>¿Seguro que quieres eliminar la descripción '{{ description.name }}'?</h1>
+            </div>
+          </b-modal>
         </div>
       </ul>
       <div v-if="add">
-        <input class="m-2" type="text" v-model="description" />
-        <b-button class="m-2" @click="save">Guardar</b-button>
-        <b-button class="m-2" @click="cancel">Cancelar</b-button>
+        <input  type="text" v-model="desc" />
+        <b-button @click="save(desc)">Guardar</b-button>
+        <b-button @click="cancel">Cancelar</b-button>
       </div>
-      <b-link v-if="!add && contract" @click="add = true">
+      <b-link v-if="!add" @click="add = true">
         <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir descripción
-      </b-link>
-      <b-link v-if="!add && !contract" @click="add = true">
-        <br /><b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir descripción
       </b-link>
   </div>
 </template>
 
 
 <script lang="ts">
-import axios from 'axios';
-import descriptionView from './DescriptionView.vue'
 
 export default {
   name: 'ProjectView',
-  components: {
-    descriptionView
-  },
   props:{
     project: {
       type: Object,
@@ -52,6 +67,8 @@ export default {
       hideDesc: false,
       hideProj: false,
       description: '',
+      desc: '',
+      descriptions: []
 		}
 	},
   methods: {
@@ -63,26 +80,16 @@ export default {
       this.$emit('sizeChange');
     },
     cancel() {
-      this.description = '';
       this.add = false;
     },
-    async save() {
-      if (this.description !== '') {
-        await axios({
-          method: 'post',
-          headers: { Authorization: `Bearer ${this.token}` },
-          url: `http://localhost:8080/api/Description`,
-          data: {
-            name: this.description,
-            projectId: this.project.id,
-          }
-        }).then((data: any) =>{
-          this.description = '';
-          this.add = false;
-          this.$emit('refresh');
-        });
-      }
-    }
+    save(description: string) {
+      this.$nextTick(() => {
+        this.descriptions.push(description);
+        this.add = false;
+        this.desc = '';
+        this.$emit('refresh');
+      });
+    },
   },
   mounted() {
     this.counter = this.project.descriptionList.length;

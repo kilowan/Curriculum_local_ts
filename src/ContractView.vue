@@ -1,6 +1,7 @@
 <template>
   <div>
     <project-list-view
+      v-if="projects.length > 0"
       :projects="projects"
       :iconsHidden="iconsHidden"
       @contract="$emit('contract')"
