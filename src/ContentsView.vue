@@ -34,7 +34,6 @@
           :id="`edit-content-${i}`" 
           title="Editar Contenido"
           ok-title="Guardar"
-          @cancel="cancel"
         >
           <div style="text-align: center; margin: 0 auto; width:380px;">
             <input class="m-2" type="text" v-model="content.name" />

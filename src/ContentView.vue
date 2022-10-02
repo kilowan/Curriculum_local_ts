@@ -2,12 +2,35 @@
 	<div>
     <ul>
       <div v-for="(sub, thirdindex) in subContents" v-bind:key="thirdindex">
-        <sub-content
-          :subContent="sub" 
-          :iconsHidden="iconsHidden"
-          @refresh="$emit('refresh')"
-          @hide="$emit('hide')"
-        />
+        <li>
+          {{ sub }}
+          <b-link @click="$bvModal.show(`edit-subcontent-${thirdindex}`)">
+            <b-icon icon="pencil-square" aria-hidden="true"/>
+          </b-link>
+          <b-link @click="$bvModal.show(`delete-subcontent-${thirdindex}`)">
+            <b-icon icon="x-circle-fill" aria-hidden="true"/>
+          </b-link>
+        </li>
+        <b-modal 
+          :id="`delete-subcontent-${thirdindex}`" 
+          title="Eliminar Contenido"
+          ok-title="Eliminar"
+          @ok="subContents.splice(thirdindex, 1)"
+        >
+          <div style="text-align: center; margin: 0 auto; width:380px;">
+            <h1>¿Seguro que quieres eliminar el elemento '{{ sub.name }}'?</h1>
+          </div>
+        </b-modal>
+        <b-modal 
+          :id="`edit-subcontent-${thirdindex}`" 
+          title="Editar Contenido"
+          ok-title="Guardar"
+          @cancel="cancel"
+        >
+          <div style="text-align: center; margin: 0 auto; width:380px;">
+            <input class="m-2" type="text" v-model="sub.name" />
+          </div>
+        </b-modal>
       </div>
       <b-link @click="$bvModal.show(`add-subcontent`)">
         <b-icon icon="plus-circle-fill" aria-hidden="true"/>Añadir SubContenido
@@ -28,14 +51,9 @@
 
 
 <script lang="ts">
-import axios from 'axios';
-import  SubContent  from './SubContentView.vue';
 
 export default {
   name: 'ContentView',
-  components:{
-    SubContent
-  },
   props:{
     content: {
       type: Object,
@@ -59,10 +77,6 @@ export default {
     }
 	},
   methods:{
-    add(subContent: string){
-      this.subContents.push(subContent);
-      this.subcontent = '';
-    },
     addOne(subContent: string) {
       this.subContents.push(subContent);
       this.subcontent = '';
@@ -70,29 +84,6 @@ export default {
     cancel(){
       this.contentData = this.content;
       this.edit = false;
-    },
-    async deleteContent(){
-      if (this.contentData.id) {
-        await axios({
-          method: 'delete',
-          headers: { Authorization: `Bearer ${this.token}` },
-          url: `http://localhost:8080/api/Content/${this.contentData.id}`,
-        }).then((data: any) =>{
-          this.$emit('refresh');
-        });
-      }
-    },
-    async save(){
-      if (this.contentData.name !== '') {
-        await axios({
-          method: 'put',
-          headers: { Authorization: `Bearer ${this.token}` },
-          url: `http://localhost:8080/api/Content/${this.contentData.id}/${this.contentData.name}`,
-        }).then((data: any) =>{
-          this.edit = false;
-          this.$emit('refresh');
-        });
-      }
     },
   },
   mounted(){

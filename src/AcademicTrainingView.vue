@@ -15,7 +15,7 @@
 			<b-button class="m-2" @click="save(element)">Guardar</b-button>
 			<b-button class="m-2" @click="cancel">Cancelar</b-button>
 		</div>
-		<b-link v-if="!iconsHidden" @click="add = true">
+		<b-link v-if="!iconsHidden && !add" @click="add = true">
 			<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir contenido
 		</b-link>
 	</ul>
@@ -59,7 +59,7 @@ export default {
 		},
 		save(content: string) {
 			this.$nextTick(() => {
-				this.contents.push({ name: content });
+				if(content !== '') this.contents.push({ name: content });
 				this.element = '';
 				this.add = false;
 				this.$emit('refresh');
