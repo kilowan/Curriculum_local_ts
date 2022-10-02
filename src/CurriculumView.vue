@@ -21,23 +21,10 @@
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="iconsHidden" @refresh="exp" />
-			<academic-training-list-view :iconsHidden="iconsHidden"	@sizeChange="EditMode"/>
+			<academic-training-list-view :iconsHidden="iconsHidden"/>
 			<skill-list-view :iconsHidden="iconsHidden"	@refresh="EditMode" />
-			<language-list-view 
-				:languageList="ddata.languageList"
-				:userId="ddata.userId"
-				:curriculumId="curriculumId"
-				:iconsHidden="iconsHidden"
-				@sizeChange="EditMode"
-				@refresh="addLanguage($event)"
-			/>			
-			<other-list-view
-				:token="token"
-				:curriculumId="curriculumId"
-				:other="ddata.otherData"
-				:iconsHidden="iconsHidden"
-				@sizeChange="EditMode"
-			/>
+			<language-list-view :languageList="ddata.languageList" :iconsHidden="iconsHidden" @refresh="EditMode"/>			
+			<other-list-view :other="ddata.otherData" :iconsHidden="iconsHidden" @sizeChange="EditMode"/>
 		</dl>
 		<dd class="clear"></dd>
 			<b-button @click="active=false">Guardar</b-button>
@@ -63,19 +50,8 @@
 			<professional-experience-list-view 	:iconsHidden="iconsHidden"	@refresh="EditMode"/>
 			<academic-training-list-view  :iconsHidden="iconsHidden" @refresh="EditMode" />
 			<skill-list-view :iconsHidden="iconsHidden"	@refresh="EditMode" />
-			<language-list-view 
-				:languageList="ddata.languageList"
-				:userId="ddata.userId"
-				:curriculumId="curriculumId"
-				:iconsHidden="iconsHidden"
-				@refresh="EditMode"
-			/>			
-			<other-list-view
-				:curriculumId="curriculumId"
-				:other="ddata.otherData"
-				:iconsHidden="iconsHidden"
-				@refresh="EditMode"
-			/>
+			<language-list-view :languageList="ddata.languageList" :iconsHidden="iconsHidden" @refresh="EditMode"/>			
+			<other-list-view :other="ddata.otherData" :iconsHidden="iconsHidden" @refresh="EditMode"/>
 		</dl>
 			<b-button @click="active=true">Desacer</b-button>
 		</div>
