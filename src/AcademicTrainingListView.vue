@@ -1,20 +1,53 @@
 <template>
 	<div v-if="!hide">	
-		<dt id="academica" v-if="academicTraining">Formación
+		<dt id="academica">Formación
 			<b-link v-if="!iconsHidden" @click="hide = true, $emit('sizeChange')">
 				<b-icon icon="eye-slash-fill"/>
 			</b-link>
     </dt>
-		<dd id="academic" v-if="academicTraining">
+		<dd id="academic">
 			<ul>
-				<div v-for="(academic, firstindex) in academicTraining" v-bind:key="firstindex">
-					<academic-training-view 
-            :academic="academic"
-            :iconsHidden="iconsHidden"
-            @hide="hidden"
-            @sizeChange="$emit('sizeChange')"
-            @refresh="$emit('refresh')"
-          />
+				<div v-for="(academic, firstindex) in academicTrainingList" v-bind:key="firstindex">
+          <li>
+            {{academic.name}}
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-training-${firstindex}`)">
+              <b-icon icon="pencil-square" aria-hidden="true"/>
+            </b-link>
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-training-${firstindex}`)">
+              <b-icon icon="x-circle-fill" aria-hidden="true"/>
+            </b-link>
+            <academic-training-view 
+              :academic="academic"
+              :iconsHidden="iconsHidden"
+              @hide="hidden"
+              @sizeChange="$emit('sizeChange')"
+              @refresh="$emit('refresh')"
+            />
+          </li>
+          <b-modal 
+            :id="`edit-training-${firstindex}`"
+            title="Editar formación"
+            ok-title="Guardar"
+            @cancel="cancel"
+          >
+            <label>Nombre:</label> <input type="text" v-model="academic.name" /> <br />
+            <label>Centro/Lugar:</label> <input type="text" v-model="academic.place" /> <br />
+            <div v-if="academic.graduationDate">
+              <label>Graduación:</label> <b-form-datepicker
+              v-model="academic.graduationDate"
+              min="2015-01-01" max="2030-12-31"></b-form-datepicker> <br />
+            </div>
+          </b-modal>
+          <b-modal 
+            :id="`delete-training-${firstindex}`" 
+            title="Eliminar Contrato"
+            ok-title="Eliminar"
+            @ok="academicTrainingList.splice(firstindex, 1)"
+          >
+            <div style="text-align: center; margin: 0 auto; width:380px;">
+              <h1>¿Seguro que quieres eliminar el contrato '{{ academic.name }}'?</h1>
+            </div>
+          </b-modal>
 				</div>
 			</ul>
     <b-link v-if="!iconsHidden" @click="$bvModal.show('add-training')">
@@ -26,13 +59,13 @@
 			:id="'add-training'"
 			title="Añadir Formación"
 			ok-title="Guardar"
-			@ok="save"
+			@ok="save(training)"
 			@cancel="cancel"
 		>
-			<label>Nombre</label> <input type="text" v-model="trainingNew" /> <br />
-			<label>Centro/Lugar:</label> <input type="text" v-model="place" /> <br />
+			<label>Nombre</label> <input type="text" v-model="training.name" /> <br />
+			<label>Centro/Lugar:</label> <input type="text" v-model="training.place" /> <br />
 			<label>Graduación</label> <input type="date"
-				v-model="graduationDate"
+				v-model="training.graduationDate"
 				min="2015-01-01" max="2030-12-31"> <br />
 		</b-modal>
 	</div>
@@ -50,14 +83,6 @@ export default {
     AcademicTrainingView
   },
   props:{
-    academicTraining: {
-      type: Array,
-      required: true
-    },
-    curriculumId: {
-      type: String,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true
@@ -68,49 +93,43 @@ export default {
 			ContentType: ContentType,
       hide: false,
       counter: 0,
-      trainingNew: '',
-      place: '',
-      graduationDate: null,
+      training:{
+        name: '',
+        place: '',
+        graduationDate: null,
+      },
       add: false,
+      academicTrainingList: []
 		}
 	},
   methods: {
     hidden() {
       this.counter--;
-      if (this.counter == 0 && this.academicTraining.length >= 1) {
+      if (this.counter == 0 && this.academicTrainingList.length >= 1) {
         this.hide = true;
       }
       this.$emit('sizeChange');
     },
     cancel() {
-      this.trainingNew = '';
-      this.place = '';
-      this.graduationDate = null;
+      this.training = {
+        name: '',
+        place: '',
+        graduationDate: null,
+      };
       this.add = false;
     },
-    async save() {
-      if (this.trainingNew !== '') {
-        await axios({
-          method: 'post',
-          headers: { Authorization: `Bearer ${this.token}` },
-          url: `http://localhost:8080/api/Training`,
-          data: {
-            name: this.trainingNew,
-            place: this.place,
-            graduationDate: this.graduationDate === '' ? null : this.graduationDate,
-            curriculumId: this.curriculumId,
-            type: 1,
-          }
-        }).then((data: any) =>{
-          this.cancel();
-          this.$emit('refresh');
+    save() {
+      this.$nextTick(() => {
+        this.academicTrainingList.push({
+            name: this.training.name,
+            place: this.training.place,
+            graduationDate: this.training.graduationDate === '' ? null : this.training.graduationDate,
         });
-      }
+        this.cancel();
+        this.$emit('refresh');
+      });
     }
-  },
-  mounted(){
-    this.counter = this.academicTraining.length;
-  },
+  }
 }
 </script>
 
