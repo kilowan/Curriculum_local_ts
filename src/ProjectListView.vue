@@ -14,7 +14,6 @@
 					<project-view 
 						:project="project"
 						:iconsHidden="iconsHidden"
-						@contract="$emit('contract')"
 						@refresh="$emit('refresh')"
 						@hide="hidden"
 					/>

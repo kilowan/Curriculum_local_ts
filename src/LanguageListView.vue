@@ -11,8 +11,6 @@
           <language-view 
             :language="languages"
             :iconsHidden="iconsHidden"
-            :userId="userId"
-            @hide="hiden"
             @refresh="refresh"
           />
 				</div>

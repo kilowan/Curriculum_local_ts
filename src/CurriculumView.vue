@@ -22,13 +22,7 @@
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="iconsHidden" @refresh="exp" />
 			<academic-training-list-view :iconsHidden="iconsHidden"	@sizeChange="EditMode"/>
-			<skill-list-view 
-				:otherTraining="ddata.otherTraining"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@sizeChange="EditMode"
-				@contract="EditMode" 
-			/>
+			<skill-list-view :iconsHidden="iconsHidden"	@refresh="EditMode" />
 			<language-list-view 
 				:languageList="ddata.languageList"
 				:userId="ddata.userId"
@@ -66,28 +60,21 @@
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 	:iconsHidden="iconsHidden"	@contract="EditMode"/>
-			<academic-training-list-view  :iconsHidden="iconsHidden" @sizeChange="EditMode" />
-			<skill-list-view 
-				:otherTraining="ddata.otherTraining"
-				:iconsHidden="iconsHidden"
-				:curriculumId="curriculumId"
-				@sizeChange="EditMode"
-				@contract="EditMode" 
-			/>
+			<professional-experience-list-view 	:iconsHidden="iconsHidden"	@refresh="EditMode"/>
+			<academic-training-list-view  :iconsHidden="iconsHidden" @refresh="EditMode" />
+			<skill-list-view :iconsHidden="iconsHidden"	@refresh="EditMode" />
 			<language-list-view 
 				:languageList="ddata.languageList"
 				:userId="ddata.userId"
 				:curriculumId="curriculumId"
 				:iconsHidden="iconsHidden"
-				@sizeChange="EditMode"
-				@refresh="addLanguage($event)"
+				@refresh="EditMode"
 			/>			
 			<other-list-view
 				:curriculumId="curriculumId"
 				:other="ddata.otherData"
 				:iconsHidden="iconsHidden"
-				@sizeChange="EditMode"
+				@refresh="EditMode"
 			/>
 		</dl>
 			<b-button @click="active=true">Desacer</b-button>

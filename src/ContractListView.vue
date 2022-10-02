@@ -13,10 +13,7 @@
           </b-link>
           <contract-view
             :iconsHidden="iconsHidden"
-            :contract="contract"
-            @contract="$emit('contract')"
             @refresh="$emit('refresh')"
-            @hide="hidden"
           />
         </li>
         <b-modal 

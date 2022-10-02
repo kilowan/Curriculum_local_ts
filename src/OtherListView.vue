@@ -11,8 +11,6 @@
           <other-view
             :otherData="otherData"
             :iconsHidden="iconsHidden"
-            @hide="hidden"
-            @sizeChange="$emit('sizeChange')"
             @refresh="$emit('refresh')"
           />
 				</div>
@@ -43,10 +41,6 @@ export default {
   props:{
     other: {
       type: Array,
-      required: true
-    },
-    curriculumId: {
-      type: String,
       required: true
     },
     iconsHidden: {

@@ -19,8 +19,6 @@
             <academic-training-view 
               :academic="academic"
               :iconsHidden="iconsHidden"
-              @hide="hidden"
-              @sizeChange="$emit('sizeChange')"
               @refresh="$emit('refresh')"
             />
           </li>
