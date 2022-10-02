@@ -5,6 +5,12 @@
       <div v-for="(contract, secondindex) in contracts" v-bind:key="secondindex">
         <li>
           {{contract.name}}
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-contract-${secondindex}`)">
+            <b-icon icon="pencil-square" aria-hidden="true"/>
+          </b-link>
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-contract-${secondindex}`)">
+            <b-icon icon="x-circle-fill" aria-hidden="true"/>
+          </b-link>
           <contract-view
             :iconsHidden="iconsHidden"
             :contract="contract"
@@ -12,12 +18,6 @@
             @refresh="$emit('refresh')"
             @hide="hidden"
           />
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-contract-${secondindex}`)">
-            <b-icon icon="pencil-square" aria-hidden="true"/>
-          </b-link>
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-contract-${secondindex}`)">
-            <b-icon icon="x-circle-fill" aria-hidden="true"/>
-          </b-link>
         </li>
         <b-modal 
           :id="`edit-contract-${secondindex}`"

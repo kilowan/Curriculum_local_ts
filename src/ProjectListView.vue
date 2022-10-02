@@ -1,10 +1,16 @@
 <template>
-	<li v-if="!hide">
+	<div>
 		Proyectos:
 		<ul>
 			<div v-for="(project, thirdindex) in projects" v-bind:key="thirdindex">
 				<li>
 					{{ project.name }}
+					<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-project-${thirdindex}`)">
+					<b-icon icon="pencil-square" aria-hidden="true"/>
+					</b-link>
+					<b-link @click="$bvModal.show(`delete-project-${thirdindex}`)">
+						<b-icon icon="x-circle-fill" aria-hidden="true"/>
+					</b-link>
 					<project-view 
 						:project="project"
 						:iconsHidden="iconsHidden"
@@ -13,12 +19,6 @@
 						@hide="hidden"
 					/>
 				</li>
-				<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-project-${thirdindex}`)">
-					<b-icon icon="pencil-square" aria-hidden="true"/>
-				</b-link>
-				<b-link @click="$bvModal.show(`delete-project-${thirdindex}`)">
-					<b-icon icon="x-circle-fill" aria-hidden="true"/>
-				</b-link>
 				<b-modal 
 					:id="`edit-project-${thirdindex}`"
 					title="Editar proyecto"
@@ -39,7 +39,7 @@
 				</b-modal>
 			</div>
 		</ul>
-	</li>
+	</div>
 </template>
 
 
