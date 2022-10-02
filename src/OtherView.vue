@@ -20,7 +20,6 @@
           <value-view
             :value="value"
             :iconsHidden="iconsHidden"
-            @hide="$emit('sizeChange')"
             @refresh="$emit('refresh')"
           />
         </div>

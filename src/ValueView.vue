@@ -2,9 +2,6 @@
 <div>
     <li v-if="!hide">
       {{ value.name }}
-      <b-link v-if="!iconsHidden" @click="hide = true, $emit('hide')">
-        <b-icon icon="eye-slash-fill"/>
-      </b-link>
       <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-value-${value.id}`)">
         <b-icon icon="pencil-square" aria-hidden="true"/>
       </b-link>

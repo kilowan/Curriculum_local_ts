@@ -3,7 +3,6 @@
     <div v-for="(socialMediaData, index) in socialMediaList" v-bind:key="index" class="d-flex">
         <social-media-view
           :socialMediaData="socialMediaData"
-          @update="edit($event)"
         />
 			<b-link v-if="!iconsHidden" @click="editMedia(index)">
 				<b-icon icon="pencil-square" aria-hidden="true"/>

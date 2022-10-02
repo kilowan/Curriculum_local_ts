@@ -4,7 +4,6 @@
       v-if="projects.length > 0"
       :projects="projects"
       :iconsHidden="iconsHidden"
-      @contract="$emit('contract')"
       @refresh="$emit('refresh')"
     />
     <div v-if="add">

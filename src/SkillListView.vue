@@ -8,18 +8,44 @@
 		<dd id="complementary" v-if="otherTraining">
 			<ul>
 				<div v-for="(skill, firstindex) in otherTraining" v-bind:key="firstindex">
-					<skill-view
-						:skill="skill"
-						:iconsHidden="iconsHidden"
-						@sizeChange="$emit('sizeChange')"
-						@hide="hidden"
-						@refresh="$emit('refresh')"
-					/>
+					<li>
+						<strong>{{ skill.name }}</strong>
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-skill-${firstindex}`)">
+							<b-icon icon="pencil-square" aria-hidden="true"/>
+						</b-link>
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-skill-${firstindex}`)">
+							<b-icon icon="x-circle-fill" aria-hidden="true"/>
+						</b-link>
+						<skill-view
+							:skill="skill"
+							:iconsHidden="iconsHidden"
+							@refresh="$emit('refresh')"
+						/>
+					</li>
+					<b-modal 
+						:id="`edit-skill-${firstindex}`" 
+						title="Editar skill"
+						ok-title="Guardar"
+					>
+						<div style="text-align: center; margin: 0 auto; width:380px;">
+							<input class="m-2" type="text" v-model="skill.name" />
+						</div>
+					</b-modal>
+					<b-modal 
+						:id="`delete-skill-${firstindex}`"
+						title="Eliminar Contrato"
+						ok-title="Eliminar"
+						@ok="otherTraining.splice(firstindex, 1)"
+					>
+						<div style="text-align: center; margin: 0 auto; width:380px;">
+							<h1>¿Seguro que quieres eliminar el contrato '{{ skill.name }}'?</h1>
+						</div>
+					</b-modal>
 				</div>
 			</ul>
 			<div v-if="add">
 				<input type="text" v-model="trainingNew" />
-				<b-button class="m-2" @click="save">Guardar</b-button>
+				<b-button class="m-2" @click="save(trainingNew)">Guardar</b-button>
 				<b-button class="m-2" @click="cancel">Cancelar</b-button>
 			</div>
 			<b-link v-if="!iconsHidden" @click="add = true">
@@ -33,7 +59,6 @@
 <script lang="ts">
 import SkillView from './SkillView.vue';
 import { ContentType } from './Config/types'
-import axios from 'axios';
 
 export default {
   name: 'ComplementaryExperienceListView',
@@ -41,14 +66,6 @@ export default {
     SkillView
   },
   props:{
-    otherTraining: {
-      type: Array,
-      required: true
-    },
-    curriculumId: {
-      type: String,
-      required: true
-    },
     iconsHidden: {
       type: Boolean,
       required: true
@@ -61,6 +78,7 @@ export default {
 			counter: 0,
 			trainingNew: '',
 			add: false,
+			otherTraining:[]
 		}
 	},
 	methods: {
@@ -75,26 +93,13 @@ export default {
 			this.trainingNew = '';
 			this.add = false;
 		},
-		async save() {
-			if (this.trainingNew !== '') {
-				await axios({
-				method: 'post',
-				headers: { Authorization: `Bearer ${this.token}` },
-				url: `http://localhost:8080/api/Training`,
-				data: {
-					name: this.trainingNew,
-					curriculumId: this.curriculumId,
-					type: 2,
-				}
-				}).then((data: any) =>{
-					this.cancel();
-					this.$emit('refresh');
-				});
-			}
+		save(training: string) {
+			this.$nextTick(() => {
+				this.otherTraining.push({ name: training });
+				this.cancel();
+				this.$emit('refresh');
+			});
 		}
-	},
-	mounted(){
-		this.counter = this.otherTraining.length;
-	},
+	}
 }
 </script>
