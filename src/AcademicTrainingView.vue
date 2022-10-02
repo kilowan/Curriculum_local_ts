@@ -6,7 +6,6 @@
 			<contents-view
 				:contents="contents"
 				:iconsHidden="iconsHidden"
-				@sizeChange="$emit('sizeChange')"
 				@refresh="$emit('refresh')"
 			/>
 		</div>

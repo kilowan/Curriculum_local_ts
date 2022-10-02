@@ -12,11 +12,8 @@
             <b-icon icon="x-circle-fill" aria-hidden="true"/>
           </b-link>
           <content-view
-            :editMode="editMode"
             :content="content"
             :iconsHidden="iconsHidden"
-            @editMode="$emit('sizeChange')"
-            @hide="hidden"
             @refresh="$emit('refresh')"
           />
         </li>
