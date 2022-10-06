@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="active" id="page-wrap">
+		<div v-if="!active" id="page-wrap" class="main">
 			<div id="contact-info" class="vcard">
 				<h1 class="fn">
 					<input type="text" v-model="ddata.fullName" placeholder="Nombre completo" />
@@ -20,14 +20,14 @@
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 	:iconsHidden="iconsHidden" @refresh="exp" />
-			<academic-training-list-view :iconsHidden="iconsHidden"/>
-			<skill-list-view :iconsHidden="iconsHidden"	@refresh="EditMode" />
-			<language-list-view :languageList="ddata.languageList" :iconsHidden="iconsHidden" @refresh="EditMode"/>			
-			<other-list-view :other="ddata.otherData" :iconsHidden="iconsHidden" @sizeChange="EditMode"/>
+			<professional-experience-list-view 	:iconsHidden="active" @refresh="exp" :experienceList="$result.experienceList"/>
+			<academic-training-list-view :iconsHidden="active"/>
+			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
+			<language-list-view :languageList="ddata.languageList" :iconsHidden="active" @refresh="EditMode"/>			
+			<other-list-view :other="ddata.otherData" :iconsHidden="active" @sizeChange="EditMode"/>
 		</dl>
 		<dd class="clear"></dd>
-			<b-button @click="active=false">Guardar</b-button>
+			<b-button @click="downloadPDF">Guardar</b-button>
 		</div>
 		<div  v-else id="page-wrap">
 			<div id="contact-info" class="vcard">
@@ -48,13 +48,13 @@
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 	:iconsHidden="true"	@refresh="EditMode"/>
-			<academic-training-list-view  :iconsHidden="true" @refresh="EditMode" />
-			<skill-list-view :iconsHidden="true"	@refresh="EditMode" />
-			<language-list-view :languageList="ddata.languageList" :iconsHidden="true" @refresh="EditMode"/>			
-			<other-list-view :other="ddata.otherData" :iconsHidden="true" @refresh="EditMode"/>
+			<professional-experience-list-view 	:iconsHidden="active" :experienceList="$result.experienceList" @refresh="EditMode"/>
+			<academic-training-list-view  :iconsHidden="active" @refresh="EditMode" />
+			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
+			<language-list-view :languageList="ddata.languageList" :iconsHidden="active" @refresh="EditMode"/>			
+			<other-list-view :other="ddata.otherData" :iconsHidden="active" @refresh="EditMode"/>
 		</dl>
-			<b-button @click="active=true">Desacer</b-button>
+			<b-button @click="active=false">Desacer</b-button>
 		</div>
 	</div>
 </template>
@@ -68,6 +68,7 @@ import ProfessionalExperienceListView from './ProfessionalExperienceListView.vue
 import SkillListView from './SkillListView.vue';
 import LanguageListView from './LanguageListView.vue';
 import SocialMediaListView from './SocialMediaListView.vue';
+import { jsPDF } from "jspdf";
 
 export default {
   name: 'CurriculumView',
@@ -81,7 +82,7 @@ export default {
   },
   data() {
 		return {
-			active:true,
+			active:false,
 			edit: false,
 			page: 'select',
 			selected: undefined,
@@ -106,8 +107,7 @@ export default {
 				userId: 0,
 				token:''
 			},
-			token: '',
-			curriculumId: '',
+			curriculum:{},
 			SocialMediaType: SocialMediaType,
 			iconsHidden: false
 		}
@@ -157,6 +157,30 @@ export default {
 		let otros: HTMLElement|null = document.querySelector('#otros');
 		let other: HTMLElement|null = document.querySelector('#other');
 		if(otros && other) otros.style.height = other.clientHeight + 'px';
+	},
+	createMedia(media: any){
+		this.curriculum.SocialMedia = media;
+	},
+	downloadPDF() {
+	console.log(this.$result);
+	this.active = true;
+	//const doc = new jsPDF();
+	const contentHtml = document.querySelector('#app');
+
+	var doc = new jsPDF({
+    //orientation: 'landscape'
+	});
+	doc.setFont("courier");
+	//doc.setFontType("normal");
+	doc.setFontSize(24);
+	doc.setTextColor(100);
+	doc.addPage(contentHtml?.outerHTML);
+	
+	//doc. = contentHtml?.outerHTML;
+	/*doc.fromHTML(contentHtml, 15, 15, { // error: fromHTML is not a function
+		width: 170,
+	});*/
+	doc.save("sample.pdf");
 	}
 	/*save: function() {
 		const data = JSON.stringify(this.inputData)
@@ -171,7 +195,9 @@ export default {
 	},*/
   },
   mounted() {
-	  	//if(this.$route.params.token) {
+	
+	this.$result.experienceList = [];  	
+	//if(this.$route.params.token) {
 			//this.curriculumId = this.$route.params.curriculumId;
 			//this.token = this.$route.params.token;
 			//this.ddata = this.getCurriculum(this.$route.params.curriculumId);
@@ -179,33 +205,4 @@ export default {
   	}
 }
 </script>
-
-<style>
-* { margin: 0; padding: 0; }
-body { font: 16px Helvetica, Sans-Serif; line-height: 24px; background: url(../images/noise.jpg); }
-.clear { clear: both; }
-.idiomas { border-right: 1px solid #999; }
-.otros { border-right: 1px solid #999; }
-#page-wrap { width: 1000px; margin: 40px auto 60px; }
-#pic { float: right; margin: -30px 0 0 0; height: 100px; }
-h1 { margin: 0 0 16px 0; padding: 0 0 16px 0; font-size: 34px; font-weight: bold; letter-spacing: -2px; border-bottom: 1px solid #999; }
-h2 { font-size: 20px; margin: 0 0 6px 0; position: relative; }
-h2 span { position: absolute; bottom: 0; right: 0; font-style: italic; font-family: Georgia, Serif; font-size: 16px; color: #999; font-weight: normal; }
-p { margin: 0 0 16px 0; }
-a { color: #999; text-decoration: none; border-bottom: 1px dotted #999; }
-a:hover { border-bottom-style: solid; color: black; }
-ul { margin: 0 0 32px 17px; }
-li { font-size: 20px; }
-#objective { width: 100%; float: left; }
-#objective p { font-family: Georgia, Serif; font-style: italic; color: #666; }
-dt { font-style: italic; font-weight: bold; font-size: 18px; text-align: right; padding: 0 26px 0 0; width: 150px; float: left; border-right: 1px solid #999;  }
-dd { width: 800px; float: right; }
-dd.clear { float: none; margin: 0; height: 15px; }
-.formacion { border-right: 1px solid #999; }
-.formacion2 { border-right: 1px solid #999; }
-  .marco {
-    margin:2%;
-	border-style: groove; border-width: 1px;
-  }
-</style>
 

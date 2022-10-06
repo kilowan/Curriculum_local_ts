@@ -4,8 +4,19 @@ import VueRouter, { RouteConfig } from "vue-router";
 //import PasswordRecovery from "../PasswordRecovery.vue";
 import CurriculumView from '../views/CurriculumView.vue';
 //import CurriculumList from '../CurriculumList.vue';
-/* eslint-disable */
 Vue.use(VueRouter);
+Vue.prototype.$result = {
+  fullName: '',
+  description: '',
+  phoneNumber: 0,
+  email: '',
+  experience: [],
+  otherTraining: [],
+  academicTraining: [],
+  languageList: [],
+  socialMedia: [],
+  otherData: [],
+};
 
 const routes: Array<RouteConfig> = [
   {

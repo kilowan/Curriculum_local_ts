@@ -24,7 +24,6 @@
 <script lang="ts">
 import ContentsView from './ContentsView.vue'
 import { ContentType } from '../Config/types'
-import axios from 'axios';
 
 export default {
   name: 'AcademicTrainingView',
@@ -61,29 +60,6 @@ export default {
 				if(content !== '') this.contents.push({ name: content });
 				this.element = '';
 				this.add = false;
-				this.$emit('refresh');
-			});
-		},
-		async update() {
-			await axios({
-			method: 'put',
-			headers: { Authorization: `Bearer ${this.token}` },
-			url: `http://localhost:8080/api/Training/${this.academic.id}`,
-			data: {
-					name: this.academic.name,
-					place: this.academic.place,
-					graduationDate: this.academic.initDate
-				}
-			}).then((data: any) =>{
-				this.$emit('refresh');
-			});
-		},
-		async deleteTraining() {
-			await axios({
-				method: 'delete',
-				headers: { Authorization: `Bearer ${this.token}` },
-				url: `http://localhost:8080/api/Training/${this.academic.id}`,
-			}).then((data: any) =>{
 				this.$emit('refresh');
 			});
 		}
