@@ -21,7 +21,7 @@
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="active" @refresh="exp" :experienceList="$result.experienceList"/>
-			<academic-training-list-view :iconsHidden="active"/>
+			<academic-training-list-view :iconsHidden="active" @refresh="EditMode($event)"/>
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
 			<language-list-view :languageList="ddata.languageList" :iconsHidden="active" @refresh="EditMode"/>			
 			<other-list-view :other="ddata.otherData" :iconsHidden="active" @sizeChange="EditMode"/>
@@ -49,7 +49,7 @@
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="active" :experienceList="$result.experienceList" @refresh="EditMode"/>
-			<academic-training-list-view  :iconsHidden="active" @refresh="EditMode" />
+			<academic-training-list-view  :iconsHidden="active" @refresh="EditMode($event)" />
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
 			<language-list-view :languageList="ddata.languageList" :iconsHidden="active" @refresh="EditMode"/>			
 			<other-list-view :other="ddata.otherData" :iconsHidden="active" @refresh="EditMode"/>
@@ -113,14 +113,19 @@ export default {
 		}
 	},
   methods: {
-	EditMode(data:string){
+	EditMode: function(data: any){
         this.$nextTick(() => {
 			this.exp();
 			this.comp();
 			this.academic();
 			this.lang();
 			this.other();
-			return data;
+			if(data !== "" && data !== null) {
+				this.curriculum.academicTraining = data;
+				console.log(this.curriculum);
+			}
+
+			//return data;
         });
 	},
 	addLanguage: function(data: any){

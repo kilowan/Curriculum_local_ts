@@ -39,12 +39,18 @@ export interface CurriculumDetail {
     initDate?: string;
     finishDate?: string;
     graduationDate?: string;
-    contents: Array<Content>;
+    contents: Contents;
   }
   export interface Content extends base {
     name: string;
     edit: boolean;
-    subContents: Array<SubContent>;
+    subContents: SubContents;
+  }
+  export interface Contents extends base {
+    contents: Array<Content>
+  }
+  export interface SubContents extends base {
+    subContents: Array<SubContent>
   }
   export interface SubContent extends base {
     name: string;
