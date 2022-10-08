@@ -89,7 +89,7 @@ export default {
         subContents: this.subContents.map((data: any) => { return { name: data }}), 
         id: this.contentIndex
       };
-      this.$emit('refresh', subs);
+      this.$emit('update', subs);
       this.subcontent = '';
     },
     cancel(){

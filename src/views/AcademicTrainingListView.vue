@@ -20,7 +20,7 @@
               :academic="academic"
               :iconsHidden="iconsHidden"
               :academicIndex="firstindex"
-              @refresh="refresh($event, firstindex)"
+              @update="refresh($event, firstindex)"
             />
           </li>
           <b-modal 
@@ -103,8 +103,8 @@ export default {
   methods: {
     refresh(Contents: Contents, index: number){
       this.$nextTick(() => {
-        this.academicTrainingList[index].contents = Contents;
-        this.$emit('refresh', this.academicTrainingList)
+        this.academicTrainingList[index].contents = Contents.contents;
+        this.$emit('update', this.academicTrainingList)
       });
     },
     cancel() {
@@ -123,7 +123,7 @@ export default {
             graduationDate: this.training.graduationDate === '' ? null : this.training.graduationDate,
         });
         this.cancel();
-        this.$emit('refresh', this.academicTrainingList);
+        this.$emit('update', this.academicTrainingList);
       });
     }
   }

@@ -8,7 +8,7 @@
 					<contents-view
 						:contents="contents"
 						:iconsHidden="iconsHidden"
-						@refresh="refresh($event)"
+						@update="refresh($event)"
 					/>
 			</li>
 		</div>
@@ -71,7 +71,7 @@ export default {
 				};
 				this.element = '';
 				this.add = false;
-				this.$emit('refresh', result);
+				this.$emit('update', result);
 			});
 		},
 		refresh(content: Content) {
@@ -80,7 +80,7 @@ export default {
 				this.contents[content.id].id = content.id;
 				var cont = this.contents[content.id];
 
-				this.$emit('refresh', cont);
+				this.$emit('update', cont);
 			});
 		}
 	}

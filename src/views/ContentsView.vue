@@ -13,7 +13,7 @@
           :content="content"
           :iconsHidden="iconsHidden"
           :contentIndex="i"
-          @refresh="refresh($event, content, i)"
+          @update="refresh($event, content, i)"
         />
       </li>
       <b-modal 
@@ -79,7 +79,7 @@ export default {
     refresh(subContents: SubContents, content: any, index: number ){
       this.$nextTick(() => {
         var cont : Content = { name: content.name, subContents: subContents, id: index };
-        this.$emit('refresh', cont);
+        this.$emit('update', cont);
       });
     }
   },

@@ -15,19 +15,19 @@
 			<div id="objective">
 				<textarea v-model="ddata.description" placeholder="Descripción"/>
 			</div>
-			<div class="clear">{{EditMode('')}}</div>	
+			<div class="clear"></div>	
 			<dl>
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="active" @refresh="exp" :experienceList="$result.experienceList"/>
-			<academic-training-list-view :iconsHidden="active" @refresh="EditMode($event)"/>
+			<academic-training-list-view :iconsHidden="active" @update="updateAcademic($event)"/>
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
 			<language-list-view :languageList="ddata.languageList" :iconsHidden="active" @refresh="EditMode"/>			
 			<other-list-view :other="ddata.otherData" :iconsHidden="active" @sizeChange="EditMode"/>
 		</dl>
 		<dd class="clear"></dd>
-			<b-button @click="downloadPDF">Guardar</b-button>
+			<b-button @click="getFile(curriculum)">Guardar</b-button>
 		</div>
 		<div  v-else id="page-wrap">
 			<div id="contact-info" class="vcard">
@@ -43,13 +43,13 @@
 			<div id="objective">
 				<p>{{ ddata.description }}</p>
 			</div>
-			<div class="clear">{{EditMode('')}}</div>	
+			<div class="clear"></div>	
 			<dl>
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="active" :experienceList="$result.experienceList" @refresh="EditMode"/>
-			<academic-training-list-view  :iconsHidden="active" @refresh="EditMode($event)" />
+			<academic-training-list-view  :iconsHidden="active" @update="updateAcademic($event)" />
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
 			<language-list-view :languageList="ddata.languageList" :iconsHidden="active" @refresh="EditMode"/>			
 			<other-list-view :other="ddata.otherData" :iconsHidden="active" @refresh="EditMode"/>
@@ -78,7 +78,7 @@ export default {
 	ProfessionalExperienceListView,
 	SkillListView,
 	LanguageListView,
-	SocialMediaListView
+	SocialMediaListView,
   },
   data() {
 		return {
@@ -107,26 +107,27 @@ export default {
 				userId: 0,
 				token:''
 			},
-			curriculum:{},
+			curriculum:{
+				academicTraining: []
+			},
 			SocialMediaType: SocialMediaType,
 			iconsHidden: false
 		}
 	},
   methods: {
-	EditMode: function(data: any){
+	EditMode() {
         this.$nextTick(() => {
 			this.exp();
 			this.comp();
 			this.academic();
 			this.lang();
 			this.other();
-			if(data !== "" && data !== null) {
-				this.curriculum.academicTraining = data;
-				console.log(this.curriculum);
-			}
-
-			//return data;
         });
+	},
+	updateAcademic(media: any){
+		this.curriculum.academicTraining = media;
+		console.log(this.curriculum);
+		this.EditMode();
 	},
 	addLanguage: function(data: any){
 		this.$nextTick(() => {
@@ -163,50 +164,21 @@ export default {
 		let other: HTMLElement|null = document.querySelector('#other');
 		if(otros && other) otros.style.height = other.clientHeight + 'px';
 	},
-	createMedia(media: any){
-		this.curriculum.SocialMedia = media;
-	},
-	downloadPDF() {
-	console.log(this.$result);
-	this.active = true;
-	//const doc = new jsPDF();
-	const contentHtml = document.querySelector('#app');
 
-	var doc = new jsPDF({
-    //orientation: 'landscape'
-	});
-	doc.setFont("courier");
-	//doc.setFontType("normal");
-	doc.setFontSize(24);
-	doc.setTextColor(100);
-	doc.addPage(contentHtml?.outerHTML);
-	
-	//doc. = contentHtml?.outerHTML;
-	/*doc.fromHTML(contentHtml, 15, 15, { // error: fromHTML is not a function
-		width: 170,
-	});*/
-	doc.save("sample.pdf");
+	getFile(contenido: any){
+		const a = document.createElement("a");
+		const archivo = new Blob([JSON.stringify(contenido)], { type: "" });
+		//new Blob([contenido], { type: 'text/plain' });
+		const url = URL.createObjectURL(archivo);
+		a.href = url;
+		var date = new Date();
+		a.download = 'descarga' + date.toISOString() + '.json';
+		a.click();
+		URL.revokeObjectURL(url);
 	}
-	/*save: function() {
-		const data = JSON.stringify(this.inputData)
-		const blob = new Blob([data], {type: 'text/plain'})
-		const e = document.createEvent('MouseEvents'),
-		a = document.createElement('a');
-		a.download = "CurriculumData.json";
-		a.href = window.URL.createObjectURL(blob);
-		a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
-		e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-		a.dispatchEvent(e);
-	},*/
   },
   mounted() {
-	
-	this.$result.experienceList = [];  	
-	//if(this.$route.params.token) {
-			//this.curriculumId = this.$route.params.curriculumId;
-			//this.token = this.$route.params.token;
-			//this.ddata = this.getCurriculum(this.$route.params.curriculumId);
-		//}
+	this.$result.experienceList = [];
   	}
 }
 </script>
