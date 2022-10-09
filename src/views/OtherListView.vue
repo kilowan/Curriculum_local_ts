@@ -47,7 +47,7 @@
 				<b-button class="m-2" @click="save(otherNew)">Guardar</b-button>
 				<b-button class="m-2" @click="cancel">Cancelar</b-button>
 			</div>
-			<b-link v-if="!iconsHidden" @click="add = true">
+			<b-link v-if="!iconsHidden && !add" @click="add = true, $emit('sizeChange')">
 				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Otros Datos
 			</b-link>
 		</dd>
@@ -90,6 +90,7 @@ export default {
 		cancel() {
 			this.otherNew = '';
 			this.add = false;
+			this.$emit('sizeChange');
 		},
 		save(otherNew: string) {
 			this.$nextTick(() => {

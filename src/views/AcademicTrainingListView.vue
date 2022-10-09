@@ -58,7 +58,7 @@
 			:id="'add-training'"
 			title="Añadir Formación"
 			ok-title="Guardar"
-			@ok="save(training)"
+			@ok="save"
 			@cancel="cancel"
 		>
 			<label>Nombre</label> <input type="text" v-model="training.name" /> <br />
