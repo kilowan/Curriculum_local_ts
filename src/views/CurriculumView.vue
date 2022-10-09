@@ -61,7 +61,7 @@
 
 
 <script lang="ts">
-import { SocialMedia, SocialMediaType, Language } from '../Config/types';
+import { SocialMedia, Language } from '../Config/types';
 import  AcademicTrainingListView from './AcademicTrainingListView.vue';
 import  OtherListView from './OtherListView.vue';
 import ProfessionalExperienceListView from './ProfessionalExperienceListView.vue';
@@ -82,12 +82,7 @@ export default {
   data() {
 		return {
 			active:false,
-			edit: false,
-			page: 'select',
-			selected: undefined,
-			name: '',
 			add: false,
-			message: '',
 			curriculum: {
 				otherTraining:[],
 				languageList:[],
@@ -100,7 +95,6 @@ export default {
 				otherData:[],
 				socialMedia: []
 			},
-			SocialMediaType: SocialMediaType,
 			iconsHidden: false
 		}
 	},
