@@ -48,7 +48,7 @@
 				<b-button class="m-2" @click="save(trainingNew)">Guardar</b-button>
 				<b-button class="m-2" @click="cancel">Cancelar</b-button>
 			</div>
-			<b-link v-if="!iconsHidden" @click="add = true">
+			<b-link v-if="!iconsHidden && !add" @click="add = true">
 				<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir Skill
 			</b-link>
 		</dd>

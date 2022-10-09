@@ -1,32 +1,17 @@
 export interface base {
   id: number;
 }
-export interface CurriculumDetail extends base{
-    userId: number,
-    curriculumName: string;
+export interface CurriculumDetail {
     fullName: string;
     description: string;
-    phoneNumber: PhoneNumber;
-    email: Email;
+    phoneNumber: string;
+    email: string;
     experience: Array<Experience>;
     otherTraining: Array<Training>;
     academicTraining: Array<Training>;
-    languageList: Array<UserLanguage>;
+    languageList: Array<Language>;
     socialMedia: Array<SocialMedia>;
     otherData: Array<OtherData>;
-  }
-  export interface Curriculum extends base {
-    curriculumName: string;
-    curriculumId: number;
-  }
-  export interface PhoneNumber extends base {
-    number: number;
-    prefix: string;
-  }
-  export interface Email extends base {
-    mailName: string;
-    domain: string;
-    fullEmail: string;
   }
   export interface Experience extends base {
     name: string;
@@ -54,23 +39,25 @@ export interface CurriculumDetail extends base{
     initDate?: string;
     finishDate?: string;
     graduationDate?: string;
-    contents: Array<Content>;
+    contents: Contents;
   }
   export interface Content extends base {
     name: string;
     edit: boolean;
-    subContents: Array<SubContent>;
+    subContents: SubContents;
+  }
+  export interface Contents extends base {
+    contents: Array<Content>
+  }
+  export interface SubContents extends base {
+    subContents: Array<SubContent>
   }
   export interface SubContent extends base {
     name: string;
   }
-  export interface UserLanguage extends base {
-    name: string;
-    level: string;
-    userId: number;
-  }
   export interface Language extends base {
     name: string;
+    level: string;
   }
   export interface SocialMedia extends base {
     name: string;
@@ -85,20 +72,6 @@ export interface CurriculumDetail extends base{
   }
   export interface Value extends base {
     name: string;
-  }
-  export interface Credentials extends base {
-    username: string;
-    password: string;
-  }
-
-  export interface User {
-    userId: number;
-    name: string;
-    surname1: string;
-    surname2: string;
-    credentials: Credentials;
-    phoneNumbers: Array<PhoneNumber>;
-    emailList: Array<Email>;
   }
   export enum ContentType {
     Academic,

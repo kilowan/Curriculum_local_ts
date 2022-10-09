@@ -9,7 +9,7 @@
 			<ul>
 				<div v-for="(academic, firstindex) in academicTrainingList" v-bind:key="firstindex">
           <li>
-            {{academic.name}}
+            {{ academic.name }}
             <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-training-${firstindex}`)">
               <b-icon icon="pencil-square" aria-hidden="true"/>
             </b-link>
@@ -19,7 +19,8 @@
             <academic-training-view 
               :academic="academic"
               :iconsHidden="iconsHidden"
-              @refresh="$emit('refresh')"
+              :academicIndex="firstindex"
+              @update="refresh($event, firstindex)"
             />
           </li>
           <b-modal 
@@ -57,7 +58,7 @@
 			:id="'add-training'"
 			title="Añadir Formación"
 			ok-title="Guardar"
-			@ok="save(training)"
+			@ok="save"
 			@cancel="cancel"
 		>
 			<label>Nombre</label> <input type="text" v-model="training.name" /> <br />
@@ -71,7 +72,7 @@
 
 
 <script lang="ts">
-import { ContentType } from '../Config/types'
+import { ContentType, Contents } from '../Config/types'
 import AcademicTrainingView from './AcademicTrainingView.vue';
 
 export default {
@@ -100,12 +101,11 @@ export default {
 		}
 	},
   methods: {
-    hidden() {
-      this.counter--;
-      if (this.counter == 0 && this.academicTrainingList.length >= 1) {
-        this.hide = true;
-      }
-      this.$emit('sizeChange');
+    refresh(Contents: Contents, index: number){
+      this.$nextTick(() => {
+        this.academicTrainingList[index].contents = Contents.contents;
+        this.$emit('update', this.academicTrainingList)
+      });
     },
     cancel() {
       this.training = {
@@ -123,7 +123,7 @@ export default {
             graduationDate: this.training.graduationDate === '' ? null : this.training.graduationDate,
         });
         this.cancel();
-        this.$emit('refresh');
+        this.$emit('update', this.academicTrainingList);
       });
     }
   }

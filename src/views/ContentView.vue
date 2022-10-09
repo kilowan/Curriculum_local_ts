@@ -51,6 +51,8 @@
 
 
 <script lang="ts">
+import { SubContents } from '@/Config/types';
+
 
 export default {
   name: 'ContentView',
@@ -61,6 +63,10 @@ export default {
     },
     iconsHidden: {
       type: Boolean,
+      required: true,
+    },
+    contentIndex: {
+      type: Number,
       required: true,
     }
   },
@@ -79,6 +85,11 @@ export default {
   methods:{
     addOne(subContent: string) {
       this.subContents.push(subContent);
+      var subs : SubContents = {
+        subContents: this.subContents.map((data: any) => { return { name: data }}), 
+        id: this.contentIndex
+      };
+      this.$emit('update', subs);
       this.subcontent = '';
     },
     cancel(){
