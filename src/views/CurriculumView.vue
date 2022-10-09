@@ -3,56 +3,56 @@
 		<div v-if="!active" id="page-wrap" class="main">
 			<div id="contact-info" class="vcard">
 				<h1 class="fn">
-					<input type="text" v-model="ddata.fullName" placeholder="Nombre completo" />
+					<input type="text" v-model="curriculum.fullName" placeholder="Nombre completo" />
 				</h1>
 				<div>
 					<b-icon icon="telephone-fill" aria-hidden="true"/> 
-					<input type="text" v-model="ddata.phoneNumber.number" placeholder="Teléfono"/><br />
+					<input type="text" v-model="curriculum.phoneNumber" placeholder="Teléfono"/><br />
 				</div>
-				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="ddata.email.fullEmail" placeholder="Email"/> 
+				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="curriculum.email" placeholder="Email"/> 
 			</div>
 				<social-media-list-view :iconsHidden="iconsHidden"/>
 			<div id="objective">
-				<textarea v-model="ddata.description" placeholder="Descripción"/>
+				<textarea v-model="curriculum.description" placeholder="Descripción"/>
 			</div>
 			<div class="clear"></div>	
 			<dl>
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 	:iconsHidden="active" @refresh="exp" :experienceList="$result.experienceList"/>
+			<professional-experience-list-view 	:iconsHidden="active" @refresh="exp" :experienceList="curriculum.professionalExperience"/>
 			<academic-training-list-view :iconsHidden="active" @update="updateAcademic($event)"/>
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
-			<language-list-view :languageList="ddata.languageList" :iconsHidden="active" @refresh="EditMode"/>			
-			<other-list-view :other="ddata.otherData" :iconsHidden="active" @sizeChange="EditMode"/>
+			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
+			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @sizeChange="EditMode"/>
 		</dl>
 		<dd class="clear"></dd>
 			<b-button @click="getFile(curriculum)">Guardar</b-button>
 		</div>
 		<div  v-else id="page-wrap">
 			<div id="contact-info" class="vcard">
-				<h1 class="fn">{{ ddata.fullName }}</h1>
+				<h1 class="fn">{{ curriculum.fullName }}</h1>
 				<div>
-					<b-icon icon="telephone-fill" aria-hidden="true"/> <span>{{ ddata.phoneNumber.number }}</span><br />
+					<b-icon icon="telephone-fill" aria-hidden="true"/> <span>{{ curriculum.phoneNumber }}</span><br />
 				</div>
 				<div>
-					<b-icon icon="envelope" aria-hidden="true"/> <a :href="'mailto:'+ ddata.email.fullEmail">{{ ddata.email.fullEmail }}</a><br />
+					<b-icon icon="envelope" aria-hidden="true"/> <a :href="'mailto:'+ curriculum.email">{{ curriculum.email }}</a><br />
 				</div>
 			</div>
 			<social-media-list-view :iconsHidden="true"/>
 			<div id="objective">
-				<p>{{ ddata.description }}</p>
+				<p>{{ curriculum.description }}</p>
 			</div>
 			<div class="clear"></div>	
 			<dl>
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 	:iconsHidden="active" :experienceList="$result.experienceList" @refresh="EditMode"/>
+			<professional-experience-list-view 	:iconsHidden="active" :experienceList="curriculum.professionalExperience" @refresh="EditMode"/>
 			<academic-training-list-view  :iconsHidden="active" @update="updateAcademic($event)" />
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
-			<language-list-view :languageList="ddata.languageList" :iconsHidden="active" @refresh="EditMode"/>			
-			<other-list-view :other="ddata.otherData" :iconsHidden="active" @refresh="EditMode"/>
+			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
+			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @refresh="EditMode"/>
 		</dl>
 			<b-button @click="active=false">Desacer</b-button>
 		</div>
@@ -61,14 +61,13 @@
 
 
 <script lang="ts">
-import { SocialMedia, SocialMediaType } from '../Config/types';
+import { SocialMedia, SocialMediaType, Language } from '../Config/types';
 import  AcademicTrainingListView from './AcademicTrainingListView.vue';
 import  OtherListView from './OtherListView.vue';
 import ProfessionalExperienceListView from './ProfessionalExperienceListView.vue';
 import SkillListView from './SkillListView.vue';
 import LanguageListView from './LanguageListView.vue';
 import SocialMediaListView from './SocialMediaListView.vue';
-import { jsPDF } from "jspdf";
 
 export default {
   name: 'CurriculumView',
@@ -89,26 +88,17 @@ export default {
 			name: '',
 			add: false,
 			message: '',
-			ddata: {
-				experience:[],
+			curriculum: {
 				otherTraining:[],
 				languageList:[],
-				email: {
-					fullEmail:''
-				},
-				phoneNumber:{
-					number:''
-				},
+				professionalExperience:[],
+				email: '',
+				phoneNumber:'',
 				fullName:'',
 				description:'',
 				academicTraining:[],
 				otherData:[],
-				socialMedia:[],
-				userId: 0,
-				token:''
-			},
-			curriculum:{
-				academicTraining: []
+				socialMedia: []
 			},
 			SocialMediaType: SocialMediaType,
 			iconsHidden: false
@@ -129,14 +119,14 @@ export default {
 		console.log(this.curriculum);
 		this.EditMode();
 	},
-	addLanguage: function(data: any){
+	addLanguage: function(data: Language){
 		this.$nextTick(() => {
-			this.ddata.languageList.push(data);
+			this.curriculum.languageList.push(data);
 		});
 	},
 	addSocialMedia: function(data: SocialMedia){
 		this.$nextTick(() => {
-			this.ddata.socialMedia.push(data);
+			this.curriculum.socialMedia.push(data);
 		});
 	},
 	exp: function () {
@@ -176,10 +166,7 @@ export default {
 		a.click();
 		URL.revokeObjectURL(url);
 	}
-  },
-  mounted() {
-	this.$result.experienceList = [];
-  	}
+  }
 }
 </script>
 
