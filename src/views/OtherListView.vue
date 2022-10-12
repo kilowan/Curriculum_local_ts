@@ -19,7 +19,8 @@
 						<other-view
 							:otherData="otherData"
 							:iconsHidden="iconsHidden"
-							@refresh="$emit('refresh')"
+							:otherIndex="firstindex"
+							@update="update($event)"
 						/>
 					</li>
 					<b-modal
@@ -34,7 +35,7 @@
 						:id="`delete-other-${firstindex}`" 
 						title="Eliminar elemento"
 						ok-title="Eliminar"
-						@ok="other.splice(firstindex, 1)"
+						@ok="splice(firstindex)"
 					>
 						<div style="text-align: center; margin: 0 auto; width:380px;">
 							<h1>¿Seguro que quieres eliminar el elemento '{{ otherData.name }}'?</h1>
@@ -58,6 +59,7 @@
 
 <script lang="ts">
 import otherView from './OtherView.vue';
+import { Value } from '@/Config/types';
 
 export default {
   name: 'OtherListView',
@@ -90,13 +92,21 @@ export default {
 		cancel() {
 			this.otherNew = '';
 			this.add = false;
-			this.$emit('sizeChange');
+			this.$emit('update', this.other);
 		},
 		save(otherNew: string) {
 			this.$nextTick(() => {
-				this.other.push({ name: otherNew });
+				this.other.push({ name: otherNew, values: new Array<Value>() });
 				this.cancel();
 			});
+		},
+		update(values: any){
+			this.other[values.id].values = values.values;
+			this.$emit('update', this.other);
+		},
+		splice(index: number) {
+			this.other.splice(index, 1);
+			this.$emit('update', this.other);
 		}
   }
 }
