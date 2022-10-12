@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <div v-for="(value, secondindex) in values" v-bind:key="secondindex">
+      <div v-for="(value, secondindex) in values.values" v-bind:key="secondindex">
         <li v-if="!hide">
           {{ value.name }}
           <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-value-${secondindex}`)">
@@ -23,7 +23,7 @@
           :id="`delete-value-${secondindex}`" 
           title="Eliminar valor"
           ok-title="Eliminar"
-          @ok="values.splice(secondindex, 1)"
+          @ok="splice(secondindex)"
         >
           <div style="text-align: center; margin: 0 auto; width:380px;">
             <h1>¿Seguro que quieres eliminar el valor '{{ value.name }}'?</h1>
@@ -31,13 +31,13 @@
         </b-modal>
       </div>
       <div v-if="!iconsHidden">
-        <b-link @click="$bvModal.show(`add-value`)">
+        <b-link @click="$bvModal.show(`add-value-${otherIndex}`)">
           <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir valor
         </b-link>
     </div>
     </ul>
     <b-modal 
-      :id="`add-value`"
+      :id="`add-value-${otherIndex}`"
       title="Añadir valor"
       ok-title="Guardar"
       @ok="save(valueNew)"
@@ -63,6 +63,10 @@ export default {
       type: Boolean,
       required: true
     },
+    otherIndex: {
+      type: Number,
+      required: true
+    }
   },
   data() {
 		return {
@@ -70,7 +74,10 @@ export default {
       add: false,
       contract: false,
       valueNew: '',
-      values: []
+      values: {
+        id: 0,
+        values: []
+      }
     }
 	},
   methods: {
@@ -80,11 +87,17 @@ export default {
     },
     save(value: string) {
 			this.$nextTick(() => {
-				this.values.push({ name: value });
+				this.values.values.push({ name: value });
+        this.values.id = this.otherIndex;
 				this.cancel();
-				this.$emit('refresh');
+				this.$emit('update', this.values);
 			});
     },
+    splice(index: number) {
+      this.values.values.splice(index, 1);
+      this.values.id = this.otherIndex;
+      this.$emit('update', this.values);
+    }
   }
 }
 </script>

@@ -24,7 +24,7 @@
 			<academic-training-list-view :iconsHidden="active" @update="updateAcademic($event)"/>
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
 			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
-			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @sizeChange="EditMode"/>
+			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @update="updateOther($event)"/>
 		</dl>
 		<dd class="clear"></dd>
 			<b-button @click="getFile(curriculum)">Guardar</b-button>
@@ -52,7 +52,7 @@
 			<academic-training-list-view  :iconsHidden="active" @update="updateAcademic($event)" />
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
 			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
-			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @refresh="EditMode"/>
+			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @update="updateOther($event)" />
 		</dl>
 			<b-button @click="active=false">Desacer</b-button>
 		</div>
@@ -110,6 +110,11 @@ export default {
 	},
 	updateAcademic(media: any){
 		this.curriculum.academicTraining = media;
+		console.log(this.curriculum);
+		this.EditMode();
+	},
+	updateOther(media: any){
+		this.curriculum.otherData = media;
 		console.log(this.curriculum);
 		this.EditMode();
 	},
