@@ -25,7 +25,10 @@
 				:iconsHidden="active" 
 				@update="updateAcademic($event)" 
 			/>
-			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
+			<skill-list-view 
+				:iconsHidden="active"	
+				@refresh="EditMode" 
+			/>
 			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
 			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @update="updateOther($event)"/>
 		</dl>

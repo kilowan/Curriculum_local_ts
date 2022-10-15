@@ -7,23 +7,24 @@
 		</dt>
 		<dd id="complementary" v-if="otherTraining">
 			<ul>
-				<div v-for="(skill, firstindex) in otherTraining" v-bind:key="firstindex">
+				<div v-for="skill in otherTraining" v-bind:key="skill.id">
 					<li>
 						<strong>{{ skill.name }}</strong>
-						<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-skill-${firstindex}`)">
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-skill-${skill.id}`)">
 							<b-icon icon="pencil-square" aria-hidden="true"/>
 						</b-link>
-						<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-skill-${firstindex}`)">
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-skill-${skill.id}`)">
 							<b-icon icon="x-circle-fill" aria-hidden="true"/>
 						</b-link>
 						<skill-view
 							:skill="skill"
 							:iconsHidden="iconsHidden"
-							@refresh="$emit('refresh')"
+							@update="refresh($event)"
+              				@sizeChange="$emit('sizeChange')"
 						/>
 					</li>
 					<b-modal 
-						:id="`edit-skill-${firstindex}`" 
+						:id="`edit-skill-${skill.id}`" 
 						title="Editar skill"
 						ok-title="Guardar"
 					>
@@ -32,10 +33,10 @@
 						</div>
 					</b-modal>
 					<b-modal 
-						:id="`delete-skill-${firstindex}`"
+						:id="`delete-skill-${skill.id}`"
 						title="Eliminar Contrato"
 						ok-title="Eliminar"
-						@ok="otherTraining.splice(firstindex, 1)"
+						@ok="splice(skill.id)"
 					>
 						<div style="text-align: center; margin: 0 auto; width:380px;">
 							<h1>¿Seguro que quieres eliminar el contrato '{{ skill.name }}'?</h1>
@@ -58,7 +59,7 @@
 
 <script lang="ts">
 import SkillView from './SkillView.vue';
-import { ContentType } from '../../Config/types'
+import { ContentType, Training, Content } from '../../Config/types'
 
 export default {
   name: 'ComplementaryExperienceListView',
@@ -78,26 +79,42 @@ export default {
 			counter: 0,
 			trainingNew: '',
 			add: false,
-			otherTraining:[]
+			otherTraining: new Array<Training>(),
+			index: 0
 		}
 	},
 	methods: {
-		hidden() {
-			this.counter--;
-			if (this.counter == 0 && this.otherTraining.length >= 1) {
-				this.hide = true;
-			}
-			this.$emit('sizeChange');
-		},
 		cancel() {
 			this.trainingNew = '';
 			this.add = false;
 		},
+		refresh(skill: Training){
+			this.$nextTick(() => {
+				var filtered = this.otherTraining.filter((data: any) => data.id !== skill.id)
+				var training = this.otherTraining.find((data: any) => data.id === skill.id)
+				training = skill;
+				filtered.push(training);
+				this.otherTraining = filtered;
+				this.$emit('update', this.otherTraining)
+			});
+		},
+		splice(index: number) {
+			this.$nextTick(() => {
+				this.otherTraining = this.otherTraining
+				.filter((data: any) => data.id !== index);
+				this.$emit('update', this.otherTraining);
+			});
+		},
 		save(training: string) {
 			this.$nextTick(() => {
-				this.otherTraining.push({ name: training });
+				this.otherTraining.push({ 
+					id: this.index, 
+					name: training,
+					contents: new Array<Content>(),
+				});
+				this.index++;
 				this.cancel();
-				this.$emit('refresh');
+				this.$emit('update', this.otherTraining);
 			});
 		}
 	}

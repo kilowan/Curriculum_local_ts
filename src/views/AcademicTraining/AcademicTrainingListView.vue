@@ -73,7 +73,7 @@
 
 
 <script lang="ts">
-import { ContentType, Content, Training } from '../../Config/types'
+import { ContentType, Content, Academic } from '../../Config/types'
 import AcademicTrainingView from './AcademicTrainingView.vue';
 
 export default {
@@ -91,14 +91,14 @@ export default {
 		return {
 			ContentType: ContentType,
       hide: false,
-      training: {} as Training,
+      training: {} as Academic,
       add: false,
-      academicTrainingList: new Array<Training>(),
+      academicTrainingList: new Array<Academic>(),
       index: 0
 		}
 	},
   methods: {
-    refresh(academic: Training){
+    refresh(academic: Academic){
       this.$nextTick(() => {
         var filtered = this.academicTrainingList.filter((data: any) => data.id !== academic.id)
         var training = this.academicTrainingList.find((data: any) => data.id === academic.id)
@@ -116,7 +116,7 @@ export default {
       });
     },
     cancel() {
-      this.training = {} as Training;
+      this.training = {} as Academic;
       this.add = false;
     },
     save() {
@@ -124,7 +124,6 @@ export default {
         this.academicTrainingList.push({
             id: this.index,
             name: this.training.name,
-            type: 1,
             place: this.training.place,
             graduationDate: this.training.graduationDate,
             contents: new Array<Content>()

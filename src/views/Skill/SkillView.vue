@@ -4,7 +4,8 @@
 			<contents-view
 				:contents="contents"
 				:iconsHidden="iconsHidden"
-				@refresh="$emit('refresh')"
+				@update="update($event)"
+				@sizeChange="$emit('sizeChange')"
 			/>
 		</div>
 		<div v-if="add">
@@ -21,7 +22,7 @@
 
 <script lang="ts">
 import ContentsView from '../Content/ContentsView.vue';
-import { ContentType } from '../../Config/types'
+import { ContentType, Training, Content, SubContent } from '../../Config/types'
 import axios from 'axios';
 
 export default {
@@ -42,11 +43,11 @@ export default {
   data() {
 		return {
 			ContentType: ContentType,
-			contents: [],
-			contract: false,
-			hide: false,
+			skillData: {} as Training,
+			contents: new Array<Content>(),
 			add: false,
 			element: '',
+			index: 0
 		}
 	},
 	methods: {
@@ -56,35 +57,33 @@ export default {
 		},
 		save(content: string) {
 			this.$nextTick(() => {
-				this.contents.push({ name: content });
+				this.contents.push({ 
+					id: this.index, 
+					name: content,
+					subContents: new Array<SubContent>()
+				});
+
+				this.skillData.contents.push({ 
+					id: this.index, 
+					name: content,
+					subContents: new Array<SubContent>()
+				});
+				this.index++;
 				this.cancel();
-				this.$emit('refresh');
+				this.$emit('update', this.skillData);
 			});
 		},
-		async update() {
-			await axios({
-			method: 'put',
-			headers: { Authorization: `Bearer ${this.token}` },
-			url: `http://localhost:8080/api/Training/${this.skill.id}`,
-			data: {
-				name: this.skill.name
-			}
-			}).then((data: any) =>{
-			this.element = '';
-			this.add = false;
-			this.$emit('refresh');
-			});
-		},
-		async deleteSkill() {
-			await axios({
-				method: 'delete',
-				headers: { Authorization: `Bearer ${this.token}` },
-				url: `http://localhost:8080/api/Training/${this.skill.id}`,
-			}).then((data: any) =>{
-				this.$emit('refresh');
+		update(contents: Array<Content>) {
+			this.$nextTick(() => {
+				this.skillData.contents = contents;
+				this.$emit('update', this.skillData);
 			});
 		}
-	}
+	},
+	mounted(){
+    this.skillData = this.skill;
+	this.skillData.contents = new Array<Content>();
+  },
 }
 </script>
 

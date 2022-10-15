@@ -35,12 +35,13 @@ export interface CurriculumDetail extends base {
   }
   export interface Training extends base {
     name: string;
-    type: number;
+    contents: Array<Content>;
+  }
+  export interface Academic extends Training {
     place: string;
     initDate?: string;
     finishDate?: string;
     graduationDate: string;
-    contents: Array<Content>;
   }
   export interface Content extends base {
     name: string;
