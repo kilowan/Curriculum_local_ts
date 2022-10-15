@@ -21,7 +21,6 @@
             :id="`edit-language-${firstindex}`"
             title="Editar Idioma"
             ok-title="Guardar"
-            @cancel="cancel"
           >
               <label>Nombre:</label> <input type="text" v-model="language.name" /> <br />
               <label>Nivel:</label> <input type="text" v-model="language.level" /> <br />
@@ -30,7 +29,7 @@
             :id="`delete-language-${firstindex}`" 
             title="Quitar idioma"
             ok-title="Quitar"
-            @ok="languageList.splice(firstindex, 1)"
+            @ok="splice(firstindex)"
           >
             <div style="text-align: center; margin: 0 auto; width:380px;">
               <h1>¿Seguro que quieres quitar el idioma '{{ language.name }}'?</h1>
@@ -59,6 +58,8 @@
 
 <script lang="ts">
 
+import { Language } from '../../Config/types'
+
 export default {
   name: 'AcademicTrainingView',
   props:{
@@ -69,27 +70,21 @@ export default {
   },
   data() {
 		return {
+      index: 0,
       hide: false,
       add: false,
-      counter: 0,
       languageLevelList: [],
-      languageList: [],
-      language: {
-        name: '',
-        level: ''
-      }
+      languageList: new Array<Language>(),
+      language: {} as Language
     }
 	},
   methods: {
     refresh() {
       this.$emit('refresh');
     },
-    hiden() {
-      this.counter--;
-      if (this.counter == 0 && this.languageList.length >= 1) {
-        this.hide = true;
-      }
-      this.$emit('sizeChange');
+    splice(index: number) {
+      this.languageList.splice(index, 1);
+      this.$emit('update', this.languageList);
     },
 		cancel() {
 			this.add = false;
@@ -98,9 +93,13 @@ export default {
 		},
 		save(language: any) {
       this.$nextTick(() => {
-        this.languageList.push({ name: language.name, level: language.level })
-        this.language = {};
-        this.$emit('refresh');
+        this.languageList.push({
+          id: this.index,
+          name: language.name, 
+          level: language.level, 
+        });
+        this.$emit('update', this.languageList);
+        this.language = {} as Language;
 			});
 		}
   }
