@@ -1,7 +1,7 @@
 <template>
 	<ul>
-		<li>Centro/ Lugar: {{academic.place}}</li>
-		<li v-if="academic.graduationDate">Graduación: {{new Date(academic.graduationDate).getFullYear()}}</li>
+		<li>Centro/ Lugar: {{ academicData.place }}</li>
+		<li v-if="academicData.graduationDate">Graduación: {{new Date(academicData.graduationDate).getFullYear()}}</li>
 		<div v-if="contents.length >0">
 			<li v-if="contents.length > 0">	
 				<strong class="m-2">Contenido:</strong>
@@ -9,6 +9,7 @@
 						:contents="contents"
 						:iconsHidden="iconsHidden"
 						@update="refresh($event)"
+						@sizeChange="$emit('sizeChange')"
 					/>
 			</li>
 		</div>
@@ -26,7 +27,7 @@
 
 <script lang="ts">
 import ContentsView from './ContentsView.vue'
-import { ContentType, Contents, Content } from '../Config/types'
+import { ContentType, Content, SubContent, Training } from '../Config/types'
 
 export default {
   name: 'AcademicTrainingView',
@@ -49,41 +50,49 @@ export default {
   },
   data() {
 		return {
-			contents:[],
+			academicData: {} as Training,
+			contents: new Array<Content>(),
 			ContentType: ContentType,
-			contract: false,
-			hide: false,
 			add: false,
 			element: '',
+			index: 0
 		}
 	},
 	methods: {
+		refresh(contents: Array<Content>) {
+			this.$nextTick(() => {
+				this.academicData.contents = contents;
+				this.$emit('update', this.academicData);
+			});
+		},
 		cancel() {
 			this.element = '';
 			this.add = false;
 		},
-		save(content: string) {
+		save(content: any) {
 			this.$nextTick(() => {
-				if(content !== '') this.contents.push({ name: content });
-				var result : Contents = { 
-					id: this.academicIndex, 
-					contents: this.contents.map((data: any) => { return { name: data.name }})
-				};
+				
+				if(content !== '') {
+					var cont: Content = {
+						id: this.index,
+						name: content,
+						subContents: new Array<SubContent>()
+					}
+					this.academicData.contents.push(cont);
+					this.contents.push(cont);
+				}
+
 				this.element = '';
 				this.add = false;
-				this.$emit('update', result);
-			});
-		},
-		refresh(content: Content) {
-			this.$nextTick(() => {
-				this.contents[content.id].suContents = content.subContents.subContents.map((data: any) => { return { name: data.name }});
-				this.contents[content.id].id = content.id;
-				var cont = this.contents[content.id];
-
-				this.$emit('update', cont);
+				this.index++;
+				this.$emit('update', this.academicData);
 			});
 		}
-	}
+	},
+	mounted(){
+    this.academicData = this.academic;
+	this.academicData.contents = new Array<Content>();
+  },
 }
 </script>
 

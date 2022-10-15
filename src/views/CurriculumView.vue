@@ -21,7 +21,10 @@
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="active" @refresh="exp" :experienceList="curriculum.professionalExperience"/>
-			<academic-training-list-view :iconsHidden="active" @update="updateAcademic($event)"/>
+			<academic-training-list-view 
+				:iconsHidden="active" 
+				@update="updateAcademic($event)" 
+			/>
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
 			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
 			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @update="updateOther($event)"/>
@@ -49,7 +52,10 @@
 			<dd class="clear"></dd>
 			<dl>
 			<professional-experience-list-view 	:iconsHidden="active" :experienceList="curriculum.professionalExperience" @refresh="EditMode"/>
-			<academic-training-list-view  :iconsHidden="active" @update="updateAcademic($event)" />
+			<academic-training-list-view  
+				:iconsHidden="active" 
+				@update="updateAcademic($event)" 
+			/>
 			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
 			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
 			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @update="updateOther($event)" />

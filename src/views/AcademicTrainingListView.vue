@@ -7,24 +7,25 @@
     </dt>
 		<dd id="academic">
 			<ul>
-				<div v-for="(academic, firstindex) in academicTrainingList" v-bind:key="firstindex">
+				<div v-for="academic in academicTrainingList" v-bind:key="academic.id">
           <li>
             {{ academic.name }}
-            <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-training-${firstindex}`)">
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-training-${academic.id}`)">
               <b-icon icon="pencil-square" aria-hidden="true"/>
             </b-link>
-            <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-training-${firstindex}`)">
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-training-${academic.id}`)">
               <b-icon icon="x-circle-fill" aria-hidden="true"/>
             </b-link>
             <academic-training-view 
               :academic="academic"
               :iconsHidden="iconsHidden"
-              :academicIndex="firstindex"
-              @update="refresh($event, firstindex)"
+              :academicIndex="academic.id"
+              @update="refresh($event)"
+              @sizeChange="$emit('sizeChange')"
             />
           </li>
           <b-modal 
-            :id="`edit-training-${firstindex}`"
+            :id="`edit-training-${academic.id}`"
             title="Editar formación"
             ok-title="Guardar"
             @cancel="cancel"
@@ -38,10 +39,10 @@
             </div>
           </b-modal>
           <b-modal 
-            :id="`delete-training-${firstindex}`" 
+            :id="`delete-training-${academic.id}`" 
             title="Eliminar Contrato"
             ok-title="Eliminar"
-            @ok="academicTrainingList.splice(firstindex, 1)"
+            @ok="splice(academic.id)"
           >
             <div style="text-align: center; margin: 0 auto; width:380px;">
               <h1>¿Seguro que quieres eliminar el contrato '{{ academic.name }}'?</h1>
@@ -72,7 +73,7 @@
 
 
 <script lang="ts">
-import { ContentType, Contents } from '../Config/types'
+import { ContentType, Content, Training } from '../Config/types'
 import AcademicTrainingView from './AcademicTrainingView.vue';
 
 export default {
@@ -90,38 +91,45 @@ export default {
 		return {
 			ContentType: ContentType,
       hide: false,
-      counter: 0,
-      training:{
-        name: '',
-        place: '',
-        graduationDate: null,
-      },
+      training: {} as Training,
       add: false,
-      academicTrainingList: []
+      academicTrainingList: new Array<Training>(),
+      index: 0
 		}
 	},
   methods: {
-    refresh(Contents: Contents, index: number){
+    refresh(academic: Training){
       this.$nextTick(() => {
-        this.academicTrainingList[index].contents = Contents.contents;
+        var filtered = this.academicTrainingList.filter((data: any) => data.id !== academic.id)
+        var training = this.academicTrainingList.find((data: any) => data.id === academic.id)
+        training = academic;
+        filtered.push(training);
+        this.academicTrainingList = filtered;
         this.$emit('update', this.academicTrainingList)
       });
     },
+    splice(index: number) {
+      this.$nextTick(() => {
+        this.academicTrainingList = this.academicTrainingList
+        .filter((data: any) => data.id !== index);
+        this.$emit('update', this.academicTrainingList);
+      });
+    },
     cancel() {
-      this.training = {
-        name: '',
-        place: '',
-        graduationDate: null,
-      };
+      this.training = {} as Training;
       this.add = false;
     },
     save() {
       this.$nextTick(() => {
         this.academicTrainingList.push({
+            id: this.index,
             name: this.training.name,
+            type: 1,
             place: this.training.place,
-            graduationDate: this.training.graduationDate === '' ? null : this.training.graduationDate,
+            graduationDate: this.training.graduationDate,
+            contents: new Array<Content>()
         });
+        this.index++;
         this.cancel();
         this.$emit('update', this.academicTrainingList);
       });
