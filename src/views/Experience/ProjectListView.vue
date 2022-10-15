@@ -15,7 +15,6 @@
 						:project="project"
 						:iconsHidden="iconsHidden"
 						@refresh="$emit('refresh')"
-						@hide="hidden"
 					/>
 				</li>
 				<b-modal 

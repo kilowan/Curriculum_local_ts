@@ -68,12 +68,12 @@
 
 <script lang="ts">
 import { SocialMedia, Language } from '../Config/types';
-import  AcademicTrainingListView from './AcademicTrainingListView.vue';
-import  OtherListView from './OtherListView.vue';
-import ProfessionalExperienceListView from './ProfessionalExperienceListView.vue';
-import SkillListView from './SkillListView.vue';
-import LanguageListView from './LanguageListView.vue';
-import SocialMediaListView from './SocialMediaListView.vue';
+import  AcademicTrainingListView from './AcademicTraining/AcademicTrainingListView.vue';
+import  OtherListView from './Other/OtherListView.vue';
+import ProfessionalExperienceListView from './Experience/ProfessionalExperienceListView.vue';
+import SkillListView from './Skill/SkillListView.vue';
+import LanguageListView from './Language/LanguageView.vue';
+import SocialMediaListView from './SocialMedia/SocialMediaView.vue';
 
 export default {
   name: 'CurriculumView',

@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import SocialMediaView from './SocialMediaView.vue';
-import { SocialMediaType } from '../Config/types';
+import { SocialMediaType } from '../../Config/types';
 
 export default {
   name: 'SocialMediaListView',
