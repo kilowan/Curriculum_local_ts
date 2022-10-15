@@ -73,7 +73,7 @@
 
 
 <script lang="ts">
-import { ContentType, Content, Training } from '../Config/types'
+import { ContentType, Content, Training } from '../../Config/types'
 import AcademicTrainingView from './AcademicTrainingView.vue';
 
 export default {

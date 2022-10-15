@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import ContentView from './ContentView.vue'
-import { SubContent, Content } from '../Config/types'
+import { SubContent, Content } from '../../Config/types'
 
 export default {
   name: 'ContentsView',

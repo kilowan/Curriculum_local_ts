@@ -26,8 +26,8 @@
 
 
 <script lang="ts">
-import ContentsView from './ContentsView.vue'
-import { ContentType, Content, SubContent, Training } from '../Config/types'
+import ContentsView from '../Content/ContentsView.vue'
+import { ContentType, Content, SubContent, Training } from '../../Config/types'
 
 export default {
   name: 'AcademicTrainingView',
