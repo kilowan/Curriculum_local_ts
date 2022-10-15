@@ -1,33 +1,33 @@
 <template>
   <ul>
-    <div v-for="(content, i) in contents" v-bind:key="i">
+    <div v-for="content in contentsData" v-bind:key="content.id">
       <li>
         {{ content.name }}
-        <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-content-${i}`)">
+        <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-content-${content.id}`)">
           <b-icon icon="pencil-square" aria-hidden="true"/>
         </b-link>
-        <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-content-${i}`)">
+        <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-content-${content.id}`)">
           <b-icon icon="x-circle-fill" aria-hidden="true"/>
         </b-link>
         <content-view
           :content="content"
           :iconsHidden="iconsHidden"
-          :contentIndex="i"
-          @update="refresh($event, content, i)"
+          :contentIndex="content.id"
+          @update="refresh($event, content)"
         />
       </li>
       <b-modal 
-        :id="`delete-content-${i}`" 
+        :id="`delete-content-${content.id}`" 
         title="Eliminar Contenido"
         ok-title="Eliminar"
-        @ok="contents.splice(i, 1)"
+        @ok="splice(content.id)"
       >
         <div style="text-align: center; margin: 0 auto; width:380px;">
           <h1>¿Seguro que quieres eliminar el elemento '{{ content.name }}'?</h1>
         </div>
       </b-modal>
       <b-modal 
-        :id="`edit-content-${i}`" 
+        :id="`edit-content-${content.id}`" 
         title="Editar Contenido"
         ok-title="Guardar"
       >
@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import ContentView from './ContentView.vue'
-import { SubContent, SubContents, Content } from '../Config/types'
+import { SubContent, Content } from '../Config/types'
 
 export default {
   name: 'ContentsView',
@@ -61,30 +61,28 @@ export default {
   },
   data() {
 		return {
-      add: false,
       element: '',
-      editMode: false,
-      counter: 0,
-      hide: false,
+      contentsData: new Array<Content>()
     }
 	},
   methods: {
-    hidden() {
-      this.counter--;
-      if (this.counter == 0) {
-        this.hide = true;
-      }
-      this.$emit('sizeChange');
-    },
-    refresh(subContents: SubContents, content: any, index: number ){
+    refresh(subContents: Array<SubContent>, content: any){
       this.$nextTick(() => {
-        var cont : Content = { name: content.name, subContents: subContents, id: index };
-        this.$emit('update', cont);
+        var filtered = this.contentsData.filter((data: any) => data.id !== content.id)
+        var cont : Content = this.contentsData.find((data: any) => data.id === content.id)
+        cont.subContents = subContents;
+        filtered.push(cont);
+        this.contentsData = filtered;
+        this.$emit('update', this.contentsData);
       });
+    },
+    splice(index: number) {
+      this.contentsData = this.contentsData.filter((data: any) => data.id !== index);
+      this.$emit('update', this.contentsData);
     }
   },
   mounted(){
-    this.counter = this.contents.length;
+    this.contentsData = this.contents;
   },
 }
 </script>

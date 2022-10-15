@@ -1,7 +1,8 @@
-export interface base {
+export interface base extends Object {
   id: number;
 }
-export interface CurriculumDetail {
+export interface CurriculumDetail extends base {
+  
     fullName: string;
     description: string;
     phoneNumber: string;
@@ -38,19 +39,12 @@ export interface CurriculumDetail {
     place: string;
     initDate?: string;
     finishDate?: string;
-    graduationDate?: string;
-    contents: Contents;
+    graduationDate: string;
+    contents: Array<Content>;
   }
   export interface Content extends base {
     name: string;
-    edit: boolean;
-    subContents: SubContents;
-  }
-  export interface Contents extends base {
-    contents: Array<Content>
-  }
-  export interface SubContents extends base {
-    subContents: Array<SubContent>
+    subContents: Array<SubContent>;
   }
   export interface SubContent extends base {
     name: string;

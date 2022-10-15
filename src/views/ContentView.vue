@@ -1,28 +1,28 @@
 <template>
 	<div>
     <ul>
-      <div v-for="(sub, thirdindex) in subContents" v-bind:key="thirdindex">
+      <div v-for="sub in subContents" v-bind:key="sub.id">
         <li>
-          {{ sub }}
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-subcontent-${thirdindex}`)">
+          {{ sub.name }}
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-subcontent-${sub.id}`)">
             <b-icon icon="pencil-square" aria-hidden="true"/>
           </b-link>
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-subcontent-${thirdindex}`)">
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-subcontent-${sub.id}`)">
             <b-icon icon="x-circle-fill" aria-hidden="true"/>
           </b-link>
         </li>
         <b-modal 
-          :id="`delete-subcontent-${thirdindex}`" 
+          :id="`delete-subcontent-${sub.id}`" 
           title="Eliminar Contenido"
           ok-title="Eliminar"
-          @ok="subContents.splice(thirdindex, 1)"
+          @ok="splice(sub.id)"
         >
           <div style="text-align: center; margin: 0 auto; width:380px;">
             <h1>¿Seguro que quieres eliminar el elemento '{{ sub.name }}'?</h1>
           </div>
         </b-modal>
         <b-modal 
-          :id="`edit-subcontent-${thirdindex}`" 
+          :id="`edit-subcontent-${sub.id}`" 
           title="Editar Contenido"
           ok-title="Guardar"
           @cancel="cancel"
@@ -32,12 +32,12 @@
           </div>
         </b-modal>
       </div>
-      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-subcontent`)">
+      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-subcontent-${contentIndex}`)">
         <b-icon icon="plus-circle-fill" aria-hidden="true"/>Añadir SubContenido
       </b-link>
     </ul>
     <b-modal 
-      :id="`add-subcontent`" 
+      :id="`add-subcontent-${contentIndex}`" 
       title="Añadir SubContenido"
       ok-title="Guardar"
       @ok="addOne(subcontent)"
@@ -51,7 +51,7 @@
 
 
 <script lang="ts">
-import { SubContents } from '@/Config/types';
+import { SubContent, Content } from '@/Config/types';
 
 
 export default {
@@ -72,36 +72,29 @@ export default {
   },
   data() {
 		return {
-      edit: false,
-      hide: false,
-      contentData: {
-        id: Number.prototype,
-        name: String.prototype,
-      },
+      contentData: {} as Content,
       subcontent: '',
-      subContents: new Array<string>(),
+      subContents: new Array<SubContent>(),
+      index: 0
     }
 	},
   methods:{
+    splice(index: number) {
+      this.subContents = this.subContents.filter((data: any) => data.id !== index);
+      this.$emit('update', this.subContents);
+    },
     addOne(subContent: string) {
-      this.subContents.push(subContent);
-      var subs : SubContents = {
-        subContents: this.subContents.map((data: any) => { return { name: data }}), 
-        id: this.contentIndex
-      };
-      this.$emit('update', subs);
+      this.subContents.push({ id: this.index, name: subContent });
+      this.index++;
+      this.$emit('update', this.subContents);
       this.subcontent = '';
     },
     cancel(){
       this.contentData = this.content;
-      this.edit = false;
     },
   },
   mounted(){
-    this.contentData = {
-      id: this.content.id,
-      name: this.content.name
-    };
+    this.contentData = this.content;
   }
 }
 </script>
