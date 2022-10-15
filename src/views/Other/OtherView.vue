@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <div v-for="(value, secondindex) in values.values" v-bind:key="secondindex">
+      <div v-for="(value, secondindex) in values" v-bind:key="secondindex">
         <li v-if="!hide">
           {{ value.name }}
           <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-value-${secondindex}`)">
@@ -15,7 +15,6 @@
           :id="`edit-value-${secondindex}`"
           title="Editar elemento"
           ok-title="Guardar"
-          @cancel="cancel"
         >
           <label>Nombre:</label> <input type="text" v-model="value.name" /> <br />
         </b-modal>
@@ -42,7 +41,6 @@
       ok-title="Guardar"
       @ok="save(valueNew)"
       @cancel="cancel"
-      @refresh="$emit('refresh')"
     >
       <label>Nombre</label> <input type="text" v-model="valueNew" /> <br />
     </b-modal>
@@ -51,6 +49,8 @@
 
 
 <script lang="ts">
+
+import { Value, OtherData } from '@/Config/types';
 
 export default {
   name: 'OtherView',
@@ -70,14 +70,12 @@ export default {
   },
   data() {
 		return {
+      index: 0,
+      other: {} as OtherData,
       hide: false,
       add: false,
-      contract: false,
       valueNew: '',
-      values: {
-        id: 0,
-        values: []
-      }
+      values: new Array<Value>()
     }
 	},
   methods: {
@@ -87,18 +85,29 @@ export default {
     },
     save(value: string) {
 			this.$nextTick(() => {
-				this.values.values.push({ name: value });
-        this.values.id = this.otherIndex;
+				this.other.values.push({
+          id: this.index,
+          name: value
+        });
+				this.values.push({
+          id: this.index,
+          name: value
+        });
+
+        this.index++;
 				this.cancel();
-				this.$emit('update', this.values);
+				this.$emit('update', this.other);
 			});
     },
     splice(index: number) {
-      this.values.values.splice(index, 1);
-      this.values.id = this.otherIndex;
-      this.$emit('update', this.values);
+      this.other.values.splice(index, 1);
+      this.values.splice(index, 1);
+      this.$emit('update', this.other);
     }
-  }
+  },
+  mounted(){
+    this.other = this.otherData;
+  },
 }
 </script>
 
