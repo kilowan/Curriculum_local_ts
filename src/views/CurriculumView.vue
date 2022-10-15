@@ -76,7 +76,7 @@ import  OtherListView from './Other/OtherListView.vue';
 import ProfessionalExperienceListView from './Experience/ProfessionalExperienceListView.vue';
 import SkillListView from './Skill/SkillListView.vue';
 import LanguageListView from './Language/LanguageView.vue';
-import SocialMediaListView from './SocialMedia/SocialMediaView.vue';
+import SocialMediaListView from './SocialMedia/SocialMediaListView.vue';
 
 export default {
   name: 'CurriculumView',
