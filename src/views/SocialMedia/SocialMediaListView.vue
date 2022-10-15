@@ -1,25 +1,22 @@
 <template>
 	<div>
     <div v-for="(socialMediaData, index) in socialMediaList" v-bind:key="index" class="d-flex">
-        <social-media-view
-          :socialMediaData="socialMediaData"
-        />
-			<b-link v-if="!send(iconsHidden)" @click="editMedia(index)">
-				<b-icon icon="pencil-square" aria-hidden="true"/>
-			</b-link>
-			<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-media-${index}`)">
-				<b-icon icon="x-circle-fill" aria-hidden="true"/>
-			</b-link>
-		<b-modal 
-			:id="`edit-social-media-${index}`"
-			title="Editar red social"
-			ok-title="Guardar"
-			@ok="edit(socialMediaData)"
-			@cancel="cancel(index)"
-		>
-			<label>Url:</label> <input type="text" v-model="socialMediaData.name" /> <br />
-			<label>Tipo:</label> <b-form-select disabled :options="types" v-model="socialMediaData.type" ></b-form-select> <br />
-		</b-modal>
+        <social-media-view :socialMediaData="socialMediaData"/>
+			  <b-link @click="$bvModal.show(`edit-social-media-${index}`)">
+				  <b-icon icon="pencil-square" aria-hidden="true"/>
+			  </b-link>
+        <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-media-${index}`)">
+          <b-icon icon="x-circle-fill" aria-hidden="true"/>
+        </b-link>
+        <b-modal 
+          :id="`edit-social-media-${index}`"
+          title="Editar red social"
+          ok-title="Guardar"
+          @ok="edit(socialMediaData)"
+        >
+          <label>Url:</label> <input type="text" v-model="socialMediaData.name" /> <br />
+          <label>Tipo:</label> <b-form-select disabled :options="types" v-model="socialMediaData.type" ></b-form-select> <br />
+        </b-modal>
 		<b-modal 
 			:id="`delete-media-${index}`" 
 			title="Eliminar Red social"
@@ -38,21 +35,20 @@
 			:id="'add-social-media'"
 			title="Añadir Red Social"
 			ok-title="Guardar"
-			@ok="add"
+			@ok="add(socialmedia)"
       @ok-prevent="socialmedia.name == ''"
-			@cancel="$bvModal.hide('add-social-media')"
-		>
+    >
       <label>Tipo</label> <b-form-select :options="types" v-model="socialmedia.type" /> <br />
       <div v-if="socialmedia.type === 1"><label>Id linkedin</label> <input type="text" v-model="socialmedia.name" /></div>
       <div v-else-if="socialmedia.type === 2"><label>Id infojobs</label> <input type="text" v-model="socialmedia.name" /></div>
       <div v-else ><label>Id github</label> <input type="text" v-model="socialmedia.name" /> </div><br />
-		</b-modal><br />
+    </b-modal><br />
 	</div>
 </template>
 
 <script lang="ts">
 import SocialMediaView from './SocialMediaView.vue';
-import { SocialMediaType } from '../../Config/types';
+import { SocialMediaType, SocialMedia } from '../../Config/types';
 
 export default {
   name: 'SocialMediaListView',
@@ -73,32 +69,18 @@ export default {
           { value: SocialMediaType.Infojobs, text: 'Infojobs', disabled: false },
           { value: SocialMediaType.GitHub, text: 'GitHub', disabled: false  }
       ],
-      socialmedia: {
-        name:'',
-        type:''
-      },
+      socialmedia: {} as SocialMedia,
       count: 3,
-      socialMediaList:[]
+      socialMediaList: new Array<SocialMedia>()
     }
 	},
   methods: {
-    send(iconsHidden: boolean){
-      if(iconsHidden) {
-        //this.$result.SocialMedia = this.socialMediaList;
-        this.$emit('result');
-      }
-      return iconsHidden;
-    },
-		add() {
-        var socialmedia = {
-        name: this.socialmedia.name,
-        type: this.socialmedia.type
-      };
-      this.socialmedia = {};
-      this.socialMediaList.push(socialmedia);
-      this.$result.SocialMedia.push(socialmedia);
-      var type = this.types.find((element: any) => element.value === socialmedia.type);
+		add(socialMedia: any) {
+      this.socialMediaList.push(socialMedia);
+      var type = this.types.find((element: any) => element.value === socialMedia.type);
       type.disabled = true;
+      this.$emit('update', this.socialMediaList);
+      this.socialmedia = {} as SocialMedia;
       this.count--;
 		},
 		del(media: any, index: number) {
@@ -106,25 +88,14 @@ export default {
         var type = this.types.find((element: any) => element.value === media.type);
         type.disabled = false;
         this.socialMediaList.splice(index, 1);
-        this.$result.SocialMedia.splice(index, 1);
         this.count++;
+        this.$emit('update', this.socialMediaList);
 			});
 		},
     edit(data: any){
       var sm = this.socialMediaList.find((element: any) => element.type === data.type);
       sm.name = data.name;
-    },
-		editMedia(index: number) {
-			this.$nextTick(() => {
-				this.$bvModal.show(`edit-social-media-${index}`);
-        });
-		},
-		cancel(index: number){
-			this.$bvModal.hide(`edit-social-media-${index}`);
-		},
-  },
-  mounted(){
-    this.$result.SocialMedia = [];
+    }
   }
 }
 </script>
