@@ -7,24 +7,24 @@
     </dt>
 		<dd id="other" v-if="other">
 			<ul>
-				<div v-for="(otherData, firstindex) in other" v-bind:key="firstindex">
+				<div v-for="otherData in other" v-bind:key="otherData.id">
 					<li>
 						{{otherData.name}}
-						<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-other-${firstindex}`)">
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-other-${otherData.id}`)">
 							<b-icon icon="pencil-square" aria-hidden="true"/>
 						</b-link>
-						<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-other-${firstindex}`)">
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-other-${otherData.id}`)">
 							<b-icon icon="x-circle-fill" aria-hidden="true"/>
 						</b-link>
 						<other-view
 							:otherData="otherData"
 							:iconsHidden="iconsHidden"
-							:otherIndex="firstindex"
+							:otherIndex="otherData.id"
 							@update="update($event)"
 						/>
 					</li>
 					<b-modal
-						:id="`edit-other-${firstindex}`"
+						:id="`edit-other-${otherData.id}`"
 						title="Editar Otros"
 						ok-title="Guardar"
 						@cancel="cancel"
@@ -32,10 +32,10 @@
 						<label>Nombre:</label> <input type="text" v-model="otherData.name" /> <br />
 					</b-modal>
 					<b-modal 
-						:id="`delete-other-${firstindex}`" 
+						:id="`delete-other-${otherData.id}`" 
 						title="Eliminar elemento"
 						ok-title="Eliminar"
-						@ok="splice(firstindex)"
+						@ok="splice(otherData.id)"
 					>
 						<div style="text-align: center; margin: 0 auto; width:380px;">
 							<h1>¿Seguro que quieres eliminar el elemento '{{ otherData.name }}'?</h1>
@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import otherView from './OtherView.vue';
-import { Value } from '@/Config/types';
+import { Value, OtherData } from '@/Config/types';
 
 export default {
   name: 'OtherListView',
@@ -74,38 +74,40 @@ export default {
   },
   data() {
 		return {
-		hide: false,
-		add: false,
-		counter: 0,
-		otherNew: '',
-		other: []
+			index: 0,
+			hide: false,
+			add: false,
+			counter: 0,
+			otherNew: '',
+			other: new Array<OtherData>()
 		}
 	},
   	methods: {
-		hidden(){
-			this.counter--;
-			if (this.counter == 0 && this.other.length >= 1) {
-				this.hide = true;
-			}
-			this.$emit('sizeChange');
-		},
 		cancel() {
 			this.otherNew = '';
 			this.add = false;
-			this.$emit('update', this.other);
 		},
 		save(otherNew: string) {
 			this.$nextTick(() => {
-				this.other.push({ name: otherNew, values: new Array<Value>() });
+				this.other.push({ 
+					id: this.index,
+					name: otherNew, 
+					values: new Array<Value>() 
+				});
+				this.index++;
+				this.$emit('update', this.other);
 				this.cancel();
 			});
 		},
-		update(values: any){
-			this.other[values.id].values = values.values;
+		update(other: OtherData){
+			var dat = this.other.find((data: any) => data.id === other.id);
+			dat = other;
+			this.other = this.other.filter((data: any) => data.id !== other.id);
+			this.other.push(dat);
 			this.$emit('update', this.other);
 		},
 		splice(index: number) {
-			this.other.splice(index, 1);
+			this.other = this.other.filter((data: any) => data.id !== index);
 			this.$emit('update', this.other);
 		}
   }
