@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import ContentsView from '../Content/ContentsView.vue'
-import { ContentType, Content, SubContent, Training } from '../../Config/types'
+import { ContentType, Content, SubContent, Academic } from '../../Config/types'
 
 export default {
   name: 'AcademicTrainingView',
@@ -50,7 +50,7 @@ export default {
   },
   data() {
 		return {
-			academicData: {} as Training,
+			academicData: {} as Academic,
 			contents: new Array<Content>(),
 			ContentType: ContentType,
 			add: false,
