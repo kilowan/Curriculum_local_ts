@@ -1,89 +1,87 @@
 <template>
-	<ul>
-		<div v-if="contents.length >0">
-			<contents-view
-				:contents="contents"
-				:iconsHidden="iconsHidden"
-				@update="update($event)"
-				@sizeChange="$emit('sizeChange')"
-			/>
-		</div>
-		<div v-if="add">
-			<input class="m-2" type="text" v-model="element" />
-			<b-button class="m-2" @click="save(element)">Guardar</b-button>
-			<b-button class="m-2" @click="cancel">Cancelar</b-button>
-		</div>
-		<b-link v-if="!iconsHidden" @click="add = true">
-			<b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir contenido
-		</b-link>
-	</ul>
+  <ul>
+    <div v-if="contents.length > 0">
+      <contents-view
+        :contents="contents"
+        :iconsHidden="iconsHidden"
+        @update="update($event)"
+        @sizeChange="$emit('sizeChange')"
+      />
+    </div>
+    <div v-if="add">
+      <input class="m-2" type="text" v-model="element" />
+      <b-button class="m-2" @click="save(element)">Guardar</b-button>
+      <b-button class="m-2" @click="cancel">Cancelar</b-button>
+    </div>
+    <b-link v-if="!iconsHidden" @click="add = true">
+      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir contenido
+    </b-link>
+  </ul>
 </template>
 
-
 <script lang="ts">
-import ContentsView from '../Content/ContentsView.vue';
-import { ContentType, Training, Content, SubContent } from '../../Config/types'
-import axios from 'axios';
+import ContentsView from "../Content/ContentsView.vue";
+import { ContentType, Training, Content, SubContent } from "../../Config/types";
+import axios from "axios";
 
 export default {
-  name: 'ComplementaryExperienceView',
+  name: "ComplementaryExperienceView",
   components: {
-    ContentsView
+    ContentsView,
   },
-  props:{
+  props: {
     skill: {
       type: Object,
-      required: true
+      required: true,
     },
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
   },
   data() {
-		return {
-			ContentType: ContentType,
-			skillData: {} as Training,
-			contents: new Array<Content>(),
-			add: false,
-			element: '',
-			index: 0
-		}
-	},
-	methods: {
-		cancel() {
-			this.element = '';
-			this.add = false;
-		},
-		save(content: string) {
-			this.$nextTick(() => {
-				this.contents.push({ 
-					id: this.index, 
-					name: content,
-					subContents: new Array<SubContent>()
-				});
-
-				this.skillData.contents.push({ 
-					id: this.index, 
-					name: content,
-					subContents: new Array<SubContent>()
-				});
-				this.index++;
-				this.cancel();
-				this.$emit('update', this.skillData);
-			});
-		},
-		update(contents: Array<Content>) {
-			this.$nextTick(() => {
-				this.skillData.contents = contents;
-				this.$emit('update', this.skillData);
-			});
-		}
-	},
-	mounted(){
-    this.skillData = this.skill;
-	this.skillData.contents = new Array<Content>();
+    return {
+      ContentType: ContentType,
+      skillData: {} as Training,
+      contents: new Array<Content>(),
+      add: false,
+      element: "",
+      index: 0,
+    };
   },
-}
-</script>
+  methods: {
+    cancel() {
+      this.element = "";
+      this.add = false;
+    },
+    save(content: string) {
+      this.$nextTick(() => {
+        this.contents.push({
+          id: this.index,
+          name: content,
+          subContents: new Array<SubContent>(),
+        });
 
+        this.skillData.contents.push({
+          id: this.index,
+          name: content,
+          subContents: new Array<SubContent>(),
+        });
+        this.index++;
+        this.cancel();
+        this.$emit("update", this.skillData);
+      });
+    },
+    update(contents: Array<Content>) {
+      this.$nextTick(() => {
+        this.skillData.contents = contents;
+        this.$emit("update", this.skillData);
+      });
+    },
+  },
+  mounted() {
+    this.skillData = this.skill;
+    this.skillData.contents = new Array<Content>();
+  },
+};
+</script>

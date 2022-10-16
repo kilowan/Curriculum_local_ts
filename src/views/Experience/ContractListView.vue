@@ -1,15 +1,21 @@
 <template>
-	<li>
-		Contratos (ordenados de manera cronológica): 
-		<ul>
+  <li>
+    Contratos (ordenados de manera cronológica):
+    <ul>
       <div v-for="contract in contractsData" v-bind:key="contract.id">
         <li>
-          {{contract.name}}
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-contract-${contract.id}`)">
-            <b-icon icon="pencil-square" aria-hidden="true"/>
+          {{ contract.name }}
+          <b-link
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-contract-${contract.id}`)"
+          >
+            <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-contract-${contract.id}`)">
-            <b-icon icon="x-circle-fill" aria-hidden="true"/>
+          <b-link
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-contract-${contract.id}`)"
+          >
+            <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
           <contract-view
             :iconsHidden="iconsHidden"
@@ -17,63 +23,63 @@
             @refresh="$emit('refresh')"
           />
         </li>
-        <b-modal 
+        <b-modal
           :id="`edit-contract-${contract.id}`"
           title="Editar contrato"
           ok-title="Guardar"
         >
           <input type="text" v-model="contract.name" /> <br />
         </b-modal>
-        <b-modal 
-          :id="`delete-contract-${contract.id}`" 
+        <b-modal
+          :id="`delete-contract-${contract.id}`"
           title="Eliminar Contrato"
           ok-title="Eliminar"
           @ok="contracts.splice(contract.id, 1), $emit('refresh')"
         >
-          <div style="text-align: center; margin: 0 auto; width:380px;">
-            <h1>¿Seguro que quieres eliminar el contrato '{{ contract.name }}'?</h1>
+          <div style="text-align: center; margin: 0 auto; width: 380px">
+            <h1>
+              ¿Seguro que quieres eliminar el contrato '{{ contract.name }}'?
+            </h1>
           </div>
         </b-modal>
-			</div>
-		</ul>
-	</li>
+      </div>
+    </ul>
+  </li>
 </template>
 
-
 <script lang="ts">
-import ContractView from './ContractView.vue';
-import { Contract } from '../../Config/types';
+import ContractView from "./ContractView.vue";
+import { Contract } from "../../Config/types";
 
 export default {
-  name: 'ContractsView',
+  name: "ContractsView",
   components: {
-	  ContractView
+    ContractView,
   },
-  props:{
+  props: {
     contracts: {
       type: Array,
-      required: true
+      required: true,
     },
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
   },
   data() {
-		return {
+    return {
       contractsData: new Array<Contract>(),
-      projectData: ''
-    }
-	},
+      projectData: "",
+    };
+  },
   methods: {
     splice(index: number) {
       this.contractsData.splice(index, 1);
-      this.$emit('update', this.contractsData);
-    }
+      this.$emit("update", this.contractsData);
+    },
   },
   mounted() {
     this.contractsData = this.contracts;
-  }
-}
+  },
+};
 </script>
-

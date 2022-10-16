@@ -13,70 +13,67 @@
     </div>
     <div>
       <b-link v-if="!add && !iconsHidden" @click="add = true">
-        <b-icon icon="plus-circle-fill" aria-hidden="true"/> Añadir proyecto
+        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir proyecto
       </b-link>
     </div>
-</div>
+  </div>
 </template>
 
-
 <script lang="ts">
-import { Contract, Project, Description } from '../../Config/types';
-import ProjectListView from './ProjectListView.vue';
+import { Contract, Project, Description } from "../../Config/types";
+import ProjectListView from "./ProjectListView.vue";
 export default {
-  name: 'ContractView',
+  name: "ContractView",
   components: {
-	ProjectListView
+    ProjectListView,
   },
-  props:{
+  props: {
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
     contract: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
-		return {
+    return {
       index: 0,
       add: false,
       contractData: {} as Contract,
-      projectData: '',
-      projects: new Array<Project>()
-    }
-	},
+      projectData: "",
+      projects: new Array<Project>(),
+    };
+  },
   methods: {
     save(project: string) {
       this.projects.push({
         id: this.index,
         name: project,
-        descriptionList: new Array<Description>()
+        descriptionList: new Array<Description>(),
       });
       this.contractData.projects.push({
         id: this.index,
         name: project,
-        descriptionList: new Array<Description>()
+        descriptionList: new Array<Description>(),
       });
-      this.$emit('update', this.contractData);
-      this.projectData = '';
+      this.$emit("update", this.contractData);
+      this.projectData = "";
       this.add = false;
     },
     splice(index: number) {
       this.contractData.projects.splice(index, 1);
       this.projects.splice(index, 1);
-      this.$emit('update', this.contractData);
+      this.$emit("update", this.contractData);
     },
     update(projects: Array<Project>) {
       this.contractData.projects = projects;
-      this.$emit('update', this.contractData);
-    }
+      this.$emit("update", this.contractData);
+    },
   },
   mounted() {
     this.contractData = this.contract;
-  }
-
-}
+  },
+};
 </script>
-
