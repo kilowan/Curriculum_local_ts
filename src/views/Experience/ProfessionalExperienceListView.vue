@@ -7,22 +7,25 @@
 		</dt>
 		<dd id="experience">
 			<ul>
-				<div v-for="(company, firstindex) in experienceList" v-bind:key="firstindex">
+				<div v-for="company in experienceList" v-bind:key="company.id">
 					<li>
-						{{company.name}}
-						<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-experience-${firstindex}`)">
+						{{ company.name }}
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-experience-${company.id}`)">
 							<b-icon icon="pencil-square" aria-hidden="true"/>
 						</b-link>
-						<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-experience-${firstindex}`)">
+						<b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-experience-${company.id}`)">
 							<b-icon icon="x-circle-fill" aria-hidden="true"/>
 						</b-link>
-						<professional-experience-view :company="company" :iconsHidden="iconsHidden" @refresh="$emit('refresh')" />
+						<professional-experience-view 
+							:company="company" 
+							:iconsHidden="iconsHidden" 
+							@refresh="$emit('refresh')" 
+						/>
 					</li>
 					<b-modal 
-						:id="`edit-experience-${firstindex}`"
+						:id="`edit-experience-${company.id}`"
 						title="Editar Experiencia"
 						ok-title="Guardar"
-						@cancel="cancel"
 					>
 						<label>Nombre</label> <input type="text" v-model="company.name" /> <br />
 						<label>Centro/Lugar:</label> <input type="text" v-model="company.place" /> <br />
@@ -34,10 +37,10 @@
 							min="2015-01-01" max="2030-12-31"></b-form-datepicker> <br />
 					</b-modal>
 					<b-modal 
-						:id="`delete-experience-${firstindex}`" 
+						:id="`delete-experience-${company.id}`" 
 						title="Eliminar Contrato"
 						ok-title="Eliminar"
-						@ok="deleteExperience"
+						@ok="deleteExperience(company.id)"
 					>
 						<div style="text-align: center; margin: 0 auto; width:380px;">
 							<h1>¿Seguro que quieres eliminar el contrato '{{ company.name }}'?</h1>
@@ -73,7 +76,7 @@
 
 <script lang="ts">
 
-//import { ExperienceType } from './Config/types';
+import { Experience, Contract } from '../../Config/types';
 import ProfessionalExperienceView from './ProfessionalExperienceView.vue';
 
 export default {
@@ -89,13 +92,9 @@ export default {
   },
   data() {
 		return {
-			experienceList:[],
-			experience: {
-				initDate: '2021-12-08',
-				finishDate: '2021-12-08',
-				place: '',
-				name: ''
-			},
+			index: 0,
+			experienceList: new Array<Experience>(),
+			experience: {} as Experience,
 			add: false,
 			hide: false,
 			typeSelected: 1,
@@ -121,24 +120,23 @@ export default {
 		save(experience: any){
 			this.$nextTick(() => {
 				this.experienceList.push({
+					id: this.index,
 					initDate: experience.initDate,
 					finishDate: experience.finishDate,
 					place: experience.place,
-					name: experience.name
+					name: experience.name,
+					type: experience.type,
+					contracts: new Array<Contract>()
 				});
-				this.experience = {
-				initDate: '2021-12-08',
-				finishDate: '2021-12-08',
-				place: '',
-				name: ''
-			};
-			this.$emit('refresh');
+				this.index++;
+				this.$emit('update', this.experienceList);
+				this.experience = {} as Experience;
 			});
 		},
 		deleteExperience(index: number) {
 			this.$nextTick(() => {
 				this.experienceList.splice(index, 1);
-				//this.$emit('refresh');
+				this.$emit('update', this.experienceList);
 			});
 		}
 	},

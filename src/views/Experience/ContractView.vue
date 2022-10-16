@@ -21,6 +21,7 @@
 
 
 <script lang="ts">
+import { Contract, Project, Description } from '../../Config/types';
 import ProjectListView from './ProjectListView.vue';
 export default {
   name: 'ContractView',
@@ -32,16 +33,41 @@ export default {
       type: Boolean,
       required: true
     },
+    contract: {
+      type: Object,
+      required: true
+    }
   },
   data() {
 		return {
-      contracted: false,
+      index: 0,
       add: false,
-      hide: false,
+      contractData: {} as Contract,
       projectData: '',
-      projects: []
+      projects: new Array<Project>()
     }
-	}
+	},
+  methods: {
+    save(project: string) {
+      this.projects.push({
+        id: this.index,
+        name: project,
+        descriptionList: new Array<Description>()
+      });
+      this.$emit('update', this.contractData);
+      this.projectData = '';
+      this.add = false;
+    },
+    splice(index: number) {
+      this.contractData.projects.splice(index, 1);
+      this.projects.splice(index, 1);
+      this.$emit('update', this.contractData);
+    }
+  },
+  mounted() {
+    this.contractData = this.contract;
+  }
+
 }
 </script>
 

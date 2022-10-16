@@ -20,17 +20,29 @@
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 	:iconsHidden="active" @refresh="exp" :experienceList="curriculum.professionalExperience"/>
+			<professional-experience-list-view 	
+				:iconsHidden="active" @refresh="exp" 
+				:experienceList="curriculum.professionalExperience"
+				@update="EditMode"
+			/>
 			<academic-training-list-view 
 				:iconsHidden="active" 
 				@update="updateAcademic($event)" 
 			/>
 			<skill-list-view 
 				:iconsHidden="active"	
-				@refresh="EditMode" 
+				@update="updateSkills($event)" 
 			/>
-			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
-			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @update="updateOther($event)"/>
+			<language-list-view 
+				:languageList="curriculum.languageList" 
+				:iconsHidden="active" 
+				@update="updateLanguage($event)"
+			/>			
+			<other-list-view 
+				:other="curriculum.otherData" 
+				:iconsHidden="active" 
+				@update="updateOther($event)"
+			/>
 		</dl>
 		<dd class="clear"></dd>
 			<b-button @click="getFile(curriculum)">Guardar</b-button>
@@ -54,14 +66,29 @@
 			</dl>
 			<dd class="clear"></dd>
 			<dl>
-			<professional-experience-list-view 	:iconsHidden="active" :experienceList="curriculum.professionalExperience" @refresh="EditMode"/>
+			<professional-experience-list-view 	
+				:iconsHidden="active" 
+				:experienceList="curriculum.professionalExperience" 
+				@update="EditMode"
+			/>
 			<academic-training-list-view  
 				:iconsHidden="active" 
 				@update="updateAcademic($event)" 
 			/>
-			<skill-list-view :iconsHidden="active"	@refresh="EditMode" />
-			<language-list-view :languageList="curriculum.languageList" :iconsHidden="active" @refresh="EditMode"/>			
-			<other-list-view :other="curriculum.otherData" :iconsHidden="active" @update="updateOther($event)" />
+			<skill-list-view 
+				:iconsHidden="active"	
+				@update="updateSkills($event)" 
+			/>
+			<language-list-view 
+				:languageList="curriculum.languageList" 
+				:iconsHidden="active" 
+				@update="updateLanguage($event)"
+			/>			
+			<other-list-view 
+				:other="curriculum.otherData" 
+				:iconsHidden="active" 
+				@update="updateOther($event)" 
+			/>
 		</dl>
 			<b-button @click="active=false">Desacer</b-button>
 		</div>
@@ -117,8 +144,18 @@ export default {
 			this.other();
         });
 	},
+	updateSkills(skills: any) {
+		this.curriculum.otherTraining = skills;
+		console.log(this.curriculum);
+		this.EditMode();
+	},
 	updateAcademic(media: any){
 		this.curriculum.academicTraining = media;
+		console.log(this.curriculum);
+		this.EditMode();
+	},
+	updateLanguage(language: any) {
+		this.curriculum.languageList = language;
 		console.log(this.curriculum);
 		this.EditMode();
 	},
