@@ -73,14 +73,18 @@ export default {
     };
   },
   update(contract: Contract) {
-    var filtered = this.contractsData.filter((data: any) => data.id !== contract.id);
+    var filtered = this.contractsData.filter(
+      (data: any) => data.id !== contract.id
+    );
     filtered.push(contract);
     this.contractsData = filtered;
     this.$emit("update", this.contractsData);
   },
   methods: {
     splice(index: number) {
-      this.contractsData = this.contractsData.filter((data: any) => data.id !== index);
+      this.contractsData = this.contractsData.filter(
+        (data: any) => data.id !== index
+      );
       this.$emit("update", this.contractsData);
     },
   },

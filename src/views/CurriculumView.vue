@@ -36,8 +36,6 @@
       <dl>
         <professional-experience-list-view
           :iconsHidden="active"
-          @refresh="exp"
-          :experienceList="curriculum.experience"
           @update="updateExperience($event)"
         />
         <academic-training-list-view
@@ -46,15 +44,10 @@
         />
         <skill-list-view :iconsHidden="active" @update="updateSkills($event)" />
         <language-list-view
-          :languageList="curriculum.languageList"
           :iconsHidden="active"
           @update="updateLanguage($event)"
         />
-        <other-list-view
-          :other="curriculum.otherData"
-          :iconsHidden="active"
-          @update="updateOther($event)"
-        />
+        <other-list-view :iconsHidden="active" @update="updateOther($event)" />
       </dl>
       <dd class="clear"></dd>
       <b-button @click="getFile(curriculum)">Guardar</b-button>
@@ -86,7 +79,6 @@
       <dl>
         <professional-experience-list-view
           :iconsHidden="active"
-          :experienceList="curriculum.experience"
           @update="updateExperience($event)"
         />
         <academic-training-list-view
@@ -95,15 +87,10 @@
         />
         <skill-list-view :iconsHidden="active" @update="updateSkills($event)" />
         <language-list-view
-          :languageList="curriculum.languageList"
           :iconsHidden="active"
           @update="updateLanguage($event)"
         />
-        <other-list-view
-          :other="curriculum.otherData"
-          :iconsHidden="active"
-          @update="updateOther($event)"
-        />
+        <other-list-view :iconsHidden="active" @update="updateOther($event)" />
       </dl>
       <b-button @click="active = false">Desacer</b-button>
     </div>
@@ -111,12 +98,7 @@
 </template>
 
 <script lang="ts">
-import {
-  SocialMedia,
-  Language,
-  Experience,
-  CurriculumDetail,
-} from "../Config/types";
+import { CurriculumDetail } from "../Config/types";
 import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
 import OtherListView from "./Other/OtherListView.vue";
 import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceListView.vue";

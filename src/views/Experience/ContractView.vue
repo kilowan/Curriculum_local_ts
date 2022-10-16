@@ -63,7 +63,9 @@ export default {
       this.add = false;
     },
     splice(index: number) {
-      this.contractData.projects = this.contractData.projects.filter((data: any) => data.id !== index);
+      this.contractData.projects = this.contractData.projects.filter(
+        (data: any) => data.id !== index
+      );
       this.projects = this.projects.filter((data: any) => data.id !== index);
       this.$emit("update", this.contractData);
     },

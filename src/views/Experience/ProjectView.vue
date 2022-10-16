@@ -101,8 +101,13 @@ export default {
       });
     },
     splice(index: number) {
-      this.projectData.descriptionList = this.projectData.descriptionList.filter((data: any) => data.id !== index);
-      this.descriptions = this.descriptions.filter((data: any) => data.id !== index);
+      this.projectData.descriptionList =
+        this.projectData.descriptionList.filter(
+          (data: any) => data.id !== index
+        );
+      this.descriptions = this.descriptions.filter(
+        (data: any) => data.id !== index
+      );
       this.$emit("update", this.projectData);
     },
   },
