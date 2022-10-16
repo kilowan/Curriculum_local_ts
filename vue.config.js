@@ -1,5 +1,5 @@
 module.exports = {
-    devServer: {
-      proxy: 'https://localhost:44377/'
-    }
-  }
+  devServer: {
+    proxy: "https://localhost:44377/",
+  },
+};
