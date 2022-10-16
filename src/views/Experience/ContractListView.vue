@@ -20,7 +20,7 @@
           <contract-view
             :iconsHidden="iconsHidden"
             :contract="contract"
-            @refresh="$emit('refresh')"
+            @update="update($event)"
           />
         </li>
         <b-modal
@@ -34,7 +34,7 @@
           :id="`delete-contract-${contract.id}`"
           title="Eliminar Contrato"
           ok-title="Eliminar"
-          @ok="contracts.splice(contract.id, 1), $emit('refresh')"
+          @ok="splice(contract.id)"
         >
           <div style="text-align: center; margin: 0 auto; width: 380px">
             <h1>
@@ -72,9 +72,15 @@ export default {
       projectData: "",
     };
   },
+  update(contract: Contract) {
+    var filtered = this.contractsData.filter((data: any) => data.id !== contract.id);
+    filtered.push(contract);
+    this.contractsData = filtered;
+    this.$emit("update", this.contractsData);
+  },
   methods: {
     splice(index: number) {
-      this.contractsData.splice(index, 1);
+      this.contractsData = this.contractsData.filter((data: any) => data.id !== index);
       this.$emit("update", this.contractsData);
     },
   },

@@ -101,8 +101,8 @@ export default {
       });
     },
     splice(index: number) {
-      this.descriptions.splice(index, 1);
-      this.projectData.descriptionList.splice(index, 1);
+      this.projectData.descriptionList = this.projectData.descriptionList.filter((data: any) => data.id !== index);
+      this.descriptions = this.descriptions.filter((data: any) => data.id !== index);
       this.$emit("update", this.projectData);
     },
   },
