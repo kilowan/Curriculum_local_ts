@@ -2,9 +2,9 @@
   <div>
     <project-list-view
       v-if="projects.length > 0"
-      :projects="projects"
+      :projects="contractData.projects"
       :iconsHidden="iconsHidden"
-      @refresh="$emit('refresh')"
+      @update="update($event)"
     />
     <div v-if="add">
       <input class="m-2" type="text" v-model="projectData" />
@@ -54,6 +54,11 @@ export default {
         name: project,
         descriptionList: new Array<Description>()
       });
+      this.contractData.projects.push({
+        id: this.index,
+        name: project,
+        descriptionList: new Array<Description>()
+      });
       this.$emit('update', this.contractData);
       this.projectData = '';
       this.add = false;
@@ -61,6 +66,10 @@ export default {
     splice(index: number) {
       this.contractData.projects.splice(index, 1);
       this.projects.splice(index, 1);
+      this.$emit('update', this.contractData);
+    },
+    update(projects: Array<Project>) {
+      this.contractData.projects = projects;
       this.$emit('update', this.contractData);
     }
   },

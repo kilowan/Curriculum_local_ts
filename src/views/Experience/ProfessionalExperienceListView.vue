@@ -19,7 +19,7 @@
 						<professional-experience-view 
 							:company="company" 
 							:iconsHidden="iconsHidden" 
-							@refresh="$emit('refresh')" 
+							@update="update($event)" 
 						/>
 					</li>
 					<b-modal 
@@ -132,6 +132,12 @@ export default {
 				this.$emit('update', this.experienceList);
 				this.experience = {} as Experience;
 			});
+		},
+		update(experience: Experience) {
+			var exp = this.experienceList.filter((data: any) => data.id !== experience.id);
+			exp.push(experience);
+			this.experienceList = exp;
+			this.$emit('update', this.experienceList);
 		},
 		deleteExperience(index: number) {
 			this.$nextTick(() => {

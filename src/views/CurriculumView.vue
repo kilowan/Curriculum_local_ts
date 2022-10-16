@@ -11,7 +11,10 @@
 				</div>
 				<b-icon icon="envelope" aria-hidden="true"/><input type="text" v-model="curriculum.email" placeholder="Email"/> 
 			</div>
-				<social-media-list-view :iconsHidden="iconsHidden"/>
+				<social-media-list-view 
+					:iconsHidden="iconsHidden"
+					@update="updateSocialMedia($event)"
+				/>
 			<div id="objective">
 				<textarea v-model="curriculum.description" placeholder="Descripción"/>
 			</div>
@@ -22,8 +25,8 @@
 			<dl>
 			<professional-experience-list-view 	
 				:iconsHidden="active" @refresh="exp" 
-				:experienceList="curriculum.professionalExperience"
-				@update="EditMode"
+				:experienceList="curriculum.experience"
+				@update="updateExperience($event)"
 			/>
 			<academic-training-list-view 
 				:iconsHidden="active" 
@@ -57,7 +60,10 @@
 					<b-icon icon="envelope" aria-hidden="true"/> <a :href="'mailto:'+ curriculum.email">{{ curriculum.email }}</a><br />
 				</div>
 			</div>
-			<social-media-list-view :iconsHidden="true"/>
+			<social-media-list-view 
+				:iconsHidden="true"
+				@update="updateSocialMedia($event)"
+			/>
 			<div id="objective">
 				<p>{{ curriculum.description }}</p>
 			</div>
@@ -68,8 +74,8 @@
 			<dl>
 			<professional-experience-list-view 	
 				:iconsHidden="active" 
-				:experienceList="curriculum.professionalExperience" 
-				@update="EditMode"
+				:experienceList="curriculum.experience" 
+				@update="updateExperience($event)"
 			/>
 			<academic-training-list-view  
 				:iconsHidden="active" 
@@ -97,7 +103,7 @@
 
 
 <script lang="ts">
-import { SocialMedia, Language } from '../Config/types';
+import { SocialMedia, Language, Experience, CurriculumDetail } from '../Config/types';
 import  AcademicTrainingListView from './AcademicTraining/AcademicTrainingListView.vue';
 import  OtherListView from './Other/OtherListView.vue';
 import ProfessionalExperienceListView from './Experience/ProfessionalExperienceListView.vue';
@@ -119,18 +125,7 @@ export default {
 		return {
 			active:false,
 			add: false,
-			curriculum: {
-				otherTraining:[],
-				languageList:[],
-				professionalExperience:[],
-				email: '',
-				phoneNumber:'',
-				fullName:'',
-				description:'',
-				academicTraining:[],
-				otherData:[],
-				socialMedia: []
-			},
+			curriculum: {} as CurriculumDetail,
 			iconsHidden: false
 		}
 	},
@@ -164,14 +159,18 @@ export default {
 		console.log(this.curriculum);
 		this.EditMode();
 	},
-	addLanguage: function(data: Language){
+	updateExperience(experience: any) {
 		this.$nextTick(() => {
-			this.curriculum.languageList.push(data);
+			this.curriculum.experience = experience;
+			console.log(this.curriculum);
+			this.EditMode();
 		});
 	},
-	addSocialMedia: function(data: SocialMedia){
+	updateSocialMedia: function(data: any){
 		this.$nextTick(() => {
-			this.curriculum.socialMedia.push(data);
+			this.curriculum.socialMedia = data;
+			console.log(this.curriculum);
+			this.EditMode();
 		});
 	},
 	exp: function () {

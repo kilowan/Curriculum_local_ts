@@ -1,7 +1,7 @@
 <template>
   <div>
       <ul>
-        <div v-for="description in descriptions" v-bind:key="description.id">
+        <div v-for="description in projectData.descriptionList" v-bind:key="description.id">
           <li>
             {{ description.name }}
             <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-description-${description.id}`)">
