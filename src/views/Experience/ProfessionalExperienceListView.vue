@@ -61,7 +61,7 @@
           >
             <div style="text-align: center; margin: 0 auto; width: 380px">
               <h1>
-                ¿Seguro que quieres eliminar el contrato '{{ company.name }}'?
+                ¿Seguro que quieres eliminar la experiencia '{{ company.name }}'?
               </h1>
             </div>
           </b-modal>
@@ -172,7 +172,7 @@ export default {
     },
     deleteExperience(index: number) {
       this.$nextTick(() => {
-        this.experienceList.splice(index, 1);
+		this.experienceList = this.experienceList.filter((data: any) => data.id !== index);
         this.$emit("update", this.experienceList);
       });
     },
