@@ -1,18 +1,18 @@
 <template>
   <div>
       <ul>
-        <div v-for="(description, fourthindex) in descriptions" v-bind:key="fourthindex">
+        <div v-for="description in descriptions" v-bind:key="description.id">
           <li>
-            {{ description }}
-            <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-description-${fourthindex}`)">
+            {{ description.name }}
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-description-${description.id}`)">
               <b-icon icon="pencil-square" aria-hidden="true"/>
             </b-link>
-            <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-description-${fourthindex}`)">
+            <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-description-${description.id}`)">
               <b-icon icon="x-circle-fill" aria-hidden="true"/>
             </b-link>
           </li>
           <b-modal 
-			      :id="`edit-description-${fourthindex}`"
+			      :id="`edit-description-${description.id}`"
 			      title="Editar descripción"
 			      ok-title="Guardar"
 			      @cancel="cancel"
@@ -20,10 +20,10 @@
 			      <input type="text" v-model="description.name" /> <br />
 		      </b-modal>
           <b-modal 
-            :id="`delete-description-${fourthindex}`" 
+            :id="`delete-description-${description.id}`" 
             title="Eliminar Proyecto"
             ok-title="Eliminar"
-            @ok="descriptions.splice(fourthindex, 1)"
+            @ok="splice(description.id)"
           >
             <div style="text-align: center; margin: 0 auto; width:380px;">
               <h1>¿Seguro que quieres eliminar la descripción '{{ description.name }}'?</h1>
@@ -45,6 +45,8 @@
 
 <script lang="ts">
 
+import { Description, Project } from '../../Config/types';
+
 export default {
   name: 'ProjectView',
   props:{
@@ -59,36 +61,43 @@ export default {
   },
   data() {
 		return {
-			contract: false,
+      index: 0,
       add: false,
-      counter: 0,
-      hideDesc: false,
-      hideProj: false,
       description: '',
       desc: '',
-      descriptions: []
+      descriptions: new Array<Description>(),
+      projectData: {} as Project
 		}
 	},
   methods: {
-    hidden() {
-      this.counter--;
-      if (this.counter == 0) {
-        this.hideDesc = true;
-      }
-      this.$emit('sizeChange');
-    },
     cancel() {
       this.add = false;
     },
     save(description: string) {
       this.$nextTick(() => {
-        this.descriptions.push(description);
+        this.descriptions.push({
+          id: this.index,
+          name: description
+        });
+        this.projectData.descriptionList.push({
+          id: this.index,
+          name: description
+        });
+        this.index++;
         this.add = false;
         this.desc = '';
-        this.$emit('refresh');
+        this.$emit('update', this.projectData);
       });
     },
-  }
+    splice(index: number){
+      this.descriptions.splice(index, 1);
+      this.projectData.descriptionList.splice(index, 1);
+      this.$emit('update', this.projectData);
+    }
+  },
+  mounted() {
+		this.projectData = this.project;
+	}
 }
 </script>
 

@@ -18,8 +18,8 @@ export interface CurriculumDetail extends base {
     name: string;
     type: number;
     place: string;
-    initDate?: string;
-    finishDate?: string;
+    initDate: string;
+    finishDate: string;
     contracts: Array<Contract>;
   }
   export interface Contract extends base {
