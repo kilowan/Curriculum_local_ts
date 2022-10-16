@@ -74,7 +74,9 @@ export default {
   methods: {
     deleteProject(index: number) {
       this.$nextTick(() => {
-		this.projectsData = this.projectsData.filter((data: any) => data.id !== index);
+        this.projectsData = this.projectsData.filter(
+          (data: any) => data.id !== index
+        );
         this.$emit("update", this.projectsData);
       });
     },

@@ -1,4 +1,4 @@
-export interface base extends Object {
+export interface base {
   id: number;
 }
 export interface CurriculumDetail extends base {
@@ -8,7 +8,7 @@ export interface CurriculumDetail extends base {
   email: string;
   experience: Array<Experience>;
   otherTraining: Array<Training>;
-  academicTraining: Array<Training>;
+  academicTraining: Array<Academic>;
   languageList: Array<Language>;
   socialMedia: Array<SocialMedia>;
   otherData: Array<OtherData>;
