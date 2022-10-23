@@ -1,99 +1,69 @@
 <template>
-  <div>
-    <div v-if="!active" id="page-wrap" class="main">
-      <div id="contact-info" class="vcard">
-        <h1 class="fn">
-          <input
-            type="text"
-            v-model="curriculum.fullName"
-            placeholder="Nombre completo"
-          />
-        </h1>
-        <div>
-          <b-icon icon="telephone-fill" aria-hidden="true" />
-          <input
-            type="text"
-            v-model="curriculum.phoneNumber"
-            placeholder="Teléfono"
-          /><br />
-        </div>
-        <b-icon icon="envelope" aria-hidden="true" /><input
+  <div id="page-wrap" class="main">
+    <div v-if="!active" id="contact-info" class="vcard">
+      <h1 class="fn">
+        <input
           type="text"
-          v-model="curriculum.email"
-          placeholder="Email"
+          v-model="curriculum.fullName"
+          placeholder="Nombre completo"
         />
+      </h1>
+      <div>
+        <b-icon icon="telephone-fill" aria-hidden="true" />
+        <input
+          type="text"
+          v-model="curriculum.phoneNumber"
+          placeholder="Teléfono"
+        /><br />
       </div>
-      <social-media-list-view
-        :iconsHidden="iconsHidden"
-        @update="updateSocialMedia($event)"
+      <b-icon icon="envelope" aria-hidden="true" /><input
+        type="text"
+        v-model="curriculum.email"
+        placeholder="Email"
       />
-      <div id="objective">
-        <textarea v-model="curriculum.description" placeholder="Descripción" />
-      </div>
-      <div class="clear"></div>
-      <dl></dl>
-      <dd class="clear"></dd>
-      <dl>
-        <professional-experience-list-view
-          :iconsHidden="active"
-          @update="updateExperience($event)"
-        />
-        <academic-training-list-view
-          :iconsHidden="active"
-          @update="updateAcademic($event)"
-        />
-        <skill-list-view :iconsHidden="active" @update="updateSkills($event)" />
-        <language-list-view
-          :iconsHidden="active"
-          @update="updateLanguage($event)"
-        />
-        <other-list-view :iconsHidden="active" @update="updateOther($event)" />
-      </dl>
-      <dd class="clear"></dd>
-      <b-button @click="getFile(curriculum)">Guardar</b-button>
     </div>
-    <div v-else id="page-wrap">
-      <div id="contact-info" class="vcard">
-        <h1 class="fn">{{ curriculum.fullName }}</h1>
-        <div>
-          <b-icon icon="telephone-fill" aria-hidden="true" />
-          <span>{{ curriculum.phoneNumber }}</span
-          ><br />
-        </div>
-        <div>
-          <b-icon icon="envelope" aria-hidden="true" />
-          <a :href="'mailto:' + curriculum.email">{{ curriculum.email }}</a
-          ><br />
-        </div>
+    <div v-else id="contact-info" class="vcard">
+      <h1 class="fn">{{ curriculum.fullName }}</h1>
+      <div>
+        <b-icon icon="telephone-fill" aria-hidden="true" />
+        <span>{{ curriculum.phoneNumber }}</span><br />
       </div>
-      <social-media-list-view
-        :iconsHidden="true"
-        @update="updateSocialMedia($event)"
+      <div>
+        <b-icon icon="envelope" aria-hidden="true" />
+        <a :href="'mailto:' + curriculum.email">{{ curriculum.email }}</a
+        ><br />
+      </div>
+    </div>
+    <social-media-list-view
+      :iconsHidden="iconsHidden"
+      @update="updateSocialMedia($event)"
+    />
+    <div id="objective">
+      <textarea v-if="!active" v-model="curriculum.description" placeholder="Descripción" />
+      <p v-else>{{ curriculum.description }}</p>
+    </div>
+    <div class="clear"></div>
+    <dl></dl>
+    <dd class="clear"></dd>
+    <dl>
+      <professional-experience-list-view
+        :iconsHidden="active"
+        @update="updateExperience($event)"
       />
-      <div id="objective">
-        <p>{{ curriculum.description }}</p>
-      </div>
-      <div class="clear"></div>
-      <dl></dl>
-      <dd class="clear"></dd>
-      <dl>
-        <professional-experience-list-view
-          :iconsHidden="active"
-          @update="updateExperience($event)"
-        />
-        <academic-training-list-view
-          :iconsHidden="active"
-          @update="updateAcademic($event)"
-        />
-        <skill-list-view :iconsHidden="active" @update="updateSkills($event)" />
-        <language-list-view
-          :iconsHidden="active"
-          @update="updateLanguage($event)"
-        />
-        <other-list-view :iconsHidden="active" @update="updateOther($event)" />
-      </dl>
-      <b-button @click="active = false">Desacer</b-button>
-    </div>
+      <academic-training-list-view
+        :iconsHidden="active"
+        @update="updateAcademic($event)"
+      />
+      <skill-list-view :iconsHidden="active" @update="updateSkills($event)" />
+      <language-list-view
+        :iconsHidden="active"
+        @update="updateLanguage($event)"
+      />
+      <other-list-view :iconsHidden="active" @update="updateOther($event)" />
+    </dl>
+    <b-button class="m-2" v-if="!active" @click="active=true">Guardar</b-button>
+    <b-button class="m-2" v-else @click="active = false">Desacer</b-button>
+    <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
   </div>
 </template>
 
