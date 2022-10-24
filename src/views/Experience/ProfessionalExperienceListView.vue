@@ -88,16 +88,16 @@
       <label>Tipo</label>
       <b-form-select
         :options="options()"
-        v-model="typeSelected"
+        v-model="experience.type"
       ></b-form-select>
       <br />
       <label>Fecha de inicio</label>
-      <input type="date" v-model="initDate" min="2015-01-01" max="2030-12-31" />
+      <input type="date" v-model="experience.initDate" min="2015-01-01" max="2030-12-31" />
       <br />
       <label>Fecha de fin</label>
       <input
         type="date"
-        v-model="finishDate"
+        v-model="experience.finishDate"
         min="2015-01-01"
         max="2030-12-31"
       />
@@ -128,18 +128,10 @@ export default {
       experience: {} as Experience,
       add: false,
       hide: false,
-      typeSelected: 1,
-      initDate: "2021-12-08",
-      finishDate: "2021-12-08",
-      place: "",
     };
   },
   methods: {
     cancel() {
-      this.initDate = "2021-12-08";
-      this.finishDate = "2021-12-08";
-      this.place = "";
-      this.typeSelected = 1;
       this.add = false;
     },
     options: function () {
