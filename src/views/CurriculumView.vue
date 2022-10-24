@@ -65,6 +65,7 @@
       <b-button class="m-2" v-if="!active" @click="doPrint">Imprimir</b-button>
       <b-button class="m-2" v-else @click="cancel">Desacer</b-button>
       <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
+      <input type="file" @change="readFile($event)"/>
     </div>
   </div>
 </template>
@@ -96,6 +97,7 @@ export default {
       add: false,
       curriculum: {} as CurriculumDetail,
       iconsHidden: false,
+      reader: {} as FileReader
       //: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>
     };
   },
@@ -131,6 +133,29 @@ export default {
         });
       });
     },
+    readFile: async function(file: any) {
+
+      this.reader = new FileReader();
+      this.reader.readAsBinaryString(file.target.files[0]);
+      
+      this.reader.onloadend = function(event: any) {
+        var json = JSON.parse(event.target.result);
+        //console.log(json);
+        //return this.pullFile(json);
+      }
+      
+      
+      //this.$nextTick(() => {
+        //var json = JSON.stringify(this.reader.result);
+        //console.log(json);
+      //});
+    },
+    /*pullFile(data: any) {
+      this.curriculum = data;
+    }*/
+   /*previewFiles(event: any) {
+      console.log(event.target.files);
+   },*/
     /*createPDF() {
       let el = document.querySelector('#results');
       if (el) {
