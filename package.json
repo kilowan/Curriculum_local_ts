@@ -17,6 +17,7 @@
     "core-js": "^3.6.5",
     "file-saver": "^2.0.5",
     "follow-redirects": "^1.15.1",
+    "html2canvas": "^1.4.1",
     "jquery": "^3.6.0",
     "jspdf": "^2.5.1",
     "minimist": "^1.2.6",
