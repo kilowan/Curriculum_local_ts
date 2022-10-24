@@ -62,8 +62,8 @@
       <other-list-view :iconsHidden="active" @update="updateOther($event)" />
     </dl>
     <div id="buttons">
-      <b-button class="m-2" v-if="!active" @click="doPrint">Guardar</b-button>
-      <b-button class="m-2" v-else @click="active = false">Desacer</b-button>
+      <b-button class="m-2" v-if="!active" @click="doPrint">Imprimir</b-button>
+      <b-button class="m-2" v-else @click="cancel">Desacer</b-button>
       <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
     </div>
   </div>
@@ -109,18 +109,26 @@ export default {
         this.other();
       });
     },
+    cancel() {
+      this.active = false;
+      this.$nextTick(() => {
+        this.EditMode();
+      });
+    },
     doPrint() {
       this.active=true;
       this.$nextTick(() => {
         this.EditMode();
-        let mywindow = window.open('', '_blank');
-        mywindow!.document.head.innerHTML = document.head.innerHTML;
-        mywindow!.document.body.innerHTML = document.body.innerHTML;
-        //document.getElementById('page-wrap')!.innerHTML;
-        let noPrintableContent: any = mywindow!.document.getElementById('buttons');
-        noPrintableContent.parentNode.removeChild(noPrintableContent);
-        mywindow!.print();
-        mywindow!.close();
+        this.$nextTick(() => {
+          let mywindow = window.open('', '_blank');
+          mywindow!.document.head.innerHTML = document.head.innerHTML;
+          mywindow!.document.body.innerHTML = document.body.innerHTML;
+          //document.getElementById('page-wrap')!.innerHTML;
+          let noPrintableContent: any = mywindow!.document.getElementById('buttons');
+          noPrintableContent.parentNode.removeChild(noPrintableContent);
+          mywindow!.print();
+          mywindow!.close();
+        });
       });
     },
     /*createPDF() {
