@@ -58,6 +58,7 @@ export default {
         name: project,
         descriptionList: new Array<Description>(),
       });
+      this.index++;
       this.$emit("update", this.contractData);
       this.projectData = "";
       this.add = false;
