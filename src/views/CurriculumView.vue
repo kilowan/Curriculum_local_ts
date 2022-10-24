@@ -61,13 +61,17 @@
       />
       <other-list-view :iconsHidden="active" @update="updateOther($event)" />
     </dl>
-    <b-button class="m-2" v-if="!active" @click="active=true">Guardar</b-button>
-    <b-button class="m-2" v-else @click="active = false">Desacer</b-button>
-    <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
+    <div id="buttons">
+      <b-button class="m-2" v-if="!active" @click="doPrint">Guardar</b-button>
+      <b-button class="m-2" v-else @click="active = false">Desacer</b-button>
+      <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+//import jsPDF from 'jspdf';
+//declare const html2canvas: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>;
 import { CurriculumDetail } from "../Config/types";
 import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
 import OtherListView from "./Other/OtherListView.vue";
@@ -92,6 +96,7 @@ export default {
       add: false,
       curriculum: {} as CurriculumDetail,
       iconsHidden: false,
+      //: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>
     };
   },
   methods: {
@@ -103,6 +108,57 @@ export default {
         this.lang();
         this.other();
       });
+    },
+    doPrint() {
+      this.active=true;
+      this.$nextTick(() => {
+        this.EditMode();
+        let mywindow = window.open('', '_blank');
+        mywindow!.document.head.innerHTML = document.head.innerHTML;
+        mywindow!.document.body.innerHTML = document.body.innerHTML;
+        //document.getElementById('page-wrap')!.innerHTML;
+        let noPrintableContent: any = mywindow!.document.getElementById('buttons');
+        noPrintableContent.parentNode.removeChild(noPrintableContent);
+        mywindow!.print();
+        mywindow!.close();
+      });
+    },
+    /*createPDF() {
+      let el = document.querySelector('#results');
+      if (el) {
+        html2canvas(el as HTMLElement).then((canvas: any) => {
+          let img = canvas.toDataURL('image/png');
+          var doc = new jsPDF('p', 'pt', 'a4');
+          let date = new Date();
+
+          doc.text(this.$t('sarlaftsearch_pdf_header'), 30, 50);
+          let formattedDate = date.toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric' });
+          doc.text(formattedDate, 500, 30);
+          doc.addImage(img, 'JPEG', 50, 100, 500, 160, 'SarlaftReport.pdf');
+          let blob = doc.output('blob');
+          let name = this.formatName(this.companyName, this.$t('lite_sarlaft_modal_title'));
+          this.descargarArchivo(blob, name);
+        });
+      }
+    },*/
+    descargarArchivo(contenidoEnBlob: Blob, nombreArchivo: string) {
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        var save = document.createElement('a');
+        if (event.target && event.target.result) {
+          save.href = event.target.result.toString();
+        }
+        save.target = '_blank';
+        save.download = nombreArchivo || 'archivo.dat';
+        var clicEvent = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        save.dispatchEvent(clicEvent);
+        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+      };
+      reader.readAsDataURL(contenidoEnBlob);
     },
     updateSkills(skills: any) {
       this.curriculum.otherTraining = skills;
