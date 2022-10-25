@@ -90,6 +90,10 @@ export default {
       required: true,
       default: false,
     },
+    media: {
+      type: Array,
+      required: false
+    }
   },
   data() {
     return {
@@ -102,6 +106,12 @@ export default {
       count: 3,
       socialMediaList: new Array<SocialMedia>(),
     };
+  },
+  mounted() {
+    if(this.media !== undefined)
+    {
+      this.socialmediaList = this.media;
+    }
   },
   methods: {
     add(socialMedia: SocialMedia) {
