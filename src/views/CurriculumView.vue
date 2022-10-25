@@ -35,6 +35,7 @@
       </div>
     </div>
     <social-media-list-view
+      :ref="'socialMedia'"
       :media="curriculum.socialMedia"
       :iconsHidden="iconsHidden"
       @update="updateSocialMedia($event)"
@@ -48,15 +49,20 @@
     <dd class="clear"></dd>
     <dl>
       <professional-experience-list-view
+        :ref="'experience'"
         :iconsHidden="active"
         @update="updateExperience($event)"
       />
       <academic-training-list-view
+        :ref="'academic'"
         :iconsHidden="active"
         @update="updateAcademic($event)"
       />
-      <skill-list-view :iconsHidden="active" @update="updateSkills($event)" />
+      <skill-list-view 
+        :iconsHidden="active" 
+        @update="updateSkills($event)" />
       <language-list-view
+        :ref="'lang'"
         :iconsHidden="active"
         @update="updateLanguage($event)"
       />
@@ -66,6 +72,7 @@
       <b-button class="m-2" v-if="!active" @click="doPrint">Imprimir</b-button>
       <b-button class="m-2" v-else @click="cancel">Desacer</b-button>
       <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
+      <b-button class="m-2" @click="EditMode">Recargar</b-button>
       <input type="file" @change="readFile($event)"/>
     </div>
   </div>
@@ -107,11 +114,18 @@ export default {
     curriculum() {
       if(this.reader.result != null) {
         var json = JSON.parse(this.reader.result);
+        console.log(json);
+        console.log(this.reader.result);
         this.curriculum.description = json.description;
         this.curriculum.phoneNumber = json.phoneNumber;
-        this.curriculum.socialMedia = json.socialMedia;
         this.curriculum.academicTraining = json.academicTraining;
         this.curriculum.email = json.email;
+        this.curriculum.fullName = json.fullName;
+        this.$refs.socialMedia._data.socialMediaList = json.socialMedia
+        this.$refs.experience._data.experienceList = json.experience;
+        this.$refs.academic._data.academicTrainingList = json.academicTraining;
+        this.$refs.lang._data.languageList = json.languageList;
+
         //return //JSON.parse(this.reader.result);
       }
         return this.curriculum;
