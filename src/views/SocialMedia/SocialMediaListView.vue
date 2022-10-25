@@ -107,12 +107,6 @@ export default {
       socialMediaList: new Array<SocialMedia>(),
     };
   },
-  mounted() {
-    if(this.media !== undefined)
-    {
-      this.socialmediaList = this.media;
-    }
-  },
   methods: {
     add(socialMedia: SocialMedia) {
       this.socialMediaList.push(socialMedia);
@@ -141,6 +135,12 @@ export default {
       );
       sm.name = data.name;
     },
+  },
+  mounted() {
+    //if(this.media !== undefined)
+    //{
+      this.socialmediaList = this.media;
+    //}
   },
 };
 </script>
