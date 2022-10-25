@@ -35,6 +35,7 @@
       </div>
     </div>
     <social-media-list-view
+      :media="curriculum.socialMedia"
       :iconsHidden="iconsHidden"
       @update="updateSocialMedia($event)"
     />
@@ -61,7 +62,7 @@
       />
       <other-list-view :iconsHidden="active" @update="updateOther($event)" />
     </dl>
-    <div id="buttons">
+    <div v-if="!isRead" id="buttons">
       <b-button class="m-2" v-if="!active" @click="doPrint">Imprimir</b-button>
       <b-button class="m-2" v-else @click="cancel">Desacer</b-button>
       <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
@@ -97,9 +98,29 @@ export default {
       add: false,
       curriculum: {} as CurriculumDetail,
       iconsHidden: false,
-      reader: {} as FileReader
+      reader: {} as FileReader,
+      isRead: false
       //: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>
     };
+  },
+  watch: {
+    curriculum() {
+      if(this.reader.result != null) {
+        var json = JSON.parse(this.reader.result);
+        this.curriculum.description = json.description;
+        this.curriculum.phoneNumber = json.phoneNumber;
+        this.curriculum.socialMedia = json.socialMedia;
+        this.curriculum.academicTraining = json.academicTraining;
+        this.curriculum.email = json.email;
+        //return //JSON.parse(this.reader.result);
+      }
+        return this.curriculum;
+      //var data = new File(file.target.files[0], file.name);
+      //return data.stream;
+      //var reader = new FileReader(data);
+      //reader.readAsBinaryString(file.target.files[0]);
+      //return await reader.onload(() => );
+    },
   },
   methods: {
     EditMode() {
@@ -133,21 +154,16 @@ export default {
         });
       });
     },
-    readFile: async function(file: any) {
-
+    readFile(file: any) {
       this.reader = new FileReader();
-      this.reader.readAsBinaryString(file.target.files[0]);
-      
-      this.reader.onloadend = function(event: any) {
-        var json = JSON.parse(event.target.result);
-        //console.log(json);
-        //return this.pullFile(json);
-      }
-      
-      
-      //this.$nextTick(() => {
-        //var json = JSON.stringify(this.reader.result);
-        //console.log(json);
+      this.reader.readAsBinaryString(file.target.files[0])
+      //var data = this.getBinary(file);//.then((data: any) => {
+        //var data = this.getBinary(file);
+        //this.$nextTick(() => {
+          //var json = JSON.parse(data.);
+          //console.log(json);
+        //});
+
       //});
     },
     /*pullFile(data: any) {
