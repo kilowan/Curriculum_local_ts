@@ -6,7 +6,7 @@
       class="d-flex"
     >
       <social-media-view :socialMediaData="socialMediaData" />
-      <b-link @click="$bvModal.show(`edit-social-media-${index}`)">
+      <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-social-media-${index}`)">
         <b-icon icon="pencil-square" aria-hidden="true" />
       </b-link>
       <b-link
@@ -46,7 +46,7 @@
         </div>
       </b-modal>
     </div>
-    <b-link :hidden="count === 0" @click="$bvModal.show('add-social-media')">
+    <b-link v-if="!iconsHidden" :hidden="count === 0" @click="$bvModal.show('add-social-media')">
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir Red social
     </b-link>
     <b-modal

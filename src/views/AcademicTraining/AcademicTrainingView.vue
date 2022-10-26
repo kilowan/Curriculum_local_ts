@@ -4,17 +4,14 @@
     <li v-if="academicData.graduationDate">
       Graduación: {{ new Date(academicData.graduationDate).getFullYear() }}
     </li>
-    <div v-if="contents.length > 0">
-      <li v-if="contents.length > 0">
-        <strong class="m-2">Contenido:</strong>
-        <contents-view
-          :contents="contents"
-          :iconsHidden="iconsHidden"
-          @update="refresh($event)"
-          @sizeChange="$emit('sizeChange')"
-        />
-      </li>
-    </div>
+      <strong  v-if="contents.length > 0" class="m-2">Contenido:</strong>
+      <contents-view
+        :ref="'contents'"
+        :contents="contents"
+        :iconsHidden="iconsHidden"
+        @update="refresh($event)"
+        @sizeChange="$emit('sizeChange')"
+      />
     <div v-if="add">
       <input class="m-2" type="text" v-model="element" />
       <b-button class="m-2" @click="save(element)">Guardar</b-button>
@@ -91,7 +88,8 @@ export default {
   },
   mounted() {
     this.academicData = this.academic;
-    this.academicData.contents = new Array<Content>();
+    this.$refs.contents._data.contentsData = this.academicData.contents;
+    this.index = this.academicData.contents.length === 0 || this.academicData.contents === undefined || this.academicData.contents === null? 0 : this.academicData.contents.length-1;
   },
 };
 </script>

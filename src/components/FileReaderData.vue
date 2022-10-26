@@ -21,7 +21,7 @@ export default {
         callback(reader.result);
       }
 
-      reader.readAsBinaryString(file);
+      reader.readAsText(file);
     }
   },
 };
