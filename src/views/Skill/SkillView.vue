@@ -1,8 +1,9 @@
 <template>
   <ul>
-    <div v-if="contents.length > 0">
+    <div>
       <contents-view
-        :contents="contents"
+        :ref="'contents'"
+        :contents="skill.contents"
         :iconsHidden="iconsHidden"
         @update="update($event)"
         @sizeChange="$emit('sizeChange')"
@@ -22,7 +23,6 @@
 <script lang="ts">
 import ContentsView from "../Content/ContentsView.vue";
 import { ContentType, Training, Content, SubContent } from "../../Config/types";
-import axios from "axios";
 
 export default {
   name: "ComplementaryExperienceView",
@@ -81,7 +81,8 @@ export default {
   },
   mounted() {
     this.skillData = this.skill;
-    this.skillData.contents = new Array<Content>();
+    this.$refs.contents._data.contentsData = this.skill.contents;
+    this.index = this.skill.contents.length === 0 || this.skill.contents === undefined || this.skill.contents === null? 0 : this.skill.contents.length-1;
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <project-list-view
-      v-if="projects.length > 0"
+      :ref="'projectts'"
       :projects="contractData.projects"
       :iconsHidden="iconsHidden"
       @update="update($event)"
@@ -77,6 +77,8 @@ export default {
   },
   mounted() {
     this.contractData = this.contract;
+    this.$refs.projectts._data.projectsData = this.contract.projects;
+    this.index = this.contract.projects.length === 0 || this.contract.projects === undefined || this.contract.projects === null? 0 : this.contract.projects.length-1;
   },
 };
 </script>

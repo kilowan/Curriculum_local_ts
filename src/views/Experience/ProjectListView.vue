@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="projectsData.length > 0">
     Proyectos:
     <ul>
       <div v-for="project in projectsData" v-bind:key="project.id">

@@ -110,10 +110,14 @@ export default {
           name: language.name,
           level: language.level,
         });
+        this.index++;
         this.$emit("update", this.languageList);
         this.language = {} as Language;
       });
     },
   },
+  mounted() {
+    this.index = this.languageList.length === 0 || this.languageList === undefined || this.languageList === null? 0 : this.languageList.length-1;
+  }
 };
 </script>

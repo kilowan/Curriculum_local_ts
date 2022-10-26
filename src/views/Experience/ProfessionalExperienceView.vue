@@ -9,6 +9,7 @@
         Fecha Fin: {{ new Date(companyData.finishDate).toLocaleDateString() }}
       </li>
       <contract-list-view
+        :ref="'contractt'"
         :contracts="contractList"
         :iconsHidden="iconsHidden"
         @update="update($event)"
@@ -80,6 +81,8 @@ export default {
   },
   mounted() {
     this.companyData = this.company;
+    this.$refs.contractt._data.contractsData = this.company.contracts;
+    this.index = this.company.contracts.length === 0 || this.company.contracts === undefined || this.company.contracts === null? 0 : this.company.contracts.length-1;
   },
 };
 </script>
