@@ -36,7 +36,7 @@
     </div>
     <social-media-list-view
       :ref="'socialMedia'"
-      :iconsHidden="iconsHidden"
+      :iconsHidden="active"
       @update="updateSocialMedia($event)"
     />
     <div id="objective">
@@ -74,11 +74,11 @@
       />
     </dl>
     <div v-if="!isRead" id="buttons">
-      <b-button class="m-2" v-if="!active" @click="doPrint">Imprimir</b-button>
-      <b-button class="m-2" v-else @click="cancel">Desacer</b-button>
-      <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
-      <b-button class="m-2" @click="EditMode">Recargar</b-button>
-      <file-reader-data type="file" @output="file($event)"/>
+      <b-button class="m-2" v-if="!active && exportable" @click="doPrint">Imprimir</b-button>
+      <b-button class="m-2" v-else-if="active" @click="cancel">Desacer</b-button>
+      <b-button v-if="!active && exportable" class="m-2" @click="getFile(curriculum)">Exportar</b-button>
+      <file-reader-data v-if="imp" type="file" @output="file($event)"/>
+      <b-button v-if="!imp" class="m-2" @click="imp = true">Importar</b-button>
     </div>
   </div>
 </template>
@@ -114,7 +114,9 @@ export default {
       curriculum: {} as CurriculumDetail,
       iconsHidden: false,
       reader: {} as FileReader,
-      isRead: false
+      isRead: false,
+      exportable: false,
+      imp: false
     };
   },
   methods: {
@@ -132,6 +134,7 @@ export default {
         this.$refs.lang._data.languageList = json.languageList;
         this.$refs.skills._data.otherTraining = json.otherTraining;
         this.$refs.other._data.other = json.otherData;
+        this.exportable = true;
         this.EditMode();
       });
     },
@@ -147,6 +150,7 @@ export default {
     cancel() {
       this.active = false;
       this.$nextTick(() => {
+        this.imp = false;
         this.EditMode();
       });
     },
@@ -187,35 +191,35 @@ export default {
     },
     updateSkills(skills: any) {
       this.curriculum.otherTraining = skills;
-      console.log(this.curriculum);
+      this.exportable = true;
       this.EditMode();
     },
     updateAcademic(media: any) {
       this.curriculum.academicTraining = media;
-      console.log(this.curriculum);
+      this.exportable = true;
       this.EditMode();
     },
     updateLanguage(language: any) {
       this.curriculum.languageList = language;
-      console.log(this.curriculum);
+      this.exportable = true;
       this.EditMode();
     },
     updateOther(media: any) {
       this.curriculum.otherData = media;
-      console.log(this.curriculum);
+      this.exportable = true;
       this.EditMode();
     },
     updateExperience(experience: any) {
       this.$nextTick(() => {
         this.curriculum.experience = experience;
-        console.log(this.curriculum);
+        this.exportable = true;
         this.EditMode();
       });
     },
     updateSocialMedia(data: any) {
       this.$nextTick(() => {
         this.curriculum.socialMedia = data;
-        console.log(this.curriculum);
+        this.exportable = true;
         this.EditMode();
       });
     },
