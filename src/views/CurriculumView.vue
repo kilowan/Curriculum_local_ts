@@ -73,7 +73,7 @@
       <b-button class="m-2" v-else @click="cancel">Desacer</b-button>
       <b-button class="m-2" @click="getFile(curriculum)">Exportar</b-button>
       <b-button class="m-2" @click="EditMode">Recargar</b-button>
-      <input type="file" @change="readFile($event)"/>
+      <file-reader-data type="file" @output="file($event)"/>
     </div>
   </div>
 </template>
@@ -88,6 +88,7 @@ import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceL
 import SkillListView from "./Skill/SkillListView.vue";
 import LanguageListView from "./Language/LanguageView.vue";
 import SocialMediaListView from "./SocialMedia/SocialMediaListView.vue";
+import FileReaderData from "../components/FileReaderData.vue";
 
 export default {
   name: "CurriculumView",
@@ -98,6 +99,7 @@ export default {
     SkillListView,
     LanguageListView,
     SocialMediaListView,
+    FileReaderData
   },
   data() {
     return {
@@ -107,15 +109,13 @@ export default {
       iconsHidden: false,
       reader: {} as FileReader,
       isRead: false
-      //: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>
     };
   },
-  watch: {
-    curriculum() {
-      if(this.reader.result != null) {
-        var json = JSON.parse(this.reader.result);
+  methods: {
+    file(input: any) {
+        var json = JSON.parse(input);
         console.log(json);
-        console.log(this.reader.result);
+        console.log(input);
         this.curriculum.description = json.description;
         this.curriculum.phoneNumber = json.phoneNumber;
         this.curriculum.academicTraining = json.academicTraining;
@@ -125,18 +125,8 @@ export default {
         this.$refs.experience._data.experienceList = json.experience;
         this.$refs.academic._data.academicTrainingList = json.academicTraining;
         this.$refs.lang._data.languageList = json.languageList;
-
-        //return //JSON.parse(this.reader.result);
-      }
-        return this.curriculum;
-      //var data = new File(file.target.files[0], file.name);
-      //return data.stream;
-      //var reader = new FileReader(data);
-      //reader.readAsBinaryString(file.target.files[0]);
-      //return await reader.onload(() => );
+        this.EditMode();
     },
-  },
-  methods: {
     EditMode() {
       this.$nextTick(() => {
         this.exp();
@@ -168,42 +158,6 @@ export default {
         });
       });
     },
-    readFile(file: any) {
-      this.reader = new FileReader();
-      this.reader.readAsBinaryString(file.target.files[0])
-      //var data = this.getBinary(file);//.then((data: any) => {
-        //var data = this.getBinary(file);
-        //this.$nextTick(() => {
-          //var json = JSON.parse(data.);
-          //console.log(json);
-        //});
-
-      //});
-    },
-    /*pullFile(data: any) {
-      this.curriculum = data;
-    }*/
-   /*previewFiles(event: any) {
-      console.log(event.target.files);
-   },*/
-    /*createPDF() {
-      let el = document.querySelector('#results');
-      if (el) {
-        html2canvas(el as HTMLElement).then((canvas: any) => {
-          let img = canvas.toDataURL('image/png');
-          var doc = new jsPDF('p', 'pt', 'a4');
-          let date = new Date();
-
-          doc.text(this.$t('sarlaftsearch_pdf_header'), 30, 50);
-          let formattedDate = date.toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric' });
-          doc.text(formattedDate, 500, 30);
-          doc.addImage(img, 'JPEG', 50, 100, 500, 160, 'SarlaftReport.pdf');
-          let blob = doc.output('blob');
-          let name = this.formatName(this.companyName, this.$t('lite_sarlaft_modal_title'));
-          this.descargarArchivo(blob, name);
-        });
-      }
-    },*/
     descargarArchivo(contenidoEnBlob: Blob, nombreArchivo: string) {
       var reader = new FileReader();
       reader.onload = function (event) {
