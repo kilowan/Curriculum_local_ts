@@ -109,6 +109,8 @@ export default {
   },
   mounted() {
     this.contentData = this.content;
+    this.subContents = this.content.subContents;
+    this.index = this.content.subContents.length === 0 || this.content.subContents === undefined || this.content.subContents === null? 0 : this.content.subContents.length-1;
   },
 };
 </script>

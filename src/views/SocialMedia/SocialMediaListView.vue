@@ -89,10 +89,6 @@ export default {
       type: Boolean,
       required: true,
       default: false,
-    },
-    media: {
-      type: Array,
-      required: false
     }
   },
   data() {
@@ -135,12 +131,6 @@ export default {
       );
       sm.name = data.name;
     },
-  },
-  mounted() {
-    //if(this.media !== undefined)
-    //{
-      this.socialmediaList = this.media;
-    //}
   },
 };
 </script>

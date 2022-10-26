@@ -36,7 +36,6 @@
     </div>
     <social-media-list-view
       :ref="'socialMedia'"
-      :media="curriculum.socialMedia"
       :iconsHidden="iconsHidden"
       @update="updateSocialMedia($event)"
     />
@@ -59,14 +58,20 @@
         @update="updateAcademic($event)"
       />
       <skill-list-view 
+        :ref="'skills'"
         :iconsHidden="active" 
-        @update="updateSkills($event)" />
+        @update="updateSkills($event)" 
+      />
       <language-list-view
         :ref="'lang'"
         :iconsHidden="active"
         @update="updateLanguage($event)"
       />
-      <other-list-view :iconsHidden="active" @update="updateOther($event)" />
+      <other-list-view 
+        :ref="'other'"
+        :iconsHidden="active" 
+        @update="updateOther($event)" 
+      />
     </dl>
     <div v-if="!isRead" id="buttons">
       <b-button class="m-2" v-if="!active" @click="doPrint">Imprimir</b-button>
@@ -105,6 +110,7 @@ export default {
     return {
       active: false,
       add: false,
+      description:'',
       curriculum: {} as CurriculumDetail,
       iconsHidden: false,
       reader: {} as FileReader,
@@ -113,19 +119,21 @@ export default {
   },
   methods: {
     file(input: any) {
+      this.$nextTick(() => {
         var json = JSON.parse(input);
-        console.log(json);
-        console.log(input);
+        this.curriculum = json;
         this.curriculum.description = json.description;
         this.curriculum.phoneNumber = json.phoneNumber;
-        this.curriculum.academicTraining = json.academicTraining;
         this.curriculum.email = json.email;
         this.curriculum.fullName = json.fullName;
         this.$refs.socialMedia._data.socialMediaList = json.socialMedia
         this.$refs.experience._data.experienceList = json.experience;
         this.$refs.academic._data.academicTrainingList = json.academicTraining;
         this.$refs.lang._data.languageList = json.languageList;
+        this.$refs.skills._data.otherTraining = json.otherTraining;
+        this.$refs.other._data.other = json.otherData;
         this.EditMode();
+      });
     },
     EditMode() {
       this.$nextTick(() => {
