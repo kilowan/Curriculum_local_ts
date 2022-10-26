@@ -6,8 +6,6 @@
 
 export default {
   name: "FileReaderData",
-  components: {
-  },
   data() {
     return {
       reader: {} as FileReader
