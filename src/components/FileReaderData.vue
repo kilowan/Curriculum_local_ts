@@ -7,9 +7,7 @@
 export default {
   name: "FileReaderData",
   data() {
-    return {
-      reader: {} as FileReader
-    };
+    return {};
   },
   methods: {
     result(data: any) {
