@@ -6,7 +6,6 @@
         :contents="skill.contents"
         :iconsHidden="iconsHidden"
         @update="update($event)"
-        @sizeChange="$emit('sizeChange')"
       />
     </div>
     <div v-if="add">

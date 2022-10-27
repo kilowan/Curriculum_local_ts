@@ -31,6 +31,7 @@
             :id="`edit-language-${firstindex}`"
             title="Editar Idioma"
             ok-title="Guardar"
+            @ok="update(languageList)"
           >
             <label>Nombre:</label>
             <input type="text" v-model="language.name" /> <br />
@@ -102,6 +103,11 @@ export default {
       this.add = false;
       this.language.name = "";
       this.language.level = "";
+    },
+    update(langs: any) {
+      this.$nextTick(() => {
+        this.$emit('update', langs);
+      });
     },
     save(language: any) {
       this.$nextTick(() => {

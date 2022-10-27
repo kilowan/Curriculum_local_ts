@@ -130,6 +130,8 @@ export default {
         (element: any) => element.type === data.type
       );
       sm.name = data.name;
+
+      this.$emit('update', data);
     },
   },
 };

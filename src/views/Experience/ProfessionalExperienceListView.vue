@@ -2,7 +2,7 @@
   <div v-if="!hide">
     <dt id="experiencia">
       Experiencia
-      <b-link v-if="!iconsHidden" @click="(hide = true), $emit('sizeChange')">
+      <b-link v-if="!iconsHidden" @click="(hide = true)">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
@@ -26,13 +26,14 @@
             <professional-experience-view
               :company="company"
               :iconsHidden="iconsHidden"
-              @update="update($event)"
+              @update="refresh($event)"
             />
           </li>
           <b-modal
             :id="`edit-experience-${company.id}`"
             title="Editar Experiencia"
             ok-title="Guardar"
+            @ok="update(experienceList)"
           >
             <label>Nombre</label> <input type="text" v-model="company.name" />
             <br />
@@ -156,13 +157,18 @@ export default {
         this.experience = {} as Experience;
       });
     },
-    update(experience: Experience) {
+    refresh(experience: Experience) {
       var exp = this.experienceList.filter(
         (data: any) => data.id !== experience.id
       );
       exp.push(experience);
       this.experienceList = exp;
       this.$emit("update", this.experienceList);
+    },
+    update(experiences: any) {
+      this.$nextTick(() => {
+        this.$emit('update', experiences);
+      });
     },
     deleteExperience(index: number) {
       this.$nextTick(() => {

@@ -20,13 +20,14 @@
           <contract-view
             :iconsHidden="iconsHidden"
             :contract="contract"
-            @update="update($event)"
+            @update="refresh($event)"
           />
         </li>
         <b-modal
           :id="`edit-contract-${contract.id}`"
           title="Editar contrato"
           ok-title="Guardar"
+          @ok="update(contractsData)"
         >
           <input type="text" v-model="contract.name" /> <br />
         </b-modal>
@@ -79,13 +80,18 @@ export default {
         );
         this.$emit("update", this.contractsData);
       },
-      update(contract: any) {
-      var filtered = this.contractsData.filter(
-        (data: any) => data.id !== contract.id
-      );
-      filtered.push(contract);
-      this.contractsData = filtered;
-      this.$emit("update", this.contractsData);
+      refresh(contract: any) {
+        var filtered = this.contractsData.filter(
+          (data: any) => data.id !== contract.id
+        );
+        filtered.push(contract);
+        this.contractsData = filtered;
+        this.$emit("update", this.contractsData);
+    },
+    update(contracts: any) {
+      this.$nextTick(() => {
+        this.$emit('update', contracts);
+      });
     },
   },
   mounted() {
