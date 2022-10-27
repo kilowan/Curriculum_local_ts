@@ -2,7 +2,7 @@
   <div v-if="!hide">
     <dt id="otros" class="otros" v-if="other">
       Otros datos
-      <b-link v-if="!iconsHidden" @click="(hide = true), $emit('sizeChange')">
+      <b-link v-if="!iconsHidden" @click="(hide = true)">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
@@ -27,7 +27,7 @@
               :otherData="otherData"
               :iconsHidden="iconsHidden"
               :otherIndex="otherData.id"
-              @update="update($event)"
+              @update="refresh($event)"
             />
           </li>
           <b-modal
@@ -35,6 +35,7 @@
             title="Editar Otros"
             ok-title="Guardar"
             @cancel="cancel"
+            @ok="update(other)"
           >
             <label>Nombre:</label>
             <input type="text" v-model="otherData.name" /> <br />
@@ -60,7 +61,7 @@
       </div>
       <b-link
         v-if="!iconsHidden && !add"
-        @click="(add = true), $emit('sizeChange')"
+        @click="(add = true)"
       >
         <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir Otros Datos
       </b-link>
@@ -111,12 +112,17 @@ export default {
         this.cancel();
       });
     },
-    update(other: OtherData) {
+    refresh(other: OtherData) {
       var dat = this.other.find((data: any) => data.id === other.id);
       dat = other;
       this.other = this.other.filter((data: any) => data.id !== other.id);
       this.other.push(dat);
       this.$emit("update", this.other);
+    },
+    update(others: any) {
+      this.$nextTick(() => {
+        this.$emit('update', others);
+      });
     },
     splice(index: number) {
       this.other = this.other.filter((data: any) => data.id !== index);

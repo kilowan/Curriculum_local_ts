@@ -34,7 +34,7 @@
           @cancel="cancel"
         >
           <div style="text-align: center; margin: 0 auto; width: 380px">
-            <input class="m-2" type="text" v-model="sub.name" />
+            <textarea class="m-2" v-model="sub.name" />
           </div>
         </b-modal>
       </div>

@@ -26,7 +26,7 @@
           ok-title="Guardar"
           @cancel="cancel"
         >
-          <input type="text" v-model="description.name" /> <br />
+          <textarea v-model="description.name" /> <br />
         </b-modal>
         <b-modal
           :id="`delete-description-${description.id}`"

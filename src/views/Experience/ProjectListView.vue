@@ -20,15 +20,16 @@
           <project-view
             :project="project"
             :iconsHidden="iconsHidden"
-            @update="update($event)"
+            @update="refresh($event)"
           />
         </li>
         <b-modal
           :id="`edit-project-${project.id}`"
           title="Editar proyecto"
           ok-title="Guardar"
+          @ok="update(projectsData)"
         >
-          <input type="text" v-model="project.name" /> <br />
+          <textarea v-model="project.name" /> <br />
         </b-modal>
         <b-modal
           :id="`delete-project-${project.id}`"
@@ -80,13 +81,18 @@ export default {
         this.$emit("update", this.projectsData);
       });
     },
-    update(project: Project) {
+    refresh(project: Project) {
       var projects = this.projectsData.filter(
         (data: any) => data.id !== project.id
       );
       projects.push(project);
       this.projectsData = projects;
       this.$emit("update", this.projectsData);
+    },
+    update(projects: any) {
+      this.$nextTick(() => {
+        this.$emit('update', projects);
+      });
     },
   },
   mounted() {

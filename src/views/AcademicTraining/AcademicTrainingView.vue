@@ -10,7 +10,6 @@
         :contents="contents"
         :iconsHidden="iconsHidden"
         @update="refresh($event)"
-        @sizeChange="$emit('sizeChange')"
       />
     <div v-if="add">
       <input class="m-2" type="text" v-model="element" />

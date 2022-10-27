@@ -2,7 +2,7 @@
   <div v-if="!hide">
     <dt id="academica">
       Formación
-      <b-link v-if="!iconsHidden" @click="(hide = true), $emit('sizeChange')">
+      <b-link v-if="!iconsHidden" @click="(hide = true)">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
@@ -28,7 +28,6 @@
               :iconsHidden="iconsHidden"
               :academicIndex="academic.id"
               @update="refresh($event)"
-              @sizeChange="$emit('sizeChange')"
             />
           </li>
           <b-modal
@@ -36,6 +35,7 @@
             title="Editar formación"
             ok-title="Guardar"
             @cancel="cancel"
+            @ok="update(academicTrainingList)"
           >
             <label>Nombre:</label>
             <input type="text" v-model="academic.name" /> <br />
@@ -143,6 +143,11 @@ export default {
     cancel() {
       this.training = {} as Academic;
       this.add = false;
+    },
+    update(trainings: any) {
+      this.$nextTick(() => {
+        this.$emit('update', trainings);
+      });
     },
     save() {
       this.$nextTick(() => {

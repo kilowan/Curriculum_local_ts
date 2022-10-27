@@ -38,9 +38,10 @@
         :id="`edit-content-${content.id}`"
         title="Editar Contenido"
         ok-title="Guardar"
+        @ok="update(contentsData)"
       >
         <div style="text-align: center; margin: 0 auto; width: 380px">
-          <input class="m-2" type="text" v-model="content.name" />
+          <textarea class="m-2" v-model="content.name" />
         </div>
       </b-modal>
     </div>
@@ -85,6 +86,11 @@ export default {
         filtered.push(cont);
         this.contentsData = filtered;
         this.$emit("update", this.contentsData);
+      });
+    },
+    update(contents: any) {
+      this.$nextTick(() => {
+        this.$emit('update', contents);
       });
     },
     splice(index: number) {

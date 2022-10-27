@@ -2,7 +2,7 @@
   <div v-if="!hide">
     <dt id="complementaria" v-if="otherTraining">
       Skills
-      <b-link v-if="!iconsHidden" @click="(hide = true), $emit('sizeChange')">
+      <b-link v-if="!iconsHidden" @click="(hide = true)">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
@@ -27,13 +27,13 @@
               :skill="skill"
               :iconsHidden="iconsHidden"
               @update="refresh($event)"
-              @sizeChange="$emit('sizeChange')"
             />
           </li>
           <b-modal
             :id="`edit-skill-${skill.id}`"
             title="Editar skill"
             ok-title="Guardar"
+            @ok="update(otherTraining)"
           >
             <div style="text-align: center; margin: 0 auto; width: 380px">
               <input class="m-2" type="text" v-model="skill.name" />
@@ -117,6 +117,11 @@ export default {
           (data: any) => data.id !== index
         );
         this.$emit("update", this.otherTraining);
+      });
+    },
+    update(skills: any) {
+      this.$nextTick(() => {
+        this.$emit('update', skills);
       });
     },
     save(training: string) {
