@@ -31,18 +31,13 @@
         >
           <input type="text" v-model="contract.name" /> <br />
         </b-modal>
-        <b-modal
-          :id="`delete-contract-${contract.id}`"
-          title="Eliminar Contrato"
-          ok-title="Eliminar"
-          @ok="splice(contract.id)"
-        >
-          <div style="text-align: center; margin: 0 auto; width: 380px">
-            <h1>
-              ¿Seguro que quieres eliminar el contrato '{{ contract.name }}'?
-            </h1>
-          </div>
-        </b-modal>
+        <delete-modal 
+            :modal-id="'contract'"
+            :modal-title="'Contrato'"
+            :message="'el contrato'"
+            :component-data="contract"
+            @remove="splice(contract.id)"
+          />
       </div>
     </ul>
   </li>
@@ -50,12 +45,14 @@
 
 <script lang="ts">
 import ContractView from "./ContractView.vue";
-import { Contract } from "../../Config/types";
+import { Component } from "../../Config/types";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
   name: "ContractsView",
   components: {
     ContractView,
+    DeleteModal
   },
   props: {
     contracts: {
@@ -69,7 +66,7 @@ export default {
   },
   data() {
     return {
-      contractsData: new Array<Contract>(),
+      contractsData: new Array<Component>(),
       projectData: "",
     };
   },

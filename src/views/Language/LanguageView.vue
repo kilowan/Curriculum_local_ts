@@ -27,29 +27,20 @@
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
           </li>
-          <b-modal
-            :id="`edit-language-${firstindex}`"
-            title="Editar Idioma"
-            ok-title="Guardar"
-            @ok="update(languageList)"
-          >
-            <label>Nombre:</label>
-            <input type="text" v-model="language.name" /> <br />
-            <label>Nivel:</label>
-            <input type="text" v-model="language.level" /> <br />
-          </b-modal>
-          <b-modal
-            :id="`delete-language-${firstindex}`"
-            title="Quitar idioma"
-            ok-title="Quitar"
-            @ok="splice(firstindex)"
-          >
-            <div style="text-align: center; margin: 0 auto; width: 380px">
-              <h1>
-                ¿Seguro que quieres quitar el idioma '{{ language.name }}'?
-              </h1>
-            </div>
-          </b-modal>
+          <EditModal 
+           :modal-id="'language'"
+           :modal-title="'Idioma'"
+           :component-data="language"
+           :component-datatype="'Language'"
+           @update="update(languageList)"
+          />
+          <DeleteModal 
+            :modal-id="'language'"
+            :modal-title="'idioma'"
+            :message="'el idioma'"
+            :component-data="language"
+            @remove="splice(firstindex)"
+          />
         </div>
       </ul>
       <b-link v-if="!iconsHidden" @click="$bvModal.show('add-language')">
@@ -57,24 +48,28 @@
       </b-link>
     </dd>
     <dd class="clear"></dd>
-    <b-modal
-      :id="'add-language'"
-      title="Añadir Idioma"
-      ok-title="Guardar"
-      @ok="save(language)"
-      @cancel="cancel"
-    >
-      <label>Nombre</label> <input type="text" v-model="language.name" /> <br />
-      <label>Nivel</label> <input type="text" v-model="language.level" /> <br />
-    </b-modal>
+    <AddModal 
+      :modal-id="'language'"
+      :modal-title="'Idioma'"
+      :component-datatype="'Language'"
+      @save="save($event)"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { Language } from "../../Config/types";
+import { Component } from "../../Config/types";
+import AddModal from "../Modal/AddModal.vue";
+import EditModal from "../Modal/EditModal.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
   name: "AcademicTrainingView",
+  components: {
+    AddModal,
+    EditModal,
+    DeleteModal
+  },
   props: {
     iconsHidden: {
       type: Boolean,
@@ -87,8 +82,8 @@ export default {
       hide: false,
       add: false,
       languageLevelList: [],
-      languageList: new Array<Language>(),
-      language: {} as Language,
+      languageList: new Array<Component>(),
+      language: {} as Component,
     };
   },
   methods: {
@@ -118,7 +113,7 @@ export default {
         });
         this.index++;
         this.$emit("update", this.languageList);
-        this.language = {} as Language;
+        this.language = {} as Component;
       });
     },
   },

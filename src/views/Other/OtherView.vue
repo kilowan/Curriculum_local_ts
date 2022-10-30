@@ -17,24 +17,19 @@
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
         </li>
-        <b-modal
-          :id="`edit-value-${secondindex}`"
-          title="Editar elemento"
-          ok-title="Guardar"
-        >
-          <label>Nombre:</label> <input type="text" v-model="value.name" />
-          <br />
-        </b-modal>
-        <b-modal
-          :id="`delete-value-${secondindex}`"
-          title="Eliminar valor"
-          ok-title="Eliminar"
-          @ok="splice(secondindex)"
-        >
-          <div style="text-align: center; margin: 0 auto; width: 380px">
-            <h1>¿Seguro que quieres eliminar el valor '{{ value.name }}'?</h1>
-          </div>
-        </b-modal>
+        <EditModal 
+          :modal-id="'value'"
+          :modal-title="'valor'"
+          :component-data="value"
+          :component-datatype="'Value'"
+        />
+        <DeleteModal 
+          :modal-id="'value'"
+          :modal-title="'valor'"
+          :component-data="value"
+          :message="'el valor'"
+          @remove="splice(secondindex)"
+        />
       </div>
       <div v-if="!iconsHidden">
         <b-link @click="$bvModal.show(`add-value-${otherIndex}`)">
@@ -42,23 +37,28 @@
         </b-link>
       </div>
     </ul>
-    <b-modal
-      :id="`add-value-${otherIndex}`"
-      title="Añadir valor"
-      ok-title="Guardar"
-      @ok="save(valueNew)"
-      @cancel="cancel"
-    >
-      <label>Nombre</label> <input type="text" v-model="valueNew" /> <br />
-    </b-modal>
+    <AddModal 
+      :modal-id="'value'"
+      :modal-title="'valor'"
+      :component-datatype="'Value'"
+      @save="save($event)"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { Value, OtherData } from "@/Config/types";
+import { Component } from "@/Config/types";
+import AddModal from "../Modal/AddModal.vue";
+import EditModal from "../Modal/EditModal.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
   name: "OtherView",
+  components: {
+    AddModal,
+    EditModal,
+    DeleteModal
+  },
   props: {
     otherData: {
       type: Object,
@@ -76,11 +76,11 @@ export default {
   data() {
     return {
       index: 0,
-      other: {} as OtherData,
+      other: {} as Component,
       hide: false,
       add: false,
       valueNew: "",
-      values: new Array<Value>(),
+      values: new Array<Component>(),
     };
   },
   methods: {
@@ -90,7 +90,7 @@ export default {
     },
     save(value: string) {
       this.$nextTick(() => {
-        this.other.values.push({
+        this.other.childrens.push({
           id: this.index,
           name: value,
         });
@@ -105,13 +105,14 @@ export default {
       });
     },
     splice(index: number) {
-      this.other.values.splice(index, 1);
+      this.other.childrens.splice(index, 1);
       this.values.splice(index, 1);
       this.$emit("update", this.other);
     },
   },
   mounted() {
     this.other = this.otherData;
+    this.other.childrens = this.otherData.childrens;
   },
 };
 </script>

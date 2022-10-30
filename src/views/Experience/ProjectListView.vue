@@ -23,39 +23,37 @@
             @update="refresh($event)"
           />
         </li>
-        <b-modal
-          :id="`edit-project-${project.id}`"
-          title="Editar proyecto"
-          ok-title="Guardar"
-          @ok="update(projectsData)"
-        >
-          <textarea v-model="project.name" /> <br />
-        </b-modal>
-        <b-modal
-          :id="`delete-project-${project.id}`"
-          title="Eliminar Proyecto"
-          ok-title="Eliminar"
-          @ok="deleteProject(project.id)"
-        >
-          <div style="text-align: center; margin: 0 auto; width: 380px">
-            <h1>
-              ¿Seguro que quieres eliminar el proyecto '{{ project.name }}'?
-            </h1>
-          </div>
-        </b-modal>
+        <edit-modal 
+          :modal-id="'project'"
+          :modal-title="'proyecto'"
+          :component-data="project"
+          :component-datatype="'Project'"
+          @update="update($event)"
+        />
+        <delete-modal 
+        :modal-id="'project'"
+        :modalTitle="'Proyecto'"
+        :message="'el proyecto'"
+        :component-data="project"
+        @remove="deleteProject($event)"
+      />
       </div>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { Project } from "../../Config/types";
+import { Component } from "../../Config/types";
 import ProjectView from "./ProjectView.vue";
+import EditModal from "../Modal/EditModal.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
   name: "ProjectListView",
   components: {
     ProjectView,
+    EditModal,
+    DeleteModal
   },
   props: {
     projects: {
@@ -69,7 +67,7 @@ export default {
   },
   data() {
     return {
-      projectsData: new Array<Project>(),
+      projectsData: new Array<Component>(),
     };
   },
   methods: {
@@ -81,7 +79,7 @@ export default {
         this.$emit("update", this.projectsData);
       });
     },
-    refresh(project: Project) {
+    refresh(project: Component) {
       var projects = this.projectsData.filter(
         (data: any) => data.id !== project.id
       );

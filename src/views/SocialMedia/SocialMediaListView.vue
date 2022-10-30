@@ -31,20 +31,13 @@
         ></b-form-select>
         <br />
       </b-modal>
-      <b-modal
-        :id="`delete-media-${index}`"
-        title="Eliminar Red social"
-        ok-title="Eliminar"
-        @ok="del(socialMediaData, index)"
-      >
-        <div style="text-align: center; margin: 0 auto; width: 380px">
-          <h1>
-            ¿Seguro que quieres eliminar el elemento '{{
-              socialMediaData.name
-            }}'?
-          </h1>
-        </div>
-      </b-modal>
+      <delete-modal 
+        :modal-id="'media'"
+        :modal-title="'Red social'"
+        :message="'la red social'"
+        :component-data="socialMediaData"
+        @remove="del(socialMediaData, index)"
+      />
     </div>
     <b-link v-if="!iconsHidden" :hidden="count === 0" @click="$bvModal.show('add-social-media')">
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir Red social
@@ -77,12 +70,14 @@
 
 <script lang="ts">
 import SocialMediaView from "./SocialMediaView.vue";
-import { SocialMediaType, SocialMedia } from "../../Config/types";
+import { SocialMediaType, Component } from "../../Config/types";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
   name: "SocialMediaListView",
   components: {
     SocialMediaView,
+    DeleteModal
   },
   props: {
     iconsHidden: {
@@ -98,23 +93,23 @@ export default {
         { value: SocialMediaType.Infojobs, text: "Infojobs", disabled: false },
         { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
       ],
-      socialmedia: {} as SocialMedia,
+      socialmedia: {} as Component,
       count: 3,
-      socialMediaList: new Array<SocialMedia>(),
+      socialMediaList: new Array<Component>(),
     };
   },
   methods: {
-    add(socialMedia: SocialMedia) {
+    add(socialMedia: Component) {
       this.socialMediaList.push(socialMedia);
       var type = this.types.find(
         (element: any) => element.value === socialMedia.type
       );
       type.disabled = true;
       this.$emit("update", this.socialMediaList);
-      this.socialmedia = {} as SocialMedia;
+      this.socialmedia = {} as Component;
       this.count--;
     },
-    del(media: SocialMedia, index: number) {
+    del(media: Component, index: number) {
       this.$nextTick(() => {
         var type = this.types.find(
           (element: any) => element.value === media.type
@@ -125,7 +120,7 @@ export default {
         this.$emit("update", this.socialMediaList);
       });
     },
-    edit(data: SocialMedia) {
+    edit(data: Component) {
       var sm = this.socialMediaList.find(
         (element: any) => element.type === data.type
       );

@@ -17,26 +17,19 @@
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
         </li>
-        <b-modal
-          :id="`delete-subcontent-${sub.id}`"
-          title="Eliminar Contenido"
-          ok-title="Eliminar"
-          @ok="splice(sub.id)"
-        >
-          <div style="text-align: center; margin: 0 auto; width: 380px">
-            <h1>¿Seguro que quieres eliminar el elemento '{{ sub.name }}'?</h1>
-          </div>
-        </b-modal>
-        <b-modal
-          :id="`edit-subcontent-${sub.id}`"
-          title="Editar Contenido"
-          ok-title="Guardar"
-          @cancel="cancel"
-        >
-          <div style="text-align: center; margin: 0 auto; width: 380px">
-            <textarea class="m-2" v-model="sub.name" />
-          </div>
-        </b-modal>
+        <DeleteModal 
+          :modal-id="'subcontent'"
+          :component-data="sub"
+          :modal-title="'Contenido'"
+          :message="'el elemento'"
+          @remove="splice($event)"
+        />
+        <EditModal 
+          :modal-id="'subcontent'"
+          :modal-title="'Contenido'"
+          :component-data="sub"
+          :component-datatype="'SubContent'"
+        />
       </div>
       <b-link
         v-if="!iconsHidden"
@@ -45,34 +38,29 @@
         <b-icon icon="plus-circle-fill" aria-hidden="true" />Añadir SubContenido
       </b-link>
     </ul>
-    <b-modal
-      :id="`add-subcontent-${contentIndex}`"
-      title="Añadir SubContenido"
-      ok-title="Guardar"
-      @ok="addOne(subcontent)"
-    >
-      <div style="text-align: center; margin: 0 auto; width: 380px">
-        <input
-          class="m-2"
-          type="text"
-          placeholder="Nuevo subcontenido"
-          v-model="subcontent"
-        />
-      </div>
-    </b-modal>
+    <AddModal 
+      :modal-id="'subcontent'"
+      :component-datatype="'Subcontent'"
+      :modal-title="'SubContenido'"
+      @save="push($event)"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { SubContent, Content } from "@/Config/types";
+import { Component } from "@/Config/types";
+import AddModal from "../Modal/AddModal.vue";
+import EditModal from "../Modal/EditModal.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
   name: "ContentView",
+  components: {
+    AddModal,
+    EditModal,
+    DeleteModal
+  },
   props: {
-    content: {
-      type: Object,
-      required: true,
-    },
     iconsHidden: {
       type: Boolean,
       required: true,
@@ -84,9 +72,9 @@ export default {
   },
   data() {
     return {
-      contentData: {} as Content,
+      contentData: {} as Component,
       subcontent: "",
-      subContents: new Array<SubContent>(),
+      subContents: new Array<Component>(),
       index: 0,
     };
   },
@@ -97,20 +85,12 @@ export default {
       );
       this.$emit("update", this.subContents);
     },
-    addOne(subContent: string) {
+    push(subContent: string) {
       this.subContents.push({ id: this.index, name: subContent });
       this.index++;
       this.$emit("update", this.subContents);
       this.subcontent = "";
     },
-    cancel() {
-      this.contentData = this.content;
-    },
-  },
-  mounted() {
-    this.contentData = this.content;
-    this.subContents = this.content.subContents;
-    this.index = this.content.subContents.length === 0 || this.content.subContents === undefined || this.content.subContents === null? 0 : this.content.subContents.length-1;
   },
 };
 </script>

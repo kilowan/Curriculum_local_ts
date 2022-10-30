@@ -2,7 +2,7 @@
   <ul>
     <li>Centro/ Lugar: {{ academicData.place }}</li>
     <li v-if="academicData.graduationDate">
-      Graduación: {{ new Date(academicData.graduationDate).getFullYear() }}
+      Graduación: {{ formatDate(academicData.graduationDate) }}
     </li>
       <strong  v-if="contents.length > 0" class="m-2">Contenido:</strong>
       <contents-view
@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts">
-import ContentsView from "../Content/ContentsView.vue";
-import { ContentType, Content, SubContent, Academic } from "../../Config/types";
+import ContentsView from "../Content/ContentListView.vue";
+import { Component } from "../../Config/types";
 
 export default {
   name: "AcademicTrainingView",
@@ -47,18 +47,17 @@ export default {
   },
   data() {
     return {
-      academicData: {} as Academic,
-      contents: new Array<Content>(),
-      ContentType: ContentType,
+      academicData: {} as Component,
+      contents: new Array<Component>(),
       add: false,
       element: "",
       index: 0,
     };
   },
   methods: {
-    refresh(contents: Array<Content>) {
+    refresh(contents: Array<Component>) {
       this.$nextTick(() => {
-        this.academicData.contents = contents;
+        this.academicData.childrens = contents;
         this.$emit("update", this.academicData);
       });
     },
@@ -69,12 +68,12 @@ export default {
     save(content: any) {
       this.$nextTick(() => {
         if (content !== "") {
-          var cont: Content = {
+          var cont: Component = {
             id: this.index,
             name: content,
-            subContents: new Array<SubContent>(),
+            childrens: new Array<Component>(),
           };
-          this.academicData.contents.push(cont);
+          this.academicData.childrens.push(cont);
           this.contents.push(cont);
         }
 
@@ -84,11 +83,14 @@ export default {
         this.$emit("update", this.academicData);
       });
     },
+    formatDate(date: any) {
+      return new Date(date).getFullYear();
+    }
   },
   mounted() {
     this.academicData = this.academic;
-    this.$refs.contents._data.contentsData = this.academicData.contents;
-    this.index = this.academicData.contents.length === 0 || this.academicData.contents === undefined || this.academicData.contents === null? 0 : this.academicData.contents.length-1;
+    this.$refs.contents._data.contentsData = this.academicData.childrens;
+    this.index = this.academicData.childrens.length === 0 || this.academicData.childrens === undefined || this.academicData.childrens === null? 0 : this.academicData.childrens.length-1;
   },
 };
 </script>

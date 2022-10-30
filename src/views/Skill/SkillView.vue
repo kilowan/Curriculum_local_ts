@@ -3,7 +3,7 @@
     <div>
       <contents-view
         :ref="'contents'"
-        :contents="skill.contents"
+        :contents="skill.childrens"
         :iconsHidden="iconsHidden"
         @update="update($event)"
       />
@@ -20,8 +20,8 @@
 </template>
 
 <script lang="ts">
-import ContentsView from "../Content/ContentsView.vue";
-import { ContentType, Training, Content, SubContent } from "../../Config/types";
+import ContentsView from "../Content/ContentListView.vue";
+import { Component } from "../../Config/types";
 
 export default {
   name: "ComplementaryExperienceView",
@@ -40,9 +40,8 @@ export default {
   },
   data() {
     return {
-      ContentType: ContentType,
-      skillData: {} as Training,
-      contents: new Array<Content>(),
+      skillData: {} as Component,
+      contents: new Array<Component>(),
       add: false,
       element: "",
       index: 0,
@@ -55,33 +54,27 @@ export default {
     },
     save(content: string) {
       this.$nextTick(() => {
-        this.contents.push({
+        this.$refs.contents._data.contentsData.push({
           id: this.index,
           name: content,
-          subContents: new Array<SubContent>(),
-        });
-
-        this.skillData.contents.push({
-          id: this.index,
-          name: content,
-          subContents: new Array<SubContent>(),
+          childrens: new Array<Component>(),
         });
         this.index++;
         this.cancel();
-        this.$emit("update", this.skillData);
+        this.$emit("update", this.$refs.contents._data.contentsData);
       });
     },
-    update(contents: Array<Content>) {
+    update(contents: Array<Component>) {
       this.$nextTick(() => {
-        this.skillData.contents = contents;
+        this.$refs.contents._data.contentsData = contents;
         this.$emit("update", this.skillData);
       });
     },
   },
   mounted() {
     this.skillData = this.skill;
-    this.$refs.contents._data.contentsData = this.skill.contents;
-    this.index = this.skill.contents.length === 0 || this.skill.contents === undefined || this.skill.contents === null? 0 : this.skill.contents.length-1;
+    this.$refs.contents._data.contentsData = this.skill.childrens;
+    this.index = this.skill.childrens.length === 0 || this.skill.childrens === undefined || this.skill.childrens === null? 0 : this.skill.childrens.length-1;
   },
 };
 </script>
