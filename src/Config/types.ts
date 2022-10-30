@@ -13,6 +13,7 @@ export interface CurriculumDetail {
 }
 export interface Component {
   id: number;
+  identifier?: string;
   name: string;
   place?: string;
   initDate?: string;
