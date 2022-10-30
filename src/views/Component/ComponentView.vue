@@ -1,5 +1,6 @@
 <template>
   <div>
+    <li v-if="childrensTitle !== undefined">{{ childrensTitle }}:</li>
     <div v-if="componentData.length >0">
         <ul>
           <div v-for="data in componentData" v-bind:key="data.identifier">
@@ -25,15 +26,13 @@
                 <li v-if="data.finishDate">
                   Fecha Fin: {{ formatDate(data.finishDate) }}
                 </li>
-                <li v-if="childrensTitle !== undefined">{{ childrensTitle }}:</li>
                 <div>
                   <component-view
-                    :name="data.componentDataType"
                     :ref="modalId"
                     :iconsHidden="iconsHidden"
                     :component-data="data.childrens"
                     :childrens-title="data.childrensTitle"
-                    :component-datatype="data.componentDataType"
+                    :component-datatype="data.childrenDataType"
                     @update="refresh($event)"
                   />
                 </div>
@@ -51,7 +50,7 @@
               :modal-id="modalId"
               :modal-title="modalTitle"
               :component-data="data"
-              :component-datatype="componentDatatype"
+              :component-datatype="data.childrenDataType"
             />
           </div>
           <add-modal
@@ -63,7 +62,7 @@
         </ul>
       </div>
     <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${modalId}`)">
-      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir {{ modalTitle }}
+      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir {{ getModalTitle }}
     </b-link>
   </div>
 </template>
@@ -73,7 +72,6 @@ import { Component } from "../../Config/types";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
-import Vue from "vue";
 
 export default {
   name: "ComponentView",
@@ -140,7 +138,13 @@ export default {
       return new Date(date).toLocaleDateString();
     }
   },
+  computed: {
+    getModalTitle() {
+      return this.modalTitle;
+    }
+  },
   created() {
+    this.$nextTick(() => {
     switch (this.componentDatatype) {
       case 'Academic':
         this.deleteModalMessage = "la formación";
@@ -196,9 +200,16 @@ export default {
         this.modalId = "subContent";
         break;
 
+      case 'Project':
+        this.deleteModalMessage = "el proyecto";
+        this.modalTitle = "Proyecto";
+        this.modalId = "project";
+        break;
+
       default:
         break;
     }
+  });
     this.$forceUpdate();
   },
   mounted() {
