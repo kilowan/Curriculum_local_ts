@@ -22,40 +22,36 @@
           @update="refresh($event, content)"
         />
       </li>
-      <b-modal
-        :id="`delete-content-${content.id}`"
-        title="Eliminar Contenido"
-        ok-title="Eliminar"
-        @ok="splice(content.id)"
-      >
-        <div style="text-align: center; margin: 0 auto; width: 380px">
-          <h1>
-            ¿Seguro que quieres eliminar el elemento '{{ content.name }}'?
-          </h1>
-        </div>
-      </b-modal>
-      <b-modal
-        :id="`edit-content-${content.id}`"
-        title="Editar Contenido"
-        ok-title="Guardar"
-        @ok="update(contentsData)"
-      >
-        <div style="text-align: center; margin: 0 auto; width: 380px">
-          <textarea class="m-2" v-model="content.name" />
-        </div>
-      </b-modal>
+      <delete-modal 
+        :modal-id="'content'"
+        :modal-title="'Contenido'"
+        :message="'el contenido'"
+        :component-data="content"
+        @remove="splice(content.id)"
+      />
+      <edit-modal
+        :modal-id="'content'"
+        :modal-title="'Contenido'"
+        :component-data="content"
+        :component-datatype="'Content'"
+        @update="update($event)"
+      />
     </div>
   </ul>
 </template>
 
 <script lang="ts">
 import ContentView from "./ContentView.vue";
-import { SubContent, Content } from "../../Config/types";
+import { Component } from "../../Config/types";
+import DeleteModal from "../Modal/DeleteModal.vue";
+import EditModal from "../Modal/EditModal.vue";
 
 export default {
   name: "ContentsView",
   components: {
     ContentView,
+    DeleteModal,
+    EditModal
   },
   props: {
     contents: {
@@ -70,19 +66,19 @@ export default {
   data() {
     return {
       element: "",
-      contentsData: new Array<Content>(),
+      contentsData: new Array<Component>(),
     };
   },
   methods: {
-    refresh(subContents: Array<SubContent>, content: any) {
+    refresh(subContents: Array<Component>, content: any) {
       this.$nextTick(() => {
         var filtered = this.contentsData.filter(
           (data: any) => data.id !== content.id
         );
-        var cont: Content = this.contentsData.find(
+        var cont: Component = this.contentsData.find(
           (data: any) => data.id === content.id
         );
-        cont.subContents = subContents;
+        cont.childrens = subContents;
         filtered.push(cont);
         this.contentsData = filtered;
         this.$emit("update", this.contentsData);

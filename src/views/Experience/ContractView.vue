@@ -1,8 +1,8 @@
 <template>
   <div>
     <project-list-view
-      :ref="'projectts'"
-      :projects="contractData.projects"
+      :ref="'projects'"
+      :projects="contractData.childrens"
       :iconsHidden="iconsHidden"
       @update="update($event)"
     />
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { Contract, Project, Description } from "../../Config/types";
+import { Component } from "../../Config/types";
 import ProjectListView from "./ProjectListView.vue";
 export default {
   name: "ContractView",
@@ -41,9 +41,9 @@ export default {
     return {
       index: 0,
       add: false,
-      contractData: {} as Contract,
+      contractData: {} as Component,
       projectData: "",
-      projects: new Array<Project>(),
+      projects: new Array<Component>(),
     };
   },
   methods: {
@@ -51,12 +51,12 @@ export default {
       this.projects.push({
         id: this.index,
         name: project,
-        descriptionList: new Array<Description>(),
+        childrens: new Array<Component>(),
       });
-      this.contractData.projects.push({
+      this.contractData.childrens.push({
         id: this.index,
         name: project,
-        descriptionList: new Array<Description>(),
+        childrens: new Array<Component>(),
       });
       this.index++;
       this.$emit("update", this.contractData);
@@ -64,21 +64,21 @@ export default {
       this.add = false;
     },
     splice(index: number) {
-      this.contractData.projects = this.contractData.projects.filter(
+      this.contractData.childrens = this.contractData.childrens.filter(
         (data: any) => data.id !== index
       );
       this.projects = this.projects.filter((data: any) => data.id !== index);
       this.$emit("update", this.contractData);
     },
-    update(projects: Array<Project>) {
-      this.contractData.projects = projects;
+    update(projects: Array<Component>) {
+      this.contractData.childrens = projects;
       this.$emit("update", this.contractData);
     },
   },
   mounted() {
     this.contractData = this.contract;
-    this.$refs.projectts._data.projectsData = this.contract.projects;
-    this.index = this.contract.projects.length === 0 || this.contract.projects === undefined || this.contract.projects === null? 0 : this.contract.projects.length-1;
+    this.$refs.projects._data.projectsData = this.contract.childrens;
+    this.index = this.contract.childrens.length === 0 || this.contract.childrens === undefined || this.contract.childrens === null? 0 : this.contract.childrens.length-1;
   },
 };
 </script>

@@ -132,7 +132,7 @@ export default {
         this.$refs.experience._data.experienceList = json.experience;
         this.$refs.academic._data.academicTrainingList = json.academicTraining;
         this.$refs.lang._data.languageList = json.languageList;
-        this.$refs.skills._data.otherTraining = json.otherTraining;
+        this.$refs.skills._data.skillList = json.skillList;
         this.$refs.other._data.other = json.otherData;
         this.exportable = true;
         this.EditMode();
@@ -190,7 +190,7 @@ export default {
       reader.readAsDataURL(contenidoEnBlob);
     },
     updateSkills(skills: any) {
-      this.curriculum.otherTraining = skills;
+      this.curriculum.skillList = skills;
       this.exportable = true;
       this.EditMode();
     },

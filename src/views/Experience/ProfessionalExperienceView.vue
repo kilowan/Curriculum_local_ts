@@ -3,14 +3,14 @@
     <ul>
       <li>Centro/Lugar: {{ companyData.place }}</li>
       <li>
-        Fecha inicio: {{ new Date(companyData.initDate).toLocaleDateString() }}
+        Fecha inicio: {{ formatDate(companyData.initDate) }}
       </li>
       <li v-if="company.finishDate">
-        Fecha Fin: {{ new Date(companyData.finishDate).toLocaleDateString() }}
+        Fecha Fin: {{ formatDate(companyData.finishDate) }}
       </li>
       <contract-list-view
         :ref="'contractt'"
-        :contracts="contractList"
+        :contracts="company.childrens"
         :iconsHidden="iconsHidden"
         @update="update($event)"
       />
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Project, Contract, Experience } from "../../Config/types";
+import { Component } from "../../Config/types";
 import ContractListView from "./ContractListView.vue";
 
 export default {
@@ -50,24 +50,24 @@ export default {
       index: 0,
       add: false,
       contractData: "",
-      companyData: {} as Experience,
-      contractList: new Array<Contract>(),
+      companyData: {} as Component,
+      contractList: new Array<Component>(),
     };
   },
   methods: {
-    update(contracts: Array<Contract>) {
-      this.companyData.contracts = contracts;
+    update(contracts: Array<Component>) {
+      this.companyData.childrens = contracts;
       this.$emit("update", this.companyData);
     },
     save(contract: any) {
       this.$nextTick(() => {
-        var data: Contract = {
+        var data: Component = {
           id: this.index,
           name: contract,
-          projects: new Array<Project>(),
+          childrens: new Array<Component>()
         };
         this.contractList.push(data);
-        this.companyData.contracts.push(data);
+        this.companyData.childrens.push(data);
         this.contractData = "";
         this.add = false;
         this.index++;
@@ -78,11 +78,14 @@ export default {
       this.contractData = "";
       this.add = false;
     },
+    formatDate(date: any) {
+      return new Date(date).toLocaleDateString();
+    }
   },
   mounted() {
     this.companyData = this.company;
-    this.$refs.contractt._data.contractsData = this.company.contracts;
-    this.index = this.company.contracts.length === 0 || this.company.contracts === undefined || this.company.contracts === null? 0 : this.company.contracts.length-1;
+    this.$refs.contractt._data.contractsData = this.company.childrens;
+    this.index = this.company.childrens.length === 0 || this.company.childrens === undefined || this.company.childrens === null? 0 : this.company.childrens.length-1;
   },
 };
 </script>

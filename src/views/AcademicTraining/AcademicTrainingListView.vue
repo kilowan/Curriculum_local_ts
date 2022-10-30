@@ -30,39 +30,20 @@
               @update="refresh($event)"
             />
           </li>
-          <b-modal
-            :id="`edit-training-${academic.id}`"
-            title="Editar formación"
-            ok-title="Guardar"
-            @cancel="cancel"
-            @ok="update(academicTrainingList)"
-          >
-            <label>Nombre:</label>
-            <input type="text" v-model="academic.name" /> <br />
-            <label>Centro/Lugar:</label>
-            <input type="text" v-model="academic.place" /> <br />
-            <div v-if="academic.graduationDate">
-              <label>Graduación:</label>
-              <b-form-datepicker
-                v-model="academic.graduationDate"
-                min="2015-01-01"
-                max="2030-12-31"
-              ></b-form-datepicker>
-              <br />
-            </div>
-          </b-modal>
-          <b-modal
-            :id="`delete-training-${academic.id}`"
-            title="Eliminar Contrato"
-            ok-title="Eliminar"
-            @ok="splice(academic.id)"
-          >
-            <div style="text-align: center; margin: 0 auto; width: 380px">
-              <h1>
-                ¿Seguro que quieres eliminar el contrato '{{ academic.name }}'?
-              </h1>
-            </div>
-          </b-modal>
+          <edit-modal 
+            :modal-id="'training'"
+            :modal-title="'formación'"
+            :component-data="academic"
+            :component-datatype="'Academic'"
+            @update="update(academicTrainingList)"
+          />
+          <delete-modal 
+            :modal-id="'training'"
+            :modal-title="'Contrato'"
+            :message="'la formación'"
+            :component-data="academic"
+            @remove="splice(academic.id)"
+          />
         </div>
       </ul>
       <b-link v-if="!iconsHidden" @click="$bvModal.show('add-training')">
@@ -70,36 +51,29 @@
       </b-link>
     </dd>
     <dd class="clear"></dd>
-    <b-modal
-      :id="'add-training'"
-      title="Añadir Formación"
-      ok-title="Guardar"
-      @ok="save"
-      @cancel="cancel"
-    >
-      <label>Nombre</label> <input type="text" v-model="training.name" /> <br />
-      <label>Centro/Lugar:</label>
-      <input type="text" v-model="training.place" /> <br />
-      <label>Graduación</label>
-      <input
-        type="date"
-        v-model="training.graduationDate"
-        min="2015-01-01"
-        max="2030-12-31"
-      />
-      <br />
-    </b-modal>
+    <add-modal 
+      :component-datatype="'Academic'"
+      :modal-id="'training'"
+      :modal-title="'Formación'"
+      @save="save($event)"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { ContentType, Content, Academic } from "../../Config/types";
+import { Component } from "../../Config/types";
 import AcademicTrainingView from "./AcademicTrainingView.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
+import AddModal from "../Modal/AddModal.vue";
+import EditModal from "../Modal/EditModal.vue";
 
 export default {
   name: "AcademicTrainingListView",
   components: {
     AcademicTrainingView,
+    DeleteModal,
+    AddModal,
+    EditModal
   },
   props: {
     iconsHidden: {
@@ -109,16 +83,15 @@ export default {
   },
   data() {
     return {
-      ContentType: ContentType,
       hide: false,
-      training: {} as Academic,
+      training: {} as Component,
       add: false,
-      academicTrainingList: new Array<Academic>(),
+      academicTrainingList: new Array<Component>(),
       index: 0,
     };
   },
   methods: {
-    refresh(academic: Academic) {
+    refresh(academic: Component) {
       this.$nextTick(() => {
         var filtered = this.academicTrainingList.filter(
           (data: any) => data.id !== academic.id
@@ -141,7 +114,7 @@ export default {
       });
     },
     cancel() {
-      this.training = {} as Academic;
+      this.training = {} as Component;
       this.add = false;
     },
     update(trainings: any) {
@@ -149,14 +122,14 @@ export default {
         this.$emit('update', trainings);
       });
     },
-    save() {
+    save(data: Component) {
       this.$nextTick(() => {
         this.academicTrainingList.push({
           id: this.index,
-          name: this.training.name,
-          place: this.training.place,
-          graduationDate: this.training.graduationDate,
-          contents: new Array<Content>(),
+          name: data.name,
+          place: data.place,
+          graduationDate: data.graduationDate,
+          childrens: new Array<Component>(),
         });
         this.index++;
         this.cancel();

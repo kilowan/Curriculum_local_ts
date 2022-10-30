@@ -2,7 +2,7 @@
   <div>
     <ul>
       <div
-        v-for="description in projectData.descriptionList"
+        v-for="description in projectData.childrens"
         v-bind:key="description.id"
       >
         <li>
@@ -20,28 +20,20 @@
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
         </li>
-        <b-modal
-          :id="`edit-description-${description.id}`"
-          title="Editar descripción"
-          ok-title="Guardar"
+        <EditModal 
+          :modal-id="'description'"
+          :modal-title="'descripción'"
+          :component-data="description"
+          :component-datatype="'Description'"
           @cancel="cancel"
-        >
-          <textarea v-model="description.name" /> <br />
-        </b-modal>
-        <b-modal
-          :id="`delete-description-${description.id}`"
-          title="Eliminar Proyecto"
-          ok-title="Eliminar"
-          @ok="splice(description.id)"
-        >
-          <div style="text-align: center; margin: 0 auto; width: 380px">
-            <h1>
-              ¿Seguro que quieres eliminar la descripción '{{
-                description.name
-              }}'?
-            </h1>
-          </div>
-        </b-modal>
+        />
+        <DeleteModal 
+          :modal-id="'description'"
+          :modal-title="'Descripción'"
+          :component-data="description"
+          :message="'la descripción'"
+          @remove="splice(description.id)"
+        />
       </div>
     </ul>
     <div v-if="add">
@@ -56,10 +48,16 @@
 </template>
 
 <script lang="ts">
-import { Description, Project } from "../../Config/types";
+import { Component } from "../../Config/types";
+import EditModal from "../Modal/EditModal.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
   name: "ProjectView",
+  components: {
+    EditModal,
+    DeleteModal
+  },
   props: {
     project: {
       type: Object,
@@ -76,8 +74,8 @@ export default {
       add: false,
       description: "",
       desc: "",
-      descriptions: new Array<Description>(),
-      projectData: {} as Project,
+      descriptions: new Array<Component>(),
+      projectData: {} as Component,
     };
   },
   methods: {
@@ -90,7 +88,7 @@ export default {
           id: this.index,
           name: description,
         });
-        this.projectData.descriptionList.push({
+        this.projectData.childrens.push({
           id: this.index,
           name: description,
         });
@@ -101,8 +99,8 @@ export default {
       });
     },
     splice(index: number) {
-      this.projectData.descriptionList =
-        this.projectData.descriptionList.filter(
+      this.projectData.childrens =
+        this.projectData.childrens.filter(
           (data: any) => data.id !== index
         );
       this.descriptions = this.descriptions.filter(

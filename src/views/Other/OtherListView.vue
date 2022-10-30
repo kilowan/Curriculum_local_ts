@@ -30,28 +30,20 @@
               @update="refresh($event)"
             />
           </li>
-          <b-modal
-            :id="`edit-other-${otherData.id}`"
-            title="Editar Otros"
-            ok-title="Guardar"
-            @cancel="cancel"
-            @ok="update(other)"
-          >
-            <label>Nombre:</label>
-            <input type="text" v-model="otherData.name" /> <br />
-          </b-modal>
-          <b-modal
-            :id="`delete-other-${otherData.id}`"
-            title="Eliminar elemento"
-            ok-title="Eliminar"
-            @ok="splice(otherData.id)"
-          >
-            <div style="text-align: center; margin: 0 auto; width: 380px">
-              <h1>
-                ¿Seguro que quieres eliminar el elemento '{{ otherData.name }}'?
-              </h1>
-            </div>
-          </b-modal>
+          <edit-modal 
+            :modal-id="'other'"
+            :modal-title="'Otros'"
+            :component-data="otherData"
+            :component-datatype="'Other'"
+            @update="update($event)"
+          />
+          <delete-modal 
+            :modal-id="'other'"
+            :modal-title="'elemento'"
+            :message="'el elemento'"
+            :component-data="otherData"
+            @remove="splice(otherData.id)"
+          />
         </div>
       </ul>
       <div v-if="add">
@@ -72,12 +64,16 @@
 
 <script lang="ts">
 import otherView from "./OtherView.vue";
-import { Value, OtherData } from "@/Config/types";
+import { Component } from "@/Config/types";
+import DeleteModal from "../Modal/DeleteModal.vue";
+import EditModal from "../Modal/EditModal.vue";
 
 export default {
   name: "OtherListView",
   components: {
     otherView,
+    EditModal,
+    DeleteModal
   },
   props: {
     iconsHidden: {
@@ -92,7 +88,7 @@ export default {
       add: false,
       counter: 0,
       otherNew: "",
-      other: new Array<OtherData>(),
+      other: new Array<Component>(),
     };
   },
   methods: {
@@ -105,14 +101,14 @@ export default {
         this.other.push({
           id: this.index,
           name: otherNew,
-          values: new Array<Value>(),
+          childrens: new Array<Component>(),
         });
         this.index++;
         this.$emit("update", this.other);
         this.cancel();
       });
     },
-    refresh(other: OtherData) {
+    refresh(other: Component) {
       var dat = this.other.find((data: any) => data.id === other.id);
       dat = other;
       this.other = this.other.filter((data: any) => data.id !== other.id);

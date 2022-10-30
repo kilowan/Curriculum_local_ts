@@ -1,14 +1,14 @@
 <template>
   <div v-if="!hide">
-    <dt id="complementaria" v-if="otherTraining">
+    <dt id="complementaria" v-if="skillList">
       Skills
       <b-link v-if="!iconsHidden" @click="(hide = true)">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
-    <dd id="complementary" v-if="otherTraining">
+    <dd id="complementary" v-if="skillList">
       <ul>
-        <div v-for="skill in otherTraining" v-bind:key="skill.id">
+        <div v-for="skill in skillList" v-bind:key="skill.id">
           <li>
             <strong>{{ skill.name }}</strong>
             <b-link
@@ -29,28 +29,20 @@
               @update="refresh($event)"
             />
           </li>
-          <b-modal
-            :id="`edit-skill-${skill.id}`"
-            title="Editar skill"
-            ok-title="Guardar"
-            @ok="update(otherTraining)"
-          >
-            <div style="text-align: center; margin: 0 auto; width: 380px">
-              <input class="m-2" type="text" v-model="skill.name" />
-            </div>
-          </b-modal>
-          <b-modal
-            :id="`delete-skill-${skill.id}`"
-            title="Eliminar Contrato"
-            ok-title="Eliminar"
-            @ok="splice(skill.id)"
-          >
-            <div style="text-align: center; margin: 0 auto; width: 380px">
-              <h1>
-                ¿Seguro que quieres eliminar el contrato '{{ skill.name }}'?
-              </h1>
-            </div>
-          </b-modal>
+          <edit-modal 
+            :modal-id="'skill'"
+            :modal-title="'skill'"
+            :component-data="skill"
+            :component-datatype="'Skill'"
+            @update="update(skillList)"
+          />
+          <delete-modal 
+            :modal-id="'skill'"
+            :modal-title="'Skill'"
+            :message="'la skill'"
+            :component-data="skill"
+            @remove="splice(skill.id)"
+          />
         </div>
       </ul>
       <div v-if="add">
@@ -68,12 +60,16 @@
 
 <script lang="ts">
 import SkillView from "./SkillView.vue";
-import { ContentType, Training, Content } from "../../Config/types";
+import { Component } from "../../Config/types";
+import EditModal from "../Modal/EditModal.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
-  name: "ComplementaryExperienceListView",
+  name: "SkillListView",
   components: {
     SkillView,
+    EditModal,
+    DeleteModal
   },
   props: {
     iconsHidden: {
@@ -83,12 +79,11 @@ export default {
   },
   data() {
     return {
-      ContentType: ContentType,
       hide: false,
       counter: 0,
       trainingNew: "",
       add: false,
-      otherTraining: new Array<Training>(),
+      skillList: new Array<Component>(),
       index: 0,
     };
   },
@@ -97,26 +92,26 @@ export default {
       this.trainingNew = "";
       this.add = false;
     },
-    refresh(skill: Training) {
+    refresh(skill: Component) {
       this.$nextTick(() => {
-        var filtered = this.otherTraining.filter(
+        var filtered = this.skillList.filter(
           (data: any) => data.id !== skill.id
         );
-        var training = this.otherTraining.find(
+        var training = this.skillList.find(
           (data: any) => data.id === skill.id
         );
         training = skill;
         filtered.push(training);
-        this.otherTraining = filtered;
-        this.$emit("update", this.otherTraining);
+        this.skillList = filtered;
+        this.$emit("update", this.skillList);
       });
     },
     splice(index: number) {
       this.$nextTick(() => {
-        this.otherTraining = this.otherTraining.filter(
+        this.skillList = this.skillList.filter(
           (data: any) => data.id !== index
         );
-        this.$emit("update", this.otherTraining);
+        this.$emit("update", this.skillList);
       });
     },
     update(skills: any) {
@@ -126,14 +121,14 @@ export default {
     },
     save(training: string) {
       this.$nextTick(() => {
-        this.otherTraining.push({
+        this.skillList.push({
           id: this.index,
           name: training,
-          contents: new Array<Content>(),
+          childrens: new Array<Component>(),
         });
         this.index++;
         this.cancel();
-        this.$emit("update", this.otherTraining);
+        this.$emit("update", this.skillList);
       });
     },
   },
