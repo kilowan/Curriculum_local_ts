@@ -182,7 +182,7 @@ export default {
         this.modalId = "other";
         break;
 
-      case 'Skills':
+      case 'Skill':
         this.deleteModalMessage = "la skill";
         this.modalTitle = "Skill";
         this.modalId = "skill";
