@@ -51,6 +51,10 @@ export default {
     componentDatatype: {
       type: String,
       required: true,
+    },
+    ComponentDataId: {
+      type: String,
+      required: false
     }
   },
   data() {

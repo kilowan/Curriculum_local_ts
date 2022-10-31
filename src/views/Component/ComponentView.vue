@@ -33,6 +33,7 @@
                     :component-data="data.childrens"
                     :childrens-title="data.childrensTitle"
                     :component-datatype="data.childrenDataType"
+                    :component-data-id="data.identifier"
                     @update="refresh($event)"
                   />
                 </div>
@@ -40,28 +41,29 @@
             </li>
 
             <delete-modal 
-              :modal-id="modalId"
-              :modal-title="modalTitle"
+              :modal-id="getModalId"
+              :modal-title="getModalTitle"
               :message="deleteModalMessage"
               :component-data="data"
               @remove="splice(data.identifier)"
             />
             <edit-modal
-              :modal-id="modalId"
-              :modal-title="modalTitle"
+              :modal-id="getModalId"
+              :modal-title="getModalTitle"
               :component-data="data"
               :component-datatype="data.childrenDataType"
             />
           </div>
           <add-modal
-            :modal-id="modalId"
-            :modal-title="modalTitle"
+            :modal-id="`${componentDataId}-${getModalId}`"
+            :modal-title="getModalTitle"
+            :componentDataId="componentDataId"
             :component-datatype="componentDatatype"
             @save="save($event)"
           />
         </ul>
       </div>
-    <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${modalId}`)">
+    <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${componentDataId}-${getModalId}`)">
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir {{ getModalTitle }}
     </b-link>
   </div>
@@ -84,6 +86,10 @@ export default {
     componentData: {
       type: Array,
       required: true,
+    },
+    componentDataId: {
+      type: String,
+      required: true
     },
     componentDatatype: {
       type: String,
@@ -140,7 +146,10 @@ export default {
   },
   computed: {
     getModalTitle() {
-      return this.modalTitle;
+      return this.modalTitle; //+ this.componentData.identifier;
+    },
+    getModalId() {
+      return this.modalId; //+ this.componentData.identifier;
     }
   },
   created() {
