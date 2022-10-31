@@ -33,7 +33,7 @@ export enum SocialMediaType {
 export enum ComponentType {
   Experience = 1,
   Academic = 2,
-  Skills = 3,
+  Skill = 3,
   Languages = 4,
   Other = 5,
   Content = 6,
