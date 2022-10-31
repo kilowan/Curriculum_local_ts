@@ -7,54 +7,14 @@
       </b-link>
     </dt>
     <dd id="experience">
-      <!--<component-view 
+      <component-view 
         :name="'Experience'"
         :component-data="experienceList"
         :component-datatype="'Experience'"
         :icons-hidden="iconsHidden"
-        @update="refresh($event)"
-      />-->
-      <ul>
-        <div v-for="company in experienceList" v-bind:key="company.id">
-          <li>
-            {{ company.name }}
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-experience-${company.id}`)"
-            >
-              <b-icon icon="pencil-square" aria-hidden="true" />
-            </b-link>
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-experience-${company.id}`)"
-            >
-              <b-icon icon="x-circle-fill" aria-hidden="true" />
-            </b-link>
-            <professional-experience-view
-              :company="company"
-              :iconsHidden="iconsHidden"
-              @update="refresh($event)"
-            />
-          </li>
-          <EditModal 
-            :modal-id="'experience'"
-            :modal-title="'Experiencia'"
-            :component-data="company"
-            :component-datatype="'Experience'"
-            @update="update($event)"
-          />
-          <DeleteModal
-            :modal-id="'experience'"
-            :modal-title="'Experiencia'"
-            :message="'la experiencia'"
-            :component-data="company"
-            @remove="deleteExperience($event)"
-          />
-        </div>
-      </ul>
-      <b-link v-if="!iconsHidden" @click="$bvModal.show('add-experience')">
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir experiencia
-      </b-link>
+        :component-data-id="'1'"
+        @update="$emit('update', $event)"
+      />
     </dd>
     <dd class="clear"></dd>
     <AddModal
@@ -68,20 +28,14 @@
 
 <script lang="ts">
 import { Component } from "../../Config/types";
-import ProfessionalExperienceView from "./ProfessionalExperienceView.vue";
-//import ComponentView from "../Component/ComponentView.vue";
+import ComponentView from "../Component/ComponentView.vue";
 import AddModal from "../Modal/AddModal.vue";
-import EditModal from "../Modal/EditModal.vue";
-import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
   name: "ProfessionalExperienceListView",
   components: {
-    ProfessionalExperienceView,
-    //ComponentView,
-    AddModal,
-    EditModal,
-    DeleteModal
+    ComponentView,
+    AddModal
   },
   props: {
     iconsHidden: {
@@ -123,19 +77,6 @@ export default {
         this.index++;
         this.$emit("update", this.experienceList);
         this.experience = {} as Component;
-      });
-    },
-    refresh(experience: Component) {
-      var exp = this.experienceList.filter(
-        (data: any) => data.id !== experience.id
-      );
-      exp.push(experience);
-      this.experienceList = exp;
-      this.$emit("update", this.experienceList);
-    },
-    update(experiences: any) {
-      this.$nextTick(() => {
-        this.$emit('update', experiences);
       });
     },
     deleteExperience(index: number) {

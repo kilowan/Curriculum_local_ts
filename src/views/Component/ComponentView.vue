@@ -34,7 +34,7 @@
                     :childrens-title="data.childrensTitle"
                     :component-datatype="data.childrenDataType"
                     :component-data-id="data.identifier"
-                    @update="refresh($event)"
+                    @update="refresh($event, data)"
                   />
                 </div>
               </ul>
@@ -45,7 +45,7 @@
               :modal-title="getModalTitle"
               :message="deleteModalMessage"
               :component-data="data"
-              @remove="splice(data.identifier)"
+              @remove="splice($event)"
             />
             <edit-modal
               :modal-id="getModalId"
@@ -114,13 +114,14 @@ export default {
     };
   },
   methods: {
-    refresh(data: Component) {
+    refresh(data: Array<Component>, data2: Component) {
       this.$nextTick(() => {
+        var obj = data2;
+        obj.childrens = data;
         var filtered = this.componentData.filter(
-          (data: any) => data.id !== data.id
+          (dat: any) => dat.identifier !== obj.identifier
         );
-
-        filtered.push(data);
+        filtered.push(obj);
         this.$emit("update", filtered);
       });
     },
@@ -129,10 +130,12 @@ export default {
         this.$emit('update', data);
       });
     },
-    splice(index: number) {
-      this.$emit("update", this.componentData.filter(
-        (data: any) => data.id !== index
-      ));
+    splice(input: Component) {
+      var filtered = this.componentData.filter(
+        (data: any) => data.identifier !== input.identifier
+      );
+
+      this.$emit("update", filtered);
     },
     save (data: Component){
       this.componentData.push(data);
