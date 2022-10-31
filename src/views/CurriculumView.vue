@@ -205,9 +205,12 @@ export default {
       this.EditMode();
     },
     updateOther(media: any) {
-      this.curriculum.otherData = media;
-      this.exportable = true;
-      this.EditMode();
+      this.$nextTick(() => {
+        this.$refs.other._data.other = media;
+        this.curriculum.otherData = media;
+        this.exportable = true;
+        this.EditMode();
+      });
     },
     updateExperience(experience: any) {
       this.$nextTick(() => {

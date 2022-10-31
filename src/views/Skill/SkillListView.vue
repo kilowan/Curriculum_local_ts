@@ -13,7 +13,7 @@
           :component-data="skillList"
           :component-datatype="'Skill'"
           :icons-hidden="iconsHidden"
-          :component-data-id="'2'"
+          :component-data-id="'3'"
           @update="$emit('update', $event)"
         />
       </ul>

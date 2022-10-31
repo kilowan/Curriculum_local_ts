@@ -178,7 +178,7 @@ export default {
 
       case 'Other':
         this.deleteModalMessage = "el elemento";
-        this.modalTitle = "Elemento";
+        this.modalTitle = "Otros";
         this.modalId = "other";
         break;
 
