@@ -9,20 +9,19 @@
     <dd id="languages">
       <ul>
         <div
-          v-for="(language, firstindex) in languageList"
-          v-bind:key="firstindex"
+          v-for="language in languageList" v-bind:key="language.id"
         >
           <li>
             <strong>{{ language.name }}:</strong> {{ language.level }}
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-language-${firstindex}`)"
+              @click="$bvModal.show(`edit-language-${language.id}`)"
             >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-language-${firstindex}`)"
+              @click="$bvModal.show(`delete-language-${language.id}`)"
             >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
@@ -39,7 +38,7 @@
             :modal-title="'idioma'"
             :message="'el idioma'"
             :component-data="language"
-            @remove="splice(firstindex)"
+            @remove="splice(language.id)"
           />
         </div>
       </ul>
@@ -84,6 +83,7 @@ export default {
       languageList: new Array<Component>(),
       language: {} as Component,
       sameInstance: false,
+      index: 1,
     };
   },
   methods: {
@@ -91,29 +91,9 @@ export default {
       if (index >= this.$store.state.identifier)
         this.$store.state.identifier = index;
     },
-    increment() {
-      this.$store.state.identifier++;
-    },
-    getIdentifier() {
-      const id = this.$store.state.identifier;
-      if (!this.sameInstance) {
-        this.sameInstance = true;
-        console.log(id);
-        this.$store.state.identifier++;
-      }
-      return id;
-    },
-    refresh() {
-      this.$emit("refresh");
-    },
     splice(index: number) {
       this.languageList.splice(index, 1);
       this.$emit("update", this.languageList);
-    },
-    cancel() {
-      this.add = false;
-      this.language.name = "";
-      this.language.level = "";
     },
     update(langs: any) {
       this.$nextTick(() => {
@@ -122,12 +102,7 @@ export default {
     },
     save(language: any) {
       this.$nextTick(() => {
-        this.languageList.push({
-          id: this.getIdentifier(),
-          name: language.name,
-          level: language.level,
-        });
-        this.increment();
+        this.languageList.push(language);
         this.$emit("update", this.languageList);
         this.language = {} as Component;
       });

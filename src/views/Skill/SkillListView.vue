@@ -12,7 +12,7 @@
           :component-data="skillList"
           :component-datatype="'Skill'"
           :icons-hidden="iconsHidden"
-          :component-data-id="getIdentifier()"
+          :component-data-id="getId"
           @update="$emit('update', $event)"
         />
       </ul>
@@ -41,7 +41,13 @@ export default {
       hide: false,
       skillList: new Array<Component>(),
       sameInstance: false,
+      index: 1,
     };
+  },
+  computed: {
+    getId(){
+      return this.index;
+    },
   },
   methods: {
     getIdentifier() {
@@ -54,5 +60,8 @@ export default {
       return id;
     },
   },
+  mounted() {
+    this.index = this.getIdentifier();
+  }
 };
 </script>

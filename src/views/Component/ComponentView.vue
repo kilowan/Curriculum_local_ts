@@ -39,7 +39,7 @@
                   :iconsHidden="iconsHidden"
                   :component-data="data.childrens"
                   :childrens-title="data.childrensTitle"
-                  :component-datatype="data.childrenDataType"
+                  :component-datatype="getChildrenDataTypeId(data.componentDataType)"
                   :component-data-id="data.id"
                   @update="refresh($event, data)"
                 />
@@ -118,6 +118,7 @@ export default {
       modalTitle: "Experiencia",
       modalId: "experience",
       sameInstance: false,
+      index: 1,
     };
   },
   methods: {
@@ -151,10 +152,38 @@ export default {
 
       this.$emit("update", filtered);
     },
-    save(data: Component) {
-      data.componentDataType = this.getComponentDataType;
-      this.componentData.push(data);
+    getChildrenDataTypeId(dataTypeId: string) {
+      switch (dataTypeId) {
+        case 'Experience':
+          return 'Contract';
+        case 'Contract':
+          return 'Project';
+        case 'Project':
+          return 'Description';
+        case 'Academic':
+          return 'Content';
+        case 'Content':
+          return 'SubContent';
+        default:
+          break;
+      }
+    },
+    getIdentifier() {
+      let id = parseInt(this.$store.state.identifier.toString());
       this.increment();
+      return parseInt(id.toString());
+    },
+    save(data: Component) {
+      this.$nextTick(() => {
+        data.id = parseInt(this.$store.state.identifier.toString());
+        data.componentDataType = this.getComponentDataType;
+        this.componentData.push(data);
+        this.$bvModal.hide(`add-${this.getFQN}`);
+        this.increment();
+        this.$emit('update', this.componentData);
+        //this.$refs[this.modalId]._data.componentData.push(data);
+        //this.increment();
+      });
     },
     formatDate(date: any) {
       return new Date(date).toLocaleDateString();
@@ -249,7 +278,7 @@ export default {
     });
     this.$forceUpdate();
   },
-  async mounted() {
+  mounted() {
     this.$nextTick(() => {
       if (this.componentData.length > 0)
         this.$refs[this.modalId]._data.componentData = this.componentData;

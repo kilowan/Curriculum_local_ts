@@ -11,7 +11,7 @@
         :component-data="experienceList"
         :component-datatype="'Experience'"
         :icons-hidden="iconsHidden"
-        :component-data-id="getIdentifier()"
+        :component-data-id="getId"
         @update="$emit('update', $event)"
       />
     </dd>
@@ -46,12 +46,21 @@ export default {
       return id;
     },
   },
+  computed: {
+    getId(){
+      return this.index;
+    },
+  },
   data() {
     return {
       experienceList: new Array<Component>(),
       hide: false,
       sameInstance: false,
+      index: 1,
     };
   },
+  mounted() {
+    this.index = this.getIdentifier();
+  }
 };
 </script>

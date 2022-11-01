@@ -12,7 +12,7 @@
         :component-data="academicTrainingList"
         :component-datatype="'Academic'"
         :icons-hidden="iconsHidden"
-        :component-data-id="getIdentifier()"
+        :component-data-id="getId"
         @update="$emit('update', $event)"
       />
     </dd>
@@ -40,7 +40,13 @@ export default {
       hide: false,
       academicTrainingList: new Array<Component>(),
       sameInstance: false,
+      index: 1,
     };
+  },
+  computed: {
+    getId(){
+      return this.index;
+    },
   },
   methods: {
     getIdentifier() {
@@ -53,5 +59,8 @@ export default {
       }
     },
   },
+  mounted() {
+    this.index = this.getIdentifier();
+  }
 };
 </script>

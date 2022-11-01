@@ -11,7 +11,7 @@
         :component-data="other"
         :component-datatype="'Other'"
         :icons-hidden="iconsHidden"
-        :component-data-id="getIdentifier()"
+        :component-data-id="getId"
         @update="$emit('update', $event)"
       />
     </dd>
@@ -39,7 +39,13 @@ export default {
       hide: false,
       other: new Array<Component>(),
       sameInstance: false,
+      index: 1,
     };
+  },
+  computed: {
+    getId(){
+      return this.index;
+    },
   },
   methods: {
     getIdentifier() {
@@ -52,5 +58,8 @@ export default {
       return id;
     },
   },
+  mounted() {
+    this.index = this.getIdentifier();
+  }
 };
 </script>

@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from "@/Config/types";
+import { Component, ComponentType } from "@/Config/types";
 
 export default {
   name: "AddModal",
@@ -92,15 +92,19 @@ export default {
       this.newComponent = {} as Component;
     },
     save() {
-      this.newComponent.componentDataType = this.componentDatatype;
-      this.newComponent.id = this.getIdentifier();
-      this.$emit("save", this.newComponent);
+      //this.$nextTick(() => {
+        this.newComponent.componentDataType = this.componentDatatype;
+        //this.newComponent.id = this.getIdentifier();
+        this.newComponent.childrens = new Array<Component>();
+        this.$emit("save", this.newComponent);
+      //this.newComponent = {} as Component;
+      //});
     },
-    getIdentifier() {
-      const id = this.$store.state.identifier;
+    /*getIdentifier() {
+      let id = parseInt(this.$store.state.identifier.toString());
       this.$store.state.identifier++;
       return id;
-    },
+    },*/
   },
 };
 </script>
