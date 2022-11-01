@@ -54,16 +54,16 @@
               :component-datatype="data.childrenDataType"
             />
           </div>
-          <add-modal
-            :modal-id="`${componentDataId}-${getModalId}`"
-            :modal-title="getModalTitle"
-            :componentDataId="componentDataId"
-            :component-datatype="componentDatatype"
-            @save="save($event)"
-          />
         </ul>
       </div>
-    <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${componentDataId}-${getModalId}`)">
+      <add-modal
+        :modal-id="getFQN"
+        :modal-title="getModalTitle"
+        :componentDataId="componentDataId"
+        :component-datatype="componentDatatype"
+        @save="save($event)"
+      />
+    <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${getFQN}`)">
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir {{ getModalTitle }}
     </b-link>
   </div>
@@ -153,6 +153,12 @@ export default {
     },
     getModalId() {
       return this.modalId; //+ this.componentData.identifier;
+    },
+    getComponentDataId(){
+      return this.componentDataId;
+    },
+    getFQN(){
+      return `${this.modalId}-${this.componentDataId}`;
     }
   },
   created() {

@@ -40,6 +40,6 @@ export default {
       experienceList: new Array<Component>(),
       hide: false,
     };
-  },
+  }
 };
 </script>

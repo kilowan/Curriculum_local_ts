@@ -1,6 +1,6 @@
 <template>
     <b-modal
-    :id="`add-${modalId}`"
+    :id="`add-${getModalId}`"
     :title="`Añadir ${modalTitle}`"
     ok-title="Guardar"
     @ok="save"
@@ -61,6 +61,14 @@ export default {
     return {
       newComponent: {} as Component
     };
+  },
+  computed: {
+    getModalId() {
+      return this.modalId;
+    },
+    getComponentDataId() {
+      return this.ComponentDataId;
+    }
   },
   methods: {
     cancel() {

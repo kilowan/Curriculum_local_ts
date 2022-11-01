@@ -214,6 +214,7 @@ export default {
     },
     updateExperience(experience: any) {
       this.$nextTick(() => {
+        this.$refs.experience._data.experienceList = experience;
         this.curriculum.experience = experience;
         this.exportable = true;
         this.EditMode();
