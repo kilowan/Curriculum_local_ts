@@ -2,17 +2,16 @@
   <div v-if="!hide">
     <dt id="otros" class="otros" v-if="other">
       Otros datos
-      <b-link v-if="!iconsHidden" @click="(hide = true)">
+      <b-link v-if="!iconsHidden" @click="hide = true">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
     <dd id="other" v-if="other">
-      <component-view 
-        :name="'Skill'"
+      <component-view
         :component-data="other"
         :component-datatype="'Other'"
         :icons-hidden="iconsHidden"
-        :component-data-id="'5'"
+        :component-data-id="getIdentifier()"
         @update="$emit('update', $event)"
       />
     </dd>
@@ -27,7 +26,7 @@ import ComponentView from "../Component/ComponentView.vue";
 export default {
   name: "OtherListView",
   components: {
-    ComponentView
+    ComponentView,
   },
   props: {
     iconsHidden: {
@@ -39,7 +38,19 @@ export default {
     return {
       hide: false,
       other: new Array<Component>(),
+      sameInstance: false,
     };
-  }
+  },
+  methods: {
+    getIdentifier() {
+      const id = this.$store.state.identifier;
+      if (!this.sameInstance) {
+        this.sameInstance = true;
+        console.log(id);
+        this.$store.state.identifier++;
+      }
+      return id;
+    },
+  },
 };
 </script>

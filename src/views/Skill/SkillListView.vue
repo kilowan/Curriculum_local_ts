@@ -2,18 +2,17 @@
   <div v-if="!hide">
     <dt id="complementaria" v-if="skillList">
       Skills
-      <b-link v-if="!iconsHidden" @click="(hide = true)">
+      <b-link v-if="!iconsHidden" @click="hide = true">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
     <dd id="complementary" v-if="skillList">
       <ul>
-        <component-view 
-          :name="'Skill'"
+        <component-view
           :component-data="skillList"
           :component-datatype="'Skill'"
           :icons-hidden="iconsHidden"
-          :component-data-id="'3'"
+          :component-data-id="getIdentifier()"
           @update="$emit('update', $event)"
         />
       </ul>
@@ -29,7 +28,7 @@ import ComponentView from "../Component/ComponentView.vue";
 export default {
   name: "SkillListView",
   components: {
-    ComponentView
+    ComponentView,
   },
   props: {
     iconsHidden: {
@@ -41,7 +40,19 @@ export default {
     return {
       hide: false,
       skillList: new Array<Component>(),
+      sameInstance: false,
     };
+  },
+  methods: {
+    getIdentifier() {
+      const id = this.$store.state.identifier;
+      if (!this.sameInstance) {
+        this.sameInstance = true;
+        console.log(id);
+        this.$store.state.identifier++;
+      }
+      return id;
+    },
   },
 };
 </script>

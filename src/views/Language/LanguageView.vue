@@ -27,14 +27,14 @@
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
           </li>
-          <EditModal 
-           :modal-id="'language'"
-           :modal-title="'Idioma'"
-           :component-data="language"
-           :component-datatype="'Language'"
-           @update="update(languageList)"
+          <EditModal
+            :modal-id="'language'"
+            :modal-title="'Idioma'"
+            :component-data="language"
+            :component-datatype="'Language'"
+            @update="update(languageList)"
           />
-          <DeleteModal 
+          <DeleteModal
             :modal-id="'language'"
             :modal-title="'idioma'"
             :message="'el idioma'"
@@ -48,7 +48,7 @@
       </b-link>
     </dd>
     <dd class="clear"></dd>
-    <AddModal 
+    <AddModal
       :modal-id="'language'"
       :modal-title="'Idioma'"
       :component-datatype="'Language'"
@@ -68,7 +68,7 @@ export default {
   components: {
     AddModal,
     EditModal,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     iconsHidden: {
@@ -78,15 +78,31 @@ export default {
   },
   data() {
     return {
-      index: 0,
       hide: false,
       add: false,
       languageLevelList: [],
       languageList: new Array<Component>(),
       language: {} as Component,
+      sameInstance: false,
     };
   },
   methods: {
+    loadIdentifier(index: number) {
+      if (index >= this.$store.state.identifier)
+        this.$store.state.identifier = index;
+    },
+    increment() {
+      this.$store.state.identifier++;
+    },
+    getIdentifier() {
+      const id = this.$store.state.identifier;
+      if (!this.sameInstance) {
+        this.sameInstance = true;
+        console.log(id);
+        this.$store.state.identifier++;
+      }
+      return id;
+    },
     refresh() {
       this.$emit("refresh");
     },
@@ -101,24 +117,34 @@ export default {
     },
     update(langs: any) {
       this.$nextTick(() => {
-        this.$emit('update', langs);
+        this.$emit("update", langs);
       });
     },
     save(language: any) {
       this.$nextTick(() => {
         this.languageList.push({
-          id: this.index,
+          id: this.getIdentifier(),
           name: language.name,
           level: language.level,
         });
-        this.index++;
+        this.increment();
         this.$emit("update", this.languageList);
         this.language = {} as Component;
       });
     },
   },
   mounted() {
-    this.index = this.languageList.length === 0 || this.languageList === undefined || this.languageList === null? 0 : this.languageList.length-1;
-  }
+    if (
+      this.languageList.length !== 0 &&
+      this.languageList !== undefined &&
+      this.languageList !== null
+    ) {
+      var sorted = this.languageList.sort((a: any, b: any) => {
+        return a.id - b.id;
+      });
+      var last: Component = sorted[sorted.length - 1];
+      this.loadIdentifier(last.id);
+    }
+  },
 };
 </script>

@@ -1,70 +1,77 @@
 <template>
   <div>
     <li v-if="childrensTitle !== undefined">{{ childrensTitle }}:</li>
-    <div v-if="componentData.length >0">
-        <ul>
-          <div v-for="data in componentData" v-bind:key="data.identifier">
-                <li>
-                  {{ data.name }}
-              <b-link
-                v-if="!iconsHidden"
-                @click="$bvModal.show(`edit-${modalId}-${data.identifier}`)"
+    <div v-if="componentData.length > 0">
+      <ul>
+        <div v-for="data in componentData" v-bind:key="data.id">
+          <li>
+            {{ data.name }}
+            <b-link
+              v-if="!iconsHidden"
+              @click="$bvModal.show(`edit-${modalId}-${data.id}`)"
+            >
+              <b-icon icon="pencil-square" aria-hidden="true" />
+            </b-link>
+            <b-link
+              v-if="!iconsHidden"
+              @click="$bvModal.show(`delete-${modalId}-${data.id}`)"
+            >
+              <b-icon icon="x-circle-fill" aria-hidden="true" />
+            </b-link>
+            <ul>
+              <li
+                v-if="
+                  componentDatatype === 'Academic' ||
+                  componentDatatype === 'Experience'
+                "
               >
-                <b-icon icon="pencil-square" aria-hidden="true" />
-              </b-link>
-              <b-link
-                v-if="!iconsHidden"
-                @click="$bvModal.show(`delete-${modalId}-${data.identifier}`)"
-              >
-                <b-icon icon="x-circle-fill" aria-hidden="true" />
-              </b-link>
-              <ul>
-                <li v-if="componentDatatype === 'Academic' || componentDatatype === 'Experience'">Centro/Lugar: {{ data.place }}</li>
-                <li v-if="componentDatatype === 'Experience'">
-                  Fecha inicio: {{ formatDate(data.initDate) }}
-                </li>
-                <li v-if="data.finishDate">
-                  Fecha Fin: {{ formatDate(data.finishDate) }}
-                </li>
-                <div>
-                  <component-view
-                    :ref="modalId"
-                    :iconsHidden="iconsHidden"
-                    :component-data="data.childrens"
-                    :childrens-title="data.childrensTitle"
-                    :component-datatype="data.childrenDataType"
-                    :component-data-id="data.identifier"
-                    @update="refresh($event, data)"
-                  />
-                </div>
-              </ul>
-            </li>
+                Centro/Lugar: {{ data.place }}
+              </li>
+              <li v-if="componentDatatype === 'Experience'">
+                Fecha inicio: {{ formatDate(data.initDate) }}
+              </li>
+              <li v-if="data.finishDate">
+                Fecha Fin: {{ formatDate(data.finishDate) }}
+              </li>
+              <div>
+                <component-view
+                  :ref="modalId"
+                  :iconsHidden="iconsHidden"
+                  :component-data="data.childrens"
+                  :childrens-title="data.childrensTitle"
+                  :component-datatype="data.childrenDataType"
+                  :component-data-id="data.id"
+                  @update="refresh($event, data)"
+                />
+              </div>
+            </ul>
+          </li>
 
-            <delete-modal 
-              :modal-id="getModalId"
-              :modal-title="getModalTitle"
-              :message="deleteModalMessage"
-              :component-data="data"
-              @remove="splice($event)"
-            />
-            <edit-modal
-              :modal-id="getModalId"
-              :modal-title="getModalTitle"
-              :component-data="data"
-              :component-datatype="data.childrenDataType"
-            />
-          </div>
-        </ul>
-      </div>
-      <add-modal
-        :modal-id="getFQN"
-        :modal-title="getModalTitle"
-        :componentDataId="componentDataId"
-        :component-datatype="componentDatatype"
-        @save="save($event)"
-      />
+          <delete-modal
+            :modal-id="getModalId"
+            :modal-title="getModalTitle"
+            :message="deleteModalMessage"
+            :component-data="data"
+            @remove="splice($event)"
+          />
+          <edit-modal
+            :modal-id="getModalId"
+            :modal-title="getModalTitle"
+            :component-data="data"
+            :component-datatype="data.childrenDataType"
+          />
+        </div>
+      </ul>
+    </div>
+    <add-modal
+      :modal-id="getFQN"
+      :modal-title="getModalTitle"
+      :component-datatype="getComponentDataType"
+      @save="save($event)"
+    />
     <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${getFQN}`)">
-      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir {{ getModalTitle }}
+      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir
+      {{ getModalTitle }}
     </b-link>
   </div>
 </template>
@@ -80,7 +87,7 @@ export default {
   components: {
     AddModal,
     EditModal,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     componentData: {
@@ -88,16 +95,16 @@ export default {
       required: true,
     },
     componentDataId: {
-      type: String,
-      required: true
+      type: Number,
+      required: true,
     },
     componentDatatype: {
       type: String,
-      required: true
+      required: true,
     },
     childrensTitle: {
       type: String,
-      required: false
+      required: false,
     },
     iconsHidden: {
       type: Boolean,
@@ -110,16 +117,23 @@ export default {
       deleteModalMessage: "la experiencia",
       modalTitle: "Experiencia",
       modalId: "experience",
-      index: '1'
+      sameInstance: false,
     };
   },
   methods: {
+    loadIdentifier(index: number) {
+      if (index >= this.$store.state.identifier)
+        this.$store.state.identifier = index;
+    },
+    increment() {
+      this.$store.state.identifier++;
+    },
     refresh(data: Array<Component>, data2: Component) {
       this.$nextTick(() => {
         var obj = data2;
         obj.childrens = data;
         var filtered = this.componentData.filter(
-          (dat: any) => dat.identifier !== obj.identifier
+          (dat: any) => dat.id !== obj.id
         );
         filtered.push(obj);
         this.$emit("update", filtered);
@@ -127,120 +141,128 @@ export default {
     },
     update(data: any) {
       this.$nextTick(() => {
-        this.$emit('update', data);
+        this.$emit("update", data);
       });
     },
     splice(input: Component) {
       var filtered = this.componentData.filter(
-        (data: any) => data.identifier !== input.identifier
+        (data: any) => data.id !== input.id
       );
 
       this.$emit("update", filtered);
     },
-    save (data: Component){
+    save(data: Component) {
+      data.componentDataType = this.getComponentDataType;
       this.componentData.push(data);
-      var identifier :number = parseInt(this.index);
-      identifier++;
-      this.index = identifier.toString();
+      this.increment();
     },
     formatDate(date: any) {
       return new Date(date).toLocaleDateString();
-    }
+    },
   },
   computed: {
     getModalTitle() {
-      return this.modalTitle; //+ this.componentData.identifier;
+      return this.modalTitle; //+ this.componentData.id;
     },
     getModalId() {
-      return this.modalId; //+ this.componentData.identifier;
+      return this.modalId; //+ this.componentData.id;
     },
-    getComponentDataId(){
-      return this.componentDataId;
+    getComponentDataId() {
+      return this.getIndex;
     },
-    getFQN(){
-      return `${this.modalId}-${this.componentDataId}`;
-    }
+    getFQN() {
+      return `${this.modalId}-${this.getIndex}`;
+    },
+    getComponentDataType() {
+      return this.componentDatatype;
+    },
+    getIndex() {
+      return `${this.componentDataId}.${this.componentDataId}`;
+    },
   },
   created() {
     this.$nextTick(() => {
-    switch (this.componentDatatype) {
-      case 'Academic':
-        this.deleteModalMessage = "la formación";
-        this.modalTitle = "Formación";
-        this.modalId = "training";
-        break;
+      switch (this.componentDatatype) {
+        case "Academic":
+          this.deleteModalMessage = "la formación";
+          this.modalTitle = "Formación";
+          this.modalId = "training";
+          break;
 
-      case 'Experience':
-        this.deleteModalMessage = "la experiencia";
-        this.modalTitle = "Experiencia";
-        this.modalId = "experience";
-        break;
+        case "Experience":
+          this.deleteModalMessage = "la experiencia";
+          this.modalTitle = "Experiencia";
+          this.modalId = "experience";
+          break;
 
-      case 'Languages':
-        this.deleteModalMessage = "el idioma";
-        this.modalTitle = "Idioma";
-        this.modalId = "language";
-        break;
+        case "Languages":
+          this.deleteModalMessage = "el idioma";
+          this.modalTitle = "Idioma";
+          this.modalId = "language";
+          break;
 
-      case 'Other':
-        this.deleteModalMessage = "el elemento";
-        this.modalTitle = "Otros";
-        this.modalId = "other";
-        break;
+        case "Other":
+          this.deleteModalMessage = "el elemento";
+          this.modalTitle = "Otros";
+          this.modalId = "other";
+          break;
 
-      case 'Skill':
-        this.deleteModalMessage = "la skill";
-        this.modalTitle = "Skill";
-        this.modalId = "skill";
-        break;
+        case "Skill":
+          this.deleteModalMessage = "la skill";
+          this.modalTitle = "Skill";
+          this.modalId = "skill";
+          break;
 
-      case 'Description':
-        this.deleteModalMessage = "la descripción";
-        this.modalTitle = "Descripcion";
-        this.modalId = "description";
-        break;
+        case "Description":
+          this.deleteModalMessage = "la descripción";
+          this.modalTitle = "Descripcion";
+          this.modalId = "description";
+          break;
 
-      case 'Content':
-        this.deleteModalMessage = "el contenido";
-        this.modalTitle = "Contenido";
-        this.modalId = "content";
-        break;
+        case "Content":
+          this.deleteModalMessage = "el contenido";
+          this.modalTitle = "Contenido";
+          this.modalId = "content";
+          break;
 
-      case 'Contract':
-        this.deleteModalMessage = "el contrato";
-        this.modalTitle = "Contrato";
-        this.modalId = "contract";
-        break;
+        case "Contract":
+          this.deleteModalMessage = "el contrato";
+          this.modalTitle = "Contrato";
+          this.modalId = "contract";
+          break;
 
-      case 'SubContent':
-        this.deleteModalMessage = "el subcontenido";
-        this.modalTitle = "SubContenido";
-        this.modalId = "subContent";
-        break;
+        case "SubContent":
+          this.deleteModalMessage = "el subcontenido";
+          this.modalTitle = "SubContenido";
+          this.modalId = "subContent";
+          break;
 
-      case 'Project':
-        this.deleteModalMessage = "el proyecto";
-        this.modalTitle = "Proyecto";
-        this.modalId = "project";
-        break;
+        case "Project":
+          this.deleteModalMessage = "el proyecto";
+          this.modalTitle = "Proyecto";
+          this.modalId = "project";
+          break;
 
-      default:
-        break;
-    }
-  });
+        default:
+          break;
+      }
+    });
     this.$forceUpdate();
   },
-  mounted() {
+  async mounted() {
     this.$nextTick(() => {
-      if(this.componentData.length > 0)this.$refs[this.modalId]._data.componentData = this.componentData;
-      if(this.componentData.length === 0 || this.componentData === undefined || this.componentData === null) {
-        this.index = '1'
-      } else {
+      if (this.componentData.length > 0)
+        this.$refs[this.modalId]._data.componentData = this.componentData;
+      if (
+        this.componentData.length > 0 &&
+        this.componentData !== undefined &&
+        this.componentData !== null
+      ) {
         var sorted = this.componentData.sort((a: any, b: any) => {
-            return a.id - b.id;
+          return a.id - b.id;
         });
         var last: Component = sorted[sorted.length - 1];
-        this.index = last.identifier;
+        this.loadIdentifier(last.id);
       }
     });
   },

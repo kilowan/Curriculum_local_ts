@@ -6,7 +6,10 @@
       class="d-flex"
     >
       <social-media-view :socialMediaData="socialMediaData" />
-      <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-social-media-${index}`)">
+      <b-link
+        v-if="!iconsHidden"
+        @click="$bvModal.show(`edit-social-media-${index}`)"
+      >
         <b-icon icon="pencil-square" aria-hidden="true" />
       </b-link>
       <b-link
@@ -31,7 +34,7 @@
         ></b-form-select>
         <br />
       </b-modal>
-      <delete-modal 
+      <delete-modal
         :modal-id="'media'"
         :modal-title="'Red social'"
         :message="'la red social'"
@@ -39,7 +42,11 @@
         @remove="del(socialMediaData, index)"
       />
     </div>
-    <b-link v-if="!iconsHidden" :hidden="count === 0" @click="$bvModal.show('add-social-media')">
+    <b-link
+      v-if="!iconsHidden"
+      :hidden="count === 0"
+      @click="$bvModal.show('add-social-media')"
+    >
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir Red social
     </b-link>
     <b-modal
@@ -77,14 +84,14 @@ export default {
   name: "SocialMediaListView",
   components: {
     SocialMediaView,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     iconsHidden: {
       type: Boolean,
       required: true,
       default: false,
-    }
+    },
   },
   data() {
     return {
@@ -126,7 +133,7 @@ export default {
       );
       sm.name = data.name;
 
-      this.$emit('update', data);
+      this.$emit("update", data);
     },
   },
 };

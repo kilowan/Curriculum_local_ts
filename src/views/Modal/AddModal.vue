@@ -1,18 +1,42 @@
 <template>
-    <b-modal
+  <b-modal
     :id="`add-${getModalId}`"
     :title="`Añadir ${modalTitle}`"
     ok-title="Guardar"
     @ok="save"
     @cancel="cancel"
   >
-    <label>Nombre</label> <input type="text" v-model="newComponent.name" /> <br />
-    <label v-if="componentDatatype === 'Language'">Nivel</label> 
-    <input v-if="componentDatatype === 'Language'" type="text" v-model="newComponent.level" /> <br />
-    <label v-if="componentDatatype === 'Academic' || componentDatatype === 'Experience'">Centro/Lugar:</label>
-    <input v-if="componentDatatype === 'Academic' || componentDatatype === 'Experience'" type="text" v-model="newComponent.place" /> <br />
+    <label>Nombre</label> <input type="text" v-model="newComponent.name" />
+    <br />
+    <label v-if="componentDatatype === 'Language'">Nivel</label>
+    <input
+      v-if="componentDatatype === 'Language'"
+      type="text"
+      v-model="newComponent.level"
+    />
+    <br />
+    <label
+      v-if="
+        componentDatatype === 'Academic' || componentDatatype === 'Experience'
+      "
+      >Centro/Lugar:</label
+    >
+    <input
+      v-if="
+        componentDatatype === 'Academic' || componentDatatype === 'Experience'
+      "
+      type="text"
+      v-model="newComponent.place"
+    />
+    <br />
     <label v-if="componentDatatype === 'Experience'">Fecha de inicio</label>
-    <input v-if="componentDatatype === 'Experience'" type="date" v-model="newComponent.initDate" min="2015-01-01" max="2030-12-31" />
+    <input
+      v-if="componentDatatype === 'Experience'"
+      type="date"
+      v-model="newComponent.initDate"
+      min="2015-01-01"
+      max="2030-12-31"
+    />
     <br />
     <label v-if="componentDatatype === 'Experience'">Fecha de fin</label>
     <input
@@ -52,23 +76,16 @@ export default {
       type: String,
       required: true,
     },
-    ComponentDataId: {
-      type: String,
-      required: false
-    }
   },
   data() {
     return {
-      newComponent: {} as Component
+      newComponent: {} as Component,
     };
   },
   computed: {
     getModalId() {
       return this.modalId;
     },
-    getComponentDataId() {
-      return this.ComponentDataId;
-    }
   },
   methods: {
     cancel() {
@@ -76,8 +93,14 @@ export default {
     },
     save() {
       this.newComponent.componentDataType = this.componentDatatype;
-      this.$emit('save', this.newComponent);
-    }
-  }
+      this.newComponent.id = this.getIdentifier();
+      this.$emit("save", this.newComponent);
+    },
+    getIdentifier() {
+      const id = this.$store.state.identifier;
+      this.$store.state.identifier++;
+      return id;
+    },
+  },
 };
 </script>

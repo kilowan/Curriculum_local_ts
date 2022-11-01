@@ -26,7 +26,8 @@
       <h1 class="fn">{{ curriculum.fullName }}</h1>
       <div>
         <b-icon icon="telephone-fill" aria-hidden="true" />
-        <span>{{ curriculum.phoneNumber }}</span><br />
+        <span>{{ curriculum.phoneNumber }}</span
+        ><br />
       </div>
       <div>
         <b-icon icon="envelope" aria-hidden="true" />
@@ -40,7 +41,11 @@
       @update="updateSocialMedia($event)"
     />
     <div id="objective">
-      <textarea v-if="!active" v-model="curriculum.description" placeholder="Descripción" />
+      <textarea
+        v-if="!active"
+        v-model="curriculum.description"
+        placeholder="Descripción"
+      />
       <p v-else>{{ curriculum.description }}</p>
     </div>
     <div class="clear"></div>
@@ -57,27 +62,36 @@
         :iconsHidden="active"
         @update="updateAcademic($event)"
       />
-      <skill-list-view 
+      <skill-list-view
         :ref="'skills'"
-        :iconsHidden="active" 
-        @update="updateSkills($event)" 
+        :iconsHidden="active"
+        @update="updateSkills($event)"
       />
       <language-list-view
         :ref="'lang'"
         :iconsHidden="active"
         @update="updateLanguage($event)"
       />
-      <other-list-view 
+      <other-list-view
         :ref="'other'"
-        :iconsHidden="active" 
-        @update="updateOther($event)" 
+        :iconsHidden="active"
+        @update="updateOther($event)"
       />
     </dl>
     <div v-if="!isRead" id="buttons">
-      <b-button class="m-2" v-if="!active && exportable" @click="doPrint">Imprimir</b-button>
-      <b-button class="m-2" v-else-if="active" @click="cancel">Desacer</b-button>
-      <b-button v-if="!active && exportable" class="m-2" @click="getFile(curriculum)">Exportar</b-button>
-      <file-reader-data v-if="imp" type="file" @output="file($event)"/>
+      <b-button class="m-2" v-if="!active && exportable" @click="doPrint"
+        >Imprimir</b-button
+      >
+      <b-button class="m-2" v-else-if="active" @click="cancel"
+        >Desacer</b-button
+      >
+      <b-button
+        v-if="!active && exportable"
+        class="m-2"
+        @click="getFile(curriculum)"
+        >Exportar</b-button
+      >
+      <file-reader-data v-if="imp" type="file" @output="file($event)" />
       <b-button v-if="!imp" class="m-2" @click="imp = true">Importar</b-button>
     </div>
   </div>
@@ -104,31 +118,29 @@ export default {
     SkillListView,
     LanguageListView,
     SocialMediaListView,
-    FileReaderData
+    FileReaderData,
   },
   data() {
     return {
       active: false,
-      add: false,
-      description:'',
       curriculum: {} as CurriculumDetail,
       iconsHidden: false,
-      reader: {} as FileReader,
       isRead: false,
       exportable: false,
-      imp: false
+      imp: false,
     };
   },
   methods: {
     file(input: any) {
       this.$nextTick(() => {
+        this.$store.state.identifier = 1;
         var json = JSON.parse(input);
         this.curriculum = json;
         this.curriculum.description = json.description;
         this.curriculum.phoneNumber = json.phoneNumber;
         this.curriculum.email = json.email;
         this.curriculum.fullName = json.fullName;
-        this.$refs.socialMedia._data.socialMediaList = json.socialMedia
+        this.$refs.socialMedia._data.socialMediaList = json.socialMedia;
         this.$refs.experience._data.experienceList = json.experience;
         this.$refs.academic._data.academicTrainingList = json.academicTraining;
         this.$refs.lang._data.languageList = json.languageList;
@@ -155,15 +167,16 @@ export default {
       });
     },
     doPrint() {
-      this.active=true;
+      this.active = true;
       this.$nextTick(() => {
         this.EditMode();
         this.$nextTick(() => {
-          let mywindow = window.open('', '_blank');
+          let mywindow = window.open("", "_blank");
           mywindow!.document.head.innerHTML = document.head.innerHTML;
           mywindow!.document.body.innerHTML = document.body.innerHTML;
           //document.getElementById('page-wrap')!.innerHTML;
-          let noPrintableContent: any = mywindow!.document.getElementById('buttons');
+          let noPrintableContent: any =
+            mywindow!.document.getElementById("buttons");
           noPrintableContent.parentNode.removeChild(noPrintableContent);
           mywindow!.print();
           mywindow!.close();
@@ -173,13 +186,13 @@ export default {
     descargarArchivo(contenidoEnBlob: Blob, nombreArchivo: string) {
       var reader = new FileReader();
       reader.onload = function (event) {
-        var save = document.createElement('a');
+        var save = document.createElement("a");
         if (event.target && event.target.result) {
           save.href = event.target.result.toString();
         }
-        save.target = '_blank';
-        save.download = nombreArchivo || 'archivo.dat';
-        var clicEvent = new MouseEvent('click', {
+        save.target = "_blank";
+        save.download = nombreArchivo || "archivo.dat";
+        var clicEvent = new MouseEvent("click", {
           view: window,
           bubbles: true,
           cancelable: true,

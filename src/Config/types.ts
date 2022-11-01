@@ -13,7 +13,6 @@ export interface CurriculumDetail {
 }
 export interface Component {
   id: number;
-  identifier?: string;
   name: string;
   place?: string;
   initDate?: string;
@@ -41,5 +40,5 @@ export enum ComponentType {
   Contract = 8,
   Project = 9,
   Description = 10,
-  Value = 11
+  Value = 11,
 }
