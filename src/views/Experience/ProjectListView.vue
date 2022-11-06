@@ -71,10 +71,10 @@ export default {
     };
   },
   methods: {
-    deleteProject(index: number) {
+    deleteProject(proj: Component) {
       this.$nextTick(() => {
         this.projectsData = this.projectsData.filter(
-          (data: any) => data.id !== index
+          (data: any) => data.id !== proj.id
         );
         this.$emit("update", this.projectsData);
       });
