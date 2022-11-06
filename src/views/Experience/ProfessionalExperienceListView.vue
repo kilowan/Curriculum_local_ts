@@ -138,10 +138,10 @@ export default {
         this.$emit('update', experiences);
       });
     },
-    deleteExperience(index: number) {
+    deleteExperience(comp: Component) {
       this.$nextTick(() => {
         this.experienceList = this.experienceList.filter(
-          (data: any) => data.id !== index
+          (data: any) => data.id !== comp.id
         );
         this.$emit("update", this.experienceList);
       });
