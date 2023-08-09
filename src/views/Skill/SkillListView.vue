@@ -8,18 +8,18 @@
     </dt>
     <dd id="complementary" v-if="skillList">
       <ul>
-        <div v-for="skill in skillList" v-bind:key="skill.id">
+        <div v-for="skill in skillList" v-bind:key="skill.guid">
           <li>
             <strong>{{ skill.name }}</strong>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-skill-${skill.id}`)"
+              @click="$bvModal.show(`edit-skill-${skill.guid}`)"
             >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-skill-${skill.id}`)"
+              @click="$bvModal.show(`delete-skill-${skill.guid}`)"
             >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
@@ -41,7 +41,7 @@
             :modal-title="'Skill'"
             :message="'la skill'"
             :component-data="skill"
-            @remove="splice(skill.id)"
+            @remove="splice(skill.guid)"
           />
         </div>
       </ul>
@@ -95,10 +95,10 @@ export default {
     refresh(skill: Component) {
       this.$nextTick(() => {
         var filtered = this.skillList.filter(
-          (data: any) => data.id !== skill.id
+          (data: any) => data.guid !== skill.guid
         );
         var training = this.skillList.find(
-          (data: any) => data.id === skill.id
+          (data: any) => data.guid === skill.guid
         );
         training = skill;
         filtered.push(training);
@@ -106,10 +106,10 @@ export default {
         this.$emit("update", this.skillList);
       });
     },
-    splice(index: number) {
+    splice(index: string) {
       this.$nextTick(() => {
         this.skillList = this.skillList.filter(
-          (data: any) => data.id !== index
+          (data: any) => data.guid !== index
         );
         this.$emit("update", this.skillList);
       });
@@ -123,6 +123,7 @@ export default {
       this.$nextTick(() => {
         this.skillList.push({
           id: this.index,
+          guid: crypto.randomUUID(),
           name: training,
           childrens: new Array<Component>(),
         });

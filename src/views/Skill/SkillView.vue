@@ -56,6 +56,7 @@ export default {
       this.$nextTick(() => {
         this.$refs.contents._data.contentsData.push({
           id: this.index,
+          guid: crypto.randomUUID(),
           name: content,
           childrens: new Array<Component>(),
         });

@@ -8,18 +8,18 @@
     </dt>
     <dd id="other" v-if="other">
       <ul>
-        <div v-for="otherData in other" v-bind:key="otherData.id">
+        <div v-for="otherData in other" v-bind:key="otherData.guid">
           <li>
             {{ otherData.name }}
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-other-${otherData.id}`)"
+              @click="$bvModal.show(`edit-other-${otherData.guid}`)"
             >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-other-${otherData.id}`)"
+              @click="$bvModal.show(`delete-other-${otherData.guid}`)"
             >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>

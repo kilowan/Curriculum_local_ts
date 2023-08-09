@@ -50,11 +50,13 @@ export default {
     save(project: string) {
       this.projects.push({
         id: this.index,
+        guid: crypto.randomUUID(),
         name: project,
         childrens: new Array<Component>(),
       });
       this.contractData.childrens.push({
         id: this.index,
+        guid: crypto.randomUUID(),
         name: project,
         childrens: new Array<Component>(),
       });
@@ -63,11 +65,11 @@ export default {
       this.projectData = "";
       this.add = false;
     },
-    splice(index: number) {
+    splice(index: string) {
       this.contractData.childrens = this.contractData.childrens.filter(
-        (data: any) => data.id !== index
+        (data: any) => data.guid !== index
       );
-      this.projects = this.projects.filter((data: any) => data.id !== index);
+      this.projects = this.projects.filter((data: any) => data.guid !== index);
       this.$emit("update", this.contractData);
     },
     update(projects: Array<Component>) {

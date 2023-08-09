@@ -108,6 +108,7 @@ export default {
       this.$nextTick(() => {
         this.languageList.push({
           id: this.index,
+          guid: crypto.randomUUID(),
           name: language.name,
           level: language.level,
         });

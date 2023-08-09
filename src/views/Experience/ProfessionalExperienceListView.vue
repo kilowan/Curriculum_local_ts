@@ -15,18 +15,18 @@
         @update="refresh($event)"
       />-->
       <ul>
-        <div v-for="company in experienceList" v-bind:key="company.id">
+        <div v-for="company in experienceList" v-bind:key="company.guid">
           <li>
             {{ company.name }}
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-experience-${company.id}`)"
+              @click="$bvModal.show(`edit-experience-${company.guid}`)"
             >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-experience-${company.id}`)"
+              @click="$bvModal.show(`delete-experience-${company.guid}`)"
             >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
@@ -112,6 +112,7 @@ export default {
       this.$nextTick(() => {
         this.experienceList.push({
           id: this.index,
+          guid: crypto.randomUUID(),
           initDate: experience.initDate,
           finishDate: experience.finishDate,
           graduationDate: experience.graduationDate,
@@ -127,7 +128,7 @@ export default {
     },
     refresh(experience: Component) {
       var exp = this.experienceList.filter(
-        (data: any) => data.id !== experience.id
+        (data: any) => data.guid !== experience.guid
       );
       exp.push(experience);
       this.experienceList = exp;
@@ -141,7 +142,7 @@ export default {
     deleteExperience(comp: Component) {
       this.$nextTick(() => {
         this.experienceList = this.experienceList.filter(
-          (data: any) => data.id !== comp.id
+          (data: any) => data.guid !== comp.guid
         );
         this.$emit("update", this.experienceList);
       });

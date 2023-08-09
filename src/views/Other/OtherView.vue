@@ -92,10 +92,12 @@ export default {
       this.$nextTick(() => {
         this.other.childrens.push({
           id: this.index,
+          guid: crypto.randomUUID(),
           name: value,
         });
         this.values.push({
           id: this.index,
+          guid: crypto.randomUUID(),
           name: value,
         });
 

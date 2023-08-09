@@ -3,19 +3,19 @@
     <ul>
       <div
         v-for="description in projectData.childrens"
-        v-bind:key="description.id"
+        v-bind:key="description.guid"
       >
         <li>
           {{ description.name }}
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-description-${description.id}`)"
+            @click="$bvModal.show(`edit-description-${description.guid}`)"
           >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-description-${description.id}`)"
+            @click="$bvModal.show(`delete-description-${description.guid}`)"
           >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
@@ -32,7 +32,7 @@
           :modal-title="'Descripción'"
           :component-data="description"
           :message="'la descripción'"
-          @remove="splice(description.id)"
+          @remove="splice(description.guid)"
         />
       </div>
     </ul>
@@ -86,10 +86,12 @@ export default {
       this.$nextTick(() => {
         this.descriptions.push({
           id: this.index,
+          guid: crypto.randomUUID(),
           name: description,
         });
         this.projectData.childrens.push({
           id: this.index,
+          guid: crypto.randomUUID(),
           name: description,
         });
         this.index++;
@@ -98,13 +100,13 @@ export default {
         this.$emit("update", this.projectData);
       });
     },
-    splice(index: number) {
+    splice(index: string) {
       this.projectData.childrens =
         this.projectData.childrens.filter(
-          (data: any) => data.id !== index
+          (data: any) => data.guid !== index
         );
       this.descriptions = this.descriptions.filter(
-        (data: any) => data.id !== index
+        (data: any) => data.guid !== index
       );
       this.$emit("update", this.projectData);
     },

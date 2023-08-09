@@ -63,6 +63,7 @@ export default {
       this.$nextTick(() => {
         var data: Component = {
           id: this.index,
+          guid: crypto.randomUUID(),
           name: contract,
           childrens: new Array<Component>()
         };

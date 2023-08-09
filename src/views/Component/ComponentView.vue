@@ -45,7 +45,7 @@
               :modal-title="getModalTitle"
               :message="deleteModalMessage"
               :component-data="data"
-              @remove="splice(data.identifier)"
+              @remove="splice(data.guid)"
             />
             <edit-modal
               :modal-id="getModalId"
@@ -129,9 +129,9 @@ export default {
         this.$emit('update', data);
       });
     },
-    splice(index: number) {
+    splice(index: string) {
       this.$emit("update", this.componentData.filter(
-        (data: any) => data.id !== index
+        (data: any) => data.guid !== index
       ));
     },
     save (data: Component){

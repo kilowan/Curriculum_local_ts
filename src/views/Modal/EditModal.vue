@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    :id="`edit-${modalId}-${componentData.identifier !== undefined? componentData.identifier: componentData.id}`"
+    :id="`edit-${modalId}-${componentData.guid}`"
     :title="`Editar ${modalTitle}`"
     ok-title="Guardar"
     @ok="$emit('update', componentData)"

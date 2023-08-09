@@ -2,18 +2,18 @@
   <li>
     Contratos (ordenados de manera cronológica):
     <ul>
-      <div v-for="contract in contractsData" v-bind:key="contract.id">
+      <div v-for="contract in contractsData" v-bind:key="contract.guid">
         <li>
           {{ contract.name }}
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-contract-${contract.id}`)"
+            @click="$bvModal.show(`edit-contract-${contract.guid}`)"
           >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-contract-${contract.id}`)"
+            @click="$bvModal.show(`delete-contract-${contract.guid}`)"
           >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
@@ -24,7 +24,7 @@
           />
         </li>
         <b-modal
-          :id="`edit-contract-${contract.id}`"
+          :id="`edit-contract-${contract.guid}`"
           title="Editar contrato"
           ok-title="Guardar"
           @ok="update(contractsData)"
@@ -36,7 +36,7 @@
             :modal-title="'Contrato'"
             :message="'el contrato'"
             :component-data="contract"
-            @remove="splice(contract.id)"
+            @remove="splice(contract.guid)"
           />
       </div>
     </ul>
@@ -71,15 +71,15 @@ export default {
     };
   },
   methods: {
-      splice(index: number) {
+      splice(index: string) {
         this.contractsData = this.contractsData.filter(
-          (data: any) => data.id !== index
+          (data: any) => data.guid !== index
         );
         this.$emit("update", this.contractsData);
       },
       refresh(contract: any) {
         var filtered = this.contractsData.filter(
-          (data: any) => data.id !== contract.id
+          (data: any) => data.guid !== contract.guid
         );
         filtered.push(contract);
         this.contractsData = filtered;

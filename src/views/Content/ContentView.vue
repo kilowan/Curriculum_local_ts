@@ -1,18 +1,18 @@
 <template>
   <div>
     <ul>
-      <div v-for="sub in subContents" v-bind:key="sub.id">
+      <div v-for="sub in subContents" v-bind:key="sub.guid">
         <li>
           {{ sub.name }}
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-subcontent-${sub.id}`)"
+            @click="$bvModal.show(`edit-subcontent-${sub.guid}`)"
           >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-subcontent-${sub.id}`)"
+            @click="$bvModal.show(`delete-subcontent-${sub.guid}`)"
           >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
@@ -79,14 +79,14 @@ export default {
     };
   },
   methods: {
-    splice(index: number) {
+    splice(index: string) {
       this.subContents = this.subContents.filter(
-        (data: any) => data.id !== index
+        (data: any) => data.guid !== index
       );
       this.$emit("update", this.subContents);
     },
     push(subContent: string) {
-      this.subContents.push({ id: this.index, name: subContent });
+      this.subContents.push({ id: this.index, name: subContent, guid: crypto.randomUUID() });
       this.index++;
       this.$emit("update", this.subContents);
       this.subcontent = "";
