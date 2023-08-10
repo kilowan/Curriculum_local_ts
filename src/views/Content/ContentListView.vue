@@ -1,36 +1,33 @@
 <template>
   <ul>
-    <div v-for="content in contentsData" v-bind:key="content.id">
+    <div v-for="content in contentsData" v-bind:key="content.guid">
       <li>
         {{ content.name }}
         <b-link
           v-if="!iconsHidden"
-          @click="$bvModal.show(`edit-content-${content.id}`)"
+          @click="$bvModal.show(`edit-${content.guid}`)"
         >
           <b-icon icon="pencil-square" aria-hidden="true" />
         </b-link>
         <b-link
           v-if="!iconsHidden"
-          @click="$bvModal.show(`delete-content-${content.id}`)"
+          @click="$bvModal.show(`delete-${content.guid}`)"
         >
           <b-icon icon="x-circle-fill" aria-hidden="true" />
         </b-link>
         <content-view
           :content="content"
           :iconsHidden="iconsHidden"
-          :contentIndex="content.id"
           @update="refresh($event, content)"
         />
       </li>
       <delete-modal 
-        :modal-id="'content'"
         :modal-title="'Contenido'"
         :message="'el contenido'"
         :component-data="content"
-        @remove="splice(content.id)"
+        @remove="splice(content.guid)"
       />
       <edit-modal
-        :modal-id="'content'"
         :modal-title="'Contenido'"
         :component-data="content"
         :component-datatype="'Content'"
@@ -73,10 +70,10 @@ export default {
     refresh(subContents: Array<Component>, content: any) {
       this.$nextTick(() => {
         var filtered = this.contentsData.filter(
-          (data: any) => data.id !== content.id
+          (data: any) => data.guid !== content.guid
         );
         var cont: Component = this.contentsData.find(
-          (data: any) => data.id === content.id
+          (data: any) => data.guid === content.guid
         );
         cont.childrens = subContents;
         filtered.push(cont);
@@ -89,9 +86,9 @@ export default {
         this.$emit('update', contents);
       });
     },
-    splice(index: number) {
+    splice(index: string) {
       this.contentsData = this.contentsData.filter(
-        (data: any) => data.id !== index
+        (data: any) => data.guid !== index
       );
       this.$emit("update", this.contentsData);
     },

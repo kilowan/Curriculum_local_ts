@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    :id="`delete-${modalId}-${componentData.identifier !== undefined? componentData.identifier: componentData.id }`"
+    :id="`delete-${componentData.guid }`"
     :title="`Eliminar ${modalTitle}`"
     ok-title="Eliminar"
     @ok="$emit('remove', componentData)"
@@ -19,10 +19,6 @@ export default {
     componentData: {
       type: Object,
       required: true,
-    },
-    modalId: {
-      type: String,
-      required: true
     },
     modalTitle: {
       type: String,

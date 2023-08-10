@@ -1,22 +1,22 @@
 <template>
   <div>
     <div
-      v-for="(socialMediaData, index) in socialMediaList"
-      v-bind:key="index"
+      v-for="(socialMediaData) in socialMediaList"
+      v-bind:key="socialMediaData.guid"
       class="d-flex"
     >
       <social-media-view :socialMediaData="socialMediaData" />
-      <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-social-media-${index}`)">
+      <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-${socialMediaData.guid}`)">
         <b-icon icon="pencil-square" aria-hidden="true" />
       </b-link>
       <b-link
         v-if="!iconsHidden"
-        @click="$bvModal.show(`delete-media-${index}`)"
+        @click="$bvModal.show(`delete-${socialMediaData.guid}`)"
       >
         <b-icon icon="x-circle-fill" aria-hidden="true" />
       </b-link>
       <b-modal
-        :id="`edit-social-media-${index}`"
+        :id="`edit-social-media-${socialMediaData.guid}`"
         title="Editar red social"
         ok-title="Guardar"
         @ok="edit(socialMediaData)"
@@ -32,11 +32,10 @@
         <br />
       </b-modal>
       <delete-modal 
-        :modal-id="'media'"
         :modal-title="'Red social'"
         :message="'la red social'"
         :component-data="socialMediaData"
-        @remove="del(socialMediaData, index)"
+        @remove="del(socialMediaData)"
       />
     </div>
     <b-link v-if="!iconsHidden" :hidden="count === 0" @click="$bvModal.show('add-social-media')">
@@ -100,6 +99,7 @@ export default {
   },
   methods: {
     add(socialMedia: Component) {
+      socialMedia.guid = crypto.randomUUID();
       this.socialMediaList.push(socialMedia);
       var type = this.types.find(
         (element: any) => element.value === socialMedia.type
@@ -109,13 +109,15 @@ export default {
       this.socialmedia = {} as Component;
       this.count--;
     },
-    del(media: Component, index: number) {
+    del(media: Component) {
       this.$nextTick(() => {
         var type = this.types.find(
           (element: any) => element.value === media.type
         );
         type.disabled = false;
-        this.socialMediaList.splice(index, 1);
+        this.socialMediaList = this.socialMediaList.filter(
+          (data: any) => data.guid !== media.guid
+        );
         this.count++;
         this.$emit("update", this.socialMediaList);
       });

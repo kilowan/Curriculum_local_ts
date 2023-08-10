@@ -2,18 +2,18 @@
   <div v-if="projectsData.length > 0">
     Proyectos:
     <ul>
-      <div v-for="project in projectsData" v-bind:key="project.id">
+      <div v-for="project in projectsData" v-bind:key="project.guid">
         <li>
           {{ project.name }}
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-project-${project.id}`)"
+            @click="$bvModal.show(`edit-${project.guid}`)"
           >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-project-${project.id}`)"
+            @click="$bvModal.show(`delete-${project.guid}`)"
           >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
@@ -24,14 +24,12 @@
           />
         </li>
         <edit-modal 
-          :modal-id="'project'"
           :modal-title="'proyecto'"
           :component-data="project"
           :component-datatype="'Project'"
           @update="update($event)"
         />
         <delete-modal 
-        :modal-id="'project'"
         :modalTitle="'Proyecto'"
         :message="'el proyecto'"
         :component-data="project"
@@ -74,14 +72,14 @@ export default {
     deleteProject(proj: Component) {
       this.$nextTick(() => {
         this.projectsData = this.projectsData.filter(
-          (data: any) => data.id !== proj.id
+          (data: any) => data.guid !== proj.guid
         );
         this.$emit("update", this.projectsData);
       });
     },
     refresh(project: Component) {
       var projects = this.projectsData.filter(
-        (data: any) => data.id !== project.id
+        (data: any) => data.guid !== project.guid
       );
       projects.push(project);
       this.projectsData = projects;

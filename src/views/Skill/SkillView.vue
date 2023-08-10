@@ -44,7 +44,6 @@ export default {
       contents: new Array<Component>(),
       add: false,
       element: "",
-      index: 0,
     };
   },
   methods: {
@@ -55,11 +54,10 @@ export default {
     save(content: string) {
       this.$nextTick(() => {
         this.$refs.contents._data.contentsData.push({
-          id: this.index,
+          guid: crypto.randomUUID(),
           name: content,
           childrens: new Array<Component>(),
         });
-        this.index++;
         this.cancel();
         this.$emit("update", this.$refs.contents._data.contentsData);
       });
@@ -74,7 +72,6 @@ export default {
   mounted() {
     this.skillData = this.skill;
     this.$refs.contents._data.contentsData = this.skill.childrens;
-    this.index = this.skill.childrens.length === 0 || this.skill.childrens === undefined || this.skill.childrens === null? 0 : this.skill.childrens.length-1;
   },
 };
 </script>

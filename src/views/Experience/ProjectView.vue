@@ -3,36 +3,34 @@
     <ul>
       <div
         v-for="description in projectData.childrens"
-        v-bind:key="description.id"
+        v-bind:key="description.guid"
       >
         <li>
           {{ description.name }}
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-description-${description.id}`)"
+            @click="$bvModal.show(`edit-${description.guid}`)"
           >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-description-${description.id}`)"
+            @click="$bvModal.show(`delete-${description.guid}`)"
           >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
         </li>
         <EditModal 
-          :modal-id="'description'"
           :modal-title="'descripción'"
           :component-data="description"
           :component-datatype="'Description'"
           @cancel="cancel"
         />
         <DeleteModal 
-          :modal-id="'description'"
           :modal-title="'Descripción'"
           :component-data="description"
           :message="'la descripción'"
-          @remove="splice(description.id)"
+          @remove="splice(description.guid)"
         />
       </div>
     </ul>
@@ -70,7 +68,6 @@ export default {
   },
   data() {
     return {
-      index: 0,
       add: false,
       description: "",
       desc: "",
@@ -85,26 +82,25 @@ export default {
     save(description: string) {
       this.$nextTick(() => {
         this.descriptions.push({
-          id: this.index,
+          guid: crypto.randomUUID(),
           name: description,
         });
         this.projectData.childrens.push({
-          id: this.index,
+          guid: crypto.randomUUID(),
           name: description,
         });
-        this.index++;
         this.add = false;
         this.desc = "";
         this.$emit("update", this.projectData);
       });
     },
-    splice(index: number) {
+    splice(index: string) {
       this.projectData.childrens =
         this.projectData.childrens.filter(
-          (data: any) => data.id !== index
+          (data: any) => data.guid !== index
         );
       this.descriptions = this.descriptions.filter(
-        (data: any) => data.id !== index
+        (data: any) => data.guid !== index
       );
       this.$emit("update", this.projectData);
     },

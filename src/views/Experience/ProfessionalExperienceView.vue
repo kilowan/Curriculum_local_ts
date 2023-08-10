@@ -47,7 +47,6 @@ export default {
   },
   data() {
     return {
-      index: 0,
       add: false,
       contractData: "",
       companyData: {} as Component,
@@ -62,7 +61,7 @@ export default {
     save(contract: any) {
       this.$nextTick(() => {
         var data: Component = {
-          id: this.index,
+          guid: crypto.randomUUID(),
           name: contract,
           childrens: new Array<Component>()
         };
@@ -70,7 +69,6 @@ export default {
         this.companyData.childrens.push(data);
         this.contractData = "";
         this.add = false;
-        this.index++;
         this.$emit("update", this.companyData);
       });
     },
@@ -85,7 +83,6 @@ export default {
   mounted() {
     this.companyData = this.company;
     this.$refs.contractt._data.contractsData = this.company.childrens;
-    this.index = this.company.childrens.length === 0 || this.company.childrens === undefined || this.company.childrens === null? 0 : this.company.childrens.length-1;
   },
 };
 </script>

@@ -40,10 +40,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    academicIndex: {
-      type: Number,
-      required: true,
-    },
   },
   data() {
     return {
@@ -51,7 +47,6 @@ export default {
       contents: new Array<Component>(),
       add: false,
       element: "",
-      index: 0,
     };
   },
   methods: {
@@ -69,7 +64,7 @@ export default {
       this.$nextTick(() => {
         if (content !== "") {
           var cont: Component = {
-            id: this.index,
+            guid: crypto.randomUUID(),
             name: content,
             childrens: new Array<Component>(),
           };
@@ -79,7 +74,6 @@ export default {
 
         this.element = "";
         this.add = false;
-        this.index++;
         this.$emit("update", this.academicData);
       });
     },
@@ -90,7 +84,6 @@ export default {
   mounted() {
     this.academicData = this.academic;
     this.$refs.contents._data.contentsData = this.academicData.childrens;
-    this.index = this.academicData.childrens.length === 0 || this.academicData.childrens === undefined || this.academicData.childrens === null? 0 : this.academicData.childrens.length-1;
   },
 };
 </script>
