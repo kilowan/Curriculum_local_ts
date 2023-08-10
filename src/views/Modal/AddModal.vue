@@ -68,7 +68,14 @@ export default {
     },
     save() {
       this.$nextTick(() => {
-        var component: Component = { name: this.newComponent.name, guid: crypto.randomUUID(), componentDataType: this.componentDatatype };
+        var component: Component = { 
+          name: this.newComponent.name, 
+          guid: crypto.randomUUID(), 
+          componentDataType: this.componentDatatype, 
+          place: this.newComponent?.place, 
+          initDate: this.newComponent?.initDate, 
+          finishDate: this.newComponent?.finishDate 
+        };
         this.cancel();
         this.$emit('save', component);
       });

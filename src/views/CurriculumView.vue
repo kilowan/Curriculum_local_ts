@@ -141,12 +141,12 @@ export default {
     },
     ParseLegacy(input: CurriculumDetail){
       if(input.guid == undefined) input.guid = crypto.randomUUID();
-      input.academicTraining.forEach((element: Component) => this.ParseComponent(element));
-      input.experience.forEach((element: Component) => this.ParseComponent(element));
-      input.languageList.forEach((element: Component) => this.ParseComponent(element));
-      input.otherData.forEach((element: Component) => this.ParseComponent(element));
-      input.skillList.forEach((element: Component) => this.ParseComponent(element));
-      input.socialMedia.forEach((element: Component) => this.ParseComponent(element));
+      if(input.academicTraining != null) input.academicTraining.forEach((element: Component) => this.ParseComponent(element));
+      if(input.experience != null) input.experience.forEach((element: Component) => this.ParseComponent(element));
+      if(input.languageList != null) input.languageList.forEach((element: Component) => this.ParseComponent(element));
+      if(input.otherData != null) input.otherData.forEach((element: Component) => this.ParseComponent(element));
+      if(input.skillList != null) input.skillList.forEach((element: Component) => this.ParseComponent(element));
+      if(input.socialMedia != null) input.socialMedia.forEach((element: Component) => this.ParseComponent(element));
     },
     ParseComponent(input: Component){
       if(input.guid == undefined) input.guid = crypto.randomUUID();
