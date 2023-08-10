@@ -7,13 +7,13 @@
           {{ project.name }}
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-project-${project.guid}`)"
+            @click="$bvModal.show(`edit-${project.guid}`)"
           >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-project-${project.guid}`)"
+            @click="$bvModal.show(`delete-${project.guid}`)"
           >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
@@ -24,14 +24,12 @@
           />
         </li>
         <edit-modal 
-          :modal-id="'project'"
           :modal-title="'proyecto'"
           :component-data="project"
           :component-datatype="'Project'"
           @update="update($event)"
         />
         <delete-modal 
-        :modal-id="'project'"
         :modalTitle="'Proyecto'"
         :message="'el proyecto'"
         :component-data="project"
