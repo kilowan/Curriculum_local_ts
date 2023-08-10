@@ -86,7 +86,7 @@
 <script lang="ts">
 //import jsPDF from 'jspdf';
 //declare const html2canvas: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>;
-import { CurriculumDetail } from "../Config/types";
+import { CurriculumDetail, Component } from "../Config/types";
 import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
 import OtherListView from "./Other/OtherListView.vue";
 import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceListView.vue";
@@ -124,6 +124,7 @@ export default {
       this.$nextTick(() => {
         var json = JSON.parse(input);
         this.curriculum = json;
+        this.ParseLegacy(this.curriculum);
         this.curriculum.description = json.description;
         this.curriculum.phoneNumber = json.phoneNumber;
         this.curriculum.email = json.email;
@@ -137,6 +138,19 @@ export default {
         this.exportable = true;
         this.EditMode();
       });
+    },
+    ParseLegacy(input: CurriculumDetail){
+      if(input.guid == undefined) input.guid = crypto.randomUUID();
+      input.academicTraining.forEach((element: Component) => this.ParseComponent(element));
+      input.experience.forEach((element: Component) => this.ParseComponent(element));
+      input.languageList.forEach((element: Component) => this.ParseComponent(element));
+      input.otherData.forEach((element: Component) => this.ParseComponent(element));
+      input.skillList.forEach((element: Component) => this.ParseComponent(element));
+      input.socialMedia.forEach((element: Component) => this.ParseComponent(element));
+    },
+    ParseComponent(input: Component){
+      if(input.guid == undefined) input.guid = crypto.randomUUID();
+      input.childrens?.forEach((element: Component) => this.ParseComponent(element));
     },
     EditMode() {
       this.$nextTick(() => {
