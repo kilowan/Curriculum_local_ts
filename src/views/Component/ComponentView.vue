@@ -3,18 +3,18 @@
     <li v-if="childrensTitle !== undefined">{{ childrensTitle }}:</li>
     <div v-if="componentData.length >0">
         <ul>
-          <div v-for="data in componentData" v-bind:key="data.identifier">
+          <div v-for="data in componentData" v-bind:key="data.guid">
                 <li>
                   {{ data.name }}
               <b-link
                 v-if="!iconsHidden"
-                @click="$bvModal.show(`edit-${modalId}-${data.identifier}`)"
+                @click="$bvModal.show(`edit-${data.guid}`)"
               >
                 <b-icon icon="pencil-square" aria-hidden="true" />
               </b-link>
               <b-link
                 v-if="!iconsHidden"
-                @click="$bvModal.show(`delete-${modalId}-${data.identifier}`)"
+                @click="$bvModal.show(`delete-${data.guid}`)"
               >
                 <b-icon icon="x-circle-fill" aria-hidden="true" />
               </b-link>
@@ -28,12 +28,12 @@
                 </li>
                 <div>
                   <component-view
-                    :ref="modalId"
+                    :ref="data.guid"
                     :iconsHidden="iconsHidden"
                     :component-data="data.childrens"
                     :childrens-title="data.childrensTitle"
                     :component-datatype="data.childrenDataType"
-                    :component-data-id="data.identifier"
+                    :component-data-id="data.guid"
                     @update="refresh($event)"
                   />
                 </div>
@@ -41,21 +41,19 @@
             </li>
 
             <delete-modal 
-              :modal-id="getModalId"
               :modal-title="getModalTitle"
               :message="deleteModalMessage"
               :component-data="data"
               @remove="splice(data.guid)"
             />
             <edit-modal
-              :modal-id="getModalId"
               :modal-title="getModalTitle"
               :component-data="data"
               :component-datatype="data.childrenDataType"
             />
           </div>
           <add-modal
-            :modal-id="`${componentDataId}-${getModalId}`"
+            :guid="guid"
             :modal-title="getModalTitle"
             :componentDataId="componentDataId"
             :component-datatype="componentDatatype"
@@ -63,7 +61,7 @@
           />
         </ul>
       </div>
-    <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${componentDataId}-${getModalId}`)">
+    <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${getGUID()}`)">
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir {{ getModalTitle }}
     </b-link>
   </div>
@@ -87,7 +85,7 @@ export default {
       type: Array,
       required: true,
     },
-    componentDataId: {
+    guid: {
       type: String,
       required: true
     },
@@ -109,15 +107,14 @@ export default {
       element: "",
       deleteModalMessage: "la experiencia",
       modalTitle: "Experiencia",
-      modalId: "experience",
-      index: '1'
+      guid: crypto.randomUUID()
     };
   },
   methods: {
     refresh(data: Component) {
       this.$nextTick(() => {
         var filtered = this.componentData.filter(
-          (data: any) => data.id !== data.id
+          (data: any) => data.guid !== data.guid
         );
 
         filtered.push(data);
@@ -136,21 +133,19 @@ export default {
     },
     save (data: Component){
       this.componentData.push(data);
-      var identifier :number = parseInt(this.index);
-      identifier++;
-      this.index = identifier.toString();
     },
     formatDate(date: any) {
       return new Date(date).toLocaleDateString();
-    }
+    },
+    getGUID() {
+      return crypto.randomUUID();
+    },
   },
   computed: {
     getModalTitle() {
-      return this.modalTitle; //+ this.componentData.identifier;
+      return this.modalTitle;
     },
-    getModalId() {
-      return this.modalId; //+ this.componentData.identifier;
-    }
+
   },
   created() {
     this.$nextTick(() => {
@@ -158,61 +153,61 @@ export default {
       case 'Academic':
         this.deleteModalMessage = "la formación";
         this.modalTitle = "Formación";
-        this.modalId = "training";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'Experience':
         this.deleteModalMessage = "la experiencia";
         this.modalTitle = "Experiencia";
-        this.modalId = "experience";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'Languages':
         this.deleteModalMessage = "el idioma";
         this.modalTitle = "Idioma";
-        this.modalId = "language";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'Other':
         this.deleteModalMessage = "el elemento";
         this.modalTitle = "Elemento";
-        this.modalId = "other";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'Skills':
         this.deleteModalMessage = "la skill";
         this.modalTitle = "Skill";
-        this.modalId = "skill";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'Description':
         this.deleteModalMessage = "la descripción";
         this.modalTitle = "Descripcion";
-        this.modalId = "description";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'Content':
         this.deleteModalMessage = "el contenido";
         this.modalTitle = "Contenido";
-        this.modalId = "content";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'Contract':
         this.deleteModalMessage = "el contrato";
         this.modalTitle = "Contrato";
-        this.modalId = "contract";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'SubContent':
         this.deleteModalMessage = "el subcontenido";
         this.modalTitle = "SubContenido";
-        this.modalId = "subContent";
+        this.guid = crypto.randomUUID()
         break;
 
       case 'Project':
         this.deleteModalMessage = "el proyecto";
         this.modalTitle = "Proyecto";
-        this.modalId = "project";
+        this.guid = crypto.randomUUID()
         break;
 
       default:
@@ -220,20 +215,6 @@ export default {
     }
   });
     this.$forceUpdate();
-  },
-  mounted() {
-    this.$nextTick(() => {
-      if(this.componentData.length > 0)this.$refs[this.modalId]._data.componentData = this.componentData;
-      if(this.componentData.length === 0 || this.componentData === undefined || this.componentData === null) {
-        this.index = '1'
-      } else {
-        var sorted = this.componentData.sort((a: any, b: any) => {
-            return a.id - b.id;
-        });
-        var last: Component = sorted[sorted.length - 1];
-        this.index = last.identifier;
-      }
-    });
   },
 };
 </script>

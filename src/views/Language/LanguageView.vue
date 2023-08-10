@@ -9,47 +9,45 @@
     <dd id="languages">
       <ul>
         <div
-          v-for="(language, firstindex) in languageList"
-          v-bind:key="firstindex"
+          v-for="(language) in languageList"
+          v-bind:key="language.guid"
         >
           <li>
             <strong>{{ language.name }}:</strong> {{ language.level }}
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-language-${firstindex}`)"
+              @click="$bvModal.show(`edit-${language.guid}`)"
             >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-language-${firstindex}`)"
+              @click="$bvModal.show(`delete-${language.guid}`)"
             >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
           </li>
           <EditModal 
-           :modal-id="'language'"
            :modal-title="'Idioma'"
            :component-data="language"
            :component-datatype="'Language'"
            @update="update(languageList)"
           />
           <DeleteModal 
-            :modal-id="'language'"
             :modal-title="'idioma'"
             :message="'el idioma'"
             :component-data="language"
-            @remove="splice(firstindex)"
+            @remove="splice(language.guid)"
           />
         </div>
       </ul>
-      <b-link v-if="!iconsHidden" @click="$bvModal.show('add-language')">
+      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${guid}`)">
         <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir idioma
       </b-link>
     </dd>
     <dd class="clear"></dd>
     <AddModal 
-      :modal-id="'language'"
+      :guid="guid"
       :modal-title="'Idioma'"
       :component-datatype="'Language'"
       @save="save($event)"
@@ -64,7 +62,7 @@ import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
-  name: "AcademicTrainingView",
+  name: "LanguagesView",
   components: {
     AddModal,
     EditModal,
@@ -78,21 +76,22 @@ export default {
   },
   data() {
     return {
-      index: 0,
       hide: false,
       add: false,
       languageLevelList: [],
       languageList: new Array<Component>(),
       language: {} as Component,
+      guid: crypto.randomUUID()
     };
   },
   methods: {
     refresh() {
       this.$emit("refresh");
     },
-    splice(index: number) {
-      this.languageList.splice(index, 1);
-      this.$emit("update", this.languageList);
+    splice(index: string) {
+      this.$emit("update", this.languageList.filter(
+        (data: any) => data.guid !== index
+      ));
     },
     cancel() {
       this.add = false;
@@ -107,19 +106,14 @@ export default {
     save(language: any) {
       this.$nextTick(() => {
         this.languageList.push({
-          id: this.index,
           guid: crypto.randomUUID(),
           name: language.name,
           level: language.level,
         });
-        this.index++;
         this.$emit("update", this.languageList);
         this.language = {} as Component;
       });
     },
   },
-  mounted() {
-    this.index = this.languageList.length === 0 || this.languageList === undefined || this.languageList === null? 0 : this.languageList.length-1;
-  }
 };
 </script>

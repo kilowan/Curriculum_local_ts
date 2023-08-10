@@ -1,5 +1,4 @@
 export interface CurriculumDetail {
-  id: number;
   guid: string;
   fullName: string;
   description: string;
@@ -13,9 +12,7 @@ export interface CurriculumDetail {
   otherData: Array<Component>;
 }
 export interface Component {
-  id: number;
   guid: string;
-  identifier?: string;
   name: string;
   place?: string;
   initDate?: string;

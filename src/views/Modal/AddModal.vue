@@ -1,6 +1,6 @@
 <template>
     <b-modal
-    :id="`add-${modalId}`"
+    :id="`add-${guid}`"
     :title="`Añadir ${modalTitle}`"
     ok-title="Guardar"
     @ok="save"
@@ -44,7 +44,7 @@ export default {
       type: String,
       required: true,
     },
-    modalId: {
+    guid: {
       type: String,
       required: true,
     },
@@ -67,8 +67,11 @@ export default {
       this.newComponent = {} as Component;
     },
     save() {
-      this.newComponent.componentDataType = this.componentDatatype;
-      this.$emit('save', this.newComponent);
+      this.$nextTick(() => {
+        var component: Component = { name: this.newComponent.name, guid: crypto.randomUUID(), componentDataType: this.componentDatatype };
+        this.cancel();
+        this.$emit('save', component);
+      });
     }
   }
 };

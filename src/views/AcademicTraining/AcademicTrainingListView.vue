@@ -8,52 +8,50 @@
     </dt>
     <dd id="academic">
       <ul>
-        <div v-for="academic in academicTrainingList" v-bind:key="academic.id">
+        <div v-for="academic in academicTrainingList" v-bind:key="academic.guid">
           <li>
             {{ academic.name }}
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-training-${academic.id}`)"
+              @click="$bvModal.show(`edit-${academic.guid}`)"
             >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-training-${academic.id}`)"
+              @click="$bvModal.show(`delete-${academic.guid}`)"
             >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
             <academic-training-view
               :academic="academic"
               :iconsHidden="iconsHidden"
-              :academicIndex="academic.id"
+              :academicIndex="academic.guid"
               @update="refresh($event)"
             />
           </li>
           <edit-modal 
-            :modal-id="'training'"
             :modal-title="'formación'"
             :component-data="academic"
             :component-datatype="'Academic'"
             @update="update(academicTrainingList)"
           />
           <delete-modal 
-            :modal-id="'training'"
             :modal-title="'Contrato'"
             :message="'la formación'"
             :component-data="academic"
-            @remove="splice(academic.id)"
+            @remove="splice(academic.guid)"
           />
         </div>
       </ul>
-      <b-link v-if="!iconsHidden" @click="$bvModal.show('add-training')">
+      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${guid}`)">
         <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir formación
       </b-link>
     </dd>
     <dd class="clear"></dd>
     <add-modal 
       :component-datatype="'Academic'"
-      :modal-id="'training'"
+      :guid="guid"
       :modal-title="'Formación'"
       @save="save($event)"
     />
@@ -87,17 +85,17 @@ export default {
       training: {} as Component,
       add: false,
       academicTrainingList: new Array<Component>(),
-      index: 0,
+      guid: crypto.randomUUID()
     };
   },
   methods: {
     refresh(academic: Component) {
       this.$nextTick(() => {
         var filtered = this.academicTrainingList.filter(
-          (data: any) => data.id !== academic.id
+          (data: any) => data.guid !== academic.guid
         );
         var training = this.academicTrainingList.find(
-          (data: any) => data.id === academic.id
+          (data: any) => data.guid === academic.guid
         );
         training = academic;
         filtered.push(training);
@@ -105,10 +103,10 @@ export default {
         this.$emit("update", this.academicTrainingList);
       });
     },
-    splice(index: number) {
+    splice(index: string) {
       this.$nextTick(() => {
         this.academicTrainingList = this.academicTrainingList.filter(
-          (data: any) => data.id !== index
+          (data: any) => data.guid !== index
         );
         this.$emit("update", this.academicTrainingList);
       });
@@ -125,13 +123,12 @@ export default {
     save(data: Component) {
       this.$nextTick(() => {
         this.academicTrainingList.push({
-          id: this.index,
+          guid: data.guid,
           name: data.name,
           place: data.place,
           graduationDate: data.graduationDate,
           childrens: new Array<Component>(),
         });
-        this.index++;
         this.cancel();
         this.$emit("update", this.academicTrainingList);
       });

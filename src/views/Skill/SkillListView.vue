@@ -13,13 +13,13 @@
             <strong>{{ skill.name }}</strong>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-skill-${skill.guid}`)"
+              @click="$bvModal.show(`edit-${skill.guid}`)"
             >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-skill-${skill.guid}`)"
+              @click="$bvModal.show(`delete-${skill.guid}`)"
             >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
@@ -30,14 +30,12 @@
             />
           </li>
           <edit-modal 
-            :modal-id="'skill'"
             :modal-title="'skill'"
             :component-data="skill"
             :component-datatype="'Skill'"
             @update="update(skillList)"
           />
           <delete-modal 
-            :modal-id="'skill'"
             :modal-title="'Skill'"
             :message="'la skill'"
             :component-data="skill"
@@ -84,7 +82,6 @@ export default {
       trainingNew: "",
       add: false,
       skillList: new Array<Component>(),
-      index: 0,
     };
   },
   methods: {
@@ -122,12 +119,10 @@ export default {
     save(training: string) {
       this.$nextTick(() => {
         this.skillList.push({
-          id: this.index,
           guid: crypto.randomUUID(),
           name: training,
           childrens: new Array<Component>(),
         });
-        this.index++;
         this.cancel();
         this.$emit("update", this.skillList);
       });

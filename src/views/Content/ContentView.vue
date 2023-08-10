@@ -6,26 +6,24 @@
           {{ sub.name }}
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-subcontent-${sub.guid}`)"
+            @click="$bvModal.show(`edit-${sub.guid}`)"
           >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-subcontent-${sub.guid}`)"
+            @click="$bvModal.show(`delete-${sub.guid}`)"
           >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
         </li>
         <DeleteModal 
-          :modal-id="'subcontent'"
           :component-data="sub"
           :modal-title="'Contenido'"
           :message="'el elemento'"
           @remove="splice($event)"
         />
         <EditModal 
-          :modal-id="'subcontent'"
           :modal-title="'Contenido'"
           :component-data="sub"
           :component-datatype="'SubContent'"
@@ -33,13 +31,13 @@
       </div>
       <b-link
         v-if="!iconsHidden"
-        @click="$bvModal.show(`add-subcontent-${contentIndex}`)"
+        @click="$bvModal.show(`add-${guid}`)"
       >
         <b-icon icon="plus-circle-fill" aria-hidden="true" />Añadir SubContenido
       </b-link>
     </ul>
     <AddModal 
-      :modal-id="'subcontent'"
+      :guid="guid"
       :component-datatype="'Subcontent'"
       :modal-title="'SubContenido'"
       @save="push($event)"
@@ -65,17 +63,13 @@ export default {
       type: Boolean,
       required: true,
     },
-    contentIndex: {
-      type: Number,
-      required: true,
-    },
   },
   data() {
     return {
       contentData: {} as Component,
       subcontent: "",
       subContents: new Array<Component>(),
-      index: 0,
+      guid: crypto.randomUUID()
     };
   },
   methods: {
@@ -86,8 +80,7 @@ export default {
       this.$emit("update", this.subContents);
     },
     push(subContent: string) {
-      this.subContents.push({ id: this.index, name: subContent, guid: crypto.randomUUID() });
-      this.index++;
+      this.subContents.push({ name: subContent, guid: crypto.randomUUID() });
       this.$emit("update", this.subContents);
       this.subcontent = "";
     },

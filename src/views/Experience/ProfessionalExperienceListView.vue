@@ -20,13 +20,13 @@
             {{ company.name }}
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-experience-${company.guid}`)"
+              @click="$bvModal.show(`edit-${company.guid}`)"
             >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
             <b-link
               v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-experience-${company.guid}`)"
+              @click="$bvModal.show(`delete-${company.guid}`)"
             >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
@@ -37,14 +37,12 @@
             />
           </li>
           <EditModal 
-            :modal-id="'experience'"
             :modal-title="'Experiencia'"
             :component-data="company"
             :component-datatype="'Experience'"
             @update="update($event)"
           />
           <DeleteModal
-            :modal-id="'experience'"
             :modal-title="'Experiencia'"
             :message="'la experiencia'"
             :component-data="company"
@@ -52,13 +50,13 @@
           />
         </div>
       </ul>
-      <b-link v-if="!iconsHidden" @click="$bvModal.show('add-experience')">
+      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${guid}`)">
         <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir experiencia
       </b-link>
     </dd>
     <dd class="clear"></dd>
     <AddModal
-      :modal-id="'experience'"
+      :guid="guid"
       :modal-title="'Experiencia'"
       :component-datatype="'Experience'"
       @save="save($event)"
@@ -91,11 +89,11 @@ export default {
   },
   data() {
     return {
-      index: 0,
       experienceList: new Array<Component>(),
       experience: {} as Component,
       add: false,
       hide: false,
+      guid: crypto.randomUUID()
     };
   },
   methods: {
@@ -111,8 +109,7 @@ export default {
     save(experience: any) {
       this.$nextTick(() => {
         this.experienceList.push({
-          id: this.index,
-          guid: crypto.randomUUID(),
+          guid: experience.guid,
           initDate: experience.initDate,
           finishDate: experience.finishDate,
           graduationDate: experience.graduationDate,
@@ -121,7 +118,6 @@ export default {
           childrens: new Array<Component>(),
           componentDataType: 'Experience'
         });
-        this.index++;
         this.$emit("update", this.experienceList);
         this.experience = {} as Component;
       });

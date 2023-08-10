@@ -7,13 +7,13 @@
           {{ contract.name }}
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-contract-${contract.guid}`)"
+            @click="$bvModal.show(`edit-${contract.guid}`)"
           >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
           <b-link
             v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-contract-${contract.guid}`)"
+            @click="$bvModal.show(`delete-${contract.guid}`)"
           >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
@@ -32,7 +32,6 @@
           <input type="text" v-model="contract.name" /> <br />
         </b-modal>
         <delete-modal 
-            :modal-id="'contract'"
             :modal-title="'Contrato'"
             :message="'el contrato'"
             :component-data="contract"
