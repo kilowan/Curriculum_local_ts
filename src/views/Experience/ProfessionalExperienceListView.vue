@@ -7,13 +7,6 @@
       </b-link>
     </dt>
     <dd id="experience">
-      <!--<component-view 
-        :name="'Experience'"
-        :component-data="experienceList"
-        :component-datatype="'Experience'"
-        :icons-hidden="iconsHidden"
-        @update="refresh($event)"
-      />-->
       <ul>
         <div v-for="company in experienceList" v-bind:key="company.guid">
           <li>
@@ -67,7 +60,6 @@
 <script lang="ts">
 import { Component } from "../../Config/types";
 import ProfessionalExperienceView from "./ProfessionalExperienceView.vue";
-//import ComponentView from "../Component/ComponentView.vue";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
@@ -76,7 +68,6 @@ export default {
   name: "ProfessionalExperienceListView",
   components: {
     ProfessionalExperienceView,
-    //ComponentView,
     AddModal,
     EditModal,
     DeleteModal
@@ -105,6 +96,16 @@ export default {
         { value: 1, text: "personal" },
         { value: 2, text: "professional" },
       ];
+    },
+    deepChange(input: Component) {
+      this.experienceList.find((data: Component) => { 
+        if(data.guid === input.guid) data = input;
+        else {
+           data.childrens?.forEach((data2: Component) => {
+             this.deepChange(data2);
+          });
+        }
+      });
     },
     save(experience: any) {
       this.$nextTick(() => {
