@@ -20,7 +20,7 @@
         <EditModal 
           :modal-title="'valor'"
           :component-data="value"
-          :component-datatype="'Value'"
+          :component-data-type="'Value'"
         />
         <DeleteModal 
           :modal-title="'valor'"
@@ -38,7 +38,7 @@
     <AddModal 
       :guid="guid"
       :modal-title="'valor'"
-      :component-datatype="'Value'"
+      :component-data-type="'Value'"
       @save="save($event)"
     />
   </div>

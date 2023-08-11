@@ -26,7 +26,7 @@
         <EditModal 
           :modal-title="'Contenido'"
           :component-data="sub"
-          :component-datatype="'SubContent'"
+          :component-data-type="'SubContent'"
         />
       </div>
       <b-link
@@ -38,7 +38,7 @@
     </ul>
     <AddModal 
       :guid="guid"
-      :component-datatype="'Subcontent'"
+      :component-data-type="'Subcontent'"
       :modal-title="'SubContenido'"
       @save="push($event)"
     />

@@ -23,7 +23,7 @@
         <EditModal 
           :modal-title="'descripción'"
           :component-data="description"
-          :component-datatype="'Description'"
+          :component-data-type="'Description'"
           @cancel="cancel"
         />
         <DeleteModal 

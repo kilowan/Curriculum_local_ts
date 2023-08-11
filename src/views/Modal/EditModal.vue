@@ -7,20 +7,20 @@
   >
     <label>Nombre:</label>
     <input type="text" v-model="componentData.name" /> <br />
-    <label v-if="componentDatatype === 'Academic' || componentDatatype === 'Experience'">Centro/Lugar:</label>
-    <input v-if="componentDatatype === 'Academic' || componentDatatype === 'Experience'" type="text" v-model="componentData.place" /> <br />
-    <label v-if="componentDatatype === 'Experience'">Fecha de inicio</label>
-    <input v-if="componentDatatype === 'Experience'" type="date" v-model="componentData.initDate" min="2015-01-01" max="2030-12-31" />
+    <label v-if="componentDataType === 'Academic' || componentDataType === 'Experience'">Centro/Lugar:</label>
+    <input v-if="componentDataType === 'Academic' || componentDataType === 'Experience'" type="text" v-model="componentData.place" /> <br />
+    <label v-if="componentDataType === 'Experience'">Fecha de inicio</label>
+    <input v-if="componentDataType === 'Experience'" type="date" v-model="componentData.initDate" min="2015-01-01" max="2030-12-31" />
     <br />
-    <label v-if="componentDatatype === 'Experience'">Fecha de fin</label>
+    <label v-if="componentDataType === 'Experience'">Fecha de fin</label>
     <input
-      v-if="componentDatatype === 'Experience'"
+      v-if="componentDataType === 'Experience'"
       type="date"
       v-model="componentData.finishDate"
       min="2015-01-01"
       max="2030-12-31"
     />
-    <div v-if="componentDatatype === 'Academic'">
+    <div v-if="componentDataType === 'Academic'">
       <label>Graduación:</label>
       <b-form-datepicker
         v-model="componentData.graduationDate"
@@ -45,7 +45,7 @@ export default {
       type: String,
       required: true
     },
-    componentDatatype: {
+    componentDataType: {
       type: String,
       required: true,
     }

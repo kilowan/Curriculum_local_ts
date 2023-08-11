@@ -39,7 +39,7 @@
           <EditModal 
             :modal-title="'Experiencia'"
             :component-data="company"
-            :component-datatype="'Experience'"
+            :component-data-type="'Experience'"
             @update="update($event)"
           />
           <DeleteModal
@@ -58,7 +58,7 @@
     <AddModal
       :guid="guid"
       :modal-title="'Experiencia'"
-      :component-datatype="'Experience'"
+      :component-data-type="'Experience'"
       @save="save($event)"
     />
   </div>

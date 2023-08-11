@@ -19,8 +19,8 @@
                 <b-icon icon="x-circle-fill" aria-hidden="true" />
               </b-link>
               <ul>
-                <li v-if="componentDatatype === 'Academic' || componentDatatype === 'Experience'">Centro/Lugar: {{ data.place }}</li>
-                <li v-if="componentDatatype === 'Experience'">
+                <li v-if="componentDataType === 'Academic' || componentDataType === 'Experience'">Centro/Lugar: {{ data.place }}</li>
+                <li v-if="componentDataType === 'Experience'">
                   Fecha inicio: {{ formatDate(data.initDate) }}
                 </li>
                 <li v-if="data.finishDate">
@@ -32,7 +32,7 @@
                     :iconsHidden="iconsHidden"
                     :component-data="data.childrens"
                     :childrens-title="data.childrensTitle"
-                    :component-datatype="data.childrenDataType"
+                    :component-data-type="data.componentDataType"
                     :component-data-id="data.guid"
                     @update="refresh($event)"
                   />
@@ -49,14 +49,13 @@
             <edit-modal
               :modal-title="getModalTitle"
               :component-data="data"
-              :component-datatype="data.childrenDataType"
+              :component-data-type="data.componentDataType"
             />
           </div>
           <add-modal
             :guid="guid"
             :modal-title="getModalTitle"
-            :componentDataId="componentDataId"
-            :component-datatype="componentDatatype"
+            :component-data-type="componentDataType"
             @save="save($event)"
           />
         </ul>
@@ -68,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
+import { Component, ComponentType } from "../../Config/types";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
@@ -82,14 +81,14 @@ export default {
   },
   props: {
     componentData: {
-      type: Array,
+      type: Array<Component>,
       required: true,
     },
     guid: {
       type: String,
       required: true
     },
-    componentDatatype: {
+    componentDataType: {
       type: String,
       required: true
     },
@@ -149,7 +148,7 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-    switch (this.componentDatatype) {
+    switch (this.componentDataType) {
       case 'Academic':
         this.deleteModalMessage = "la formación";
         this.modalTitle = "Formación";
