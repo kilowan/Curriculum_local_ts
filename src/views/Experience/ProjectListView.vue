@@ -26,7 +26,7 @@
         <edit-modal 
           :modal-title="'proyecto'"
           :component-data="project"
-          :component-datatype="'Project'"
+          :component-data-type="'Project'"
           @update="update($event)"
         />
         <delete-modal 

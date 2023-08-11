@@ -30,7 +30,7 @@
       <edit-modal
         :modal-title="'Contenido'"
         :component-data="content"
-        :component-datatype="'Content'"
+        :component-data-type="'Content'"
         @update="update($event)"
       />
     </div>

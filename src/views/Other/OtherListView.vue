@@ -32,7 +32,7 @@
           <edit-modal 
             :modal-title="'Otros'"
             :component-data="otherData"
-            :component-datatype="'Other'"
+            :component-data-type="'Other'"
             @update="update($event)"
           />
           <delete-modal 

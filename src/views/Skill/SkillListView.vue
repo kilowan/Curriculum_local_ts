@@ -32,7 +32,7 @@
           <edit-modal 
             :modal-title="'skill'"
             :component-data="skill"
-            :component-datatype="'Skill'"
+            :component-data-type="'Skill'"
             @update="update(skillList)"
           />
           <delete-modal 

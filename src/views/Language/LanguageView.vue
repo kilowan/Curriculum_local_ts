@@ -30,7 +30,7 @@
           <EditModal 
            :modal-title="'Idioma'"
            :component-data="language"
-           :component-datatype="'Language'"
+           :component-data-type="'Language'"
            @update="update(languageList)"
           />
           <DeleteModal 
@@ -49,7 +49,7 @@
     <AddModal 
       :guid="guid"
       :modal-title="'Idioma'"
-      :component-datatype="'Language'"
+      :component-data-type="'Language'"
       @save="save($event)"
     />
   </div>

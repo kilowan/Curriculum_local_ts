@@ -33,7 +33,7 @@
           <edit-modal 
             :modal-title="'formación'"
             :component-data="academic"
-            :component-datatype="'Academic'"
+            :component-data-type="'Academic'"
             @update="update(academicTrainingList)"
           />
           <delete-modal 
@@ -50,7 +50,7 @@
     </dd>
     <dd class="clear"></dd>
     <add-modal 
-      :component-datatype="'Academic'"
+      :component-data-type="'Academic'"
       :guid="guid"
       :modal-title="'Formación'"
       @save="save($event)"
