@@ -60,14 +60,14 @@
           />
         </ul>
       </div>
-    <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${getGUID()}`)">
+      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${getGUID()}`)">
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir {{ getModalTitle }}
     </b-link>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, ComponentType } from "../../Config/types";
+import { Component } from "../../Config/types";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
@@ -83,10 +83,6 @@ export default {
     componentData: {
       type: Array<Component>,
       required: true,
-    },
-    guid: {
-      type: String,
-      required: true
     },
     componentDataType: {
       type: String,
@@ -137,8 +133,10 @@ export default {
       return new Date(date).toLocaleDateString();
     },
     getGUID() {
-      return crypto.randomUUID();
-    },
+      this.$nextTick(() => {
+        return this.guid
+      });
+    }
   },
   computed: {
     getModalTitle() {
@@ -158,62 +156,52 @@ export default {
       case 'Experience':
         this.deleteModalMessage = "la experiencia";
         this.modalTitle = "Experiencia";
-        this.guid = crypto.randomUUID()
         break;
 
       case 'Languages':
         this.deleteModalMessage = "el idioma";
         this.modalTitle = "Idioma";
-        this.guid = crypto.randomUUID()
         break;
 
       case 'Other':
         this.deleteModalMessage = "el elemento";
         this.modalTitle = "Elemento";
-        this.guid = crypto.randomUUID()
         break;
 
       case 'Skills':
         this.deleteModalMessage = "la skill";
         this.modalTitle = "Skill";
-        this.guid = crypto.randomUUID()
         break;
 
       case 'Description':
         this.deleteModalMessage = "la descripción";
         this.modalTitle = "Descripcion";
-        this.guid = crypto.randomUUID()
         break;
 
       case 'Content':
         this.deleteModalMessage = "el contenido";
         this.modalTitle = "Contenido";
-        this.guid = crypto.randomUUID()
         break;
 
       case 'Contract':
         this.deleteModalMessage = "el contrato";
         this.modalTitle = "Contrato";
-        this.guid = crypto.randomUUID()
         break;
 
       case 'SubContent':
         this.deleteModalMessage = "el subcontenido";
         this.modalTitle = "SubContenido";
-        this.guid = crypto.randomUUID()
         break;
 
       case 'Project':
         this.deleteModalMessage = "el proyecto";
         this.modalTitle = "Proyecto";
-        this.guid = crypto.randomUUID()
         break;
 
       default:
         break;
     }
   });
-    this.$forceUpdate();
   },
 };
 </script>
