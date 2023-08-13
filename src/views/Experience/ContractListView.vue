@@ -5,21 +5,39 @@
       <div v-for="contract in contractsData" v-bind:key="contract.guid">
         <li>
           {{ contract.name }}
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-${contract.guid}`)">
+          <b-link
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${contract.guid}`)"
+          >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-${contract.guid}`)">
+          <b-link
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${contract.guid}`)"
+          >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
-          <contract-view :guid="contract.guid" :iconsHidden="iconsHidden" :contract="contract"
-            @update="refresh($event)" />
+          <contract-view
+            :guid="contract.guid"
+            :iconsHidden="iconsHidden"
+            :contract="contract"
+            @update="refresh($event)"
+          />
         </li>
-        <b-modal :id="`edit-contract-${contract.guid}`" title="Editar contrato" ok-title="Guardar"
-          @ok="update(contractsData)">
+        <b-modal
+          :id="`edit-contract-${contract.guid}`"
+          title="Editar contrato"
+          ok-title="Guardar"
+          @ok="update(contractsData)"
+        >
           <input type="text" v-model="contract.name" /> <br />
         </b-modal>
-        <delete-modal :modal-title="'Contrato'" :message="'el contrato'" :component-data="contract"
-          @remove="splice(contract.guid)" />
+        <delete-modal
+          :modal-title="'Contrato'"
+          :message="'el contrato'"
+          :component-data="contract"
+          @remove="splice(contract.guid)"
+        />
       </div>
     </ul>
   </li>
@@ -34,7 +52,7 @@ export default {
   name: "ContractsView",
   components: {
     ContractView,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     contracts: {
@@ -46,20 +64,20 @@ export default {
       required: true,
     },
   },
-  data() {
+  data(): any {
     return {
       contractsData: new Array<Component>(),
       projectData: "",
     };
   },
   methods: {
-    splice(index: string) {
+    splice(index: string): void {
       this.contractsData = this.contractsData.filter(
         (data: any) => data.guid !== index
       );
       this.$emit("update", this.contractsData);
     },
-    refresh(contract: Component) {
+    refresh(contract: Component): void {
       let filtered = this.contractsData.filter(
         (data: any) => data.guid !== contract.guid
       );
@@ -67,13 +85,13 @@ export default {
       this.contractsData = filtered;
       this.$emit("update", this.contractsData);
     },
-    update(contracts: Array<Component>) {
+    update(contracts: Array<Component>): void {
       this.$nextTick(() => {
-        this.$emit('update', contracts);
+        this.$emit("update", contracts);
       });
     },
   },
-  mounted() {
+  mounted(): void {
     this.contractsData = this.contracts;
   },
 };

@@ -2,7 +2,7 @@
   <div v-if="!hide">
     <dt id="complementaria" v-if="skillList">
       Skills
-      <b-link v-if="!iconsHidden" @click="(hide = true)">
+      <b-link v-if="!iconsHidden" @click="hide = true">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
@@ -11,18 +11,38 @@
         <div v-for="skill in skillList" v-bind:key="skill.guid">
           <li>
             <strong>{{ skill.name }}</strong>
-            <b-link :id="skill.guid" v-if="!iconsHidden" @click="$bvModal.show(`edit-${skill.guid}`)">
+            <b-link
+              :id="skill.guid"
+              v-if="!iconsHidden"
+              @click="$bvModal.show(`edit-${skill.guid}`)"
+            >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
-            <b-link v-if="!iconsHidden" :id="skill.guid" @click="$bvModal.show(`delete-${skill.guid}`)">
+            <b-link
+              v-if="!iconsHidden"
+              :id="skill.guid"
+              @click="$bvModal.show(`delete-${skill.guid}`)"
+            >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
-            <skill-view :skill="skill" :iconsHidden="iconsHidden" @update="refresh($event)" />
+            <skill-view
+              :skill="skill"
+              :iconsHidden="iconsHidden"
+              @update="refresh($event)"
+            />
           </li>
-          <edit-modal :modal-title="'skill'" :component-data="skill" :component-data-type="'Skill'"
-            @update="update(skillList)" />
-          <delete-modal :modal-title="'Skill'" :message="'la skill'" :component-data="skill"
-            @remove="splice(skill.guid)" />
+          <edit-modal
+            :modal-title="'skill'"
+            :component-data="skill"
+            :component-data-type="'Skill'"
+            @update="update(skillList)"
+          />
+          <delete-modal
+            :modal-title="'Skill'"
+            :message="'la skill'"
+            :component-data="skill"
+            @remove="splice(skill.guid)"
+          />
         </div>
       </ul>
       <div v-if="add">
@@ -49,30 +69,30 @@ export default {
   components: {
     SkillView,
     EditModal,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     iconsHidden: {
       type: Boolean,
       required: true,
-    }
+    },
   },
-  data() {
+  data(): any {
     return {
       hide: false,
       counter: 0,
       trainingNew: "",
       add: false,
       skillList: new Array<Component>(),
-      guid: crypto.randomUUID()
+      guid: crypto.randomUUID(),
     };
   },
   methods: {
-    cancel() {
+    cancel(): void {
       this.trainingNew = "";
       this.add = false;
     },
-    refresh(skill: Component) {
+    refresh(skill: Component): void {
       this.$nextTick(() => {
         var filtered = this.skillList.filter(
           (data: any) => data.guid !== skill.guid
@@ -86,7 +106,7 @@ export default {
         this.$emit("update", this.skillList);
       });
     },
-    splice(index: string) {
+    splice(index: string): void {
       this.$nextTick(() => {
         this.skillList = this.skillList.filter(
           (data: any) => data.guid !== index
@@ -94,18 +114,14 @@ export default {
         this.$emit("update", this.skillList);
       });
     },
-    update(skills: any) {
+    update(skills: Array<Component>): void {
       this.$nextTick(() => {
-        this.$emit('update', skills);
+        this.$emit("update", skills);
       });
     },
-    save(training: string) {
+    save(training: string): void {
       this.$nextTick(() => {
-        this.skillList.push(
-          new Component(
-            crypto.randomUUID(), 
-            training
-            ));
+        this.skillList.push(new Component(crypto.randomUUID(), training));
         this.cancel();
         this.$emit("update", this.skillList);
       });

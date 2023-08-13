@@ -1,18 +1,19 @@
 <template>
   <b-modal
-    :id="`delete-${componentData.guid }`"
+    :id="`delete-${componentData.guid}`"
     :title="`Eliminar ${modalTitle}`"
     ok-title="Eliminar"
     @ok="$emit('remove', componentData)"
   >
     <div style="text-align: center; margin: 0 auto; width: 380px">
-      <h1>¿Seguro que quieres eliminar {{ message }} {{ componentData.name }}?</h1>
+      <h1>
+        ¿Seguro que quieres eliminar {{ message }} {{ componentData.name }}?
+      </h1>
     </div>
   </b-modal>
 </template>
 
 <script lang="ts">
-
 export default {
   name: "DeleteModal",
   props: {
@@ -22,14 +23,14 @@ export default {
     },
     modalTitle: {
       type: String,
-      required: true
+      required: true,
     },
     message: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  data() {
+  data(): any {
     return {};
   },
 };

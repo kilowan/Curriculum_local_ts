@@ -1,7 +1,11 @@
 <template>
   <div>
-    <project-list-view :ref="'projects'" :projects="contractData.childrens" :iconsHidden="iconsHidden"
-      @update="update($event)" />
+    <project-list-view
+      :ref="'projects'"
+      :projects="contractData.childrens"
+      :iconsHidden="iconsHidden"
+      @update="update($event)"
+    />
     <div v-if="add">
       <input class="m-2" type="text" v-model="projectData" />
       <b-button class="m-2" @click="save(projectData)">Guardar</b-button>
@@ -26,18 +30,18 @@ export default {
   props: {
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
     contract: {
       type: Object,
-      required: true
+      required: true,
     },
     guid: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  data() {
+  data(): any {
     return {
       add: false,
       contractData: {} as Component,
@@ -46,7 +50,7 @@ export default {
     };
   },
   methods: {
-    save(project: string) {
+    save(project: string): void {
       let data = new Component(crypto.randomUUID(), project);
       this.projects.push(data);
       this.contractData.childrens.push(data);
@@ -54,19 +58,19 @@ export default {
       this.projectData = "";
       this.add = false;
     },
-    splice(guid: string) {
+    splice(guid: string): void {
       this.contractData.childrens = this.contractData.childrens.filter(
         (data: Component) => data.guid !== guid
       );
       this.projects = this.projects.filter((data: any) => data.guid !== guid);
       this.$emit("update", this.contractData);
     },
-    update(projects: Array<Component>) {
+    update(projects: Array<Component>): void {
       this.contractData.childrens = projects;
       this.$emit("update", this.contractData);
     },
   },
-  mounted() {
+  mounted(): void {
     this.contractData = this.contract;
     this.$refs.projects._data.projectsData = this.contract.childrens;
   },

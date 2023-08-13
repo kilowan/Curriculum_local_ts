@@ -2,44 +2,95 @@
   <div id="page-wrap" class="main">
     <div v-if="!active" id="contact-info" class="vcard">
       <h1 class="fn">
-        <input type="text" v-model="curriculum.fullName" placeholder="Nombre completo" />
+        <input
+          type="text"
+          v-model="curriculum.fullName"
+          placeholder="Nombre completo"
+        />
       </h1>
       <div>
         <b-icon icon="telephone-fill" aria-hidden="true" />
-        <input type="text" v-model="curriculum.phoneNumber" placeholder="Teléfono" /><br />
+        <input
+          type="text"
+          v-model="curriculum.phoneNumber"
+          placeholder="Teléfono"
+        /><br />
       </div>
-      <b-icon icon="envelope" aria-hidden="true" /><input type="text" v-model="curriculum.email" placeholder="Email" />
+      <b-icon icon="envelope" aria-hidden="true" /><input
+        type="text"
+        v-model="curriculum.email"
+        placeholder="Email"
+      />
     </div>
     <div v-else id="contact-info" class="vcard">
       <h1 class="fn">{{ curriculum.fullName }}</h1>
       <div>
         <b-icon icon="telephone-fill" aria-hidden="true" />
-        <span>{{ curriculum.phoneNumber }}</span><br />
+        <span>{{ curriculum.phoneNumber }}</span
+        ><br />
       </div>
       <div>
         <b-icon icon="envelope" aria-hidden="true" />
-        <a :href="'mailto:' + curriculum.email">{{ curriculum.email }}</a><br />
+        <a :href="'mailto:' + curriculum.email">{{ curriculum.email }}</a
+        ><br />
       </div>
     </div>
-    <social-media-list-view :ref="'socialMedia'" :iconsHidden="active" @update="updateSocialMedia($event)" />
+    <social-media-list-view
+      :ref="'socialMedia'"
+      :iconsHidden="active"
+      @update="updateSocialMedia($event)"
+    />
     <div id="objective">
-      <textarea v-if="!active" v-model="curriculum.description" placeholder="Descripción" />
+      <textarea
+        v-if="!active"
+        v-model="curriculum.description"
+        placeholder="Descripción"
+      />
       <p v-else>{{ curriculum.description }}</p>
     </div>
     <div class="clear"></div>
     <dl></dl>
     <dd class="clear"></dd>
     <dl>
-      <professional-experience-list-view :ref="'experience'" :iconsHidden="active" @update="updateExperience($event)" />
-      <academic-training-list-view :ref="'academic'" :iconsHidden="active" @update="updateAcademic($event)" />
-      <skill-list-view :ref="'skills'" :iconsHidden="active" @update="updateSkills($event)" />
-      <language-list-view :ref="'lang'" :iconsHidden="active" @update="updateLanguage($event)" />
-      <other-list-view :ref="'other'" :iconsHidden="active" @update="updateOther($event)" />
+      <professional-experience-list-view
+        :ref="'experience'"
+        :iconsHidden="active"
+        @update="updateExperience($event)"
+      />
+      <academic-training-list-view
+        :ref="'academic'"
+        :iconsHidden="active"
+        @update="updateAcademic($event)"
+      />
+      <skill-list-view
+        :ref="'skills'"
+        :iconsHidden="active"
+        @update="updateSkills($event)"
+      />
+      <language-list-view
+        :ref="'lang'"
+        :iconsHidden="active"
+        @update="updateLanguage($event)"
+      />
+      <other-list-view
+        :ref="'other'"
+        :iconsHidden="active"
+        @update="updateOther($event)"
+      />
     </dl>
     <div v-if="!isRead" id="buttons">
-      <b-button class="m-2" v-if="!active && exportable" @click="doPrint">Imprimir</b-button>
-      <b-button class="m-2" v-else-if="active" @click="cancel">Desacer</b-button>
-      <b-button v-if="!active && exportable" class="m-2" @click="getFile(curriculum)">Exportar</b-button>
+      <b-button class="m-2" v-if="!active && exportable" @click="doPrint"
+        >Imprimir</b-button
+      >
+      <b-button class="m-2" v-else-if="active" @click="cancel"
+        >Desacer</b-button
+      >
+      <b-button
+        v-if="!active && exportable"
+        class="m-2"
+        @click="getFile(curriculum)"
+        >Exportar</b-button
+      >
       <file-reader-data v-if="imp" type="file" @output="file($event)" />
       <b-button v-if="!imp" class="m-2" @click="imp = true">Importar</b-button>
     </div>
@@ -67,23 +118,23 @@ export default {
     SkillListView,
     LanguageListView,
     SocialMediaListView,
-    FileReaderData
+    FileReaderData,
   },
-  data() {
+  data(): any {
     return {
       active: false,
       add: false,
-      description: '',
+      description: "",
       curriculum: {} as CurriculumDetail,
       iconsHidden: false,
       reader: {} as FileReader,
       isRead: false,
       exportable: false,
-      imp: false
+      imp: false,
     };
   },
   methods: {
-    file(input: any) {
+    file(input: string): void {
       this.$nextTick(() => {
         var json = JSON.parse(input);
         this.curriculum = json;
@@ -92,7 +143,7 @@ export default {
         this.curriculum.phoneNumber = json.phoneNumber;
         this.curriculum.email = json.email;
         this.curriculum.fullName = json.fullName;
-        this.$refs.socialMedia._data.socialMediaList = json.socialMedia
+        this.$refs.socialMedia._data.socialMediaList = json.socialMedia;
         this.$refs.experience._data.experienceList = json.experience;
         this.$refs.academic._data.academicTrainingList = json.academicTraining;
         this.$refs.lang._data.languageList = json.languageList;
@@ -102,20 +153,40 @@ export default {
         this.EditMode();
       });
     },
-    ParseLegacy(input: CurriculumDetail) {
+    ParseLegacy(input: CurriculumDetail): void {
       if (input.guid == undefined) input.guid = crypto.randomUUID();
-      if (input.academicTraining != null) input.academicTraining.forEach((element: Component) => this.ParseComponent(element));
-      if (input.experience != null) input.experience.forEach((element: Component) => this.ParseComponent(element));
-      if (input.languageList != null) input.languageList.forEach((element: Component) => this.ParseComponent(element));
-      if (input.otherData != null) input.otherData.forEach((element: Component) => this.ParseComponent(element));
-      if (input.skillList != null) input.skillList.forEach((element: Component) => this.ParseComponent(element));
-      if (input.socialMedia != null) input.socialMedia.forEach((element: Component) => this.ParseComponent(element));
+      if (input.academicTraining != null)
+        input.academicTraining.forEach((element: Component) =>
+          this.ParseComponent(element)
+        );
+      if (input.experience != null)
+        input.experience.forEach((element: Component) =>
+          this.ParseComponent(element)
+        );
+      if (input.languageList != null)
+        input.languageList.forEach((element: Component) =>
+          this.ParseComponent(element)
+        );
+      if (input.otherData != null)
+        input.otherData.forEach((element: Component) =>
+          this.ParseComponent(element)
+        );
+      if (input.skillList != null)
+        input.skillList.forEach((element: Component) =>
+          this.ParseComponent(element)
+        );
+      if (input.socialMedia != null)
+        input.socialMedia.forEach((element: Component) =>
+          this.ParseComponent(element)
+        );
     },
-    ParseComponent(input: Component) {
+    ParseComponent(input: Component): void {
       if (input.guid == undefined) input.guid = crypto.randomUUID();
-      input.childrens?.forEach((element: Component) => this.ParseComponent(element));
+      input.childrens?.forEach((element: Component) =>
+        this.ParseComponent(element)
+      );
     },
-    EditMode() {
+    EditMode(): void {
       this.$nextTick(() => {
         this.exp();
         this.comp();
@@ -124,39 +195,40 @@ export default {
         this.other();
       });
     },
-    cancel() {
+    cancel(): void {
       this.active = false;
       this.$nextTick(() => {
         this.imp = false;
         this.EditMode();
       });
     },
-    doPrint() {
+    doPrint(): void {
       this.active = true;
       this.$nextTick(() => {
         this.EditMode();
         this.$nextTick(() => {
-          let mywindow = window.open('', '_blank');
+          let mywindow = window.open("", "_blank");
           mywindow!.document.head.innerHTML = document.head.innerHTML;
           mywindow!.document.body.innerHTML = document.body.innerHTML;
           //document.getElementById('page-wrap')!.innerHTML;
-          let noPrintableContent: any = mywindow!.document.getElementById('buttons');
+          let noPrintableContent: any =
+            mywindow!.document.getElementById("buttons");
           noPrintableContent.parentNode.removeChild(noPrintableContent);
           mywindow!.print();
           mywindow!.close();
         });
       });
     },
-    descargarArchivo(contenidoEnBlob: Blob, nombreArchivo: string) {
+    descargarArchivo(contenidoEnBlob: Blob, nombreArchivo: string): void {
       let reader = new FileReader();
       reader.onload = function (event) {
-        let save = document.createElement('a');
+        let save = document.createElement("a");
         if (event.target && event.target.result) {
           save.href = event.target.result.toString();
         }
-        save.target = '_blank';
-        save.download = nombreArchivo || 'archivo.dat';
-        let clicEvent = new MouseEvent('click', {
+        save.target = "_blank";
+        save.download = nombreArchivo || "archivo.dat";
+        let clicEvent = new MouseEvent("click", {
           view: window,
           bubbles: true,
           cancelable: true,
@@ -166,41 +238,41 @@ export default {
       };
       reader.readAsDataURL(contenidoEnBlob);
     },
-    updateSkills(skills: any) {
+    updateSkills(skills: Array<Component>): void {
       this.curriculum.skillList = skills;
       this.exportable = true;
       this.EditMode();
     },
-    updateAcademic(media: any) {
+    updateAcademic(media: Array<Component>): void {
       this.curriculum.academicTraining = media;
       this.exportable = true;
       this.EditMode();
     },
-    updateLanguage(language: any) {
+    updateLanguage(language: Array<Component>): void {
       this.curriculum.languageList = language;
       this.exportable = true;
       this.EditMode();
     },
-    updateOther(media: any) {
+    updateOther(media: Array<Component>): void {
       this.curriculum.otherData = media;
       this.exportable = true;
       this.EditMode();
     },
-    updateExperience(experience: any) {
+    updateExperience(experience: Array<Component>): void {
       this.$nextTick(() => {
         this.curriculum.experience = experience;
         this.exportable = true;
         this.EditMode();
       });
     },
-    updateSocialMedia(data: any) {
+    updateSocialMedia(data: Array<Component>): void {
       this.$nextTick(() => {
         this.curriculum.socialMedia = data;
         this.exportable = true;
         this.EditMode();
       });
     },
-    exp: function () {
+    exp(): void {
       let experiencia: HTMLElement | null =
         document.querySelector("#experiencia");
       let experience: HTMLElement | null =
@@ -208,7 +280,7 @@ export default {
       if (experiencia && experience)
         experiencia.style.height = experience.clientHeight + "px";
     },
-    comp: function () {
+    comp(): void {
       let complementaria: HTMLElement | null =
         document.querySelector("#complementaria");
       let complementary: HTMLElement | null =
@@ -216,25 +288,25 @@ export default {
       if (complementaria && complementary)
         complementaria.style.height = complementary.clientHeight + "px";
     },
-    academic: function () {
+    academic(): void {
       let academica: HTMLElement | null = document.querySelector("#academica");
       let academic: HTMLElement | null = document.querySelector("#academic");
       if (academica && academic)
         academica.style.height = academic.clientHeight + "px";
     },
-    lang: function () {
+    lang(): void {
       let idiomas: HTMLElement | null = document.querySelector("#idiomas");
       let languages: HTMLElement | null = document.querySelector("#languages");
       if (idiomas && languages)
         idiomas.style.height = languages.clientHeight + "px";
     },
-    other: function () {
+    other(): void {
       let otros: HTMLElement | null = document.querySelector("#otros");
       let other: HTMLElement | null = document.querySelector("#other");
       if (otros && other) otros.style.height = other.clientHeight + "px";
     },
 
-    getFile(contenido: any) {
+    getFile(contenido: string): void {
       const a = document.createElement("a");
       const archivo = new Blob([JSON.stringify(contenido)], { type: "" });
       //new Blob([contenido], { type: 'text/plain' });
@@ -246,8 +318,8 @@ export default {
       URL.revokeObjectURL(url);
     },
   },
-  mounted() {
-    this.curriculum = new CurriculumDetail(crypto.randomUUID(), '', '', '', '');
+  mounted(): void {
+    this.curriculum = new CurriculumDetail(crypto.randomUUID(), "", "", "", "");
   },
 };
 </script>

@@ -25,7 +25,7 @@ export interface IComponent {
   componentDataType?: string;
 }
 export class Component implements IComponent {
-  constructor(guid: string, name: string){
+  constructor(guid: string, name: string) {
     this.guid = guid;
     this.name = name;
     this.childrens = new Array<Component>();
@@ -43,7 +43,13 @@ export class Component implements IComponent {
   componentDataType?: string;
 }
 export class CurriculumDetail implements ICurriculumDetail {
-  constructor(guid: string, fullName: string, description: string, phoneNumber: string, email: string) {
+  constructor(
+    guid: string,
+    fullName: string,
+    description: string,
+    phoneNumber: string,
+    email: string
+  ) {
     this.guid = guid;
     this.fullName = fullName;
     this.description = description;
@@ -85,5 +91,5 @@ export enum ComponentType {
   Contract = 8,
   Project = 9,
   Description = 10,
-  Value = 11
+  Value = 11,
 }

@@ -2,9 +2,7 @@
   <div>
     <ul>
       <li>Centro/Lugar: {{ companyData.place }}</li>
-      <li>
-        Fecha inicio: {{ formatDate(companyData.initDate) }}
-      </li>
+      <li>Fecha inicio: {{ formatDate(companyData.initDate) }}</li>
       <li v-if="company.finishDate">
         Fecha Fin: {{ formatDate(companyData.finishDate) }}
       </li>
@@ -38,18 +36,18 @@ export default {
   props: {
     company: {
       type: Object,
-      required: true
+      required: true,
     },
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
     guid: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  data() {
+  data(): any {
     return {
       add: false,
       contractData: "",
@@ -58,11 +56,11 @@ export default {
     };
   },
   methods: {
-    update(contracts: Array<Component>) {
+    update(contracts: Array<Component>): void {
       this.companyData.childrens = contracts;
       this.$emit("update", this.companyData);
     },
-    save(contract: any) {
+    save(contract: Component): void {
       this.$nextTick(() => {
         let data = new Component(crypto.randomUUID(), contract);
         this.contractList.push(data);
@@ -72,15 +70,15 @@ export default {
         this.$emit("update", this.companyData);
       });
     },
-    cancel() {
+    cancel(): void {
       this.contractData = "";
       this.add = false;
     },
-    formatDate(date: any) {
+    formatDate(date: string): string {
       return new Date(date).toLocaleDateString();
-    }
+    },
   },
-  mounted() {
+  mounted(): void {
     this.companyData = this.company;
     this.$refs.contractt._data.contractsData = this.company.childrens;
   },
