@@ -16,7 +16,7 @@
         <b-icon icon="x-circle-fill" aria-hidden="true" />
       </b-link>
       <b-modal
-        :id="`edit-social-media-${socialMediaData.guid}`"
+        :id="`edit-${socialMediaData.guid}`"
         title="Editar red social"
         ok-title="Guardar"
         @ok="edit(socialMediaData)"
@@ -104,17 +104,17 @@ export default {
       var type = this.types.find(
         (element: any) => element.value === socialMedia.type
       );
-      type.disabled = true;
+      if (type !== undefined) type.disabled = true;
       this.$emit("update", this.socialMediaList);
       this.socialmedia = {} as Component;
       this.count--;
     },
     del(media: Component) {
       this.$nextTick(() => {
-        var type = this.types.find(
+        let type = this.types.find(
           (element: any) => element.value === media.type
         );
-        type.disabled = false;
+        if (type !== undefined) type.disabled = false;
         this.socialMediaList = this.socialMediaList.filter(
           (data: any) => data.guid !== media.guid
         );
@@ -123,10 +123,10 @@ export default {
       });
     },
     edit(data: Component) {
-      var sm = this.socialMediaList.find(
+      let sm = this.socialMediaList.find(
         (element: any) => element.type === data.type
       );
-      sm.name = data.name;
+      if (sm !== undefined) sm.name = data.name;
 
       this.$emit('update', data);
     },

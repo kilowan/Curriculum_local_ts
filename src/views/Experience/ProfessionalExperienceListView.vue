@@ -11,49 +11,27 @@
         <div v-for="company in experienceList" v-bind:key="company.guid">
           <li>
             {{ company.name }}
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-${company.guid}`)"
-            >
+            <b-link v-if="!iconsHidden" :id="company.guid" @click="$bvModal.show('edit-modal')">
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-${company.guid}`)"
-            >
+            <b-link v-if="!iconsHidden" :id="company.guid" @click="$bvModal.show('delete-modal')">
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
-            <professional-experience-view
-              :company="company"
-              :iconsHidden="iconsHidden"
-              @update="refresh($event)"
-            />
+            <professional-experience-view :guid="company.guid" :company="company" :iconsHidden="iconsHidden"
+              @update="refresh($event)" />
           </li>
-          <EditModal 
-            :modal-title="'Experiencia'"
-            :component-data="company"
-            :component-data-type="'Experience'"
-            @update="update($event)"
-          />
-          <DeleteModal
-            :modal-title="'Experiencia'"
-            :message="'la experiencia'"
-            :component-data="company"
-            @remove="deleteExperience($event)"
-          />
+          <EditModal :modal-title="'Experiencia'" :component-data="company" :component-data-type="'Experience'"
+            @update="update($event)" />
+          <DeleteModal :modal-title="'Experiencia'" :message="'la experiencia'" :component-data="company"
+            @remove="deleteExperience($event)" />
         </div>
       </ul>
-      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${guid}`)">
+      <b-link v-if="!iconsHidden" :id="guid" @click="$bvModal.show('add-modal')">
         <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir experiencia
       </b-link>
     </dd>
     <dd class="clear"></dd>
-    <AddModal
-      :guid="guid"
-      :modal-title="'Experiencia'"
-      :component-data-type="'Experience'"
-      @save="save($event)"
-    />
+    <AddModal :guid="guid" :modal-title="'Experiencia'" :component-data-type="'Experience'" @save="save($event)" />
   </div>
 </template>
 
@@ -98,33 +76,29 @@ export default {
       ];
     },
     deepChange(input: Component) {
-      this.experienceList.find((data: Component) => { 
-        if(data.guid === input.guid) data = input;
-        else {
-           data.childrens?.forEach((data2: Component) => {
-             this.deepChange(data2);
+      this.experienceList.find((data: Component) => {
+        if (data.guid === input.guid) data = input; else {
+          data.childrens?.forEach((data2: Component) => {
+            this.deepChange(data2);
           });
         }
       });
     },
     save(experience: any) {
       this.$nextTick(() => {
-        this.experienceList.push({
-          guid: experience.guid,
-          initDate: experience.initDate,
-          finishDate: experience.finishDate,
-          graduationDate: experience.graduationDate,
-          place: experience.place,
-          name: experience.name,
-          childrens: new Array<Component>(),
-          componentDataType: 'Experience'
-        });
+        let data = new Component(experience.guid, experience.name);
+        data.initDate = experience.initDate;
+        data.finishDate = experience.finishDate;
+        data.graduationDate = experience.graduationDate;
+        data.place = experience.place;
+        data.componentDataType = 'Experience';
+        this.experienceList.push(data);
         this.$emit("update", this.experienceList);
         this.experience = {} as Component;
       });
     },
     refresh(experience: Component) {
-      var exp = this.experienceList.filter(
+      let exp = this.experienceList.filter(
         (data: any) => data.guid !== experience.guid
       );
       exp.push(experience);

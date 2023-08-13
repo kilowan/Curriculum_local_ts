@@ -1,18 +1,14 @@
 <template>
   <div>
-    <project-list-view
-      :ref="'projects'"
-      :projects="contractData.childrens"
-      :iconsHidden="iconsHidden"
-      @update="update($event)"
-    />
+    <project-list-view :ref="'projects'" :projects="contractData.childrens" :iconsHidden="iconsHidden"
+      @update="update($event)" />
     <div v-if="add">
       <input class="m-2" type="text" v-model="projectData" />
       <b-button class="m-2" @click="save(projectData)">Guardar</b-button>
       <b-button class="m-2">Cancelar</b-button>
     </div>
     <div>
-      <b-link v-if="!add && !iconsHidden" @click="add = true">
+      <b-link v-if="!add && !iconsHidden" :id="guid" @click="add = true">
         <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir proyecto
       </b-link>
     </div>
@@ -30,12 +26,16 @@ export default {
   props: {
     iconsHidden: {
       type: Boolean,
-      required: true,
+      required: true
     },
     contract: {
       type: Object,
-      required: true,
+      required: true
     },
+    guid: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
@@ -47,25 +47,18 @@ export default {
   },
   methods: {
     save(project: string) {
-      this.projects.push({
-        guid: crypto.randomUUID(),
-        name: project,
-        childrens: new Array<Component>(),
-      });
-      this.contractData.childrens.push({
-        guid: crypto.randomUUID(),
-        name: project,
-        childrens: new Array<Component>(),
-      });
+      let data = new Component(crypto.randomUUID(), project);
+      this.projects.push(data);
+      this.contractData.childrens.push(data);
       this.$emit("update", this.contractData);
       this.projectData = "";
       this.add = false;
     },
-    splice(index: string) {
+    splice(guid: string) {
       this.contractData.childrens = this.contractData.childrens.filter(
-        (data: any) => data.guid !== index
+        (data: Component) => data.guid !== guid
       );
-      this.projects = this.projects.filter((data: any) => data.guid !== index);
+      this.projects = this.projects.filter((data: any) => data.guid !== guid);
       this.$emit("update", this.contractData);
     },
     update(projects: Array<Component>) {

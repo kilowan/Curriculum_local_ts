@@ -5,38 +5,21 @@
       <div v-for="contract in contractsData" v-bind:key="contract.guid">
         <li>
           {{ contract.name }}
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-${contract.guid}`)"
-          >
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-${contract.guid}`)">
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-${contract.guid}`)"
-          >
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-${contract.guid}`)">
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
-          <contract-view
-            :iconsHidden="iconsHidden"
-            :contract="contract"
-            @update="refresh($event)"
-          />
+          <contract-view :guid="contract.guid" :iconsHidden="iconsHidden" :contract="contract"
+            @update="refresh($event)" />
         </li>
-        <b-modal
-          :id="`edit-contract-${contract.guid}`"
-          title="Editar contrato"
-          ok-title="Guardar"
-          @ok="update(contractsData)"
-        >
+        <b-modal :id="`edit-contract-${contract.guid}`" title="Editar contrato" ok-title="Guardar"
+          @ok="update(contractsData)">
           <input type="text" v-model="contract.name" /> <br />
         </b-modal>
-        <delete-modal 
-            :modal-title="'Contrato'"
-            :message="'el contrato'"
-            :component-data="contract"
-            @remove="splice(contract.guid)"
-          />
+        <delete-modal :modal-title="'Contrato'" :message="'el contrato'" :component-data="contract"
+          @remove="splice(contract.guid)" />
       </div>
     </ul>
   </li>
@@ -70,21 +53,21 @@ export default {
     };
   },
   methods: {
-      splice(index: string) {
-        this.contractsData = this.contractsData.filter(
-          (data: any) => data.guid !== index
-        );
-        this.$emit("update", this.contractsData);
-      },
-      refresh(contract: any) {
-        var filtered = this.contractsData.filter(
-          (data: any) => data.guid !== contract.guid
-        );
-        filtered.push(contract);
-        this.contractsData = filtered;
-        this.$emit("update", this.contractsData);
+    splice(index: string) {
+      this.contractsData = this.contractsData.filter(
+        (data: any) => data.guid !== index
+      );
+      this.$emit("update", this.contractsData);
     },
-    update(contracts: any) {
+    refresh(contract: Component) {
+      let filtered = this.contractsData.filter(
+        (data: any) => data.guid !== contract.guid
+      );
+      filtered.push(contract);
+      this.contractsData = filtered;
+      this.$emit("update", this.contractsData);
+    },
+    update(contracts: Array<Component>) {
       this.$nextTick(() => {
         this.$emit('update', contracts);
       });

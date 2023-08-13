@@ -11,36 +11,18 @@
         <div v-for="skill in skillList" v-bind:key="skill.guid">
           <li>
             <strong>{{ skill.name }}</strong>
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-${skill.guid}`)"
-            >
+            <b-link :id="skill.guid" v-if="!iconsHidden" @click="$bvModal.show(`edit-${skill.guid}`)">
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-${skill.guid}`)"
-            >
+            <b-link v-if="!iconsHidden" :id="skill.guid" @click="$bvModal.show(`delete-${skill.guid}`)">
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
-            <skill-view
-              :skill="skill"
-              :iconsHidden="iconsHidden"
-              @update="refresh($event)"
-            />
+            <skill-view :skill="skill" :iconsHidden="iconsHidden" @update="refresh($event)" />
           </li>
-          <edit-modal 
-            :modal-title="'skill'"
-            :component-data="skill"
-            :component-data-type="'Skill'"
-            @update="update(skillList)"
-          />
-          <delete-modal 
-            :modal-title="'Skill'"
-            :message="'la skill'"
-            :component-data="skill"
-            @remove="splice(skill.guid)"
-          />
+          <edit-modal :modal-title="'skill'" :component-data="skill" :component-data-type="'Skill'"
+            @update="update(skillList)" />
+          <delete-modal :modal-title="'Skill'" :message="'la skill'" :component-data="skill"
+            @remove="splice(skill.guid)" />
         </div>
       </ul>
       <div v-if="add">
@@ -73,7 +55,7 @@ export default {
     iconsHidden: {
       type: Boolean,
       required: true,
-    },
+    }
   },
   data() {
     return {
@@ -82,6 +64,7 @@ export default {
       trainingNew: "",
       add: false,
       skillList: new Array<Component>(),
+      guid: crypto.randomUUID()
     };
   },
   methods: {
@@ -118,11 +101,11 @@ export default {
     },
     save(training: string) {
       this.$nextTick(() => {
-        this.skillList.push({
-          guid: crypto.randomUUID(),
-          name: training,
-          childrens: new Array<Component>(),
-        });
+        this.skillList.push(
+          new Component(
+            crypto.randomUUID(), 
+            training
+            ));
         this.cancel();
         this.$emit("update", this.skillList);
       });

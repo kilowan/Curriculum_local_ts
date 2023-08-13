@@ -1,37 +1,20 @@
 <template>
   <div>
     <ul>
-      <div
-        v-for="description in projectData.childrens"
-        v-bind:key="description.guid"
-      >
+      <div v-for="description in projectData.childrens" v-bind:key="description.guid">
         <li>
           {{ description.name }}
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-${description.guid}`)"
-          >
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-${description.guid}`)">
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-${description.guid}`)"
-          >
+          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-${description.guid}`)">
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
         </li>
-        <EditModal 
-          :modal-title="'descripción'"
-          :component-data="description"
-          :component-data-type="'Description'"
-          @cancel="cancel"
-        />
-        <DeleteModal 
-          :modal-title="'Descripción'"
-          :component-data="description"
-          :message="'la descripción'"
-          @remove="splice(description.guid)"
-        />
+        <EditModal :modal-title="'descripción'" :component-data="description" :component-data-type="'Description'"
+          @cancel="cancel" />
+        <DeleteModal :modal-title="'Descripción'" :component-data="description" :message="'la descripción'"
+          @remove="splice(description.guid)" />
       </div>
     </ul>
     <div v-if="add">
@@ -39,7 +22,7 @@
       <b-button @click="save(desc)">Guardar</b-button>
       <b-button @click="cancel">Cancelar</b-button>
     </div>
-    <b-link v-if="!add && !iconsHidden" @click="add = true">
+    <b-link v-if="!add && !iconsHidden" :id="guid" @click="add = true">
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir descripción
     </b-link>
   </div>
@@ -59,12 +42,16 @@ export default {
   props: {
     project: {
       type: Object,
-      required: true,
+      required: true
     },
     iconsHidden: {
       type: Boolean,
-      required: true,
+      required: true
     },
+    guid: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
@@ -81,14 +68,9 @@ export default {
     },
     save(description: string) {
       this.$nextTick(() => {
-        this.descriptions.push({
-          guid: crypto.randomUUID(),
-          name: description,
-        });
-        this.projectData.childrens.push({
-          guid: crypto.randomUUID(),
-          name: description,
-        });
+        let element = new Component(crypto.randomUUID(), description);
+        this.descriptions.push(element);
+        this.projectData.childrens.push(element);
         this.add = false;
         this.desc = "";
         this.$emit("update", this.projectData);
