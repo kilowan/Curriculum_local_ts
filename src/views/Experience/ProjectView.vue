@@ -1,20 +1,37 @@
 <template>
   <div>
     <ul>
-      <div v-for="description in projectData.childrens" v-bind:key="description.guid">
+      <div
+        v-for="description in projectData.childrens"
+        v-bind:key="description.guid"
+      >
         <li>
           {{ description.name }}
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-${description.guid}`)">
+          <b-link
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${description.guid}`)"
+          >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-${description.guid}`)">
+          <b-link
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${description.guid}`)"
+          >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
         </li>
-        <EditModal :modal-title="'descripción'" :component-data="description" :component-data-type="'Description'"
-          @cancel="cancel" />
-        <DeleteModal :modal-title="'Descripción'" :component-data="description" :message="'la descripción'"
-          @remove="splice(description.guid)" />
+        <EditModal
+          :modal-title="'descripción'"
+          :component-data="description"
+          :component-data-type="'Description'"
+          @cancel="cancel"
+        />
+        <DeleteModal
+          :modal-title="'Descripción'"
+          :component-data="description"
+          :message="'la descripción'"
+          @remove="splice(description.guid)"
+        />
       </div>
     </ul>
     <div v-if="add">
@@ -37,23 +54,23 @@ export default {
   name: "ProjectView",
   components: {
     EditModal,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     project: {
       type: Object,
-      required: true
+      required: true,
     },
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
     guid: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  data() {
+  data(): any {
     return {
       add: false,
       description: "",
@@ -63,10 +80,10 @@ export default {
     };
   },
   methods: {
-    cancel() {
+    cancel(): void {
       this.add = false;
     },
-    save(description: string) {
+    save(description: string): void {
       this.$nextTick(() => {
         let element = new Component(crypto.randomUUID(), description);
         this.descriptions.push(element);
@@ -76,18 +93,17 @@ export default {
         this.$emit("update", this.projectData);
       });
     },
-    splice(index: string) {
-      this.projectData.childrens =
-        this.projectData.childrens.filter(
-          (data: any) => data.guid !== index
-        );
+    splice(guid: string): void {
+      this.projectData.childrens = this.projectData.childrens.filter(
+        (data: Component) => data.guid !== guid
+      );
       this.descriptions = this.descriptions.filter(
-        (data: any) => data.guid !== index
+        (data: Component) => data.guid !== guid
       );
       this.$emit("update", this.projectData);
     },
   },
-  mounted() {
+  mounted(): void {
     this.projectData = this.project;
   },
 };

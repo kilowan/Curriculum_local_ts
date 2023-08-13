@@ -38,7 +38,7 @@ export default {
       required: true,
     },
   },
-  data() {
+  data(): any {
     return {
       skillData: {} as Component,
       contents: new Array<Component>(),
@@ -47,11 +47,11 @@ export default {
     };
   },
   methods: {
-    cancel() {
+    cancel(): void {
       this.element = "";
       this.add = false;
     },
-    save(content: string) {
+    save(content: string): void {
       this.$nextTick(() => {
         this.$refs.contents._data.contentsData.push({
           guid: crypto.randomUUID(),
@@ -62,7 +62,7 @@ export default {
         this.$emit("update", this.$refs.contents._data.contentsData);
       });
     },
-    update(contents: Array<Component>) {
+    update(contents: Array<Component>): void {
       this.$nextTick(() => {
         this.$refs.contents._data.contentsData = contents;
         this.$emit("update", this.skillData);

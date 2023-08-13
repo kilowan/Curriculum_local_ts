@@ -1,12 +1,15 @@
 <template>
   <div>
     <div
-      v-for="(socialMediaData) in socialMediaList"
+      v-for="socialMediaData in socialMediaList"
       v-bind:key="socialMediaData.guid"
       class="d-flex"
     >
       <social-media-view :socialMediaData="socialMediaData" />
-      <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-${socialMediaData.guid}`)">
+      <b-link
+        v-if="!iconsHidden"
+        @click="$bvModal.show(`edit-${socialMediaData.guid}`)"
+      >
         <b-icon icon="pencil-square" aria-hidden="true" />
       </b-link>
       <b-link
@@ -31,14 +34,18 @@
         ></b-form-select>
         <br />
       </b-modal>
-      <delete-modal 
+      <delete-modal
         :modal-title="'Red social'"
         :message="'la red social'"
         :component-data="socialMediaData"
         @remove="del(socialMediaData)"
       />
     </div>
-    <b-link v-if="!iconsHidden" :hidden="count === 0" @click="$bvModal.show('add-social-media')">
+    <b-link
+      v-if="!iconsHidden"
+      :hidden="count === 0"
+      @click="$bvModal.show('add-social-media')"
+    >
       <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir Red social
     </b-link>
     <b-modal
@@ -76,16 +83,16 @@ export default {
   name: "SocialMediaListView",
   components: {
     SocialMediaView,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     iconsHidden: {
       type: Boolean,
       required: true,
       default: false,
-    }
+    },
   },
-  data() {
+  data(): any {
     return {
       types: [
         { value: SocialMediaType.Linkedin, text: "Linkedin", disabled: false },
@@ -98,7 +105,7 @@ export default {
     };
   },
   methods: {
-    add(socialMedia: Component) {
+    add(socialMedia: Component): void {
       socialMedia.guid = crypto.randomUUID();
       this.socialMediaList.push(socialMedia);
       var type = this.types.find(
@@ -109,7 +116,7 @@ export default {
       this.socialmedia = {} as Component;
       this.count--;
     },
-    del(media: Component) {
+    del(media: Component): void {
       this.$nextTick(() => {
         let type = this.types.find(
           (element: any) => element.value === media.type
@@ -122,13 +129,13 @@ export default {
         this.$emit("update", this.socialMediaList);
       });
     },
-    edit(data: Component) {
+    edit(data: Component): void {
       let sm = this.socialMediaList.find(
         (element: any) => element.type === data.type
       );
       if (sm !== undefined) sm.name = data.name;
 
-      this.$emit('update', data);
+      this.$emit("update", data);
     },
   },
 };

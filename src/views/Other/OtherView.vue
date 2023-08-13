@@ -1,18 +1,33 @@
 <template>
   <div>
     <ul>
-      <div v-for="(value) in values" v-bind:key="value.guid">
+      <div v-for="value in values" v-bind:key="value.guid">
         <li v-if="!hide">
           {{ value.name }}
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`edit-${value.guid}`)">
+          <b-link
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${value.guid}`)"
+          >
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
-          <b-link v-if="!iconsHidden" @click="$bvModal.show(`delete-${value.guid}`)">
+          <b-link
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${value.guid}`)"
+          >
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
         </li>
-        <EditModal :modal-title="'valor'" :component-data="value" :component-data-type="'Value'" />
-        <DeleteModal :modal-title="'valor'" :component-data="value" :message="'el valor'" @remove="splice(value.guid)" />
+        <EditModal
+          :modal-title="'valor'"
+          :component-data="value"
+          :component-data-type="'Value'"
+        />
+        <DeleteModal
+          :modal-title="'valor'"
+          :component-data="value"
+          :message="'el valor'"
+          @remove="splice(value.guid)"
+        />
       </div>
       <div v-if="!iconsHidden">
         <b-link @click="$bvModal.show(`add-${guid}`)">
@@ -20,7 +35,12 @@
         </b-link>
       </div>
     </ul>
-    <AddModal :guid="guid" :modal-title="'valor'" :component-data-type="'Value'" @save="save($event)" />
+    <AddModal
+      :guid="guid"
+      :modal-title="'valor'"
+      :component-data-type="'Value'"
+      @save="save($event)"
+    />
   </div>
 </template>
 
@@ -35,7 +55,7 @@ export default {
   components: {
     AddModal,
     EditModal,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     otherData: {
@@ -47,7 +67,7 @@ export default {
       required: true,
     },
   },
-  data() {
+  data(): any {
     return {
       guid: crypto.randomUUID(),
       other: {} as Component,
@@ -58,39 +78,29 @@ export default {
     };
   },
   methods: {
-    cancel() {
+    cancel(): void {
       this.valueNew = "";
       this.add = false;
     },
-    save(value: string) {
+    save(value: string): void {
       this.$nextTick(() => {
-        this.other.childrens.push(
-          new Component(
-            crypto.randomUUID(), 
-            value
-          ));
-        this.values.push(
-          new Component(
-            crypto.randomUUID(),
-            value,
-          ));
+        this.other.childrens.push(new Component(crypto.randomUUID(), value));
+        this.values.push(new Component(crypto.randomUUID(), value));
         this.cancel();
         this.$emit("update", this.other);
       });
     },
-    splice(index: string) {
+    splice(index: string): void {
       this.$nextTick(() => {
         this.other.childrens = this.other.childrens.filter(
           (data: any) => data.guid !== index
         );
-        this.values = this.values.filter(
-          (data: any) => data.guid !== index
-        );
+        this.values = this.values.filter((data: any) => data.guid !== index);
         this.$emit("update", this.other);
       });
     },
   },
-  mounted() {
+  mounted(): void {
     this.other = this.otherData;
     this.other.childrens = this.otherData.childrens;
   },

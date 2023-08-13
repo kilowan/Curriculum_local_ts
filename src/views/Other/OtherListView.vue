@@ -2,7 +2,7 @@
   <div v-if="!hide">
     <dt id="otros" class="otros" v-if="other">
       Otros datos
-      <b-link v-if="!iconsHidden" @click="(hide = true)">
+      <b-link v-if="!iconsHidden" @click="hide = true">
         <b-icon icon="eye-slash-fill" />
       </b-link>
     </dt>
@@ -11,18 +11,38 @@
         <div v-for="otherData in other" v-bind:key="otherData.guid">
           <li>
             {{ otherData.name }}
-            <b-link v-if="!iconsHidden" :id="otherData.guid" @click="$bvModal.show(`edit-${otherData.guid}`)">
+            <b-link
+              v-if="!iconsHidden"
+              :id="otherData.guid"
+              @click="$bvModal.show(`edit-${otherData.guid}`)"
+            >
               <b-icon icon="pencil-square" aria-hidden="true" />
             </b-link>
-            <b-link v-if="!iconsHidden" :id="otherData.guid" @click="$bvModal.show(`delete-${otherData.guid}`)">
+            <b-link
+              v-if="!iconsHidden"
+              :id="otherData.guid"
+              @click="$bvModal.show(`delete-${otherData.guid}`)"
+            >
               <b-icon icon="x-circle-fill" aria-hidden="true" />
             </b-link>
-            <other-view :otherData="otherData" :iconsHidden="iconsHidden" @update="refresh($event)" />
+            <other-view
+              :otherData="otherData"
+              :iconsHidden="iconsHidden"
+              @update="refresh($event)"
+            />
           </li>
-          <edit-modal :modal-title="'Otros'" :component-data="otherData" :component-data-type="'Other'"
-            @update="update($event)" />
-          <delete-modal :modal-title="'elemento'" :message="'el elemento'" :component-data="otherData"
-            @remove="splice(otherData.guid)" />
+          <edit-modal
+            :modal-title="'Otros'"
+            :component-data="otherData"
+            :component-data-type="'Other'"
+            @update="update($event)"
+          />
+          <delete-modal
+            :modal-title="'elemento'"
+            :message="'el elemento'"
+            :component-data="otherData"
+            @remove="splice(otherData.guid)"
+          />
         </div>
       </ul>
       <div v-if="add">
@@ -49,7 +69,7 @@ export default {
   components: {
     otherView,
     EditModal,
-    DeleteModal
+    DeleteModal,
   },
   props: {
     iconsHidden: {
@@ -58,10 +78,10 @@ export default {
     },
     guid: {
       type: String,
-      rewuired: true
-    }
+      rewuired: true,
+    },
   },
-  data() {
+  data(): any {
     return {
       hide: false,
       add: false,
@@ -71,11 +91,11 @@ export default {
     };
   },
   methods: {
-    cancel() {
+    cancel(): void {
       this.otherNew = "";
       this.add = false;
     },
-    save(otherNew: string) {
+    save(otherNew: string): void {
       this.$nextTick(() => {
         this.other.push({
           guid: crypto.randomUUID(),
@@ -86,19 +106,19 @@ export default {
         this.cancel();
       });
     },
-    refresh(other: Component) {
+    refresh(other: Component): void {
       let dat = this.other.find((data: any) => data.guid === other.guid);
       dat = other;
       this.other = this.other.filter((data: any) => data.guid !== other.guid);
       this.other.push(dat);
       this.$emit("update", this.other);
     },
-    update(others: any) {
+    update(others: Array<Component>): void {
       this.$nextTick(() => {
-        this.$emit('update', others);
+        this.$emit("update", others);
       });
     },
-    splice(index: string) {
+    splice(index: string): void {
       this.other = this.other.filter((data: any) => data.guid !== index);
       this.$emit("update", this.other);
     },
