@@ -123,7 +123,7 @@ export default {
         );
         if (type !== undefined) type.disabled = false;
         this.socialMediaList = this.socialMediaList.filter(
-          (data: any) => data.guid !== media.guid
+          (data: Component) => data.guid !== media.guid
         );
         this.count++;
         this.$emit("update", this.socialMediaList);
@@ -131,7 +131,7 @@ export default {
     },
     edit(data: Component): void {
       let sm = this.socialMediaList.find(
-        (element: any) => element.type === data.type
+        (element: Component) => element.type === data.type
       );
       if (sm !== undefined) sm.name = data.name;
 
