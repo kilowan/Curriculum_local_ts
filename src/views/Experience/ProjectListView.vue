@@ -5,36 +5,18 @@
       <div v-for="project in projectsData" v-bind:key="project.guid">
         <li>
           {{ project.name }}
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-${project.guid}`)"
-          >
+          <b-link v-if="!iconsHidden" :id="project.guid" @click="$bvModal.show(`edit-${project.guid}`)">
             <b-icon icon="pencil-square" aria-hidden="true" />
           </b-link>
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-${project.guid}`)"
-          >
+          <b-link v-if="!iconsHidden" :id="project.guid" @click="$bvModal.show(`delete-${project.guid}`)">
             <b-icon icon="x-circle-fill" aria-hidden="true" />
           </b-link>
-          <project-view
-            :project="project"
-            :iconsHidden="iconsHidden"
-            @update="refresh($event)"
-          />
+          <project-view :guid="project.guid" :project="project" :iconsHidden="iconsHidden" @update="refresh($event)" />
         </li>
-        <edit-modal 
-          :modal-title="'proyecto'"
-          :component-data="project"
-          :component-data-type="'Project'"
-          @update="update($event)"
-        />
-        <delete-modal 
-        :modalTitle="'Proyecto'"
-        :message="'el proyecto'"
-        :component-data="project"
-        @remove="deleteProject($event)"
-      />
+        <edit-modal :modal-title="'proyecto'" :component-data="project" :component-data-type="'Project'"
+          @update="update($event)" />
+        <delete-modal :modalTitle="'Proyecto'" :message="'el proyecto'" :component-data="project"
+          @remove="deleteProject($event)" />
       </div>
     </ul>
   </div>

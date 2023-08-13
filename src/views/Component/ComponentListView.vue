@@ -1,42 +1,55 @@
 <template>
-  <ul>
-    <li>
+  <div>
+    <div v-if="elements.length > 0">
       <ul>
-        <li v-if="componentDataType === 'Academic' || componentDataType === 'Experience'">Centro/Lugar: {{
-          data.place }}</li>
-        <li v-if="componentDataType === 'Experience'">
-          Fecha inicio: {{ formatDate(data.initDate) }}
-        </li>
-        <li v-if="data.finishDate">
-          Fecha Fin: {{ formatDate(data.finishDate) }}
-        </li>
-        <div>
+        <div v-for="data in elements" v-bind:key="data.guid">
+          {{ data.name }}
+          <b-link v-if="!iconsHidden" :id="data.guid" @click="$bvModal.show(`edit-${data.componentDataType}-${data.guid}`)">
+            <b-icon icon="pencil-square" aria-hidden="true" />
+          </b-link>
+          <b-link v-if="!iconsHidden" :id="data.guid" @click="$bvModal.show(`delete-${data.componentDataType}-${data.guid}`)">
+            <b-icon icon="x-circle-fill" aria-hidden="true" />
+          </b-link>
           <component-list-view :ref="data.guid" :iconsHidden="iconsHidden" :component-data="data.childrens"
             :childrens-title="data.childrensTitle" :component-data-type="data.componentDataType"
             :component-data-id="data.guid" @update="refresh($event)" />
+          <delete-modal :modal-title="getModalTitle" :message="deleteModalMessage" :component-data="data"
+            @remove="splice(data.guid)" />
+          <edit-modal :modal-title="getModalTitle" :component-data="data" :component-data-type="data.componentDataType" />
         </div>
+        <add-modal :guid="guid" :modal-title="getModalTitle" :component-data-type="componentDataType"
+          @save="save($event)" />
       </ul>
-    </li>
-  </ul>
+    </div>
+    <b-link v-if="!iconsHidden" :id="getGUID()" @click="$bvModal.show('add-modal')">
+      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir {{ getModalTitle }}
+    </b-link>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component } from "../../Config/types";
-import ComponentListViewVue from "./ComponentListView.vue";
+import EditModal from "../Modal/EditModal.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
 
 export default {
-  name: "ComponentView",
+  name: "ComponentListView",
   components: {
-    ComponentListViewVue
+    EditModal,
+    DeleteModal
   },
   props: {
-    data: {
-      type: Object,
+    elements: {
+      type: Array<Component>,
       required: true,
     },
     componentDataType: {
       type: String,
       required: true
+    },
+    childrensTitle: {
+      type: String,
+      required: false
     },
     iconsHidden: {
       type: Boolean,
@@ -54,7 +67,7 @@ export default {
   methods: {
     refresh(data: Component) {
       this.$nextTick(() => {
-        let filtered = this.componentData.filter(
+        let filtered = this.elements.filter(
           (data: any) => data.guid !== data.guid
         );
 
@@ -62,9 +75,33 @@ export default {
         this.$emit("update", filtered);
       });
     },
+    update(data: any) {
+      this.$nextTick(() => {
+        this.$emit('update', data);
+      });
+    },
+    splice(index: string) {
+      this.$emit("update", this.elements.filter(
+        (data: any) => data.guid !== index
+      ));
+    },
+    save(data: Component) {
+      this.elements.push(data);
+    },
     formatDate(date: any) {
       return new Date(date).toLocaleDateString();
     },
+    getGUID() {
+      this.$nextTick(() => {
+        return this.guid
+      });
+    }
+  },
+  computed: {
+    getModalTitle() {
+      return this.modalTitle;
+    },
+
   },
   created() {
     this.$nextTick(() => {

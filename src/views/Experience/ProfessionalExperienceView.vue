@@ -9,7 +9,7 @@
         Fecha Fin: {{ formatDate(companyData.finishDate) }}
       </li>
       <contract-list-view
-        :ref="'contractt'"
+        :ref="'contract'"
         :contracts="company.childrens"
         :iconsHidden="iconsHidden"
         @update="update($event)"
@@ -38,12 +38,16 @@ export default {
   props: {
     company: {
       type: Object,
-      required: true,
+      required: true
     },
     iconsHidden: {
       type: Boolean,
-      required: true,
+      required: true
     },
+    guid: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
@@ -60,11 +64,7 @@ export default {
     },
     save(contract: any) {
       this.$nextTick(() => {
-        var data: Component = {
-          guid: crypto.randomUUID(),
-          name: contract,
-          childrens: new Array<Component>()
-        };
+        let data = new Component(crypto.randomUUID(), contract);
         this.contractList.push(data);
         this.companyData.childrens.push(data);
         this.contractData = "";

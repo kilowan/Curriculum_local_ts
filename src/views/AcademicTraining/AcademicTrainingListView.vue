@@ -10,74 +10,47 @@
       <ul>
         <div v-for="academic in academicTrainingList" v-bind:key="academic.guid">
           <li>
-            {{ academic.name }}
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-${academic.guid}`)"
-            >
-              <b-icon icon="pencil-square" aria-hidden="true" />
-            </b-link>
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-${academic.guid}`)"
-            >
-              <b-icon icon="x-circle-fill" aria-hidden="true" />
-            </b-link>
-            <academic-training-view
-              :academic="academic"
-              :iconsHidden="iconsHidden"
-              :academicIndex="academic.guid"
-              @update="refresh($event)"
-            />
+            <academic-training-view :guid="academic.guid" :academic="academic" :iconsHidden="iconsHidden"
+              :academicIndex="academic.guid" @update="refresh($event)" @delete="$bvModal.show(`delete-${$event}`)" />
           </li>
-          <edit-modal 
-            :modal-title="'formación'"
-            :component-data="academic"
-            :component-data-type="'Academic'"
-            @update="update(academicTrainingList)"
-          />
-          <delete-modal 
-            :modal-title="'Contrato'"
-            :message="'la formación'"
-            :component-data="academic"
-            @remove="splice(academic.guid)"
-          />
+          <b-modal :id="`delete-${academic.guid}`" :title="'Eliminar formación'" ok-title="Eliminar"
+            @ok="splice(academic.guid)">
+            <div style="text-align: center; margin: 0 auto; width: 380px">
+              <h1>¿Seguro que quieres eliminar la formación {{ academic.name }}?</h1>
+            </div>
+          </b-modal>
         </div>
       </ul>
-      <b-link v-if="!iconsHidden" @click="$bvModal.show(`add-${guid}`)">
+      <b-link :id="guid" v-if="!iconsHidden" @click="$bvModal.show('add-academic-modal')">
         <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir formación
       </b-link>
     </dd>
     <dd class="clear"></dd>
-    <add-modal 
-      :component-data-type="'Academic'"
-      :guid="guid"
-      :modal-title="'Formación'"
-      @save="save($event)"
-    />
+    <b-modal :id="'add-academic-modal'" :title="`Añadir Formación`" ok-title="Guardar" @ok="save" @cancel="cancel">
+      <label>Nombre</label> <input type="text" v-model="newComponent.name" /> <br />
+      <label>Centro/Lugar:</label>
+      <input type="text" v-model="newComponent.place" /> <br />
+      <label>Graduación</label>
+      <input type="date" v-model="newComponent.graduationDate" min="2015-01-01" max="2030-12-31" />
+      <br />
+    </b-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { Component } from "../../Config/types";
 import AcademicTrainingView from "./AcademicTrainingView.vue";
-import DeleteModal from "../Modal/DeleteModal.vue";
-import AddModal from "../Modal/AddModal.vue";
-import EditModal from "../Modal/EditModal.vue";
 
 export default {
   name: "AcademicTrainingListView",
   components: {
-    AcademicTrainingView,
-    DeleteModal,
-    AddModal,
-    EditModal
+    AcademicTrainingView
   },
   props: {
     iconsHidden: {
       type: Boolean,
       required: true,
-    },
+    }
   },
   data() {
     return {
@@ -85,16 +58,17 @@ export default {
       training: {} as Component,
       add: false,
       academicTrainingList: new Array<Component>(),
-      guid: crypto.randomUUID()
+      guid: crypto.randomUUID(),
+      newComponent: {} as Component
     };
   },
   methods: {
     refresh(academic: Component) {
       this.$nextTick(() => {
-        var filtered = this.academicTrainingList.filter(
+        let filtered = this.academicTrainingList.filter(
           (data: any) => data.guid !== academic.guid
         );
-        var training = this.academicTrainingList.find(
+        let training = this.academicTrainingList.find(
           (data: any) => data.guid === academic.guid
         );
         training = academic;
@@ -120,19 +94,18 @@ export default {
         this.$emit('update', trainings);
       });
     },
-    save(data: Component) {
+    save() {
       this.$nextTick(() => {
-        this.academicTrainingList.push({
-          guid: data.guid,
-          name: data.name,
-          place: data.place,
-          graduationDate: data.graduationDate,
-          childrens: new Array<Component>(),
-        });
+        let component = new Component(crypto.randomUUID(), this.newComponent.name);
+        component.componentDataType = 'Academic';
+        component.place = this.newComponent?.place;
+        component.initDate = this.newComponent?.initDate;
+        component.finishDate = this.newComponent?.finishDate;
+        this.academicTrainingList.push(component);
         this.cancel();
         this.$emit("update", this.academicTrainingList);
       });
-    },
+    }
   },
 };
 </script>
