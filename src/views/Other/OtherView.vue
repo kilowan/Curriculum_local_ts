@@ -95,7 +95,9 @@ export default {
         this.other.childrens = this.other.childrens.filter(
           (data: any) => data.guid !== index
         );
-        this.values = this.values.filter((data: any) => data.guid !== index);
+        this.values = this.values.filter(
+          (data: Component) => data.guid !== index
+        );
         this.$emit("update", this.other);
       });
     },
