@@ -135,6 +135,7 @@ export default {
         component.place = this.newComponent?.place;
         component.initDate = this.newComponent?.initDate;
         component.finishDate = this.newComponent?.finishDate;
+        component.graduationDate = this.newComponent?.graduationDate;
         this.academicTrainingList.push(component);
         this.cancel();
         this.$emit("update", this.academicTrainingList);
