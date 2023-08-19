@@ -1,45 +1,39 @@
 <template>
   <ul>
-    <li>
-      <ul>
-        <li
-          v-if="
-            componentDataType === 'Academic' ||
-            componentDataType === 'Experience'
-          "
-        >
-          Centro/Lugar: {{ data.place }}
-        </li>
-        <li v-if="componentDataType === 'Experience'">
-          Fecha inicio: {{ formatDate(data.initDate) }}
-        </li>
-        <li v-if="data.finishDate">
-          Fecha Fin: {{ formatDate(data.finishDate) }}
-        </li>
-        <div>
-          <component-list-view
-            :ref="data.guid"
-            :iconsHidden="iconsHidden"
-            :component-data="data.childrens"
-            :childrens-title="data.childrensTitle"
-            :component-data-type="data.componentDataType"
-            :component-data-id="data.guid"
-            @update="refresh($event)"
-          />
-        </div>
-      </ul>
+    <li
+      v-if="
+        componentDataType === 'Academic' ||
+        componentDataType === 'Experience'
+      "
+    >
+      Centro/Lugar: {{ data.place }}
     </li>
+    <li v-if="componentDataType === 'Experience'">
+      Fecha inicio: {{ formatDate(data.initDate) }}
+    </li>
+    <li v-if="data.finishDate">
+      Fecha Fin: {{ formatDate(data.finishDate) }}
+    </li>
+    <div>
+      <component-list-view
+        :ref="data.guid"
+        :iconsHidden="iconsHidden"
+        :component-data="data.childrens"
+        :childrens-title="data.childrensTitle"
+        :component-data-type="data.componentDataType"
+        :component-data-id="data.guid"
+        @update="refresh($event)"
+      />
+    </div>
   </ul>
 </template>
 
 <script lang="ts">
 import { Component } from "../../Config/types";
-//import ComponentListViewVue from "./ComponentListView.vue";
 
 export default {
   name: "ComponentView",
   components: {
-    //ComponentListViewVue,
   },
   props: {
     data: {
@@ -64,14 +58,10 @@ export default {
     };
   },
   methods: {
-    refresh(data: Component): void {
+    refresh(childrens: Array<Component>): void {
       this.$nextTick(() => {
-        let filtered = this.componentData.filter(
-          (data: any) => data.guid !== data.guid
-        );
-
-        filtered.push(data);
-        this.$emit("update", filtered);
+        this.componentData.childrens = childrens
+        this.$emit("update", this.componentData);
       });
     },
     formatDate(date: string): string {

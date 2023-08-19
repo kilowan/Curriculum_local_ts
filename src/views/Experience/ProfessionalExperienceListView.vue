@@ -9,8 +9,8 @@
         <div v-for="company in experienceList" v-bind:key="company.guid">
           <li>
             {{ company.name }}
-            <EditLink v-if="!iconsHidden" @click="$bvModal.show('edit-modal')"/>
-            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show('delete-modal')"/>
+            <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${company.guid}`)"/>
+            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${company.guid}`)"/>
             <professional-experience-view
               :guid="company.guid"
               :company="company"
@@ -32,7 +32,7 @@
           />
         </div>
       </ul>
-      <AddLink v-if="!iconsHidden" :text="'experiencia'" @click="$bvModal.show('add-modal')"/>
+      <AddLink v-if="!iconsHidden" :text="'experiencia'" @click="$bvModal.show(`add-${guid}`)"/>
     </dd>
     <dd class="clear"></dd>
     <AddModal
@@ -53,6 +53,7 @@ import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import HideLink from "@/components/HideLink.vue";
 
 export default {
   name: "ProfessionalExperienceListView",
@@ -63,7 +64,8 @@ export default {
     DeleteModal,
     AddLink,
     DeleteLink,
-    EditLink
+    EditLink,
+    HideLink
 },
   props: {
     iconsHidden: {

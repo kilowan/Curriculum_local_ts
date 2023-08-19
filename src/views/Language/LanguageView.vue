@@ -79,11 +79,10 @@ export default {
     refresh(): void {
       this.$emit("refresh");
     },
-    splice(index: string): void {
-      this.$emit(
-        "update",
-        this.languageList.filter((data: any) => data.guid !== index)
-      );
+    splice(guid: string): void {
+      this.$nextTick(() => {
+        this.$emit("update", this.languageList.filter((data: any) => data.guid !== guid));
+      });
     },
     cancel(): void {
       this.add = false;
