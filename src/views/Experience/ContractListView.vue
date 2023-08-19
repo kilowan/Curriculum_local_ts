@@ -5,18 +5,8 @@
       <div v-for="contract in contractsData" v-bind:key="contract.guid">
         <li>
           {{ contract.name }}
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-${contract.guid}`)"
-          >
-            <b-icon icon="pencil-square" aria-hidden="true" />
-          </b-link>
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-${contract.guid}`)"
-          >
-            <b-icon icon="x-circle-fill" aria-hidden="true" />
-          </b-link>
+          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${contract.guid}`)"/>
+          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${contract.guid}`)"/>
           <contract-view
             :guid="contract.guid"
             :iconsHidden="iconsHidden"
@@ -47,13 +37,17 @@
 import ContractView from "./ContractView.vue";
 import { Component } from "../../Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "ContractsView",
   components: {
     ContractView,
     DeleteModal,
-  },
+    DeleteLink,
+    EditLink
+},
   props: {
     contracts: {
       type: Array,

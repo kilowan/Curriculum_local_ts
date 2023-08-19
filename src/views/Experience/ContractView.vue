@@ -12,21 +12,21 @@
       <b-button class="m-2">Cancelar</b-button>
     </div>
     <div>
-      <b-link v-if="!add && !iconsHidden" :id="guid" @click="add = true">
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir proyecto
-      </b-link>
+      <AddLink v-if="!add && !iconsHidden" :text="'proyecto'" @click="add = true"/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import AddLink from "@/components/AddLink.vue";
 import { Component } from "../../Config/types";
 import ProjectListView from "./ProjectListView.vue";
 export default {
   name: "ContractView",
   components: {
     ProjectListView,
-  },
+    AddLink
+},
   props: {
     iconsHidden: {
       type: Boolean,

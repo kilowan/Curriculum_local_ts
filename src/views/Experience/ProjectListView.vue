@@ -5,20 +5,8 @@
       <div v-for="project in projectsData" v-bind:key="project.guid">
         <li>
           {{ project.name }}
-          <b-link
-            v-if="!iconsHidden"
-            :id="project.guid"
-            @click="$bvModal.show(`edit-${project.guid}`)"
-          >
-            <b-icon icon="pencil-square" aria-hidden="true" />
-          </b-link>
-          <b-link
-            v-if="!iconsHidden"
-            :id="project.guid"
-            @click="$bvModal.show(`delete-${project.guid}`)"
-          >
-            <b-icon icon="x-circle-fill" aria-hidden="true" />
-          </b-link>
+          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${project.guid}`)"/>
+          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${project.guid}`)"/>
           <project-view
             :guid="project.guid"
             :project="project"
@@ -48,6 +36,8 @@ import { Component } from "../../Config/types";
 import ProjectView from "./ProjectView.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "ProjectListView",
@@ -55,7 +45,9 @@ export default {
     ProjectView,
     EditModal,
     DeleteModal,
-  },
+    DeleteLink,
+    EditLink
+},
   props: {
     projects: {
       type: Array,

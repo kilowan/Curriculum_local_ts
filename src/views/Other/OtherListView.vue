@@ -2,29 +2,15 @@
   <div v-if="!hide">
     <dt id="otros" class="otros" v-if="other">
       Otros datos
-      <b-link v-if="!iconsHidden" @click="hide = true">
-        <b-icon icon="eye-slash-fill" />
-      </b-link>
+      <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
     <dd id="other" v-if="other">
       <ul>
         <div v-for="otherData in other" v-bind:key="otherData.guid">
           <li>
             {{ otherData.name }}
-            <b-link
-              v-if="!iconsHidden"
-              :id="otherData.guid"
-              @click="$bvModal.show(`edit-${otherData.guid}`)"
-            >
-              <b-icon icon="pencil-square" aria-hidden="true" />
-            </b-link>
-            <b-link
-              v-if="!iconsHidden"
-              :id="otherData.guid"
-              @click="$bvModal.show(`delete-${otherData.guid}`)"
-            >
-              <b-icon icon="x-circle-fill" aria-hidden="true" />
-            </b-link>
+            <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${otherData.guid}`)"/>
+            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${otherData.guid}`)"/>
             <other-view
               :otherData="otherData"
               :iconsHidden="iconsHidden"
@@ -50,9 +36,7 @@
         <b-button class="m-2" @click="save(otherNew)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <b-link v-if="!iconsHidden && !add" @click="add = true">
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir Otros Datos
-      </b-link>
+      <AddLink v-if="!iconsHidden && !add" :text="'Otros Datos'" @click="add = true"/>
     </dd>
     <dd class="clear"></dd>
   </div>
@@ -63,6 +47,10 @@ import otherView from "./OtherView.vue";
 import { Component } from "@/Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import EditModal from "../Modal/EditModal.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import HideLink from "@/components/HideLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "OtherListView",
@@ -70,7 +58,11 @@ export default {
     otherView,
     EditModal,
     DeleteModal,
-  },
+    AddLink,
+    DeleteLink,
+    HideLink,
+    EditLink
+},
   props: {
     iconsHidden: {
       type: Boolean,

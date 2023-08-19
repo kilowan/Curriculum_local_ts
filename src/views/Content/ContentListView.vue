@@ -3,18 +3,8 @@
     <div v-for="content in contentsData" v-bind:key="content.guid">
       <li>
         {{ content.name }}
-        <b-link
-          v-if="!iconsHidden"
-          @click="$bvModal.show(`edit-${content.guid}`)"
-        >
-          <b-icon icon="pencil-square" aria-hidden="true" />
-        </b-link>
-        <b-link
-          v-if="!iconsHidden"
-          @click="$bvModal.show(`delete-${content.guid}`)"
-        >
-          <b-icon icon="x-circle-fill" aria-hidden="true" />
-        </b-link>
+        <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${content.guid}`)"/>
+        <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${content.guid}`)"/>
         <content-view
           :guid="content.guid"
           :content="content"
@@ -43,6 +33,8 @@ import ContentView from "./ContentView.vue";
 import { Component } from "../../Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import EditModal from "../Modal/EditModal.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "ContentsView",
@@ -50,7 +42,9 @@ export default {
     ContentView,
     DeleteModal,
     EditModal,
-  },
+    DeleteLink,
+    EditLink
+},
   props: {
     contents: {
       type: Array,
