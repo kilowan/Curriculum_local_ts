@@ -1,7 +1,6 @@
 <template>
-  <ul>
-    <div v-for="content in contentsData" v-bind:key="content.guid">
-      <li>
+    <div>
+      <li v-for="content in contentsData" v-bind:key="content.guid">
         {{ content.name }}
         <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${content.guid}`)"/>
         <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${content.guid}`)"/>
@@ -25,7 +24,6 @@
         @update="update($event)"
       />
     </div>
-  </ul>
 </template>
 
 <script lang="ts">
