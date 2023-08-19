@@ -4,18 +4,8 @@
       <div v-for="value in values" v-bind:key="value.guid">
         <li v-if="!hide">
           {{ value.name }}
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-${value.guid}`)"
-          >
-            <b-icon icon="pencil-square" aria-hidden="true" />
-          </b-link>
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-${value.guid}`)"
-          >
-            <b-icon icon="x-circle-fill" aria-hidden="true" />
-          </b-link>
+          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${value.guid}`)"/>
+          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${value.guid}`)"/>
         </li>
         <EditModal
           :modal-title="'valor'"
@@ -30,9 +20,7 @@
         />
       </div>
       <div v-if="!iconsHidden">
-        <b-link @click="$bvModal.show(`add-${guid}`)">
-          <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir valor
-        </b-link>
+        <AddLink :text="'valor'" @click="$bvModal.show(`add-${guid}`)"/>
       </div>
     </ul>
     <AddModal
@@ -49,6 +37,9 @@ import { Component } from "@/Config/types";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "OtherView",
@@ -56,7 +47,10 @@ export default {
     AddModal,
     EditModal,
     DeleteModal,
-  },
+    AddLink,
+    DeleteLink,
+    EditLink
+},
   props: {
     otherData: {
       type: Object,

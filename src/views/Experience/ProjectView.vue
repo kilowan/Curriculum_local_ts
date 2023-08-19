@@ -7,18 +7,8 @@
       >
         <li>
           {{ description.name }}
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`edit-${description.guid}`)"
-          >
-            <b-icon icon="pencil-square" aria-hidden="true" />
-          </b-link>
-          <b-link
-            v-if="!iconsHidden"
-            @click="$bvModal.show(`delete-${description.guid}`)"
-          >
-            <b-icon icon="x-circle-fill" aria-hidden="true" />
-          </b-link>
+          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${description.guid}`)"/>
+          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${description.guid}`)"/>
         </li>
         <EditModal
           :modal-title="'descripción'"
@@ -39,9 +29,7 @@
       <b-button @click="save(desc)">Guardar</b-button>
       <b-button @click="cancel">Cancelar</b-button>
     </div>
-    <b-link v-if="!add && !iconsHidden" :id="guid" @click="add = true">
-      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir descripción
-    </b-link>
+    <AddLink v-if="!add && !iconsHidden" :text="'descripción'" @click="add = true"/>
   </div>
 </template>
 
@@ -49,13 +37,19 @@
 import { Component } from "../../Config/types";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "ProjectView",
   components: {
     EditModal,
     DeleteModal,
-  },
+    AddLink,
+    DeleteLink,
+    EditLink
+},
   props: {
     project: {
       type: Object,

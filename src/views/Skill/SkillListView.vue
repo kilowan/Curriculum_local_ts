@@ -2,29 +2,15 @@
   <div v-if="!hide">
     <dt id="complementaria" v-if="skillList">
       Skills
-      <b-link v-if="!iconsHidden" @click="hide = true">
-        <b-icon icon="eye-slash-fill" />
-      </b-link>
+      <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
     <dd id="complementary" v-if="skillList">
       <ul>
         <div v-for="skill in skillList" v-bind:key="skill.guid">
           <li>
             <strong>{{ skill.name }}</strong>
-            <b-link
-              :id="skill.guid"
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-${skill.guid}`)"
-            >
-              <b-icon icon="pencil-square" aria-hidden="true" />
-            </b-link>
-            <b-link
-              v-if="!iconsHidden"
-              :id="skill.guid"
-              @click="$bvModal.show(`delete-${skill.guid}`)"
-            >
-              <b-icon icon="x-circle-fill" aria-hidden="true" />
-            </b-link>
+            <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${skill.guid}`)"/>
+            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${skill.guid}`)"/>
             <skill-view
               :skill="skill"
               :iconsHidden="iconsHidden"
@@ -50,9 +36,7 @@
         <b-button class="m-2" @click="save(trainingNew)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <b-link v-if="!iconsHidden && !add" @click="add = true">
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir Skill
-      </b-link>
+      <AddLink v-if="!iconsHidden && !add" :text="'Skill'" @click="add = true"/>
     </dd>
     <dd class="clear"></dd>
   </div>
@@ -63,6 +47,10 @@ import SkillView from "./SkillView.vue";
 import { Component } from "../../Config/types";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import HideLink from "@/components/HideLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "SkillListView",
@@ -70,7 +58,11 @@ export default {
     SkillView,
     EditModal,
     DeleteModal,
-  },
+    AddLink,
+    DeleteLink,
+    HideLink,
+    EditLink
+},
   props: {
     iconsHidden: {
       type: Boolean,

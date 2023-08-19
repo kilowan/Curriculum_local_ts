@@ -4,24 +4,8 @@
       <ul>
         <div v-for="data in elements" v-bind:key="data.guid">
           {{ data.name }}
-          <b-link
-            v-if="!iconsHidden"
-            :id="data.guid"
-            @click="
-              $bvModal.show(`edit-${data.componentDataType}-${data.guid}`)
-            "
-          >
-            <b-icon icon="pencil-square" aria-hidden="true" />
-          </b-link>
-          <b-link
-            v-if="!iconsHidden"
-            :id="data.guid"
-            @click="
-              $bvModal.show(`delete-${data.componentDataType}-${data.guid}`)
-            "
-          >
-            <b-icon icon="x-circle-fill" aria-hidden="true" />
-          </b-link>
+          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${data.componentDataType}-${data.guid}`)"/>
+          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${data.componentDataType}-${data.guid}`)"/>
           <component-list-view
             :ref="data.guid"
             :iconsHidden="iconsHidden"
@@ -51,14 +35,7 @@
         />
       </ul>
     </div>
-    <b-link
-      v-if="!iconsHidden"
-      :id="getGUID()"
-      @click="$bvModal.show('add-modal')"
-    >
-      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir
-      {{ getModalTitle }}
-    </b-link>
+    <AddLink v-if="!iconsHidden" @click="$bvModal.show('add-modal')"/>
   </div>
 </template>
 
@@ -66,13 +43,21 @@
 import { Component } from "../../Config/types";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import ELink from "@/components/ELink.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "ComponentListView",
   components: {
     EditModal,
     DeleteModal,
-  },
+    ELink,
+    AddLink,
+    DeleteLink,
+    EditLink
+},
   props: {
     elements: {
       type: Array,

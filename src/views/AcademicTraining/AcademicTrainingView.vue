@@ -2,28 +2,13 @@
   <div>
     <div v-if="edit && !iconsHidden">
       <input type="text" v-model="academicData.name" />
-      <b-link @click="edit = false">
-        <b-icon icon="hdd" aria-hidden="true" />
-      </b-link>
-      <b-link
-        :id="academicData.guid"
-        @click="$emit('delete', academicData.guid)"
-      >
-        <b-icon icon="x-circle-fill" aria-hidden="true" />
-      </b-link>
+      <SaveLink v-if="!iconsHidden" @click="edit = false"/>
+      <DeleteLink @click="$emit('delete', academicData.guid)"/>
     </div>
     <div v-else>
       {{ academic.name }}
-      <b-link v-if="!iconsHidden" @click="edit = true">
-        <b-icon icon="pencil-square" aria-hidden="true" />
-      </b-link>
-      <b-link
-        v-if="!iconsHidden"
-        :id="academicData.guid"
-        @click="$emit('delete', academicData.guid)"
-      >
-        <b-icon icon="x-circle-fill" aria-hidden="true" />
-      </b-link>
+      <EditLink v-if="!iconsHidden" @click="edit = true"/>
+      <DeleteLink @click="$emit('delete', academicData.guid)"/>
     </div>
     <ul>
       <li v-if="edit">
@@ -57,9 +42,7 @@
         <b-button class="m-2" @click="save(element)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <b-link v-if="!iconsHidden && !add" :id="guid" @click="add = true">
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir contenido
-      </b-link>
+      <AddLink v-if="!iconsHidden && !add" :text="'contenido'" @click="add = true"/>
     </ul>
   </div>
 </template>
@@ -67,12 +50,22 @@
 <script lang="ts">
 import ContentsView from "../Content/ContentListView.vue";
 import { Component } from "../../Config/types";
+import ELink from "@/components/ELink.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
+import SaveLink from "@/components/SaveLink.vue";
 
 export default {
   name: "AcademicTrainingView",
   components: {
     ContentsView,
-  },
+    ELink,
+    AddLink,
+    DeleteLink,
+    EditLink,
+    SaveLink
+},
   props: {
     academic: {
       type: Object,

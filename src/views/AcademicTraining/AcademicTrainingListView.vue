@@ -2,9 +2,7 @@
   <div v-if="!hide">
     <dt id="academica">
       Formación
-      <b-link v-if="!iconsHidden" @click="hide = true">
-        <b-icon icon="eye-slash-fill" />
-      </b-link>
+      <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
     <dd id="academic">
       <ul>
@@ -36,13 +34,7 @@
           </b-modal>
         </div>
       </ul>
-      <b-link
-        :id="guid"
-        v-if="!iconsHidden"
-        @click="$bvModal.show('add-academic-modal')"
-      >
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir formación
-      </b-link>
+      <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show('add-academic-modal')"/>
     </dd>
     <dd class="clear"></dd>
     <b-modal
@@ -71,12 +63,18 @@
 <script lang="ts">
 import { Component } from "../../Config/types";
 import AcademicTrainingView from "./AcademicTrainingView.vue";
+import ELink from "@/components/ELink.vue";
+import AddLink from "@/components/AddLink.vue";
+import HideLink from "@/components/HideLink.vue";
 
 export default {
   name: "AcademicTrainingListView",
   components: {
     AcademicTrainingView,
-  },
+    ELink,
+    AddLink,
+    HideLink
+},
   props: {
     iconsHidden: {
       type: Boolean,
@@ -135,6 +133,7 @@ export default {
         component.place = this.newComponent?.place;
         component.initDate = this.newComponent?.initDate;
         component.finishDate = this.newComponent?.finishDate;
+        component.graduationDate = this.newComponent?.graduationDate;
         this.academicTrainingList.push(component);
         this.cancel();
         this.$emit("update", this.academicTrainingList);

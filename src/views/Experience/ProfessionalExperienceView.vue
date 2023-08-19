@@ -17,14 +17,13 @@
         <b-button class="m-2" @click="save(contractData)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <b-link v-if="!iconsHidden" @click="add = true">
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir contrato
-      </b-link>
+      <AddLink v-if="!iconsHidden" :text="'contrato'" @click="add = true"/>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
+import AddLink from "@/components/AddLink.vue";
 import { Component } from "../../Config/types";
 import ContractListView from "./ContractListView.vue";
 
@@ -32,7 +31,8 @@ export default {
   name: "ProfessionalExperienceView",
   components: {
     ContractListView,
-  },
+    AddLink
+},
   props: {
     company: {
       type: Object,

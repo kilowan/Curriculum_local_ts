@@ -13,21 +13,21 @@
       <b-button class="m-2" @click="save(element)">Guardar</b-button>
       <b-button class="m-2" @click="cancel">Cancelar</b-button>
     </div>
-    <b-link v-if="!iconsHidden" @click="add = true">
-      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir contenido
-    </b-link>
+    <AddLink v-if="!iconsHidden && !add" :text="'contenido'" @click="add = true"/>
   </ul>
 </template>
 
 <script lang="ts">
 import ContentsView from "../Content/ContentListView.vue";
 import { Component } from "../../Config/types";
+import AddLink from "@/components/AddLink.vue";
 
 export default {
   name: "ComplementaryExperienceView",
   components: {
     ContentsView,
-  },
+    AddLink
+},
   props: {
     skill: {
       type: Object,

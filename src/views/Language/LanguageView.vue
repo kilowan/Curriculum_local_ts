@@ -2,27 +2,15 @@
   <div v-if="!hide">
     <dt id="idiomas" class="idiomas">
       Idiomas
-      <b-link v-if="!iconsHidden" @click="(hide = true), $emit('hide')">
-        <b-icon icon="eye-slash-fill" />
-      </b-link>
+      <HideLink v-if="!iconsHidden" @click="(hide = true), $emit('hide')"/>
     </dt>
     <dd id="languages">
       <ul>
         <div v-for="language in languageList" v-bind:key="language.guid">
           <li>
             <strong>{{ language.name }}:</strong> {{ language.level }}
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-${language.guid}`)"
-            >
-              <b-icon icon="pencil-square" aria-hidden="true" />
-            </b-link>
-            <b-link
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-${language.guid}`)"
-            >
-              <b-icon icon="x-circle-fill" aria-hidden="true" />
-            </b-link>
+            <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${language.guid}`)"/>
+            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${language.guid}`)"/>
           </li>
           <EditModal
             :modal-title="'Idioma'"
@@ -38,13 +26,7 @@
           />
         </div>
       </ul>
-      <b-link
-        v-if="!iconsHidden"
-        :id="guid"
-        @click="$bvModal.show('add-modal')"
-      >
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir idioma
-      </b-link>
+      <AddLink v-if="!iconsHidden" :text="'idioma'" @click="$bvModal.show('add-modal')"/>
     </dd>
     <dd class="clear"></dd>
     <AddModal
@@ -61,6 +43,10 @@ import { Component } from "../../Config/types";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import HideLink from "@/components/HideLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "LanguagesView",
@@ -68,7 +54,11 @@ export default {
     AddModal,
     EditModal,
     DeleteModal,
-  },
+    AddLink,
+    DeleteLink,
+    HideLink,
+    EditLink
+},
   props: {
     iconsHidden: {
       type: Boolean,

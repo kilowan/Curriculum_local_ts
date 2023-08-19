@@ -2,29 +2,15 @@
   <div v-if="!hide">
     <dt id="experiencia">
       Experiencia
-      <b-link v-if="!iconsHidden" @click="hide = true">
-        <b-icon icon="eye-slash-fill" />
-      </b-link>
+      <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
     <dd id="experience">
       <ul>
         <div v-for="company in experienceList" v-bind:key="company.guid">
           <li>
             {{ company.name }}
-            <b-link
-              v-if="!iconsHidden"
-              :id="company.guid"
-              @click="$bvModal.show('edit-modal')"
-            >
-              <b-icon icon="pencil-square" aria-hidden="true" />
-            </b-link>
-            <b-link
-              v-if="!iconsHidden"
-              :id="company.guid"
-              @click="$bvModal.show('delete-modal')"
-            >
-              <b-icon icon="x-circle-fill" aria-hidden="true" />
-            </b-link>
+            <EditLink v-if="!iconsHidden" @click="$bvModal.show('edit-modal')"/>
+            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show('delete-modal')"/>
             <professional-experience-view
               :guid="company.guid"
               :company="company"
@@ -46,13 +32,7 @@
           />
         </div>
       </ul>
-      <b-link
-        v-if="!iconsHidden"
-        :id="guid"
-        @click="$bvModal.show('add-modal')"
-      >
-        <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir experiencia
-      </b-link>
+      <AddLink v-if="!iconsHidden" :text="'experiencia'" @click="$bvModal.show('add-modal')"/>
     </dd>
     <dd class="clear"></dd>
     <AddModal
@@ -70,6 +50,9 @@ import ProfessionalExperienceView from "./ProfessionalExperienceView.vue";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "ProfessionalExperienceListView",
@@ -78,7 +61,10 @@ export default {
     AddModal,
     EditModal,
     DeleteModal,
-  },
+    AddLink,
+    DeleteLink,
+    EditLink
+},
   props: {
     iconsHidden: {
       type: Boolean,

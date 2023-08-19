@@ -6,18 +6,8 @@
       class="d-flex"
     >
       <social-media-view :socialMediaData="socialMediaData" />
-      <b-link
-        v-if="!iconsHidden"
-        @click="$bvModal.show(`edit-${socialMediaData.guid}`)"
-      >
-        <b-icon icon="pencil-square" aria-hidden="true" />
-      </b-link>
-      <b-link
-        v-if="!iconsHidden"
-        @click="$bvModal.show(`delete-${socialMediaData.guid}`)"
-      >
-        <b-icon icon="x-circle-fill" aria-hidden="true" />
-      </b-link>
+      <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${socialMediaData.guid}`)"/>
+      <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${socialMediaData.guid}`)"/>
       <b-modal
         :id="`edit-${socialMediaData.guid}`"
         title="Editar red social"
@@ -41,13 +31,7 @@
         @remove="del(socialMediaData)"
       />
     </div>
-    <b-link
-      v-if="!iconsHidden"
-      :hidden="count === 0"
-      @click="$bvModal.show('add-social-media')"
-    >
-      <b-icon icon="plus-circle-fill" aria-hidden="true" /> Añadir Red social
-    </b-link>
+    <AddLink v-if="!iconsHidden" :hidden="count === 0" :text="'Red social'" @click="$bvModal.show('add-social-media')"/>
     <b-modal
       :id="'add-social-media'"
       title="Añadir Red Social"
@@ -78,13 +62,19 @@
 import SocialMediaView from "./SocialMediaView.vue";
 import { SocialMediaType, Component } from "../../Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import AddLink from "@/components/AddLink.vue";
+import DeleteLink from "@/components/DeleteLink.vue";
+import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "SocialMediaListView",
   components: {
     SocialMediaView,
     DeleteModal,
-  },
+    AddLink,
+    DeleteLink,
+    EditLink
+},
   props: {
     iconsHidden: {
       type: Boolean,
