@@ -1,18 +1,14 @@
 <template>
   <ul>
-    <div>
-      <contents-view
-        :ref="'contents'"
-        :contents="skill.childrens"
-        :iconsHidden="iconsHidden"
-        @update="update($event)"
-      />
-    </div>
-    <div v-if="add">
-      <input class="m-2" type="text" v-model="element" />
-      <b-button class="m-2" @click="save(element)">Guardar</b-button>
-      <b-button class="m-2" @click="cancel">Cancelar</b-button>
-    </div>
+    <contents-view
+      :ref="'contents'"
+      :contents="skill.childrens"
+      :iconsHidden="iconsHidden"
+      @update="update($event)"
+    />
+    <input v-if="add" class="m-2" type="text" v-model="element" />
+    <b-button v-if="add" class="m-2" @click="save(element)">Guardar</b-button>
+    <b-button v-if="add" class="m-2" @click="cancel">Cancelar</b-button>
     <AddLink v-if="!iconsHidden && !add" :text="'contenido'" @click="add = true"/>
   </ul>
 </template>

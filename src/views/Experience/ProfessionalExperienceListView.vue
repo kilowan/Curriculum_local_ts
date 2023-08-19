@@ -53,6 +53,7 @@ import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import HideLink from "@/components/HideLink.vue";
 
 export default {
   name: "ProfessionalExperienceListView",
@@ -63,7 +64,8 @@ export default {
     DeleteModal,
     AddLink,
     DeleteLink,
-    EditLink
+    EditLink,
+    HideLink
 },
   props: {
     iconsHidden: {
