@@ -1,18 +1,18 @@
 <template>
   <div>
-    <div v-if="elements.length > 0">
+    <div v-if="elements !=undefined && elements.length > 0">
       <ul>
         <div v-for="data in elements" v-bind:key="data.guid">
-          {{ data.name }}
-          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${data.componentDataType}-${data.guid}`)"/>
-          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${data.componentDataType}-${data.guid}`)"/>
-          <component-list-view
+          <li>
+            {{ data.name }}
+            <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${data.guid}`)"/>
+            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${data.guid}`)"/>
+          </li>
+          <component-view
             :ref="data.guid"
             :iconsHidden="iconsHidden"
-            :component-data="data.childrens"
-            :childrens-title="data.childrensTitle"
+            :data="data"
             :component-data-type="data.componentDataType"
-            :component-data-id="data.guid"
             @update="refresh($event)"
           />
           <delete-modal
@@ -27,7 +27,7 @@
             :component-data-type="data.componentDataType"
           />
         </div>
-        <add-modal
+        <AddModal
           :guid="guid"
           :modal-title="getModalTitle"
           :component-data-type="componentDataType"
@@ -35,28 +35,30 @@
         />
       </ul>
     </div>
-    <AddLink v-if="!iconsHidden" @click="$bvModal.show('add-modal')"/>
+    <AddLink v-if="!iconsHidden" :text="childrensTitle" @click="$bvModal.show(`add-${guid}`)"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component } from "../../Config/types";
 import EditModal from "../Modal/EditModal.vue";
+import AddModal from "../Modal/AddModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
-import ELink from "@/components/ELink.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import ComponentView from "./ComponentView.vue";
 
 export default {
   name: "ComponentListView",
   components: {
     EditModal,
     DeleteModal,
-    ELink,
     AddLink,
     DeleteLink,
-    EditLink
+    EditLink,
+    ComponentView,
+    AddModal
 },
   props: {
     elements: {
@@ -100,11 +102,10 @@ export default {
         this.$emit("update", data);
       });
     },
-    splice(index: string): void {
-      this.$emit(
-        "update",
-        this.elements.filter((data: any) => data.guid !== index)
-      );
+    splice(guid: string): void {
+      this.$nextTick(() => {
+        this.$emit("update", this.elements.filter((data: any) => data.guid !== guid));
+      });
     },
     save(data: Component): void {
       this.elements.push(data);
