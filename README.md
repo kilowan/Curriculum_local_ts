@@ -1,4 +1,4 @@
-# curriculum_ts
+# curriculum_local_ts
 
 ## Project setup
 ```
