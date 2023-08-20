@@ -1,10 +1,11 @@
 <template>
   <div v-if="!hide">
-    <dt id="experiencia">
-      Experiencia
+    <dt :id="input.dtId" :class="input.dtId">
+      {{ input.name }}
       <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
-    <dd id="experience">
+    <dd :id="input.ddId">
+      <!--list-->
       <ul>
         <div v-for="company in input.childrens" v-bind:key="company.guid">
           <li>
@@ -19,25 +20,25 @@
             />
           </li>
           <EditModal
-            :modalTitle="'Experiencia'"
+            :modalTitle="input.name"
             :componentData="company"
-            :componentDataType="1"
+            :componentDataType="'Experience'"
           />
-
           <DeleteModal
-            :modalTitle="'Experiencia'"
+            :modalTitle="input.name"
             :message="'la experiencia'"
             :componentData="company"
             @remove="deleteExperience($event)"
           />
         </div>
       </ul>
-      <AddLink v-if="!iconsHidden" :text="'experiencia'" @click="$bvModal.show(`add-${input.guid}`)"/>
+      <AddLink v-if="!iconsHidden" :text="input.name" @click="$bvModal.show(`add-${input.guid}`)"/>
     </dd>
     <dd class="clear"></dd>
     <AddModal
       :guid="input.guid"
-      :componentDataType="1"
+      :modal-title="input.name"
+      :component-data-type="'Experience'"
       @save="save($event)"
     />
   </div>
@@ -45,19 +46,19 @@
 
 <script lang="ts">
 import { Component, Module } from "../../Config/types";
-import ProfessionalExperienceView from "./ProfessionalExperienceView.vue";
+import List from "../Module/List.vue";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
-import AddLink from "@/components/AddLink.vue";
-import DeleteLink from "@/components/DeleteLink.vue";
-import EditLink from "@/components/EditLink.vue";
-import HideLink from "@/components/HideLink.vue";
+import AddLink from "../../components/AddLink.vue";
+import DeleteLink from "../../components/DeleteLink.vue";
+import EditLink from "../../components/EditLink.vue";
+import HideLink from "../../components/HideLink.vue";
 
 export default {
-  name: "ProfessionalExperienceListView",
+  name: "ModuleView",
   components: {
-    ProfessionalExperienceView,
+    List,
     AddModal,
     EditModal,
     DeleteModal,
@@ -104,11 +105,12 @@ export default {
     },
     save(experience: Component): void {
       this.$nextTick(() => {
-        let data = new Component(experience.guid, experience.childrensDataType, experience.name);
+        let data = new Component(experience.guid, experience.name);
         data.initDate = experience.initDate;
         data.finishDate = experience.finishDate;
         data.graduationDate = experience.graduationDate;
         data.place = experience.place;
+        data.componentDataType = "Experience";
         this.input.childrens.push(data);
         this.$emit("update", this.input);
         this.experience = {} as Component;
@@ -129,7 +131,7 @@ export default {
         );
         this.$emit("update", this.input);
       });
-    },
+    }
   },
 };
 </script>

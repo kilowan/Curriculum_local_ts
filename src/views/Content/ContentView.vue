@@ -1,30 +1,29 @@
 <template>
-  <div>
+  <div v-if="content != undefined">
     <ul>
-      <div v-for="sub in subContents" v-bind:key="sub.guid">
+      <div v-for="sub in content.childrens" v-bind:key="sub.guid">
         <li>
           {{ sub.name }}
           <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${sub.guid}`)"/>
           <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${sub.guid}`)"/>
         </li>
         <DeleteModal
-          :component-data="sub"
-          :modal-title="'Contenido'"
+          :componentData="sub"
+          :modalTitle="'Contenido'"
           :message="'el elemento'"
           @remove="splice($event)"
         />
         <EditModal
-          :modal-title="'Contenido'"
-          :component-data="sub"
-          :component-data-type="'SubContent'"
+          :modalTitle="'Contenido'"
+          :componentData="sub"
+          :componentDataType="7"
         />
       </div>
       <AddLink v-if="!iconsHidden" :text="'SubContenido'" @click="$bvModal.show(`add-${guid}`)"/>
     </ul>
     <AddModal
       :guid="guid"
-      :component-data-type="'Subcontent'"
-      :modal-title="'SubContenido'"
+      :componentDataType="7"
       @save="push($event)"
     />
   </div>
@@ -54,28 +53,26 @@ export default {
       type: Boolean,
       required: true,
     },
-    guid: {
-      type: String,
+    input: {
+      type: Component,
       required: true,
     },
   },
   data(): any {
     return {
-      contentData: {} as Component,
-      subcontent: "",
-      subContents: new Array<Component>(),
+      subcontent: ""
     };
   },
   methods: {
     splice(index: string): void {
-      this.subContents = this.subContents.filter(
+      this.content.childrens = this.content.childrens.filter(
         (data: any) => data.guid !== index
       );
-      this.$emit("update", this.subContents);
+      this.$emit("update", this.content);
     },
-    push(subContent: string): void {
-      this.subContents.push(new Component(crypto.randomUUID(), subContent));
-      this.$emit("update", this.subContents);
+    push(subContent: Component): void {
+      this.content.childrens.push(new Component(crypto.randomUUID(), subContent.childrensDataType, subContent.name));
+      this.$emit("update", this.content);
       this.subcontent = "";
     },
   },

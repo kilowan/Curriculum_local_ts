@@ -8,13 +8,13 @@
           <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${value.guid}`)"/>
         </li>
         <EditModal
-          :modal-title="'valor'"
-          :component-data="value"
-          :component-data-type="'Value'"
+          :modalTitle="'valor'"
+          :componentData="value"
+          :componentDataType="11"
         />
         <DeleteModal
-          :modal-title="'valor'"
-          :component-data="value"
+          :modalTitle="'valor'"
+          :componentData="value"
           :message="'el valor'"
           @remove="splice(value.guid)"
         />
@@ -25,8 +25,7 @@
     </ul>
     <AddModal
       :guid="guid"
-      :modal-title="'valor'"
-      :component-data-type="'Value'"
+      :componentDataType="11"
       @save="save($event)"
     />
   </div>
@@ -76,21 +75,22 @@ export default {
       this.valueNew = "";
       this.add = false;
     },
-    save(value: string): void {
+    save(value: Component): void {
       this.$nextTick(() => {
-        this.other.childrens.push(new Component(crypto.randomUUID(), value));
-        this.values.push(new Component(crypto.randomUUID(), value));
+        let component = new Component(value.guid, value.childrensDataType, value.name);
+        this.other.childrens.push(component);
+        this.values.push(component);
         this.cancel();
         this.$emit("update", this.other);
       });
     },
-    splice(index: string): void {
+    splice(guid: string): void {
       this.$nextTick(() => {
         this.other.childrens = this.other.childrens.filter(
-          (data: any) => data.guid !== index
+          (data: any) => data.guid !== guid
         );
         this.values = this.values.filter(
-          (data: Component) => data.guid !== index
+          (data: Component) => data.guid !== guid
         );
         this.$emit("update", this.other);
       });

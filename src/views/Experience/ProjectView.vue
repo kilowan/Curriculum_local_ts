@@ -11,14 +11,14 @@
           <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${description.guid}`)"/>
         </li>
         <EditModal
-          :modal-title="'descripción'"
-          :component-data="description"
-          :component-data-type="'Description'"
+          :modalTitle="'descripción'"
+          :componentData="description"
+          :componentDataType="10"
           @cancel="cancel"
         />
         <DeleteModal
-          :modal-title="'Descripción'"
-          :component-data="description"
+          :modalTitle="'Descripción'"
+          :componentData="description"
           :message="'la descripción'"
           @remove="splice(description.guid)"
         />
@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
+import { Component, ComponentType } from "../../Config/types";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
@@ -79,7 +79,7 @@ export default {
     },
     save(description: string): void {
       this.$nextTick(() => {
-        let element = new Component(crypto.randomUUID(), description);
+        let element = new Component(crypto.randomUUID(), ComponentType.End, description);
         this.descriptions.push(element);
         this.projectData.childrens.push(element);
         this.add = false;

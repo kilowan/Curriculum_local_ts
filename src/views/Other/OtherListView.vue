@@ -1,12 +1,12 @@
 <template>
   <div v-if="!hide">
-    <dt id="otros" class="otros" v-if="other">
+    <dt id="otros" class="otros" v-if="input.childrens">
       Otros datos
       <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
-    <dd id="other" v-if="other">
+    <dd id="other" v-if="input.childrens != undefined">
       <ul>
-        <div v-for="otherData in other" v-bind:key="otherData.guid">
+        <div v-for="otherData in input.childrens" v-bind:key="otherData.guid">
           <li>
             {{ otherData.name }}
             <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${otherData.guid}`)"/>
@@ -18,15 +18,15 @@
             />
           </li>
           <edit-modal
-            :modal-title="'Otros'"
-            :component-data="otherData"
-            :component-data-type="'Other'"
+            :modalTitle="'Otros'"
+            :componentData="otherData"
+            :componentDataType="5"
             @update="update($event)"
           />
           <delete-modal
-            :modal-title="'elemento'"
+            :modalTitle="'elemento'"
             :message="'el elemento'"
-            :component-data="otherData"
+            :componentData="otherData"
             @remove="splice(otherData.guid)"
           />
         </div>
@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import otherView from "./OtherView.vue";
-import { Component } from "@/Config/types";
+import { Component, Module, ComponentType } from "@/Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import AddLink from "@/components/AddLink.vue";
@@ -68,18 +68,16 @@ export default {
       type: Boolean,
       required: true,
     },
-    guid: {
-      type: String,
-      rewuired: true,
-    },
+    input: {
+      type: Module,
+      required: true
+    }
   },
   data(): any {
     return {
       hide: false,
       add: false,
-      counter: 0,
-      otherNew: "",
-      other: new Array<Component>(),
+      otherNew: ""
     };
   },
   methods: {
@@ -89,30 +87,30 @@ export default {
     },
     save(otherNew: string): void {
       this.$nextTick(() => {
-        this.other.push({
-          guid: crypto.randomUUID(),
-          name: otherNew,
-          childrens: new Array<Component>(),
-        });
-        this.$emit("update", this.other);
+        this.input.childrens.push(
+          new Component(crypto.randomUUID(), 
+          ComponentType.SubContent, 
+          otherNew
+        ));
+        this.$emit("update", this.input);
         this.cancel();
       });
     },
     refresh(other: Component): void {
-      let dat = this.other.find((data: any) => data.guid === other.guid);
+      let dat = this.input.childrens.find((data: any) => data.guid === other.guid);
       dat = other;
-      this.other = this.other.filter((data: any) => data.guid !== other.guid);
-      this.other.push(dat);
-      this.$emit("update", this.other);
+      this.input.childrens = this.input.childrens.filter((data: any) => data.guid !== other.guid);
+      this.input.childrens.push(dat);
+      this.$emit("update", this.input);
     },
     update(others: Array<Component>): void {
       this.$nextTick(() => {
         this.$emit("update", others);
       });
     },
-    splice(index: string): void {
-      this.other = this.other.filter((data: any) => data.guid !== index);
-      this.$emit("update", this.other);
+    splice(guid: string): void {
+      this.input.childrens = this.input.childrens.filter((data: any) => data.guid !== guid);
+      this.$emit("update", this.input);
     },
   },
 };

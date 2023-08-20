@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <div v-if="company != undefined">
     <ul>
-      <li>Centro/Lugar: {{ companyData.place }}</li>
-      <li>Fecha inicio: {{ formatDate(companyData.initDate) }}</li>
+      <li>Centro/Lugar: {{ company.place }}</li>
+      <li>Fecha inicio: {{ formatDate(company.initDate) }}</li>
       <li v-if="company.finishDate">
-        Fecha Fin: {{ formatDate(companyData.finishDate) }}
+        Fecha Fin: {{ formatDate(company.finishDate) }}
       </li>
       <contract-list-view
-        :ref="'contract'"
         :contracts="company.childrens"
         :iconsHidden="iconsHidden"
         @update="update($event)"
@@ -24,7 +23,7 @@
 
 <script lang="ts">
 import AddLink from "@/components/AddLink.vue";
-import { Component } from "../../Config/types";
+import { Component, ComponentType } from "../../Config/types";
 import ContractListView from "./ContractListView.vue";
 
 export default {
@@ -50,24 +49,21 @@ export default {
   data(): any {
     return {
       add: false,
-      contractData: "",
-      companyData: {} as Component,
-      contractList: new Array<Component>(),
+      contractData: ""
     };
   },
   methods: {
     update(contracts: Array<Component>): void {
-      this.companyData.childrens = contracts;
-      this.$emit("update", this.companyData);
+      this.company.childrens = contracts;
+      this.$emit("update", this.company);
     },
-    save(contract: Component): void {
+    save(contract: string): void {
       this.$nextTick(() => {
-        let data = new Component(crypto.randomUUID(), contract);
-        this.contractList.push(data);
-        this.companyData.childrens.push(data);
+        let data = new Component(crypto.randomUUID(), ComponentType.Project, contract);
+        this.company.childrens.push(data);
         this.contractData = "";
         this.add = false;
-        this.$emit("update", this.companyData);
+        this.$emit("update", this.company);
       });
     },
     cancel(): void {
@@ -77,10 +73,6 @@ export default {
     formatDate(date: string): string {
       return new Date(date).toLocaleDateString();
     },
-  },
-  mounted(): void {
-    this.companyData = this.company;
-    this.$refs.contractt._data.contractsData = this.company.childrens;
-  },
+  }
 };
 </script>

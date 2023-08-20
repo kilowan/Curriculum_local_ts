@@ -12,7 +12,7 @@
             :ref="data.guid"
             :iconsHidden="iconsHidden"
             :data="data"
-            :componentDataType="data.componentDataType"
+            :componentDataType="data.childrensDataType"
             @update="refresh($event)"
           />
           <delete-modal
@@ -22,9 +22,9 @@
             @remove="splice(data.guid)"
           />
           <edit-modal
-            :modal-title="getModalTitle"
-            :component-data="data"
-            :component-data-type="data.componentDataType"
+            :modalTitle="getModalTitle"
+            :componentData="data"
+            :componentDataType="data.childrensDataType"
           />
         </div>
         <AddModal
@@ -66,7 +66,7 @@ export default {
       required: true,
     },
     componentDataType: {
-      type: String,
+      type: Number,
       required: true,
     },
     childrensTitle: {

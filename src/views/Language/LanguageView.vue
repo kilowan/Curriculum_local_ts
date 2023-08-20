@@ -6,40 +6,39 @@
     </dt>
     <dd id="languages">
       <ul>
-        <div v-for="language in languageList" v-bind:key="language.guid">
+        <div v-for="language in input.childrens" v-bind:key="language.guid">
           <li>
             <strong>{{ language.name }}:</strong> {{ language.level }}
             <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${language.guid}`)"/>
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${language.guid}`)"/>
           </li>
           <EditModal
-            :modal-title="'Idioma'"
-            :component-data="language"
-            :component-data-type="'Language'"
+            :modalTitle="'Idioma'"
+            :componentData="language"
+            :componentDataType="4"
             @update="update(languageList)"
           />
           <DeleteModal
-            :modal-title="'idioma'"
+            :modalTitle="'idioma'"
             :message="'el idioma'"
-            :component-data="language"
+            :componentData="language"
             @remove="splice(language.guid)"
           />
         </div>
       </ul>
-      <AddLink v-if="!iconsHidden" :text="'idioma'" @click="$bvModal.show('add-modal')"/>
+      <AddLink v-if="!iconsHidden" :text="'idioma'" @click="$bvModal.show(`add-${guid}`)"/>
     </dd>
     <dd class="clear"></dd>
     <AddModal
       :guid="guid"
-      :modal-title="'Idioma'"
-      :component-data-type="'Language'"
+      :componentDataType="4"
       @save="save($event)"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
+import { Component, Module } from "../../Config/types";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
@@ -64,13 +63,16 @@ export default {
       type: Boolean,
       required: true,
     },
+    input: {
+      type: Module,
+      required: true
+    }
   },
   data(): any {
     return {
       hide: false,
       add: false,
       languageLevelList: [],
-      languageList: new Array<Component>(),
       language: {} as Component,
       guid: crypto.randomUUID(),
     };
@@ -81,7 +83,8 @@ export default {
     },
     splice(guid: string): void {
       this.$nextTick(() => {
-        this.$emit("update", this.languageList.filter((data: any) => data.guid !== guid));
+        this.input.childrens = this.input.childrens.filter((data: any) => data.guid !== guid);
+        this.$emit("update", this.input);
       });
     },
     cancel(): void {
@@ -96,10 +99,10 @@ export default {
     },
     save(language: Component): void {
       this.$nextTick(() => {
-        let lang = new Component(crypto.randomUUID(), language.name);
+        let lang = new Component(crypto.randomUUID(), language.childrensDataType, language.name);
         lang.level = language.level;
-        this.languageList.push(lang);
-        this.$emit("update", this.languageList);
+        this.input.childrens.push(lang);
+        this.$emit("update", this.input);
         this.language = {} as Component;
       });
     },

@@ -1,54 +1,54 @@
 <template>
   <b-modal
     :id="`add-${guid}`"
-    :title="`Añadir ${modalTitle}`"
+    :title="getTitle()"
     ok-title="Guardar"
     @ok="save"
     @cancel="cancel"
   >
     <label>Nombre</label> <input type="text" v-model="newComponent.name" />
     <br />
-    <label v-if="componentDataType === 'Language'">Nivel</label>
+    <label v-if="componentDataType === 4">Nivel</label>
     <input
-      v-if="componentDataType === 'Language'"
+      v-if="componentDataType === 4"
       type="text"
       v-model="newComponent.level"
     />
     <br />
     <label
       v-if="
-        componentDataType === 'Academic' || componentDataType === 'Experience'
+        componentDataType === 2 || componentDataType === 1
       "
       >Centro/Lugar:</label
     >
     <input
       v-if="
-        componentDataType === 'Academic' || componentDataType === 'Experience'
+        componentDataType === 2 || componentDataType === 1
       "
       type="text"
       v-model="newComponent.place"
     />
     <br />
-    <label v-if="componentDataType === 'Experience'">Fecha de inicio</label>
+    <label v-if="componentDataType === 1">Fecha de inicio</label>
     <input
-      v-if="componentDataType === 'Experience'"
+      v-if="componentDataType === 1"
       type="date"
       v-model="newComponent.initDate"
       min="2015-01-01"
       max="2030-12-31"
     />
     <br />
-    <label v-if="componentDataType === 'Experience'">Fecha de fin</label>
+    <label v-if="componentDataType === 1">Fecha de fin</label>
     <input
-      v-if="componentDataType === 'Experience'"
+      v-if="componentDataType === 1"
       type="date"
       v-model="newComponent.finishDate"
       min="2015-01-01"
       max="2030-12-31"
     />
-    <label v-if="componentDataType === 'Academic'">Graduación</label>
+    <label v-if="componentDataType === 2">Graduación</label>
     <input
-      v-if="componentDataType === 'Academic'"
+      v-if="componentDataType === 2"
       type="date"
       v-model="newComponent.graduationDate"
       min="2015-01-01"
@@ -59,26 +59,18 @@
 </template>
 
 <script lang="ts">
-import { Component } from "@/Config/types";
+import { Component, ComponentType } from "@/Config/types";
 
 export default {
   name: "AddModal",
   props: {
-    modalTitle: {
-      type: String,
-      required: true,
-    },
     guid: {
       type: String,
       required: true,
     },
     componentDataType: {
-      type: String,
+      type: Number,
       required: true,
-    },
-    order: {
-      type: Array,
-      required: false
     }
   },
   data(): any {
@@ -94,6 +86,7 @@ export default {
       this.$nextTick(() => {
         let component = new Component(
           crypto.randomUUID(),
+          this.getChildrensType(),
           this.newComponent.name
         );
         component.componentDataType = this.componentDataType;
@@ -107,11 +100,56 @@ export default {
         this.$emit("save", component);
       });
     },
-    getChildrensTitle(): any {
-      var indice = this.order.indexOf(this.modalTitle)+1;
-      var title = undefined;
-      if(indice < this.order.length) title = this.order[indice];
-      return title
+    getTitle(): string {
+      switch (this.componentDataType) {
+        case ComponentType.Experience:
+          return 'Añadir Experiencia';
+
+        case ComponentType.Contract:
+          return 'Añadir Contrato';
+
+        case ComponentType.Project:
+          return 'Añadir Proyecto';
+
+        case ComponentType.Academic:
+          return 'Añadir Formación';
+
+        case ComponentType.Content:
+          return 'Añadir Contenido';
+
+        case ComponentType.SubContent:
+          return 'Añadir Subcontenido';
+
+        case ComponentType.Other:
+          return 'Añadir Otros Datos';
+
+        case ComponentType.Value:
+          return 'Añadir Valor';
+        default:
+          return 'Añadir';
+      }
+    },
+    getChildrensType(): ComponentType {
+      switch (this.componentDataType) {
+        case ComponentType.Experience:
+          return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
+
+        case ComponentType.Academic:
+          return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
+
+        default:
+          return ComponentType.Value;
+      }
     }
   },
 };
