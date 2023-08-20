@@ -16,7 +16,8 @@
           placeholder="Teléfono"
         /><br />
       </div>
-      <b-icon icon="envelope" aria-hidden="true" /><input
+      <b-icon icon="envelope" aria-hidden="true" />
+      <input
         type="text"
         v-model="curriculum.email"
         placeholder="Email"

@@ -18,10 +18,9 @@
       <component-list-view
         :ref="data.guid"
         :iconsHidden="iconsHidden"
-        :component-data="data.childrens"
-        :childrens-title="data.childrensTitle"
-        :component-data-type="data.componentDataType"
-        :component-data-id="data.guid"
+        :elements="data.childrens"
+        :childrensTitle="data.childrensTitle"
+        :componentDataType="data.componentDataType"
         @update="refresh($event)"
       />
     </div>
@@ -47,7 +46,7 @@ export default {
     iconsHidden: {
       type: Boolean,
       required: true,
-    },
+    }
   },
   data(): any {
     return {

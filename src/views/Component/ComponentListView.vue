@@ -12,7 +12,7 @@
             :ref="data.guid"
             :iconsHidden="iconsHidden"
             :data="data"
-            :component-data-type="data.componentDataType"
+            :componentDataType="data.componentDataType"
             @update="refresh($event)"
           />
           <delete-modal
@@ -29,8 +29,8 @@
         </div>
         <AddModal
           :guid="guid"
-          :modal-title="getModalTitle"
-          :component-data-type="componentDataType"
+          :modalTitle="getModalTitle"
+          :componentDataType="componentDataType"
           @save="save($event)"
         />
       </ul>

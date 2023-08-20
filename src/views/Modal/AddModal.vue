@@ -76,10 +76,10 @@ export default {
       type: String,
       required: true,
     },
-    ComponentDataId: {
-      type: String,
-      required: false,
-    },
+    order: {
+      type: Array,
+      required: false
+    }
   },
   data(): any {
     return {
@@ -100,10 +100,19 @@ export default {
         component.place = this.newComponent?.place;
         component.initDate = this.newComponent?.initDate;
         component.finishDate = this.newComponent?.finishDate;
+        component.graduationDate = this.newComponent?.graduationDate;
+        //component.childrensTitle = this.getChildrensTitle();
+        component.childrens = new Array<Component>();
         this.cancel();
         this.$emit("save", component);
       });
     },
+    getChildrensTitle(): any {
+      var indice = this.order.indexOf(this.modalTitle)+1;
+      var title = undefined;
+      if(indice < this.order.length) title = this.order[indice];
+      return title
+    }
   },
 };
 </script>
