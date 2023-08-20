@@ -34,11 +34,19 @@
           </b-modal>
         </div>
       </ul>
-      <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show('add-academic-modal')"/>
+      <!--<ComponentListView
+        v-if="academicTrainingList != undefined && academicTrainingList.length >0"
+        :ref="guid"
+        :iconsHidden="iconsHidden"
+        :elements="academicTrainingList"
+        :componentDataType="'Academic'"
+        @update="refresh($event)"
+      />-->
+      <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show(`add-${guid}`)"/>
     </dd>
     <dd class="clear"></dd>
     <b-modal
-      :id="'add-academic-modal'"
+      :id="`add-${guid}`"
       :title="`Añadir Formación`"
       ok-title="Guardar"
       @ok="save"
@@ -62,16 +70,16 @@
 
 <script lang="ts">
 import { Component } from "../../Config/types";
+//import ComponentListView from "../Component/ComponentListView.vue";
 import AcademicTrainingView from "./AcademicTrainingView.vue";
-import ELink from "@/components/ELink.vue";
 import AddLink from "@/components/AddLink.vue";
 import HideLink from "@/components/HideLink.vue";
 
 export default {
   name: "AcademicTrainingListView",
   components: {
+    //ComponentListView,
     AcademicTrainingView,
-    ELink,
     AddLink,
     HideLink
 },

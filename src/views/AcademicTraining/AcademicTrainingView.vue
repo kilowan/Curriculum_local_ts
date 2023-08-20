@@ -50,7 +50,6 @@
 <script lang="ts">
 import ContentsView from "../Content/ContentListView.vue";
 import { Component } from "../../Config/types";
-import ELink from "@/components/ELink.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
@@ -60,7 +59,6 @@ export default {
   name: "AcademicTrainingView",
   components: {
     ContentsView,
-    ELink,
     AddLink,
     DeleteLink,
     EditLink,
