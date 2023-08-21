@@ -1,19 +1,28 @@
-export interface ICurriculumDetail {
+export interface IElement {
   guid: string;
-  fullName?: string;
-  description: string;
-  phoneNumber: string;
-  email: string;
-  experience: Array<Component>;
-  skillList: Array<Component>;
-  academicTraining: Array<Component>;
-  languageList: Array<Component>;
-  socialMedia: Array<Component>;
-  otherData: Array<Component>;
 }
-export interface IComponent {
+export interface IModule extends IElement {
+  name: string;
+  childrens: Array<Component>;
+  childrensDataType: ComponentType;
+}
+export class Module implements IModule {
+  constructor(guid: string, ddId: string, dtId: string, childrensDataType: ComponentType, name: string) {
+    this.guid = guid;
+    this.name = name;
+    this.ddId = ddId;
+    this.dtId = dtId;
+    this.childrens = new Array<Component>();
+    this.childrensDataType = childrensDataType;
+  }
   guid: string;
   name: string;
+  ddId: string;
+  dtId: string;
+  childrens: Array<Component>;
+  childrensDataType: ComponentType;
+}
+export interface IComponent extends IModule{
   place?: string;
   initDate?: string;
   finishDate?: string;
@@ -21,14 +30,13 @@ export interface IComponent {
   childrensTitle?: string;
   level?: string;
   type?: number;
-  childrens?: Array<Component>;
-  componentDataType?: string;
 }
 export class Component implements IComponent {
-  constructor(guid: string, name: string) {
+  constructor(guid: string, childrensDataType: ComponentType, name: string) {
     this.guid = guid;
     this.name = name;
     this.childrens = new Array<Component>();
+    this.childrensDataType = childrensDataType;
   }
   guid: string;
   name: string;
@@ -39,8 +47,21 @@ export class Component implements IComponent {
   childrensTitle?: string;
   level?: string;
   type?: number;
-  childrens?: Array<Component>;
+  childrens: Array<Component>;
+  childrensDataType: ComponentType;
   componentDataType?: string;
+}
+export interface ICurriculumDetail extends IElement {
+  fullName?: string;
+  description: string;
+  phoneNumber: string;
+  email: string;
+  experience: Module;
+  skillList: Module;
+  academicTraining: Module;
+  languageList: Module;
+  socialMedia: Array<Component>;
+  otherData: Module;
 }
 export class CurriculumDetail implements ICurriculumDetail {
   constructor(
@@ -48,19 +69,20 @@ export class CurriculumDetail implements ICurriculumDetail {
     fullName: string,
     description: string,
     phoneNumber: string,
-    email: string
+    email: string,
+    modules: Array<Module>
   ) {
     this.guid = guid;
     this.fullName = fullName;
     this.description = description;
     this.phoneNumber = phoneNumber;
     this.email = email;
-    this.experience = new Array<Component>();
-    this.skillList = new Array<Component>();
-    this.academicTraining = new Array<Component>();
-    this.languageList = new Array<Component>();
+    this.experience = modules[0];
+    this.skillList = modules[1];
+    this.academicTraining = modules[2];
+    this.languageList = modules[3];
     this.socialMedia = new Array<Component>();
-    this.otherData = new Array<Component>();
+    this.otherData = modules[4];
   }
 
   guid: string;
@@ -68,12 +90,12 @@ export class CurriculumDetail implements ICurriculumDetail {
   description: string;
   phoneNumber: string;
   email: string;
-  experience: Array<Component>;
-  skillList: Array<Component>;
-  academicTraining: Array<Component>;
-  languageList: Array<Component>;
+  experience: Module;
+  skillList: Module;
+  academicTraining: Module;
+  languageList: Module;
   socialMedia: Array<Component>;
-  otherData: Array<Component>;
+  otherData: Module;
 }
 export enum SocialMediaType {
   Linkedin = 1,
@@ -92,4 +114,5 @@ export enum ComponentType {
   Project = 9,
   Description = 10,
   Value = 11,
+  End = 12,
 }

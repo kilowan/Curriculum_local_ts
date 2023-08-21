@@ -1,28 +1,28 @@
 <template>
-    <div>
-      <li v-for="content in contentsData" v-bind:key="content.guid">
+    <div v-if="contents != undefined">
+      <li v-for="content in contents" v-bind:key="content.guid">
         {{ content.name }}
         <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${content.guid}`)"/>
         <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${content.guid}`)"/>
         <content-view
-          :guid="content.guid"
-          :content="content"
+          :guid="content"
+          :input="content"
           :iconsHidden="iconsHidden"
           @update="refresh($event, content)"
         />
+        <delete-modal
+          :modalTitle="'Contenido'"
+          :message="'el contenido'"
+          :componentData="content"
+          @remove="splice(content.guid)"
+        />
+        <edit-modal
+          :modalTitle="'Contenido'"
+          :componentData="content"
+          :componentDataType="6"
+          @update="update($event)"
+        />
       </li>
-      <delete-modal
-        :modal-title="'Contenido'"
-        :message="'el contenido'"
-        :component-data="content"
-        @remove="splice(content.guid)"
-      />
-      <edit-modal
-        :modal-title="'Contenido'"
-        :component-data="content"
-        :component-data-type="'Content'"
-        @update="update($event)"
-      />
     </div>
 </template>
 
@@ -55,23 +55,21 @@ export default {
   },
   data(): any {
     return {
-      element: "",
-      contentsData: new Array<Component>(),
+      element: ""
     };
   },
   methods: {
-    refresh(subContents: Array<Component>, content: any): void {
+    refresh(subContents: Array<Component>, content: Component): void {
       this.$nextTick(() => {
-        let cont = this.contentsData.find(
+        let cont = this.contents.find(
           (data: any) => data.guid === content.guid
         );
-        if (cont !== undefined) {
+        if (cont != undefined) {
           cont.childrens = subContents;
-          this.contentsData.push(cont);
         } else {
-          this.contentsData.push(content);
+          this.contents.push(content);
         }
-        this.$emit("update", this.contentsData);
+        this.$emit("update", this.contents);
       });
     },
     update(contents: any): void {
@@ -80,14 +78,11 @@ export default {
       });
     },
     splice(guid: string): void {
-      this.contentsData = this.contentsData.filter(
+      this.contents = this.contents.filter(
         (data: any) => data.guid !== guid
       );
-      this.$emit("update", this.contentsData);
-    },
-  },
-  mounted(): void {
-    this.contentsData = this.contents;
-  },
+      this.$emit("update", this.contents);
+    }
+  }
 };
 </script>

@@ -37,7 +37,8 @@
       </div>
     </div>
     <social-media-list-view
-      :ref="'socialMedia'"
+      v-if="curriculum.socialMedia"
+      :input="curriculum.socialMedia"
       :iconsHidden="active"
       @update="updateSocialMedia($event)"
     />
@@ -54,28 +55,32 @@
     <dd class="clear"></dd>
     <dl>
       <professional-experience-list-view
-        :ref="'experience'"
+        v-if="curriculum.experience"
         :iconsHidden="active"
+        :input="curriculum.experience"
         @update="updateExperience($event)"
       />
       <academic-training-list-view
-        :ref="'academic'"
+        :input="curriculum.academicTraining"
         :iconsHidden="active"
         @update="updateAcademic($event)"
       />
       <skill-list-view
-        :ref="'skills'"
+        v-if="curriculum.skillList"
+        :input="curriculum.skillList"
         :iconsHidden="active"
         @update="updateSkills($event)"
       />
       <language-list-view
-        :ref="'lang'"
+        v-if="curriculum.languageList"
         :iconsHidden="active"
+        :input="curriculum.languageList"
         @update="updateLanguage($event)"
       />
       <other-list-view
-        :ref="'other'"
+        v-if="curriculum.otherData"
         :iconsHidden="active"
+        :input="curriculum.otherData"
         @update="updateOther($event)"
       />
     </dl>
@@ -101,7 +106,7 @@
 <script lang="ts">
 //import jsPDF from 'jspdf';
 //declare const html2canvas: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>;
-import { CurriculumDetail, Component } from "../Config/types";
+import { CurriculumDetail, Component, Module, ComponentType } from "../Config/types";
 import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
 import OtherListView from "./Other/OtherListView.vue";
 import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceListView.vue";
@@ -144,44 +149,35 @@ export default {
         this.curriculum.phoneNumber = json.phoneNumber;
         this.curriculum.email = json.email;
         this.curriculum.fullName = json.fullName;
-        this.$refs.socialMedia._data.socialMediaList = json.socialMedia;
-        this.$refs.experience._data.experienceList = json.experience;
-        this.$refs.academic._data.academicTrainingList = json.academicTraining;
-        this.$refs.lang._data.languageList = json.languageList;
-        this.$refs.skills._data.skillList = json.skillList;
-        this.$refs.other._data.other = json.otherData;
+        this.curriculum.otherData = json.otherData;
+        this.curriculum.academicTraining = json.academicTraining;
+        this.curriculum.skillList = json.skillList;
+        this.curriculum.experience = json.experience;
+        this.curriculum.socialMedia = json.socialMedia;
+        this.curriculum.languageList = json.languageList;
         this.exportable = true;
         this.EditMode();
       });
     },
     ParseLegacy(input: CurriculumDetail): void {
       if (input.guid == undefined) input.guid = crypto.randomUUID();
-      if (input.academicTraining != null)
-        input.academicTraining.forEach((element: Component) =>
-          this.ParseComponent(element)
-        );
-      if (input.experience != null)
-        input.experience.forEach((element: Component) =>
-          this.ParseComponent(element)
-        );
-      if (input.languageList != null)
-        input.languageList.forEach((element: Component) =>
-          this.ParseComponent(element)
-        );
-      if (input.otherData != null)
-        input.otherData.forEach((element: Component) =>
-          this.ParseComponent(element)
-        );
-      if (input.skillList != null)
-        input.skillList.forEach((element: Component) =>
-          this.ParseComponent(element)
-        );
+      if (input.academicTraining != null) this.ParseModule(input.academicTraining);
+      if (input.experience != null) this.ParseModule(input.experience);
+      if (input.languageList != null) this.ParseModule(input.languageList);
+      if (input.otherData != null) this.ParseModule(input.otherData);
+      if (input.skillList != null) this.ParseModule(input.skillList);
       if (input.socialMedia != null)
         input.socialMedia.forEach((element: Component) =>
           this.ParseComponent(element)
         );
     },
     ParseComponent(input: Component): void {
+      if (input.guid == undefined) input.guid = crypto.randomUUID();
+      input.childrens?.forEach((element: Component) =>
+        this.ParseComponent(element)
+      );
+    },
+    ParseModule(input: Module): void {
       if (input.guid == undefined) input.guid = crypto.randomUUID();
       input.childrens?.forEach((element: Component) =>
         this.ParseComponent(element)
@@ -239,27 +235,27 @@ export default {
       };
       reader.readAsDataURL(contenidoEnBlob);
     },
-    updateSkills(skills: Array<Component>): void {
+    updateSkills(skills: Module): void {
       this.curriculum.skillList = skills;
       this.exportable = true;
       this.EditMode();
     },
-    updateAcademic(media: Array<Component>): void {
+    updateAcademic(media: Module): void {
       this.curriculum.academicTraining = media;
       this.exportable = true;
       this.EditMode();
     },
-    updateLanguage(language: Array<Component>): void {
+    updateLanguage(language: Module): void {
       this.curriculum.languageList = language;
       this.exportable = true;
       this.EditMode();
     },
-    updateOther(media: Array<Component>): void {
+    updateOther(media: Module): void {
       this.curriculum.otherData = media;
       this.exportable = true;
       this.EditMode();
     },
-    updateExperience(experience: Array<Component>): void {
+    updateExperience(experience: Module): void {
       this.$nextTick(() => {
         this.curriculum.experience = experience;
         this.exportable = true;
@@ -320,7 +316,20 @@ export default {
     },
   },
   mounted(): void {
-    this.curriculum = new CurriculumDetail(crypto.randomUUID(), "", "", "", "");
+    this.curriculum = 
+    new CurriculumDetail(
+      crypto.randomUUID(), 
+      '', //fullName
+      '', //description
+      '', //phoneNumber
+      '', //email
+      [
+        new Module(crypto.randomUUID(), 'experience', 'experiencia', ComponentType.Experience, 'Experiencia'), 
+        new Module(crypto.randomUUID(), 'academic', 'academica', ComponentType.Academic, 'Formación'), 
+        new Module(crypto.randomUUID(), 'complementary', 'complementaria', ComponentType.Skills, 'Skills'), 
+        new Module(crypto.randomUUID(), 'languages', 'idiomas', ComponentType.Languages, 'Idiomas'),
+        new Module(crypto.randomUUID(), 'other', 'otros', ComponentType.Other, 'Otros datos')
+      ]);
   },
 };
 </script>

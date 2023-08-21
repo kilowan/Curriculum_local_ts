@@ -1,8 +1,8 @@
 <template>
-  <div v-if="projectsData.length > 0">
+  <div v-if="projects.length > 0">
     Proyectos:
     <ul>
-      <div v-for="project in projectsData" v-bind:key="project.guid">
+      <div v-for="project in projects" v-bind:key="project.guid">
         <li>
           {{ project.name }}
           <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${project.guid}`)"/>
@@ -15,15 +15,15 @@
           />
         </li>
         <edit-modal
-          :modal-title="'proyecto'"
-          :component-data="project"
-          :component-data-type="'Project'"
+          :modalTitle="'proyecto'"
+          :componentData="project"
+          :componentDataType="9"
           @update="update($event)"
         />
         <delete-modal
           :modalTitle="'Proyecto'"
           :message="'el proyecto'"
-          :component-data="project"
+          :componentData="project"
           @remove="deleteProject($event)"
         />
       </div>
@@ -60,34 +60,30 @@ export default {
   },
   data(): any {
     return {
-      projectsData: new Array<Component>(),
     };
   },
   methods: {
     deleteProject(proj: Component): void {
       this.$nextTick(() => {
-        this.projectsData = this.projectsData.filter(
+        this.projects = this.projects.filter(
           (data: any) => data.guid !== proj.guid
         );
-        this.$emit("update", this.projectsData);
+        this.$emit("update", this.projects);
       });
     },
     refresh(project: Component): void {
-      var projects = this.projectsData.filter(
+      var projects = this.projects.filter(
         (data: any) => data.guid !== project.guid
       );
       projects.push(project);
-      this.projectsData = projects;
-      this.$emit("update", this.projectsData);
+      this.projects = projects;
+      this.$emit("update", this.projects);
     },
     update(projects: Array<Component>): void {
       this.$nextTick(() => {
         this.$emit("update", projects);
       });
     },
-  },
-  mounted(): void {
-    this.projectsData = this.projects;
-  },
+  }
 };
 </script>

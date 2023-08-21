@@ -14,11 +14,12 @@
 </template>
 
 <script lang="ts">
+import { Component } from "../../Config/types";
 export default {
   name: "DeleteModal",
   props: {
     componentData: {
-      type: Object,
+      type: Component,
       required: true,
     },
     modalTitle: {

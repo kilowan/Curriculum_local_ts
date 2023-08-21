@@ -1,32 +1,32 @@
 <template>
   <div v-if="!hide">
-    <dt id="complementaria" v-if="skillList">
+    <dt id="complementaria" v-if="input.childrens">
       Skills
       <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
-    <dd id="complementary" v-if="skillList">
+    <dd id="complementary" v-if="input.childrens">
       <ul>
-        <div v-for="skill in skillList" v-bind:key="skill.guid">
+        <div v-for="skill in input.childrens" v-bind:key="skill.guid">
           <li>
             <strong>{{ skill.name }}</strong>
             <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${skill.guid}`)"/>
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${skill.guid}`)"/>
             <skill-view
-              :skill="skill"
+              :input="skill"
               :iconsHidden="iconsHidden"
-              @update="refresh($event)"
+              @update="refresh($event, skill)"
             />
           </li>
           <edit-modal
-            :modal-title="'skill'"
-            :component-data="skill"
-            :component-data-type="'Skill'"
-            @update="update(skillList)"
+            :modalTitle="'skill'"
+            :componentData="skill"
+            :componentDataType="3"
+            @update="update(input.childrens)"
           />
           <delete-modal
-            :modal-title="'Skill'"
+            :modalTitle="'Skill'"
             :message="'la skill'"
-            :component-data="skill"
+            :componentData="skill"
             @remove="splice(skill.guid)"
           />
         </div>
@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import SkillView from "./SkillView.vue";
-import { Component } from "../../Config/types";
+import { Component, Module, ComponentType } from "../../Config/types";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
@@ -68,14 +68,16 @@ export default {
       type: Boolean,
       required: true,
     },
+    input: {
+      type: Module,
+      required: true
+    }
   },
   data(): any {
     return {
       hide: false,
-      counter: 0,
       trainingNew: "",
       add: false,
-      skillList: new Array<Component>(),
       guid: crypto.randomUUID(),
     };
   },
@@ -84,40 +86,63 @@ export default {
       this.trainingNew = "";
       this.add = false;
     },
-    refresh(skill: Component): void {
+    refresh(skills: Array<Component>, comp: Component): void {
       this.$nextTick(() => {
-        var filtered = this.skillList.filter(
-          (data: any) => data.guid !== skill.guid
+        var filtered = this.input.childrens.filter(
+          (data: any) => data.guid !== comp.guid
         );
-        var training = this.skillList.find(
-          (data: any) => data.guid === skill.guid
+        var training = this.input.childrens.find(
+          (data: any) => data.guid === comp.guid
         );
-        training = skill;
+        training.childrens = skills;
         filtered.push(training);
-        this.skillList = filtered;
-        this.$emit("update", this.skillList);
+        this.input.childrens = filtered;
+        this.$emit("update", this.input);
       });
     },
     splice(index: string): void {
       this.$nextTick(() => {
-        this.skillList = this.skillList.filter(
+        this.input.childrens = this.input.childrens.filter(
           (data: any) => data.guid !== index
         );
-        this.$emit("update", this.skillList);
+        this.$emit("update", this.input);
       });
     },
     update(skills: Array<Component>): void {
       this.$nextTick(() => {
-        this.$emit("update", skills);
+        this.input.childrens = skills;
+        this.$emit("update", this.input);
       });
     },
     save(training: string): void {
       this.$nextTick(() => {
-        this.skillList.push(new Component(crypto.randomUUID(), training));
+        this.input.childrens.push(new Component(crypto.randomUUID(), this.getChildrensType(), training));
         this.cancel();
-        this.$emit("update", this.skillList);
+        this.$emit("update", this.input);
       });
     },
+    getChildrensType(): ComponentType {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Experience:
+          return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
+
+        case ComponentType.Academic:
+          return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
+
+        default:
+          return ComponentType.Value;
+      }
+    }
   },
 };
 </script>

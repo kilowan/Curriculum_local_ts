@@ -1,5 +1,6 @@
 <template>
   <b-modal
+    v-if="componentData != undefined"
     :id="`edit-${componentData.guid}`"
     :title="`Editar ${modalTitle}`"
     ok-title="Guardar"
@@ -9,36 +10,36 @@
     <input type="text" v-model="componentData.name" /> <br />
     <label
       v-if="
-        componentDataType === 'Academic' || componentDataType === 'Experience'
+        componentDataType === 2 || componentDataType === 1
       "
       >Centro/Lugar:</label
     >
     <input
       v-if="
-        componentDataType === 'Academic' || componentDataType === 'Experience'
+        componentDataType === 2 || componentDataType === 1
       "
       type="text"
       v-model="componentData.place"
     />
     <br />
-    <label v-if="componentDataType === 'Experience'">Fecha de inicio</label>
+    <label v-if="componentDataType === 1">Fecha de inicio</label>
     <input
-      v-if="componentDataType === 'Experience'"
+      v-if="componentDataType === 1"
       type="date"
       v-model="componentData.initDate"
       min="2015-01-01"
       max="2030-12-31"
     />
     <br />
-    <label v-if="componentDataType === 'Experience'">Fecha de fin</label>
+    <label v-if="componentDataType === 1">Fecha de fin</label>
     <input
-      v-if="componentDataType === 'Experience'"
+      v-if="componentDataType === 1"
       type="date"
       v-model="componentData.finishDate"
       min="2015-01-01"
       max="2030-12-31"
     />
-    <div v-if="componentDataType === 'Academic'">
+    <div v-if="componentDataType === 2">
       <label>Graduación:</label>
       <b-form-datepicker
         v-model="componentData.graduationDate"
@@ -51,11 +52,12 @@
 </template>
 
 <script lang="ts">
+import { Component } from "../../Config/types";
 export default {
   name: "EditModal",
   props: {
     componentData: {
-      type: Object,
+      type: Component,
       required: true,
     },
     modalTitle: {
@@ -63,7 +65,7 @@ export default {
       required: true,
     },
     componentDataType: {
-      type: String,
+      type: Number,
       required: true,
     },
   },

@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
+import { Component, ComponentType, Module } from "../../Config/types";
 //import ComponentListView from "../Component/ComponentListView.vue";
 import AcademicTrainingView from "./AcademicTrainingView.vue";
 import AddLink from "@/components/AddLink.vue";
@@ -88,6 +88,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    input: {
+      type: Module,
+      required: true
+    }
   },
   data(): any {
     return {
@@ -135,6 +139,7 @@ export default {
       this.$nextTick(() => {
         let component = new Component(
           crypto.randomUUID(),
+          this.getChildrensType(),
           this.newComponent.name
         );
         component.componentDataType = "Academic";
@@ -147,6 +152,28 @@ export default {
         this.$emit("update", this.academicTrainingList);
       });
     },
+    getChildrensType(): ComponentType {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Experience:
+          return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
+
+        case ComponentType.Academic:
+          return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
+
+        default:
+          return ComponentType.Value;
+      }
+    }
   },
 };
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div>
     <project-list-view
-      :ref="'projects'"
-      :projects="contractData.childrens"
+      v-if="contract.childrens != undefined"
+      :projects="contract.childrens"
       :iconsHidden="iconsHidden"
       @update="update($event)"
     />
@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import AddLink from "@/components/AddLink.vue";
-import { Component } from "../../Config/types";
+import { Component, ComponentType } from "../../Config/types";
 import ProjectListView from "./ProjectListView.vue";
 export default {
   name: "ContractView",
@@ -33,7 +33,7 @@ export default {
       required: true,
     },
     contract: {
-      type: Object,
+      type: Component,
       required: true,
     },
     guid: {
@@ -44,35 +44,27 @@ export default {
   data(): any {
     return {
       add: false,
-      contractData: {} as Component,
-      projectData: "",
-      projects: new Array<Component>(),
+      projectData: ""
     };
   },
   methods: {
     save(project: string): void {
-      let data = new Component(crypto.randomUUID(), project);
-      this.projects.push(data);
-      this.contractData.childrens.push(data);
-      this.$emit("update", this.contractData);
+      let data = new Component(crypto.randomUUID(), ComponentType.Description, project);
+      this.contract.childrens.push(data);
+      this.$emit("update", this.contract);
       this.projectData = "";
       this.add = false;
     },
     splice(guid: string): void {
-      this.contractData.childrens = this.contractData.childrens.filter(
+      this.contract.childrens = this.contract.childrens.filter(
         (data: Component) => data.guid !== guid
       );
-      this.projects = this.projects.filter((data: any) => data.guid !== guid);
-      this.$emit("update", this.contractData);
+      this.$emit("update", this.contract);
     },
     update(projects: Array<Component>): void {
-      this.contractData.childrens = projects;
-      this.$emit("update", this.contractData);
+      this.contract.childrens = projects;
+      this.$emit("update", this.contract);
     },
-  },
-  mounted(): void {
-    this.contractData = this.contract;
-    this.$refs.projects._data.projectsData = this.contract.childrens;
-  },
+  }
 };
 </script>
