@@ -1,5 +1,6 @@
 <template>
   <b-modal
+    v-if="componentData != undefined"
     :id="`edit-${componentData.guid}`"
     :title="`Editar ${modalTitle}`"
     ok-title="Guardar"
@@ -51,11 +52,12 @@
 </template>
 
 <script lang="ts">
+import { Component } from "../../Config/types";
 export default {
   name: "EditModal",
   props: {
     componentData: {
-      type: Object,
+      type: Component,
       required: true,
     },
     modalTitle: {

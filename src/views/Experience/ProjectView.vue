@@ -52,7 +52,7 @@ export default {
 },
   props: {
     project: {
-      type: Object,
+      type: Component,
       required: true,
     },
     iconsHidden: {

@@ -5,26 +5,23 @@
         <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${content.guid}`)"/>
         <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${content.guid}`)"/>
         <content-view
-          v-if="content != undefined"
-          :guid="content.guid"
+          :guid="content"
           :input="content"
           :iconsHidden="iconsHidden"
           @update="refresh($event, content)"
         />
         <delete-modal
-        v-if="content != undefined"
-        :modalTitle="'Contenido'"
-        :message="'el contenido'"
-        :componentData="content"
-        @remove="splice(content.guid)"
-      />
-      <edit-modal
-        v-if="content != undefined"
-        :modal-title="'Contenido'"
-        :componentData="content"
-        :componentDataType="6"
-        @update="update($event)"
-      />
+          :modalTitle="'Contenido'"
+          :message="'el contenido'"
+          :componentData="content"
+          @remove="splice(content.guid)"
+        />
+        <edit-modal
+          :modalTitle="'Contenido'"
+          :componentData="content"
+          :componentDataType="6"
+          @update="update($event)"
+        />
       </li>
     </div>
 </template>
@@ -62,14 +59,13 @@ export default {
     };
   },
   methods: {
-    refresh(subContents: Array<Component>, content: any): void {
+    refresh(subContents: Array<Component>, content: Component): void {
       this.$nextTick(() => {
         let cont = this.contents.find(
           (data: any) => data.guid === content.guid
         );
-        if (cont !== undefined) {
+        if (cont != undefined) {
           cont.childrens = subContents;
-          this.contents.push(cont);
         } else {
           this.contents.push(content);
         }
@@ -86,7 +82,7 @@ export default {
         (data: any) => data.guid !== guid
       );
       this.$emit("update", this.contents);
-    },
+    }
   }
 };
 </script>

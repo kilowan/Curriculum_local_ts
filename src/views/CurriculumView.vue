@@ -37,7 +37,8 @@
       </div>
     </div>
     <social-media-list-view
-      :ref="'socialMedia'"
+      v-if="curriculum.socialMedia"
+      :input="curriculum.socialMedia"
       :iconsHidden="active"
       @update="updateSocialMedia($event)"
     />
@@ -152,7 +153,7 @@ export default {
         this.curriculum.academicTraining = json.academicTraining;
         this.curriculum.skillList = json.skillList;
         this.curriculum.experience = json.experience;
-        this.$refs.socialMedia._data.socialMediaList = json.socialMedia;
+        this.curriculum.socialMedia = json.socialMedia;
         this.curriculum.languageList = json.languageList;
         this.exportable = true;
         this.EditMode();

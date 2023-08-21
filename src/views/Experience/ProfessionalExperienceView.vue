@@ -34,7 +34,7 @@ export default {
 },
   props: {
     company: {
-      type: Object,
+      type: Component,
       required: true,
     },
     iconsHidden: {

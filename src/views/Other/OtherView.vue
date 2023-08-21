@@ -52,7 +52,7 @@ export default {
 },
   props: {
     otherData: {
-      type: Object,
+      type: Component,
       required: true,
     },
     iconsHidden: {

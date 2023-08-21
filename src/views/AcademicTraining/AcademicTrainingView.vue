@@ -66,7 +66,7 @@ export default {
 },
   props: {
     academic: {
-      type: Object,
+      type: Component,
       required: true,
     },
     iconsHidden: {

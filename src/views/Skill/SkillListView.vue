@@ -12,16 +12,16 @@
             <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${skill.guid}`)"/>
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${skill.guid}`)"/>
             <skill-view
-              :skill="skill"
+              :input="skill"
               :iconsHidden="iconsHidden"
-              @update="refresh($event)"
+              @update="refresh($event, skill)"
             />
           </li>
           <edit-modal
             :modalTitle="'skill'"
             :componentData="skill"
             :componentDataType="3"
-            @update="update(skillList)"
+            @update="update(input.childrens)"
           />
           <delete-modal
             :modalTitle="'Skill'"
@@ -76,10 +76,8 @@ export default {
   data(): any {
     return {
       hide: false,
-      counter: 0,
       trainingNew: "",
       add: false,
-      skillList: new Array<Component>(),
       guid: crypto.randomUUID(),
     };
   },
@@ -88,15 +86,15 @@ export default {
       this.trainingNew = "";
       this.add = false;
     },
-    refresh(skill: Component): void {
+    refresh(skills: Array<Component>, comp: Component): void {
       this.$nextTick(() => {
         var filtered = this.input.childrens.filter(
-          (data: any) => data.guid !== skill.guid
+          (data: any) => data.guid !== comp.guid
         );
         var training = this.input.childrens.find(
-          (data: any) => data.guid === skill.guid
+          (data: any) => data.guid === comp.guid
         );
-        training = skill;
+        training.childrens = skills;
         filtered.push(training);
         this.input.childrens = filtered;
         this.$emit("update", this.input);
@@ -112,14 +110,15 @@ export default {
     },
     update(skills: Array<Component>): void {
       this.$nextTick(() => {
-        this.$emit("update", skills);
+        this.input.childrens = skills;
+        this.$emit("update", this.input);
       });
     },
     save(training: string): void {
       this.$nextTick(() => {
-        this.skillList.push(new Component(crypto.randomUUID(), this.getChildrensType(), training));
+        this.input.childrens.push(new Component(crypto.randomUUID(), this.getChildrensType(), training));
         this.cancel();
-        this.$emit("update", this.skillList);
+        this.$emit("update", this.input);
       });
     },
     getChildrensType(): ComponentType {

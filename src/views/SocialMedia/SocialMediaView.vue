@@ -1,14 +1,14 @@
 <template>
-  <div v-if="socialMediaData.type === 1">
+  <div v-if="input.type === 1">
     <b-icon icon="linkedin" aria-hidden="true" />
-    <a :href="'https://www.linkedin.com/in/' + socialMediaData.name + '/'">{{
-      "https://www.linkedin.com/in/" + socialMediaData.name + "/"
+    <a :href="'https://www.linkedin.com/in/' + input.name + '/'">{{
+      "https://www.linkedin.com/in/" + input.name + "/"
     }}</a>
   </div>
-  <div v-else-if="socialMediaData.type === 3">
+  <div v-else-if="input.type === 3">
     <b-icon icon="github" aria-hidden="true" />
-    <a :href="'https://github.com/' + socialMediaData.name + '/'">{{
-      "https://github.com/" + socialMediaData.name + "/"
+    <a :href="'https://github.com/' + input.name + '/'">{{
+      "https://github.com/" + input.name + "/"
     }}</a>
   </div>
   <div v-else>
@@ -16,11 +16,11 @@
     <a
       :href="
         'https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=' +
-        socialMediaData.name
+        input.name
       "
       >{{
         "https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=" +
-        socialMediaData.name
+        input.name
       }}</a
     >
   </div>
@@ -28,12 +28,13 @@
 
 <script lang="ts">
 import { SocialMediaType } from "../../Config/types";
+import { Component } from "../../Config/types";
 
 export default {
   name: "SocialMediaView",
   props: {
-    socialMediaData: {
-      type: Object,
+    input: {
+      type: Component,
       required: true,
     },
   },

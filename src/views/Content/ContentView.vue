@@ -1,7 +1,7 @@
 <template>
-  <div v-if="content != undefined">
+  <div>
     <ul>
-      <div v-for="sub in content.childrens" v-bind:key="sub.guid">
+      <div v-for="sub in input.childrens" v-bind:key="sub.guid">
         <li>
           {{ sub.name }}
           <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${sub.guid}`)"/>
@@ -11,7 +11,7 @@
           :componentData="sub"
           :modalTitle="'Contenido'"
           :message="'el elemento'"
-          @remove="splice($event)"
+          @remove="splice(sub.guid)"
         />
         <EditModal
           :modalTitle="'Contenido'"
@@ -60,21 +60,22 @@ export default {
   },
   data(): any {
     return {
-      subcontent: ""
+      subcontent: "",
+      guid: crypto.randomUUID()
     };
   },
   methods: {
-    splice(index: string): void {
-      this.content.childrens = this.content.childrens.filter(
-        (data: any) => data.guid !== index
+    splice(guid: string): void {
+      this.input.childrens = this.input.childrens.filter(
+        (data: any) => data.guid !== guid
       );
-      this.$emit("update", this.content);
+      this.$emit("update", this.input.childrens);
     },
     push(subContent: Component): void {
-      this.content.childrens.push(new Component(crypto.randomUUID(), subContent.childrensDataType, subContent.name));
-      this.$emit("update", this.content);
+      this.input.childrens.push(new Component(crypto.randomUUID(), subContent.childrensDataType, subContent.name));
+      this.$emit("update", this.input.childrens);
       this.subcontent = "";
-    },
+    }
   },
 };
 </script>

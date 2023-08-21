@@ -33,7 +33,7 @@ export default {
       required: true,
     },
     contract: {
-      type: Object,
+      type: Component,
       required: true,
     },
     guid: {

@@ -1,8 +1,7 @@
 <template>
   <ul>
     <contents-view
-      :ref="'contents'"
-      :contents="skill.childrens"
+      :contents="input.childrens"
       :iconsHidden="iconsHidden"
       @update="update($event)"
     />
@@ -15,7 +14,7 @@
 
 <script lang="ts">
 import ContentsView from "../Content/ContentListView.vue";
-import { Component } from "../../Config/types";
+import { Component, ComponentType } from "../../Config/types";
 import AddLink from "@/components/AddLink.vue";
 
 export default {
@@ -25,8 +24,8 @@ export default {
     AddLink
 },
   props: {
-    skill: {
-      type: Object,
+    input: {
+      type: Component,
       required: true,
     },
     iconsHidden: {
@@ -36,8 +35,6 @@ export default {
   },
   data(): any {
     return {
-      skillData: {} as Component,
-      contents: new Array<Component>(),
       add: false,
       element: "",
     };
@@ -49,25 +46,22 @@ export default {
     },
     save(content: string): void {
       this.$nextTick(() => {
-        this.$refs.contents._data.contentsData.push({
-          guid: crypto.randomUUID(),
-          name: content,
-          childrens: new Array<Component>(),
-        });
+        this.input.childrens.push(
+          new Component(
+            crypto.randomUUID(), 
+            ComponentType.SubContent, 
+            content
+          ));
         this.cancel();
-        this.$emit("update", this.$refs.contents._data.contentsData);
+        this.$emit("update", this.input.childrens);
       });
     },
     update(contents: Array<Component>): void {
       this.$nextTick(() => {
-        this.$refs.contents._data.contentsData = contents;
-        this.$emit("update", this.skillData);
+        this.input.childrens = contents;
+        this.$emit("update", this.input.childrens);
       });
     },
-  },
-  mounted() {
-    this.skillData = this.skill;
-    this.$refs.contents._data.contentsData = this.skill.childrens;
-  },
+  }
 };
 </script>
