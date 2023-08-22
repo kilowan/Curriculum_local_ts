@@ -9,7 +9,6 @@
       :elements="company.childrens"
     />
     <!--<contract-list-view
-      :ref="'contract'"
       :contracts="company.childrens"
       :iconsHidden="iconsHidden"
       @update="update($event)"
@@ -35,7 +34,7 @@ import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
 
 export default {
-  name: "ModuleView",
+  name: "View",
   components: {
     List,
     AddModal,

@@ -10,6 +10,7 @@
         :contracts="company.childrens"
         :iconsHidden="iconsHidden"
         @update="update($event)"
+        @reload="$emit('reload')"
       />
       <div v-if="add">
         <input class="m-2" type="text" v-model="contractData" />

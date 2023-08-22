@@ -5,6 +5,7 @@
       :projects="contract.childrens"
       :iconsHidden="iconsHidden"
       @update="update($event)"
+      @reload="$event('reload')"
     />
     <div v-if="add">
       <input class="m-2" type="text" v-model="projectData" />

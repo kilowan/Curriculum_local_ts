@@ -12,6 +12,7 @@
             :project="project"
             :iconsHidden="iconsHidden"
             @update="refresh($event)"
+            @reload="$emit('reload')"
           />
         </li>
         <edit-modal
@@ -24,7 +25,7 @@
           :modalTitle="'Proyecto'"
           :message="'el proyecto'"
           :componentData="project"
-          @remove="deleteProject($event)"
+          @remove="splice($event)"
         />
       </div>
     </ul>
@@ -63,21 +64,15 @@ export default {
     };
   },
   methods: {
-    deleteProject(proj: Component): void {
-      this.$nextTick(() => {
-        this.projects = this.projects.filter(
-          (data: any) => data.guid !== proj.guid
-        );
-        this.$emit("update", this.projects);
-      });
-    },
     refresh(project: Component): void {
-      var projects = this.projects.filter(
-        (data: any) => data.guid !== project.guid
-      );
-      projects.push(project);
-      this.projects = projects;
+      this.projects.find((data: any) => {
+        if(data.guid == project.guid) data = project;
+      });
       this.$emit("update", this.projects);
+    },
+    splice(element: Component): void {
+      this.projects.splice(this.projects.indexOf(element), 1);
+      this.$emit("reload");
     },
     update(projects: Array<Component>): void {
       this.$nextTick(() => {

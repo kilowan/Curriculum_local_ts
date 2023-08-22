@@ -8,13 +8,13 @@
           :guid="content"
           :input="content"
           :iconsHidden="iconsHidden"
-          @update="refresh($event, content)"
+          @reload="$emit('reload')"
         />
         <delete-modal
           :modalTitle="'Contenido'"
           :message="'el contenido'"
           :componentData="content"
-          @remove="splice(content.guid)"
+          @remove="splice(content)"
         />
         <edit-modal
           :modalTitle="'Contenido'"
@@ -77,11 +77,9 @@ export default {
         this.$emit("update", contents);
       });
     },
-    splice(guid: string): void {
-      this.contents = this.contents.filter(
-        (data: any) => data.guid !== guid
-      );
-      this.$emit("update", this.contents);
+    splice(element: Component): void {
+      this.contents.splice(this.contents.indexOf(element), 1);
+      this.$emit("reload");
     }
   }
 };

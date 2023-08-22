@@ -16,7 +16,6 @@
     </li>
     <div>
       <component-list-view
-        :ref="data.guid"
         :iconsHidden="iconsHidden"
         :elements="data.childrens"
         :childrensTitle="data.childrensTitle"

@@ -9,7 +9,6 @@
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${data.guid}`)"/>
           </li>
           <component-view
-            :ref="data.guid"
             :iconsHidden="iconsHidden"
             :data="data"
             :componentDataType="data.childrensDataType"

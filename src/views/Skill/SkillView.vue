@@ -4,6 +4,7 @@
       :contents="input.childrens"
       :iconsHidden="iconsHidden"
       @update="update($event)"
+      @reload="$emit('reload')"
     />
     <input v-if="add" class="m-2" type="text" v-model="element" />
     <b-button v-if="add" class="m-2" @click="save(element)">Guardar</b-button>

@@ -7,7 +7,7 @@
     <dd id="academic">
       <ul>
         <div
-          v-for="academic in academicTrainingList"
+          v-for="academic in input.childrens"
           v-bind:key="academic.guid"
         >
           <li>
@@ -18,13 +18,14 @@
               :academicIndex="academic.guid"
               @update="refresh($event)"
               @delete="$bvModal.show(`delete-${$event}`)"
+              @reload="$emit('update', input)"
             />
           </li>
           <b-modal
             :id="`delete-${academic.guid}`"
             :title="'Eliminar formación'"
             ok-title="Eliminar"
-            @ok="splice(academic.guid)"
+            @ok="splice(academic)"
           >
             <div style="text-align: center; margin: 0 auto; width: 380px">
               <h1>
@@ -35,14 +36,13 @@
         </div>
       </ul>
       <!--<ComponentListView
-        v-if="academicTrainingList != undefined && academicTrainingList.length >0"
-        :ref="guid"
+        v-if="input != undefined && input.length >0"
         :iconsHidden="iconsHidden"
-        :elements="academicTrainingList"
+        :elements="input"
         :componentDataType="'Academic'"
         @update="refresh($event)"
       />-->
-      <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show(`add-${guid}`)"/>
+      <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show(`add-${input.guid}`)"/>
     </dd>
     <dd class="clear"></dd>
     <b-modal
@@ -96,38 +96,31 @@ export default {
   data(): any {
     return {
       hide: false,
-      training: {} as Component,
       add: false,
-      academicTrainingList: new Array<Component>(),
-      guid: crypto.randomUUID(),
       newComponent: {} as Component,
     };
   },
   methods: {
     refresh(academic: Component): void {
       this.$nextTick(() => {
-        let filtered = this.academicTrainingList.filter(
+        let filtered = this.input.filter(
           (data: any) => data.guid !== academic.guid
         );
-        let training = this.academicTrainingList.find(
+        let training = this.input.find(
           (data: any) => data.guid === academic.guid
         );
         training = academic;
         filtered.push(training);
-        this.academicTrainingList = filtered;
-        this.$emit("update", this.academicTrainingList);
+        this.input = filtered;
+        this.$emit("update", this.input);
       });
     },
-    splice(index: string): void {
-      this.$nextTick(() => {
-        this.academicTrainingList = this.academicTrainingList.filter(
-          (data: any) => data.guid !== index
-        );
-        this.$emit("update", this.academicTrainingList);
-      });
+    splice(element: Component): void {
+      this.input.splice(this.input.indexOf(element), 1);
+      this.$emit("update", this.input);
     },
     cancel(): void {
-      this.training = {} as Component;
+      this.newComponent = {} as Component;
       this.add = false;
     },
     update(trainings: Array<Component>): void {
@@ -147,9 +140,9 @@ export default {
         component.initDate = this.newComponent?.initDate;
         component.finishDate = this.newComponent?.finishDate;
         component.graduationDate = this.newComponent?.graduationDate;
-        this.academicTrainingList.push(component);
+        this.input.push(component);
         this.cancel();
-        this.$emit("update", this.academicTrainingList);
+        this.$emit("update", this.input);
       });
     },
     getChildrensType(): ComponentType {
