@@ -5,7 +5,7 @@
       <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
     <dd id="academic">
-      <ul>
+      <ul v-if="input != undefined">
         <div
           v-for="academic in input.childrens"
           v-bind:key="academic.guid"
@@ -44,7 +44,7 @@
     </dd>
     <dd class="clear"></dd>
     <b-modal
-      :id="`add-${guid}`"
+      :id="`add-${input.guid}`"
       :title="`Añadir Formación`"
       ok-title="Guardar"
       @ok="save"
@@ -95,7 +95,7 @@ export default {
     return {
       hide: false,
       add: false,
-      newComponent: {} as Component,
+      newComponent: Component,
     };
   },
   methods: {

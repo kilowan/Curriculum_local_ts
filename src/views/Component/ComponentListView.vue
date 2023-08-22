@@ -10,8 +10,8 @@
           </li>
           <component-view
             :iconsHidden="iconsHidden"
-            :data="data"
-            :componentDataType="data.childrensDataType"
+            :input="data"
+            :childrensDataType="data.childrensDataType"
             @reload="$emit('reload')"
           />
           <delete-modal
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
+import { Component, ComponentType } from "../../Config/types";
 import EditModal from "../Modal/EditModal.vue";
 import AddModal from "../Modal/AddModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
@@ -64,7 +64,7 @@ export default {
       type: Array,
       required: true,
     },
-    componentDataType: {
+    childrensDataType: {
       type: Number,
       required: true,
     },
@@ -104,53 +104,53 @@ export default {
   },
   created(): void {
     this.$nextTick(() => {
-      switch (this.componentDataType) {
-        case "Academic":
+      switch (this.childrensDataType) {
+        case ComponentType.Academic:
           this.deleteModalMessage = "la formación";
           this.modalTitle = "Formación";
           break;
 
-        case "Experience":
+        case ComponentType.Experience:
           this.deleteModalMessage = "la experiencia";
           this.modalTitle = "Experiencia";
           break;
 
-        case "Languages":
+        case ComponentType.Languages:
           this.deleteModalMessage = "el idioma";
           this.modalTitle = "Idioma";
           break;
 
-        case "Other":
+        case ComponentType.Other:
           this.deleteModalMessage = "el elemento";
           this.modalTitle = "Elemento";
           break;
 
-        case "Skills":
+        case ComponentType.Skills:
           this.deleteModalMessage = "la skill";
           this.modalTitle = "Skill";
           break;
 
-        case "Description":
+        case ComponentType.Description:
           this.deleteModalMessage = "la descripción";
           this.modalTitle = "Descripcion";
           break;
 
-        case "Content":
+        case ComponentType.Content:
           this.deleteModalMessage = "el contenido";
           this.modalTitle = "Contenido";
           break;
 
-        case "Contract":
+        case ComponentType.Contract:
           this.deleteModalMessage = "el contrato";
           this.modalTitle = "Contrato";
           break;
 
-        case "SubContent":
+        case ComponentType.SubContent:
           this.deleteModalMessage = "el subcontenido";
           this.modalTitle = "SubContenido";
           break;
 
-        case "Project":
+        case ComponentType.Project:
           this.deleteModalMessage = "el proyecto";
           this.modalTitle = "Proyecto";
           break;
