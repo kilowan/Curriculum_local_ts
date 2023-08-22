@@ -51,15 +51,9 @@ export default {
     save(project: string): void {
       let data = new Component(crypto.randomUUID(), ComponentType.Description, project);
       this.contract.childrens.push(data);
-      this.$emit("update", this.contract);
+      this.$emit("reload");
       this.projectData = "";
       this.add = false;
-    },
-    splice(guid: string): void {
-      this.contract.childrens = this.contract.childrens.filter(
-        (data: Component) => data.guid !== guid
-      );
-      this.$emit("update", this.contract);
     }
   }
 };

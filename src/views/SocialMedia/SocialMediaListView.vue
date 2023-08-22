@@ -28,7 +28,7 @@
         :modal-title="'Red social'"
         :message="'la red social'"
         :component-data="socialMediaData"
-        @remove="del(socialMediaData)"
+        @remove="splice(socialMediaData)"
       />
     </div>
     <AddLink v-if="!iconsHidden" :hidden="count === 0" :text="'Red social'" @click="$bvModal.show('add-social-media')"/>
@@ -106,27 +106,16 @@ export default {
       this.socialmedia = {} as Component;
       this.count--;
     },
-    del(media: Component): void {
-      this.$nextTick(() => {
-        let type = this.types.find(
-          (element: any) => element.value === media.type
-        );
-        if (type !== undefined) type.disabled = false;
-        this.socialMediaList = this.socialMediaList.filter(
-          (data: Component) => data.guid !== media.guid
-        );
-        this.count++;
-        this.$emit("update", this.socialMediaList);
-      });
-    },
-    edit(data: Component): void {
-      let sm = this.socialMediaList.find(
-        (element: Component) => element.type === data.type
+    splice(element: Component): void {
+      let type = this.types.find(
+        (element: any) => element.value === element.type
       );
-      if (sm !== undefined) sm.name = data.name;
+      if (type !== undefined) type.disabled = false;
 
-      this.$emit("update", data);
-    },
+      this.socialMediaList.splice(this.socialMediaList.indexOf(element), 1);
+      this.count++;
+      this.$emit("update", this.socialMediaList);
+    }
   },
 };
 </script>

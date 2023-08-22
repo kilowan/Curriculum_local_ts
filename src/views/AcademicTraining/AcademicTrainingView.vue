@@ -1,33 +1,33 @@
 <template>
-  <div>
+  <div v-if="academic != undefined">
     <div v-if="edit && !iconsHidden">
-      <input type="text" v-model="academicData.name" />
+      <input type="text" v-model="academic.name" />
       <SaveLink v-if="!iconsHidden" @click="edit = false"/>
-      <DeleteLink @click="$emit('delete', academicData.guid)"/>
+      <DeleteLink @click="$emit('delete', academic.guid)"/>
     </div>
     <div v-else>
       {{ academic.name }}
       <EditLink v-if="!iconsHidden" @click="edit = true"/>
-      <DeleteLink @click="$emit('delete', academicData.guid)"/>
+      <DeleteLink @click="$emit('delete', academic.guid)"/>
     </div>
     <ul>
       <li v-if="edit">
         <label>Centro/ Lugar:</label>
-        <input type="text" v-model="academicData.place" />
+        <input type="text" v-model="academic.place" />
       </li>
-      <li v-else>Centro/ Lugar: {{ academicData.place }}</li>
-      <div v-if="academicData.graduationDate">
+      <li v-else>Centro/ Lugar: {{ academic.place }}</li>
+      <div v-if="academic.graduationDate">
         <li v-if="edit">
           <label>Graduación:</label>
           <input
             type="date"
-            v-model="academicData.graduationDate"
+            v-model="academic.graduationDate"
             min="2015-01-01"
             max="2030-12-31"
           />
         </li>
         <li v-else>
-          Graduación: {{ formatDate(academicData.graduationDate) }}
+          Graduación: {{ formatDate(academic.graduationDate) }}
         </li>
       </div>
       <strong v-if="contents.length > 0" class="m-2">Contenido:</strong>
@@ -79,7 +79,6 @@ export default {
   },
   data(): any {
     return {
-      academicData: {} as Component,
       contents: new Array<Component>(),
       add: false,
       element: "",
@@ -96,14 +95,12 @@ export default {
       this.$nextTick(() => {
         if (content !== "") {
           let data = new Component(crypto.randomUUID(), ComponentType.Content, content);
-          this.academicData.childrens.push(data);
+          this.academic.childrens.push(data);
           this.contents.push(data);
         }
-
-        this.element = "";
-        this.add = false;
-        this.edit = false;
-        this.$emit("update", this.academicData);
+        
+        this.cancel();
+        this.$emit("reload");
       });
     },
     formatDate(date: string): number {

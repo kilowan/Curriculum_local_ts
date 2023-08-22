@@ -11,7 +11,6 @@
     <!--<contract-list-view
       :contracts="company.childrens"
       :iconsHidden="iconsHidden"
-      @update="update($event)"
     />-->
     <div v-if="add">
       <input class="m-2" type="text" v-model="contractData" />
@@ -71,45 +70,43 @@ export default {
         { value: 2, text: "professional" },
       ];
     },
-    deepChange(input: Component): void {
-      this.input.childrens.find((data: Component) => {
-        if (data.guid === input.guid) data = input;
-        else {
-          data.childrens?.forEach((data2: Component) => {
-            this.deepChange(data2);
-          });
-        }
-      });
-    },
     save(experience: Component): void {
       this.$nextTick(() => {
-        let data = new Component(experience.guid, experience.name);
+        let data = new Component(
+          experience.guid, 
+          this.getChildrensType(), 
+          experience.name
+        );
         data.initDate = experience.initDate;
         data.finishDate = experience.finishDate;
         data.graduationDate = experience.graduationDate;
         data.place = experience.place;
-        data.componentDataType = "Experience";
         this.input.childrens.push(data);
-        this.$emit("update", this.input);
-        this.experience = {} as Component;
+        this.$emit("reload");
       });
     },
-    refresh(experience: Component): void {
-      let exp = this.input.childrens.filter(
-        (data: any) => data.guid !== experience.guid
-      );
-      exp.push(experience);
-      this.input.childrens = exp;
-      this.$emit("update", this.input);
-    },
-    deleteExperience(comp: Component): void {
-      this.$nextTick(() => {
-        this.input.childrens = this.input.childrens.filter(
-          (data: any) => data.guid !== comp.guid
-        );
-        this.$emit("update", this.input);
-      });
-    },
+    getChildrensType(): ComponentType {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Experience:
+          return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
+
+        case ComponentType.Academic:
+          return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
+
+        default:
+          return ComponentType.Value;
+      }
+    }
   },
 };
 </script>

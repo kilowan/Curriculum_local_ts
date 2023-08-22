@@ -20,7 +20,7 @@
         :elements="data.childrens"
         :childrensTitle="data.childrensTitle"
         :componentDataType="data.componentDataType"
-        @update="refresh($event)"
+        @reload="$emit('reload')"
       />
     </div>
   </ul>
@@ -56,12 +56,6 @@ export default {
     };
   },
   methods: {
-    refresh(childrens: Array<Component>): void {
-      this.$nextTick(() => {
-        this.componentData.childrens = childrens
-        this.$emit("update", this.componentData);
-      });
-    },
     formatDate(date: string): string {
       return new Date(date).toLocaleDateString();
     },
@@ -124,6 +118,6 @@ export default {
           break;
       }
     });
-  },
+  }
 };
 </script>

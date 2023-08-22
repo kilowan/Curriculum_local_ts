@@ -12,13 +12,13 @@
             :iconsHidden="iconsHidden"
             :data="data"
             :componentDataType="data.childrensDataType"
-            @update="refresh($event)"
+            @reload="$emit('reload')"
           />
           <delete-modal
             :modal-title="getModalTitle"
             :message="deleteModalMessage"
             :component-data="data"
-            @remove="splice(data.guid)"
+            @remove="splice(data)"
           />
           <edit-modal
             :modalTitle="getModalTitle"
@@ -86,37 +86,16 @@ export default {
     };
   },
   methods: {
-    refresh(data: Component): void {
-      this.$nextTick(() => {
-        let filtered = this.elements.filter(
-          (data: any) => data.guid !== data.guid
-        );
-
-        filtered.push(data);
-        this.$emit("update", filtered);
-      });
-    },
-    update(data: any): void {
-      this.$nextTick(() => {
-        this.$emit("update", data);
-      });
-    },
-    splice(guid: string): void {
-      this.$nextTick(() => {
-        this.$emit("update", this.elements.filter((data: any) => data.guid !== guid));
-      });
+    splice(element: Component): void {
+      this.elements.splice(this.elements.indexOf(element), 1);
+      this.$emit("reload");
     },
     save(data: Component): void {
       this.elements.push(data);
     },
     formatDate(date: string): string {
       return new Date(date).toLocaleDateString();
-    },
-    getGUID(): void {
-      this.$nextTick(() => {
-        return this.guid;
-      });
-    },
+    }
   },
   computed: {
     getModalTitle(): any {

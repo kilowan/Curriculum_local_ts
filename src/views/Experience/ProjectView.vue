@@ -67,21 +67,20 @@ export default {
   data(): any {
     return {
       add: false,
-      description: "",
       desc: ""
     };
   },
   methods: {
     cancel(): void {
       this.add = false;
+      this.desc = "";
     },
     save(description: string): void {
       this.$nextTick(() => {
         let element = new Component(crypto.randomUUID(), ComponentType.End, description);
         this.project.childrens.push(element);
-        this.add = false;
-        this.desc = "";
-        this.$emit("update", this.project);
+        this.cancel();
+        this.$emit("reload");
       });
     },
     splice(element: Component): void {
