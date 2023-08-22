@@ -23,7 +23,6 @@
           <edit-modal
             :modalTitle="getModalTitle"
             :componentData="data"
-            :componentDataType="data.childrensDataType"
           />
         </div>
         <AddModal

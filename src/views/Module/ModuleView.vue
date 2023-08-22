@@ -18,19 +18,19 @@
               :iconsHidden="iconsHidden"
               @reload="$emit('update', input)"
             />-->
-            <professional-experience-view
+            <!--<professional-experience-view
               v-if="company != undefined"
               :guid="company.guid"
               :company="company"
               :iconsHidden="iconsHidden"
               @reload="$emit('update', input)"
-            />
-            <!--<ComponentView
+            />-->
+            <ComponentView
               :input="company"
-              :childrensDataType="data.childrensDataType"
+              :childrensDataType="company.childrensDataType"
               :iconsHidden="iconsHidden"
               @reload="$emit('update', input)"
-            />-->
+            />
           </li>
           <EditModal
             :modalTitle="input.name"
@@ -67,8 +67,8 @@ import AddLink from "../../components/AddLink.vue";
 import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
-//import ComponentView from "../Component/ComponentView.vue";
-import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
+import ComponentView from "../Component/ComponentView.vue";
+//import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
 //import ViewVue from "./View.vue";
 
 export default {
@@ -82,8 +82,8 @@ export default {
     DeleteLink,
     EditLink,
     HideLink,
-    //ComponentView
-    ProfessionalExperienceView,
+    ComponentView
+    //ProfessionalExperienceView,
     //ViewVue
 },
   props: {

@@ -5,19 +5,20 @@
     <li v-if="input.finishDate">Fecha Fin: {{ formatDate(input.finishDate) }}</li>
     <li v-if="input.graduationDate">Graduación: {{ formatDate(input.graduationDate) }}</li>
     <div>
-      <component-list-view
+      <!--<component-list-view
         :iconsHidden="iconsHidden"
         :elements="data.childrens"
         :childrensTitle="data.childrensTitle"
         :componentDataType="data.componentDataType"
         @reload="$emit('reload')"
-      />
+      />-->
     </div>
   </ul>
 </template>
 
 <script lang="ts">
 import { Component, ComponentType } from "../../Config/types";
+//import ComponentListView from "./ComponentListView.vue";
 
 export default {
   name: "ComponentView",

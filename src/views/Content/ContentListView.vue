@@ -19,7 +19,6 @@
         <edit-modal
           :modalTitle="'Contenido'"
           :componentData="content"
-          :componentDataType="6"
         />
       </li>
     </div>

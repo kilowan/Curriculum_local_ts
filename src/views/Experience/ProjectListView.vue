@@ -17,7 +17,6 @@
         <edit-modal
           :modalTitle="'proyecto'"
           :componentData="project"
-          :componentDataType="9"
         />
         <delete-modal
           :modalTitle="'Proyecto'"
