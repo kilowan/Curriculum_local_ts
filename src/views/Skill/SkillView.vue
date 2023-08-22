@@ -3,7 +3,6 @@
     <contents-view
       :contents="input.childrens"
       :iconsHidden="iconsHidden"
-      @update="update($event)"
       @reload="$emit('reload')"
     />
     <input v-if="add" class="m-2" type="text" v-model="element" />
@@ -54,15 +53,9 @@ export default {
             content
           ));
         this.cancel();
-        this.$emit("update", this.input.childrens);
+        this.$emit("reload");
       });
-    },
-    update(contents: Array<Component>): void {
-      this.$nextTick(() => {
-        this.input.childrens = contents;
-        this.$emit("update", this.input.childrens);
-      });
-    },
+    }
   }
 };
 </script>

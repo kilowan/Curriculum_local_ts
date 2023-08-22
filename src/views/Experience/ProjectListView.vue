@@ -11,7 +11,6 @@
             :guid="project.guid"
             :project="project"
             :iconsHidden="iconsHidden"
-            @update="refresh($event)"
             @reload="$emit('reload')"
           />
         </li>
@@ -19,7 +18,6 @@
           :modalTitle="'proyecto'"
           :componentData="project"
           :componentDataType="9"
-          @update="update($event)"
         />
         <delete-modal
           :modalTitle="'Proyecto'"
@@ -64,21 +62,10 @@ export default {
     };
   },
   methods: {
-    refresh(project: Component): void {
-      this.projects.find((data: any) => {
-        if(data.guid == project.guid) data = project;
-      });
-      this.$emit("update", this.projects);
-    },
     splice(element: Component): void {
       this.projects.splice(this.projects.indexOf(element), 1);
       this.$emit("reload");
-    },
-    update(projects: Array<Component>): void {
-      this.$nextTick(() => {
-        this.$emit("update", projects);
-      });
-    },
+    }
   }
 };
 </script>

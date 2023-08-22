@@ -4,8 +4,7 @@
       v-if="contract.childrens != undefined"
       :projects="contract.childrens"
       :iconsHidden="iconsHidden"
-      @update="update($event)"
-      @reload="$event('reload')"
+      @reload="$emit('reload')"
     />
     <div v-if="add">
       <input class="m-2" type="text" v-model="projectData" />
@@ -61,11 +60,7 @@ export default {
         (data: Component) => data.guid !== guid
       );
       this.$emit("update", this.contract);
-    },
-    update(projects: Array<Component>): void {
-      this.contract.childrens = projects;
-      this.$emit("update", this.contract);
-    },
+    }
   }
 };
 </script>

@@ -15,8 +15,7 @@
               :guid="company.guid"
               :company="company"
               :iconsHidden="iconsHidden"
-              @update="refresh($event)"
-              @remove="remove(input.childrens, $event)"
+              @reload="$emit('update', input)"
             />
           </li>
           <EditModal
@@ -24,12 +23,11 @@
             :componentData="company"
             :componentDataType="1"
           />
-
           <DeleteModal
             :modalTitle="'Experiencia'"
             :message="'la experiencia'"
             :componentData="company"
-            @remove="deleteExperience($event)"
+            @remove="splice(company)"
           />
         </div>
       </ul>
@@ -93,24 +91,6 @@ export default {
         { value: 2, text: "professional" },
       ];
     },
-    deepChange(input: Component): void {
-      this.input.childrens.find((data: Component) => {
-        if (data.guid === input.guid) data = input;
-        else {
-          data.childrens?.forEach((data2: Component) => {
-            this.deepChange(data2);
-          });
-        }
-      });
-    },
-    remove(list: Array<Component>, guid: string) {
-      list.forEach((data: Component) => {
-        if (data.guid === guid) list.splice(list.indexOf(data), 1);
-        else {
-          this.remove(data.childrens);
-        }
-      });
-    },
     save(experience: Component): void {
       this.$nextTick(() => {
         let data = new Component(experience.guid, experience.childrensDataType, experience.name);
@@ -123,20 +103,10 @@ export default {
         this.experience = {} as Component;
       });
     },
-    refresh(experience: Component): void {
-      this.input.childrens.find((data: any) => {
-        if(data.guid == experience.guid) data = experience;
-      });
+    splice(element: Component): void {
+      this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("update", this.input);
-    },
-    deleteExperience(comp: Component): void {
-      this.$nextTick(() => {
-        this.input.childrens = this.input.childrens.filter(
-          (data: any) => data.guid !== comp.guid
-        );
-        this.$emit("update", this.input);
-      });
-    },
+    }
   },
 };
 </script>

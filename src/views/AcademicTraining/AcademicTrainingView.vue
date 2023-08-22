@@ -34,7 +34,6 @@
       <contents-view
         :contents="contents"
         :iconsHidden="iconsHidden"
-        @update="refresh($event)"
         @reload="$emit('reload')"
       />
       <div v-if="add">
@@ -88,12 +87,6 @@ export default {
     };
   },
   methods: {
-    refresh(contents: Array<Component>): void {
-      this.$nextTick(() => {
-        this.academicData.childrens = contents;
-        this.$emit("update", this.academicData);
-      });
-    },
     cancel(): void {
       this.element = "";
       this.add = false;

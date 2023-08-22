@@ -9,7 +9,6 @@
       <contract-list-view
         :contracts="company.childrens"
         :iconsHidden="iconsHidden"
-        @update="update($event)"
         @reload="$emit('reload')"
       />
       <div v-if="add">
@@ -54,10 +53,6 @@ export default {
     };
   },
   methods: {
-    update(contracts: Array<Component>): void {
-      this.company.childrens = contracts;
-      this.$emit("update", this.company);
-    },
     save(contract: string): void {
       this.$nextTick(() => {
         let data = new Component(crypto.randomUUID(), ComponentType.Project, contract);
@@ -73,7 +68,7 @@ export default {
     },
     formatDate(date: string): string {
       return new Date(date).toLocaleDateString();
-    },
+    }
   }
 };
 </script>

@@ -16,7 +16,6 @@
               :guid="company.guid"
               :company="company"
               :iconsHidden="iconsHidden"
-              @update="refresh($event)"
               @reload="$emit('update', input)"
             />
           </li>
@@ -96,16 +95,6 @@ export default {
         { value: 2, text: "professional" },
       ];
     },
-    deepChange(input: Component): void {
-      this.input.childrens.find((data: Component) => {
-        if (data.guid === input.guid) data = input;
-        else {
-          data.childrens?.forEach((data2: Component) => {
-            this.deepChange(data2);
-          });
-        }
-      });
-    },
     save(experience: Component): void {
       this.$nextTick(() => {
         let data = new Component(experience.guid, experience.childrensDataType, experience.name);
@@ -118,14 +107,6 @@ export default {
         this.$emit("update", this.input);
         this.experience = {} as Component;
       });
-    },
-    refresh(experience: Component): void {
-      let exp = this.input.childrens.filter(
-        (data: any) => data.guid !== experience.guid
-      );
-      exp.push(experience);
-      this.input.childrens = exp;
-      this.$emit("update", this.input);
     },
     splice(element: Component): void {
       this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
