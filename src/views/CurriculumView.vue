@@ -54,7 +54,7 @@
     <dl></dl>
     <dd class="clear"></dd>
     <dl>
-      <professional-experience-list-view
+      <module-view
         v-if="curriculum.experience"
         :iconsHidden="active"
         :input="curriculum.experience"
@@ -109,22 +109,24 @@
 import { CurriculumDetail, Component, Module, ComponentType } from "../Config/types";
 import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
 import OtherListView from "./Other/OtherListView.vue";
-import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceListView.vue";
+//import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceListView.vue";
 import SkillListView from "./Skill/SkillListView.vue";
 import LanguageListView from "./Language/LanguageView.vue";
 import SocialMediaListView from "./SocialMedia/SocialMediaListView.vue";
 import FileReaderData from "../components/FileReaderData.vue";
+import ModuleView from "./Module/ModuleView.vue";
 
 export default {
   name: "CurriculumView",
   components: {
     AcademicTrainingListView,
     OtherListView,
-    ProfessionalExperienceListView,
+    //ProfessionalExperienceListView,
     SkillListView,
     LanguageListView,
     SocialMediaListView,
     FileReaderData,
+    ModuleView
   },
   data(): any {
     return {

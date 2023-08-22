@@ -11,7 +11,7 @@
           :componentData="sub"
           :modalTitle="'Contenido'"
           :message="'el elemento'"
-          @remove="splice(sub.guid)"
+          @remove="splice(sub)"
         />
         <EditModal
           :modalTitle="'Contenido'"
@@ -65,11 +65,9 @@ export default {
     };
   },
   methods: {
-    splice(guid: string): void {
-      this.input.childrens = this.input.childrens.filter(
-        (data: any) => data.guid !== guid
-      );
-      this.$emit("update", this.input.childrens);
+    splice(element: Component): void {
+      this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
+      this.$emit("reload");
     },
     push(subContent: Component): void {
       this.input.childrens.push(new Component(crypto.randomUUID(), subContent.childrensDataType, subContent.name));

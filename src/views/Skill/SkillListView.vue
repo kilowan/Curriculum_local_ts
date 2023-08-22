@@ -15,6 +15,7 @@
               :input="skill"
               :iconsHidden="iconsHidden"
               @update="refresh($event, skill)"
+              @reload="$emit('update', input)"
             />
           </li>
           <edit-modal
@@ -27,7 +28,7 @@
             :modalTitle="'Skill'"
             :message="'la skill'"
             :componentData="skill"
-            @remove="splice(skill.guid)"
+            @remove="splice(skill)"
           />
         </div>
       </ul>
@@ -100,13 +101,9 @@ export default {
         this.$emit("update", this.input);
       });
     },
-    splice(index: string): void {
-      this.$nextTick(() => {
-        this.input.childrens = this.input.childrens.filter(
-          (data: any) => data.guid !== index
-        );
-        this.$emit("update", this.input);
-      });
+    splice(element: Component): void {
+      this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
+      this.$emit("update", this.input);
     },
     update(skills: Array<Component>): void {
       this.$nextTick(() => {

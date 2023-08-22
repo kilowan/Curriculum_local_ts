@@ -22,7 +22,7 @@
             :modalTitle="'idioma'"
             :message="'el idioma'"
             :componentData="language"
-            @remove="splice(language.guid)"
+            @remove="splice(language)"
           />
         </div>
       </ul>
@@ -81,11 +81,9 @@ export default {
     refresh(): void {
       this.$emit("refresh");
     },
-    splice(guid: string): void {
-      this.$nextTick(() => {
-        this.input.childrens = this.input.childrens.filter((data: any) => data.guid !== guid);
-        this.$emit("update", this.input);
-      });
+    splice(element: Component): void {
+      this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
+      this.$emit("update", this.input);
     },
     cancel(): void {
       this.add = false;

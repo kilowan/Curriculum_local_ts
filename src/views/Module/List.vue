@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { Component } from "../../Config/types";
-//import ProfessionalExperienceView from "../ProfessionalExperienceView.vue";
+import ProfessionalExperienceView from "../ProfessionalExperienceView.vue";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
@@ -42,16 +42,14 @@ import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
 
 export default {
-  name: "ModuleView",
+  name: "List",
   components: {
-    //ProfessionalExperienceView,
-    AddModal,
+    ProfessionalExperienceView,
     EditModal,
     DeleteModal,
     AddLink,
     DeleteLink,
-    EditLink,
-    HideLink
+    EditLink
 },
   props: {
     iconsHidden: {

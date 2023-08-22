@@ -16,6 +16,7 @@
               :company="company"
               :iconsHidden="iconsHidden"
               @update="refresh($event)"
+              @remove="remove(input.childrens, $event)"
             />
           </li>
           <EditModal
@@ -102,6 +103,14 @@ export default {
         }
       });
     },
+    remove(list: Array<Component>, guid: string) {
+      list.forEach((data: Component) => {
+        if (data.guid === guid) list.splice(list.indexOf(data), 1);
+        else {
+          this.remove(data.childrens);
+        }
+      });
+    },
     save(experience: Component): void {
       this.$nextTick(() => {
         let data = new Component(experience.guid, experience.childrensDataType, experience.name);
@@ -115,11 +124,9 @@ export default {
       });
     },
     refresh(experience: Component): void {
-      let exp = this.input.childrens.filter(
-        (data: any) => data.guid !== experience.guid
-      );
-      exp.push(experience);
-      this.input.childrens = exp;
+      this.input.childrens.find((data: any) => {
+        if(data.guid == experience.guid) data = experience;
+      });
       this.$emit("update", this.input);
     },
     deleteExperience(comp: Component): void {

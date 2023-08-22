@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-if="project != undefined">
     <ul>
       <div
-        v-for="description in projectData.childrens"
+        v-for="description in project.childrens"
         v-bind:key="description.guid"
       >
         <li>
@@ -20,7 +20,7 @@
           :modalTitle="'Descripción'"
           :componentData="description"
           :message="'la descripción'"
-          @remove="splice(description.guid)"
+          @remove="splice(description)"
         />
       </div>
     </ul>
@@ -68,9 +68,7 @@ export default {
     return {
       add: false,
       description: "",
-      desc: "",
-      descriptions: new Array<Component>(),
-      projectData: {} as Component,
+      desc: ""
     };
   },
   methods: {
@@ -80,25 +78,16 @@ export default {
     save(description: string): void {
       this.$nextTick(() => {
         let element = new Component(crypto.randomUUID(), ComponentType.End, description);
-        this.descriptions.push(element);
-        this.projectData.childrens.push(element);
+        this.project.childrens.push(element);
         this.add = false;
         this.desc = "";
-        this.$emit("update", this.projectData);
+        this.$emit("update", this.project);
       });
     },
-    splice(guid: string): void {
-      this.projectData.childrens = this.projectData.childrens.filter(
-        (data: Component) => data.guid !== guid
-      );
-      this.descriptions = this.descriptions.filter(
-        (data: Component) => data.guid !== guid
-      );
-      this.$emit("update", this.projectData);
-    },
-  },
-  mounted(): void {
-    this.projectData = this.project;
-  },
+    splice(element: Component): void {
+      this.project.childrens.splice(this.project.childrens.indexOf(element), 1);
+      this.$emit("reload");
+    }
+  }
 };
 </script>

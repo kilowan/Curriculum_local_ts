@@ -1,8 +1,8 @@
 <template>
-  <li>
+  <li v-if="contracts != undefined">
     Contratos (ordenados de manera cronológica):
     <ul>
-      <div v-for="contract in contractsData" v-bind:key="contract.guid">
+      <div v-for="contract in contracts" v-bind:key="contract.guid">
         <li>
           {{ contract.name }}
           <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${contract.guid}`)"/>
@@ -12,13 +12,14 @@
             :iconsHidden="iconsHidden"
             :contract="contract"
             @update="refresh($event)"
+            @reload="$emit('reload')"
           />
         </li>
         <b-modal
           :id="`edit-contract-${contract.guid}`"
           title="Editar contrato"
           ok-title="Guardar"
-          @ok="update(contractsData)"
+          @ok="update(contracts)"
         >
           <input type="text" v-model="contract.name" /> <br />
         </b-modal>
@@ -26,7 +27,7 @@
           :modal-title="'Contrato'"
           :message="'el contrato'"
           :component-data="contract"
-          @remove="splice(contract.guid)"
+          @remove="splice(contract)"
         />
       </div>
     </ul>
@@ -60,33 +61,25 @@ export default {
   },
   data(): any {
     return {
-      contractsData: new Array<Component>(),
       projectData: "",
     };
   },
   methods: {
-    splice(index: string): void {
-      this.contractsData = this.contractsData.filter(
-        (data: any) => data.guid !== index
-      );
-      this.$emit("update", this.contractsData);
+    splice(element: Component): void {
+      this.contracts.splice(this.contracts.indexOf(element), 1);
+      this.$emit("reload");
     },
     refresh(contract: Component): void {
-      let filtered = this.contractsData.filter(
-        (data: any) => data.guid !== contract.guid
-      );
-      filtered.push(contract);
-      this.contractsData = filtered;
-      this.$emit("update", this.contractsData);
+      this.contracts.find((data: any) => {
+        if(data.guid == contract.guid) data = contract;
+      });
+      this.$emit("update", this.contracts);
     },
     update(contracts: Array<Component>): void {
       this.$nextTick(() => {
         this.$emit("update", contracts);
       });
     },
-  },
-  mounted(): void {
-    this.contractsData = this.contracts;
-  },
+  }
 };
 </script>

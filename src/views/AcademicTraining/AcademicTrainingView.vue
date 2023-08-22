@@ -32,10 +32,10 @@
       </div>
       <strong v-if="contents.length > 0" class="m-2">Contenido:</strong>
       <contents-view
-        :ref="'contents'"
         :contents="contents"
         :iconsHidden="iconsHidden"
         @update="refresh($event)"
+        @reload="$emit('reload')"
       />
       <div v-if="add">
         <input class="m-2" type="text" v-model="element" />
@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import ContentsView from "../Content/ContentListView.vue";
-import { Component } from "../../Config/types";
+import { Component, ComponentType } from "../../Config/types";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
@@ -102,7 +102,7 @@ export default {
     save(content: string): void {
       this.$nextTick(() => {
         if (content !== "") {
-          let data = new Component(crypto.randomUUID(), content);
+          let data = new Component(crypto.randomUUID(), ComponentType.Content, content);
           this.academicData.childrens.push(data);
           this.contents.push(data);
         }
@@ -116,10 +116,6 @@ export default {
     formatDate(date: string): number {
       return new Date(date).getFullYear();
     },
-  },
-  mounted(): void {
-    this.academicData = this.academic;
-    this.$refs.contents._data.contentsData = this.academicData.childrens;
-  },
+  }
 };
 </script>

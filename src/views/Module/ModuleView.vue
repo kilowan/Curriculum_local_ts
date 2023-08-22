@@ -17,18 +17,19 @@
               :company="company"
               :iconsHidden="iconsHidden"
               @update="refresh($event)"
+              @reload="$emit('update', input)"
             />
           </li>
           <EditModal
             :modalTitle="input.name"
             :componentData="company"
-            :componentDataType="'Experience'"
+            :componentDataType="company.childrensDataType"
           />
           <DeleteModal
             :modalTitle="input.name"
             :message="'la experiencia'"
             :componentData="company"
-            @remove="deleteExperience($event)"
+            @remove="splice($event)"
           />
         </div>
       </ul>
@@ -37,8 +38,8 @@
     <dd class="clear"></dd>
     <AddModal
       :guid="input.guid"
-      :modal-title="input.name"
-      :component-data-type="'Experience'"
+      :modalTitle="input.name"
+      :componentDataType="input.childrensDataType"
       @save="save($event)"
     />
   </div>
@@ -46,7 +47,7 @@
 
 <script lang="ts">
 import { Component, Module } from "../../Config/types";
-import List from "../Module/List.vue";
+//import List from "../Module/List.vue";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
@@ -54,18 +55,20 @@ import AddLink from "../../components/AddLink.vue";
 import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
+import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
 
 export default {
   name: "ModuleView",
   components: {
-    List,
+    //List,
     AddModal,
     EditModal,
     DeleteModal,
     AddLink,
     DeleteLink,
     EditLink,
-    HideLink
+    HideLink,
+    ProfessionalExperienceView
 },
   props: {
     iconsHidden: {
@@ -105,7 +108,7 @@ export default {
     },
     save(experience: Component): void {
       this.$nextTick(() => {
-        let data = new Component(experience.guid, experience.name);
+        let data = new Component(experience.guid, experience.childrensDataType, experience.name);
         data.initDate = experience.initDate;
         data.finishDate = experience.finishDate;
         data.graduationDate = experience.graduationDate;
@@ -124,13 +127,9 @@ export default {
       this.input.childrens = exp;
       this.$emit("update", this.input);
     },
-    deleteExperience(comp: Component): void {
-      this.$nextTick(() => {
-        this.input.childrens = this.input.childrens.filter(
-          (data: any) => data.guid !== comp.guid
-        );
-        this.$emit("update", this.input);
-      });
+    splice(element: Component): void {
+      this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
+      this.$emit("update", this.input);
     }
   },
 };
