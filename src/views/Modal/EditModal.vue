@@ -4,7 +4,6 @@
     :id="`edit-${componentData.guid}`"
     :title="`Editar ${modalTitle}`"
     ok-title="Guardar"
-    @ok="$emit('update', componentData)"
   >
     <label>Nombre:</label>
     <input type="text" v-model="componentData.name" /> <br />

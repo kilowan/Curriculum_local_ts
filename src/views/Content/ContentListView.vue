@@ -8,7 +8,7 @@
           :guid="content"
           :input="content"
           :iconsHidden="iconsHidden"
-          @reload="$emit('reload')"
+          @reload="reload"
         />
         <delete-modal
           :modalTitle="'Contenido'"
@@ -20,7 +20,6 @@
           :modalTitle="'Contenido'"
           :componentData="content"
           :componentDataType="6"
-          @update="update($event)"
         />
       </li>
     </div>
@@ -59,27 +58,12 @@ export default {
     };
   },
   methods: {
-    refresh(subContents: Array<Component>, content: Component): void {
-      this.$nextTick(() => {
-        let cont = this.contents.find(
-          (data: any) => data.guid === content.guid
-        );
-        if (cont != undefined) {
-          cont.childrens = subContents;
-        } else {
-          this.contents.push(content);
-        }
-        this.$emit("update", this.contents);
-      });
-    },
-    update(contents: any): void {
-      this.$nextTick(() => {
-        this.$emit("update", contents);
-      });
-    },
     splice(element: Component): void {
       this.contents.splice(this.contents.indexOf(element), 1);
       this.$emit("reload");
+    },
+    reload(){
+      this.$emit('reload');
     }
   }
 };

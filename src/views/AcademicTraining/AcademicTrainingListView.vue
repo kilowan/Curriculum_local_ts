@@ -16,7 +16,6 @@
               :academic="academic"
               :iconsHidden="iconsHidden"
               :academicIndex="academic.guid"
-              @update="refresh($event)"
               @delete="$bvModal.show(`delete-${$event}`)"
               @reload="$emit('update', input)"
             />
@@ -40,7 +39,6 @@
         :iconsHidden="iconsHidden"
         :elements="input"
         :componentDataType="'Academic'"
-        @update="refresh($event)"
       />-->
       <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show(`add-${input.guid}`)"/>
     </dd>
@@ -101,20 +99,6 @@ export default {
     };
   },
   methods: {
-    refresh(academic: Component): void {
-      this.$nextTick(() => {
-        let filtered = this.input.filter(
-          (data: any) => data.guid !== academic.guid
-        );
-        let training = this.input.find(
-          (data: any) => data.guid === academic.guid
-        );
-        training = academic;
-        filtered.push(training);
-        this.input = filtered;
-        this.$emit("update", this.input);
-      });
-    },
     splice(element: Component): void {
       this.input.splice(this.input.indexOf(element), 1);
       this.$emit("update", this.input);
@@ -122,11 +106,6 @@ export default {
     cancel(): void {
       this.newComponent = {} as Component;
       this.add = false;
-    },
-    update(trainings: Array<Component>): void {
-      this.$nextTick(() => {
-        this.$emit("update", trainings);
-      });
     },
     save(): void {
       this.$nextTick(() => {

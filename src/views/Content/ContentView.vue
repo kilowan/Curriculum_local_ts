@@ -71,7 +71,7 @@ export default {
     },
     push(subContent: Component): void {
       this.input.childrens.push(new Component(crypto.randomUUID(), subContent.childrensDataType, subContent.name));
-      this.$emit("update", this.input.childrens);
+      this.$emit("reload");
       this.subcontent = "";
     }
   },

@@ -16,7 +16,6 @@
             :modalTitle="'Idioma'"
             :componentData="language"
             :componentDataType="4"
-            @update="update(languageList)"
           />
           <DeleteModal
             :modalTitle="'idioma'"
@@ -78,9 +77,6 @@ export default {
     };
   },
   methods: {
-    refresh(): void {
-      this.$emit("refresh");
-    },
     splice(element: Component): void {
       this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("update", this.input);
@@ -89,11 +85,6 @@ export default {
       this.add = false;
       this.language.name = "";
       this.language.level = "";
-    },
-    update(langs: Array<Component>): void {
-      this.$nextTick(() => {
-        this.$emit("update", langs);
-      });
     },
     save(language: Component): void {
       this.$nextTick(() => {

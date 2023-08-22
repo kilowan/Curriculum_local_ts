@@ -11,7 +11,6 @@
             :guid="contract.guid"
             :iconsHidden="iconsHidden"
             :contract="contract"
-            @update="refresh($event)"
             @reload="$emit('reload')"
           />
         </li>
@@ -19,7 +18,6 @@
           :id="`edit-contract-${contract.guid}`"
           title="Editar contrato"
           ok-title="Guardar"
-          @ok="update(contracts)"
         >
           <input type="text" v-model="contract.name" /> <br />
         </b-modal>
@@ -68,18 +66,7 @@ export default {
     splice(element: Component): void {
       this.contracts.splice(this.contracts.indexOf(element), 1);
       this.$emit("reload");
-    },
-    refresh(contract: Component): void {
-      this.contracts.find((data: any) => {
-        if(data.guid == contract.guid) data = contract;
-      });
-      this.$emit("update", this.contracts);
-    },
-    update(contracts: Array<Component>): void {
-      this.$nextTick(() => {
-        this.$emit("update", contracts);
-      });
-    },
+    }
   }
 };
 </script>

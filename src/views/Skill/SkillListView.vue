@@ -14,7 +14,6 @@
             <skill-view
               :input="skill"
               :iconsHidden="iconsHidden"
-              @update="refresh($event, skill)"
               @reload="$emit('update', input)"
             />
           </li>
@@ -22,7 +21,6 @@
             :modalTitle="'skill'"
             :componentData="skill"
             :componentDataType="3"
-            @update="update(input.childrens)"
           />
           <delete-modal
             :modalTitle="'Skill'"
@@ -87,29 +85,9 @@ export default {
       this.trainingNew = "";
       this.add = false;
     },
-    refresh(skills: Array<Component>, comp: Component): void {
-      this.$nextTick(() => {
-        var filtered = this.input.childrens.filter(
-          (data: any) => data.guid !== comp.guid
-        );
-        var training = this.input.childrens.find(
-          (data: any) => data.guid === comp.guid
-        );
-        training.childrens = skills;
-        filtered.push(training);
-        this.input.childrens = filtered;
-        this.$emit("update", this.input);
-      });
-    },
     splice(element: Component): void {
       this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("update", this.input);
-    },
-    update(skills: Array<Component>): void {
-      this.$nextTick(() => {
-        this.input.childrens = skills;
-        this.$emit("update", this.input);
-      });
     },
     save(training: string): void {
       this.$nextTick(() => {
