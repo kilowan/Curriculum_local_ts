@@ -1,19 +1,9 @@
 <template>
   <ul>
-    <li
-      v-if="
-        componentDataType === 'Academic' ||
-        componentDataType === 'Experience'
-      "
-    >
-      Centro/Lugar: {{ data.place }}
-    </li>
-    <li v-if="componentDataType === 'Experience'">
-      Fecha inicio: {{ formatDate(data.initDate) }}
-    </li>
-    <li v-if="data.finishDate">
-      Fecha Fin: {{ formatDate(data.finishDate) }}
-    </li>
+    <li v-if="input.place">Centro/Lugar: {{ input.place }}</li>
+    <li v-if="input.initDate">Fecha inicio: {{ formatDate(input.initDate) }}</li>
+    <li v-if="input.finishDate">Fecha Fin: {{ formatDate(input.finishDate) }}</li>
+    <li v-if="input.graduationDate">Graduación: {{ formatDate(input.graduationDate) }}</li>
     <div>
       <component-list-view
         :iconsHidden="iconsHidden"
@@ -27,19 +17,19 @@
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
+import { Component, ComponentType } from "../../Config/types";
 
 export default {
   name: "ComponentView",
   components: {
   },
   props: {
-    data: {
+    input: {
       type: Component,
       required: true,
     },
-    componentDataType: {
-      type: String,
+    childrensDataType: {
+      type: Number,
       required: true,
     },
     iconsHidden: {
@@ -62,54 +52,54 @@ export default {
   },
   created(): void {
     this.$nextTick(() => {
-      switch (this.componentDataType) {
-        case "Academic":
+      switch (this.childrensDataType) {
+        case ComponentType.Academic:
           this.deleteModalMessage = "la formación";
           this.modalTitle = "Formación";
           this.guid = crypto.randomUUID();
           break;
 
-        case "Experience":
+        case ComponentType.Experience:
           this.deleteModalMessage = "la experiencia";
           this.modalTitle = "Experiencia";
           break;
 
-        case "Languages":
+        case ComponentType.Languages:
           this.deleteModalMessage = "el idioma";
           this.modalTitle = "Idioma";
           break;
 
-        case "Other":
+        case ComponentType.Other:
           this.deleteModalMessage = "el elemento";
           this.modalTitle = "Elemento";
           break;
 
-        case "Skills":
+        case ComponentType.Skills:
           this.deleteModalMessage = "la skill";
           this.modalTitle = "Skill";
           break;
 
-        case "Description":
+        case ComponentType.Description:
           this.deleteModalMessage = "la descripción";
           this.modalTitle = "Descripcion";
           break;
 
-        case "Content":
+        case ComponentType.Content:
           this.deleteModalMessage = "el contenido";
           this.modalTitle = "Contenido";
           break;
 
-        case "Contract":
+        case ComponentType.Contract:
           this.deleteModalMessage = "el contrato";
           this.modalTitle = "Contrato";
           break;
 
-        case "SubContent":
+        case ComponentType.SubContent:
           this.deleteModalMessage = "el subcontenido";
           this.modalTitle = "SubContenido";
           break;
 
-        case "Project":
+        case ComponentType.Project:
           this.deleteModalMessage = "el proyecto";
           this.modalTitle = "Proyecto";
           break;

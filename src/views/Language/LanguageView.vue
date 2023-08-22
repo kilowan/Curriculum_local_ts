@@ -72,7 +72,7 @@ export default {
       hide: false,
       add: false,
       languageLevelList: [],
-      language: {} as Component,
+      language: Component,
       guid: crypto.randomUUID(),
     };
   },

@@ -63,7 +63,7 @@ export default {
   data(): any {
     return {
       guid: crypto.randomUUID(),
-      other: {} as Component,
+      other: Component,
       hide: false,
       add: false,
       valueNew: "",

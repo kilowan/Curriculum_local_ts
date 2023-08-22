@@ -1,32 +1,38 @@
 <template>
   <div>
     <ul>
-      <div v-for="company in elements" v-bind:key="company.guid">
+      <div v-for="element in elements" v-bind:key="element.guid">
         <li>
-          {{ company.name }}
-          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${company.guid}`)"/>
-          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${company.guid}`)"/>
+          {{ element.name }}
+          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${element.guid}`)"/>
+          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${element.guid}`)"/>
           <professional-experience-view
-            :guid="company.guid"
-            :company="company"
+            :guid="element.guid"
+            :company="element"
             :iconsHidden="iconsHidden"
             @reload="$emit('reload')"
           />
         </li>
         <EditModal
-          :modal-title="input.name"
-          :component-data="company"
-          :component-data-type="'Experience'"
+          :modalTitle="modalTitle"
+          :componentData="element"
+          :componentDataType="childrensDataType"
         />
         <DeleteModal
-          :modal-title="input.name"
-          :message="'la experiencia'"
-          :component-data="company"
-          @remove="splice(company)"
+          :modalTitle="modalTitle"
+          :message="deleteModalMessage"
+          :componentData="element"
+          @remove="splice(element)"
         />
       </div>
     </ul>
     <AddLink v-if="!iconsHidden" :text="input.name" @click="$bvModal.show(`add-${input.guid}`)"/>
+    <AddModal
+      :guid="guid"
+      :modalTitle="modalTitle"
+      :componentDataType="childrensDataType"
+      @save="save($event)"
+    />
   </div>
 </template>
 
@@ -39,7 +45,6 @@ import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "../../components/AddLink.vue";
 import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
-import HideLink from "../../components/HideLink.vue";
 
 export default {
   name: "List",
@@ -49,7 +54,8 @@ export default {
     DeleteModal,
     AddLink,
     DeleteLink,
-    EditLink
+    EditLink,
+    AddModal
 },
   props: {
     iconsHidden: {
@@ -59,36 +65,34 @@ export default {
     elements: {
       type: Array,
       required: true
+    },
+    childrensDataType: {
+      type: Number,
+      required: true
     }
   },
   data(): any {
     return {
-      add: false,
-      hide: false
+      deleteModalMessage: "la experiencia",
+      modalTitle: "Experiencia",
+      guid: crypto.randomUUID()
     };
   },
   methods: {
-    cancel(): void {
-      this.add = false;
+    getModalTitle(): any {
+      return this.modalTitle;
     },
-    options(): any {
-      return [
-        { value: 1, text: "personal" },
-        { value: 2, text: "professional" },
-      ];
-    },
-    save(experience: Component): void {
+    save(element: Component): void {
       this.$nextTick(() => {
         let data = new Component(
-          experience.guid, 
+          element.guid, 
           this.getChildrensType(), 
-          experience.name
+          element.name
         );
-        data.initDate = experience.initDate;
-        data.finishDate = experience.finishDate;
-        data.graduationDate = experience.graduationDate;
-        data.place = experience.place;
-        data.componentDataType = "Experience";
+        data.initDate = element.initDate;
+        data.finishDate = element.finishDate;
+        data.graduationDate = element.graduationDate;
+        data.place = element.place;
         this.input.childrens.push(data);
         this.$emit("reload");
       });
@@ -119,6 +123,64 @@ export default {
           return ComponentType.Value;
       }
     }
+  },
+  created(): void {
+    this.$nextTick(() => {
+      switch (this.childrensDataType) {
+        case ComponentType.Academic:
+          this.deleteModalMessage = "la formación";
+          this.modalTitle = "Formación";
+          break;
+
+        case ComponentType.Experience:
+          this.deleteModalMessage = "la experiencia";
+          this.modalTitle = "Experiencia";
+          break;
+
+        case ComponentType.Languages:
+          this.deleteModalMessage = "el idioma";
+          this.modalTitle = "Idioma";
+          break;
+
+        case ComponentType.Other:
+          this.deleteModalMessage = "el elemento";
+          this.modalTitle = "Elemento";
+          break;
+
+        case ComponentType.Skills:
+          this.deleteModalMessage = "la skill";
+          this.modalTitle = "Skill";
+          break;
+
+        case ComponentType.Description:
+          this.deleteModalMessage = "la descripción";
+          this.modalTitle = "Descripcion";
+          break;
+
+        case ComponentType.Content:
+          this.deleteModalMessage = "el contenido";
+          this.modalTitle = "Contenido";
+          break;
+
+        case ComponentType.Contract:
+          this.deleteModalMessage = "el contrato";
+          this.modalTitle = "Contrato";
+          break;
+
+        case ComponentType.SubContent:
+          this.deleteModalMessage = "el subcontenido";
+          this.modalTitle = "SubContenido";
+          break;
+
+        case ComponentType.Project:
+          this.deleteModalMessage = "el proyecto";
+          this.modalTitle = "Proyecto";
+          break;
+
+        default:
+          break;
+      }
+    });
   },
 };
 </script>

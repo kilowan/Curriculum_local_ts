@@ -12,12 +12,25 @@
             {{ company.name }}
             <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${company.guid}`)"/>
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${company.guid}`)"/>
+            <!--<ViewVue
+              v-if="company != undefined"
+              :input="company"
+              :iconsHidden="iconsHidden"
+              @reload="$emit('update', input)"
+            />-->
             <professional-experience-view
+              v-if="company != undefined"
               :guid="company.guid"
               :company="company"
               :iconsHidden="iconsHidden"
               @reload="$emit('update', input)"
             />
+            <!--<ComponentView
+              :input="company"
+              :childrensDataType="data.childrensDataType"
+              :iconsHidden="iconsHidden"
+              @reload="$emit('update', input)"
+            />-->
           </li>
           <EditModal
             :modalTitle="input.name"
@@ -45,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Module } from "../../Config/types";
+import { Component, Module, ComponentType } from "../../Config/types";
 //import List from "../Module/List.vue";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
@@ -54,7 +67,9 @@ import AddLink from "../../components/AddLink.vue";
 import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
+//import ComponentView from "../Component/ComponentView.vue";
 import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
+//import ViewVue from "./View.vue";
 
 export default {
   name: "ModuleView",
@@ -67,7 +82,9 @@ export default {
     DeleteLink,
     EditLink,
     HideLink,
-    ProfessionalExperienceView
+    //ComponentView
+    ProfessionalExperienceView,
+    //ViewVue
 },
   props: {
     iconsHidden: {
@@ -82,18 +99,14 @@ export default {
   data(): any {
     return {
       add: false,
-      hide: false
+      hide: false,
+      deleteModalMessage: "la experiencia",
+      modalTitle: "Experiencia"
     };
   },
   methods: {
     cancel(): void {
       this.add = false;
-    },
-    options(): any {
-      return [
-        { value: 1, text: "personal" },
-        { value: 2, text: "professional" },
-      ];
     },
     save(experience: Component): void {
       this.$nextTick(() => {
@@ -102,7 +115,6 @@ export default {
         data.finishDate = experience.finishDate;
         data.graduationDate = experience.graduationDate;
         data.place = experience.place;
-        data.componentDataType = "Experience";
         this.input.childrens.push(data);
         this.$emit("update", this.input);
         this.experience = {} as Component;
@@ -112,6 +124,64 @@ export default {
       this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("update", this.input);
     }
+  },
+  created(): void {
+    this.$nextTick(() => {
+      switch (this.childrensDataType) {
+        case ComponentType.Academic:
+          this.deleteModalMessage = "la formación";
+          this.modalTitle = "Formación";
+          break;
+
+        case ComponentType.Experience:
+          this.deleteModalMessage = "la experiencia";
+          this.modalTitle = "Experiencia";
+          break;
+
+        case ComponentType.Languages:
+          this.deleteModalMessage = "el idioma";
+          this.modalTitle = "Idioma";
+          break;
+
+        case ComponentType.Other:
+          this.deleteModalMessage = "el elemento";
+          this.modalTitle = "Elemento";
+          break;
+
+        case ComponentType.Skills:
+          this.deleteModalMessage = "la skill";
+          this.modalTitle = "Skill";
+          break;
+
+        case ComponentType.Description:
+          this.deleteModalMessage = "la descripción";
+          this.modalTitle = "Descripcion";
+          break;
+
+        case ComponentType.Content:
+          this.deleteModalMessage = "el contenido";
+          this.modalTitle = "Contenido";
+          break;
+
+        case ComponentType.Contract:
+          this.deleteModalMessage = "el contrato";
+          this.modalTitle = "Contrato";
+          break;
+
+        case ComponentType.SubContent:
+          this.deleteModalMessage = "el subcontenido";
+          this.modalTitle = "SubContenido";
+          break;
+
+        case ComponentType.Project:
+          this.deleteModalMessage = "el proyecto";
+          this.modalTitle = "Proyecto";
+          break;
+
+        default:
+          break;
+      }
+    });
   },
 };
 </script>

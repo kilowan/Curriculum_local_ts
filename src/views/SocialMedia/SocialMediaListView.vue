@@ -89,7 +89,7 @@ export default {
         { value: SocialMediaType.Infojobs, text: "Infojobs", disabled: false },
         { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
       ],
-      socialmedia: {} as Component,
+      socialmedia: Component,
       count: 3,
       socialMediaList: new Array<Component>(),
     };
