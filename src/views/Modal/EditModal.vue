@@ -7,38 +7,29 @@
   >
     <label>Nombre:</label>
     <input type="text" v-model="componentData.name" /> <br />
-    <label
-      v-if="
-        componentDataType === 2 || componentDataType === 1
-      "
-      >Centro/Lugar:</label
-    >
-    <input
-      v-if="
-        componentDataType === 2 || componentDataType === 1
-      "
-      type="text"
-      v-model="componentData.place"
-    />
+    <label v-if="componentData.level != undefined">Nivel:</label>
+    <input v-if="componentData.level != undefined" type="text" v-model="componentData.level"/>
+    <label v-if="componentData.place != undefined">Centro/Lugar:</label>
+    <input v-if="componentData.place != undefined" type="text" v-model="componentData.place"/>
     <br />
-    <label v-if="componentDataType === 1">Fecha de inicio</label>
+    <label v-if="componentData.initDate != undefined">Fecha de inicio</label>
     <input
-      v-if="componentDataType === 1"
+      v-if="componentData.initDate != undefined"
       type="date"
       v-model="componentData.initDate"
       min="2015-01-01"
       max="2030-12-31"
     />
     <br />
-    <label v-if="componentDataType === 1">Fecha de fin</label>
+    <label v-if="componentData.finishDate != undefined">Fecha de fin</label>
     <input
-      v-if="componentDataType === 1"
+      v-if="componentData.finishDate != undefined"
       type="date"
       v-model="componentData.finishDate"
       min="2015-01-01"
       max="2030-12-31"
     />
-    <div v-if="componentDataType === 2">
+    <div v-if="componentData.graduationDate != undefined">
       <label>Graduación:</label>
       <b-form-datepicker
         v-model="componentData.graduationDate"
@@ -62,11 +53,7 @@ export default {
     modalTitle: {
       type: String,
       required: true,
-    },
-    componentDataType: {
-      type: Number,
-      required: true,
-    },
+    }
   },
   data(): any {
     return {};

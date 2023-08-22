@@ -20,7 +20,6 @@
           <edit-modal
             :modalTitle="'skill'"
             :componentData="skill"
-            :componentDataType="3"
           />
           <delete-modal
             :modalTitle="'Skill'"

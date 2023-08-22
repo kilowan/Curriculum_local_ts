@@ -20,7 +20,6 @@
           <edit-modal
             :modalTitle="'Otros'"
             :componentData="otherData"
-            :componentDataType="5"
           />
           <delete-modal
             :modalTitle="'elemento'"
