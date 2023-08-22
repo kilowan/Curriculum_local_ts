@@ -14,14 +14,13 @@
             <other-view
               :otherData="otherData"
               :iconsHidden="iconsHidden"
-              @update="refresh($event)"
+              @reload="$emit('reload', input)"
             />
           </li>
           <edit-modal
             :modalTitle="'Otros'"
             :componentData="otherData"
             :componentDataType="5"
-            @update="update($event)"
           />
           <delete-modal
             :modalTitle="'elemento'"
@@ -94,18 +93,6 @@ export default {
         ));
         this.$emit("update", this.input);
         this.cancel();
-      });
-    },
-    refresh(other: Component): void {
-      let dat = this.input.childrens.find((data: any) => data.guid === other.guid);
-      dat = other;
-      this.input.childrens = this.input.childrens.filter((data: any) => data.guid !== other.guid);
-      this.input.childrens.push(dat);
-      this.$emit("update", this.input);
-    },
-    update(others: Array<Component>): void {
-      this.$nextTick(() => {
-        this.$emit("update", others);
       });
     },
     splice(guid: string): void {

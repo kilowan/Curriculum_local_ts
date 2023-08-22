@@ -16,7 +16,7 @@
           :modalTitle="'valor'"
           :componentData="value"
           :message="'el valor'"
-          @remove="splice(value.guid)"
+          @remove="splice(value)"
         />
       </div>
       <div v-if="!iconsHidden">
@@ -81,20 +81,13 @@ export default {
         this.other.childrens.push(component);
         this.values.push(component);
         this.cancel();
-        this.$emit("update", this.other);
+        this.$emit("reload");
       });
     },
-    splice(guid: string): void {
-      this.$nextTick(() => {
-        this.other.childrens = this.other.childrens.filter(
-          (data: any) => data.guid !== guid
-        );
-        this.values = this.values.filter(
-          (data: Component) => data.guid !== guid
-        );
-        this.$emit("update", this.other);
-      });
-    },
+    splice(element: Component): void {
+      this.other.childrens.splice(this.other.childrens.indexOf(element), 1);
+      this.$emit("reload");
+    }
   },
   mounted(): void {
     this.other = this.otherData;

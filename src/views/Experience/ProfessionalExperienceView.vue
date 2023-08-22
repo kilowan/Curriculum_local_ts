@@ -57,9 +57,8 @@ export default {
       this.$nextTick(() => {
         let data = new Component(crypto.randomUUID(), ComponentType.Project, contract);
         this.company.childrens.push(data);
-        this.contractData = "";
-        this.add = false;
-        this.$emit("update", this.company);
+        this.cancel();
+        this.$emit("reload");
       });
     },
     cancel(): void {
