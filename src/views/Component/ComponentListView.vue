@@ -9,6 +9,7 @@
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${data.guid}`)"/>
           </li>
           <component-view
+            :name="data.guid"
             :iconsHidden="iconsHidden"
             :input="data"
             :childrensDataType="data.childrensDataType"
@@ -33,7 +34,7 @@
         />
       </ul>
     </div>
-    <AddLink v-if="!iconsHidden" :text="childrensTitle" @click="$bvModal.show(`add-${guid}`)"/>
+    <AddLink v-if="!iconsHidden" :text="modalTitle" @click="$bvModal.show(`add-${guid}`)"/>
   </div>
 </template>
 

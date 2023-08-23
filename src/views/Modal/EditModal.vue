@@ -5,58 +5,81 @@
     :title="`Editar ${modalTitle}`"
     ok-title="Guardar"
   >
-    <label>Nombre:</label>
-    <input type="text" v-model="componentData.name" /> <br />
-    <label v-if="componentData.level != undefined">Nivel:</label>
-    <input v-if="componentData.level != undefined" type="text" v-model="componentData.level"/>
-    <label v-if="componentData.place != undefined">Centro/Lugar:</label>
-    <input v-if="componentData.place != undefined" type="text" v-model="componentData.place"/>
-    <br />
-    <label v-if="componentData.initDate != undefined">Fecha de inicio</label>
-    <input
-      v-if="componentData.initDate != undefined"
-      type="date"
-      v-model="componentData.initDate"
-      min="2015-01-01"
-      max="2030-12-31"
+  <KeyValue 
+      v-if="componentData.type != undefined && modalTitle == 'red social'" 
+      :type="2" 
+      :disabled="true"
+      :options="types"
+      :field="'Tipo'" 
+      :value="componentData.type" 
     />
-    <br />
-    <label v-if="componentData.finishDate != undefined">Fecha de fin</label>
-    <input
-      v-if="componentData.finishDate != undefined"
-      type="date"
-      v-model="componentData.finishDate"
-      min="2015-01-01"
-      max="2030-12-31"
+    <KeyValue 
+      v-if="componentData.name != undefined && modalTitle == 'red social'" 
+      :type="1" 
+      :field="'Url'" 
+      :value="componentData.name" 
     />
-    <div v-if="componentData.graduationDate != undefined">
-      <label>Graduación:</label>
-      <b-form-datepicker
-        v-model="componentData.graduationDate"
-        min="2015-01-01"
-        max="2030-12-31"
-      ></b-form-datepicker>
-      <br />
-    </div>
+    <KeyValue 
+      v-if="componentData.name != undefined && modalTitle != 'red social'" 
+      :type="1" 
+      :field="'Nombre'" 
+      :value="componentData.name" 
+    />
+    <KeyValue 
+      v-if="componentData.level != undefined" 
+      :type="1" 
+      :field="'Nivel'" 
+      :value="componentData.level" 
+    />
+    <KeyValue 
+      v-if="componentData.place != undefined" 
+      :type="1" 
+      :field="'Centro/Lugar'" 
+      :value="componentData.place" 
+    />
+    <KeyValue 
+      v-if="componentData.initDate != undefined" 
+      :type="3" 
+      :field="'Fecha de inicio'" 
+      :value="componentData.initDate" 
+    />
+    <KeyValue 
+      v-if="componentData.finishDate != undefined" 
+      :type="3" 
+      :field="'Fecha de fin'" 
+      :value="componentData.finishDate" 
+    />
+    <KeyValue 
+      v-if="componentData.graduationDate != undefined" 
+      :type="4" 
+      :field="'Graduación'" 
+      :value="componentData.graduationDate" 
+    />
   </b-modal>
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
+import KeyValue from "@/components/KeyValue.vue";
+import { Component, SocialMediaType } from "../../Config/types";
 export default {
-  name: "EditModal",
-  props: {
-    componentData: {
-      type: Component,
-      required: true,
+    name: "EditModal",
+    props: {
+        componentData: {
+            type: Component,
+            required: true,
+        },
+        modalTitle: {
+            type: String,
+            required: true,
+        }
     },
-    modalTitle: {
-      type: String,
-      required: true,
-    }
-  },
-  data(): any {
-    return {};
-  },
+    data(): any {
+        return { types: [
+                { value: SocialMediaType.Linkedin, text: "Linkedin", disabled: false },
+                { value: SocialMediaType.Infojobs, text: "Infojobs", disabled: false },
+                { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
+            ] };
+    },
+    components: { KeyValue }
 };
 </script>

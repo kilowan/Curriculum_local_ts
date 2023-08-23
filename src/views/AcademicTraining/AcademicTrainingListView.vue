@@ -20,66 +20,41 @@
               @reload="$emit('update', input)"
             />
           </li>
-          <b-modal
-            :id="`delete-${academic.guid}`"
-            :title="'Eliminar formación'"
-            ok-title="Eliminar"
-            @ok="splice(academic)"
-          >
-            <div style="text-align: center; margin: 0 auto; width: 380px">
-              <h1>
-                ¿Seguro que quieres eliminar la formación {{ academic.name }}?
-              </h1>
-            </div>
-          </b-modal>
+          <delete-modal
+            :modalTitle="getModalTitle"
+            :message="deleteModalMessage"
+            :componentData="academic"
+            @remove="splice(academic)"
+          />
         </div>
       </ul>
-      <!--<ComponentListView
-        v-if="input != undefined && input.length >0"
-        :iconsHidden="iconsHidden"
-        :elements="input"
-        :componentDataType="'Academic'"
-      />-->
       <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show(`add-${input.guid}`)"/>
     </dd>
     <dd class="clear"></dd>
-    <b-modal
-      :id="`add-${input.guid}`"
-      :title="`Añadir Formación`"
-      ok-title="Guardar"
-      @ok="save"
-      @cancel="cancel"
-    >
-      <label>Nombre</label> <input type="text" v-model="newComponent.name" />
-      <br />
-      <label>Centro/Lugar:</label>
-      <input type="text" v-model="newComponent.place" /> <br />
-      <label>Graduación</label>
-      <input
-        type="date"
-        v-model="newComponent.graduationDate"
-        min="2015-01-01"
-        max="2030-12-31"
-      />
-      <br />
-    </b-modal>
+    <AddModal
+      :guid="input.guid"
+      :componentDataType="input.childrensDataType"
+      @save="save($event)"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, ComponentType, Module } from "../../Config/types";
-//import ComponentListView from "../Component/ComponentListView.vue";
 import AcademicTrainingView from "./AcademicTrainingView.vue";
 import AddLink from "@/components/AddLink.vue";
 import HideLink from "@/components/HideLink.vue";
+import DeleteModal from "../Modal/DeleteModal.vue";
+import AddModal from "../Modal/AddModal.vue";
 
 export default {
   name: "AcademicTrainingListView",
   components: {
-    //ComponentListView,
     AcademicTrainingView,
     AddLink,
-    HideLink
+    HideLink,
+    DeleteModal,
+    AddModal
 },
   props: {
     iconsHidden: {
@@ -94,8 +69,7 @@ export default {
   data(): any {
     return {
       hide: false,
-      add: false,
-      newComponent: Component,
+      add: false
     };
   },
   methods: {
@@ -104,22 +78,11 @@ export default {
       this.$emit("update", this.input);
     },
     cancel(): void {
-      this.newComponent = {} as Component;
       this.add = false;
     },
-    save(): void {
+    save(input: Component): void {
       this.$nextTick(() => {
-        let component = new Component(
-          crypto.randomUUID(),
-          this.getChildrensType(),
-          this.newComponent.name
-        );
-        component.componentDataType = "Academic";
-        component.place = this.newComponent?.place;
-        component.initDate = this.newComponent?.initDate;
-        component.finishDate = this.newComponent?.finishDate;
-        component.graduationDate = this.newComponent?.graduationDate;
-        this.input.push(component);
+        this.input.push(input);
         this.cancel();
         this.$emit("update", this.input);
       });

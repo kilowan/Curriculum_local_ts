@@ -5,42 +5,29 @@
       <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
     <dd :id="input.ddId">
-      <!--list-->
       <ul>
-        <div v-for="company in input.childrens" v-bind:key="company.guid">
+        <div v-for="element in input.childrens" v-bind:key="element.guid">
           <li>
-            {{ company.name }}
-            <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${company.guid}`)"/>
-            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${company.guid}`)"/>
-            <!--<ViewVue
-              v-if="company != undefined"
-              :input="company"
-              :iconsHidden="iconsHidden"
-              @reload="$emit('update', input)"
-            />-->
-            <!--<professional-experience-view
-              v-if="company != undefined"
-              :guid="company.guid"
-              :company="company"
-              :iconsHidden="iconsHidden"
-              @reload="$emit('update', input)"
-            />-->
-            <ComponentView
-              :input="company"
-              :childrensDataType="company.childrensDataType"
+            {{ element.name }}
+            <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${element.guid}`)"/>
+            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${element.guid}`)"/>
+            <professional-experience-view
+              v-if="element != undefined"
+              :guid="element.guid"
+              :company="element"
               :iconsHidden="iconsHidden"
               @reload="$emit('update', input)"
             />
           </li>
           <EditModal
             :modalTitle="input.name"
-            :componentData="company"
-            :componentDataType="company.childrensDataType"
+            :componentData="element"
+            :componentDataType="element.childrensDataType"
           />
           <DeleteModal
             :modalTitle="input.name"
-            :message="'la experiencia'"
-            :componentData="company"
+            :message="deleteModalMessage"
+            :componentData="element"
             @remove="splice($event)"
           />
         </div>
@@ -59,7 +46,6 @@
 
 <script lang="ts">
 import { Component, Module, ComponentType } from "../../Config/types";
-//import List from "../Module/List.vue";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
@@ -67,14 +53,11 @@ import AddLink from "../../components/AddLink.vue";
 import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
-import ComponentView from "../Component/ComponentView.vue";
-//import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
-//import ViewVue from "./View.vue";
+import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
 
 export default {
   name: "ModuleView",
   components: {
-    //List,
     AddModal,
     EditModal,
     DeleteModal,
@@ -82,9 +65,7 @@ export default {
     DeleteLink,
     EditLink,
     HideLink,
-    ComponentView
-    //ProfessionalExperienceView,
-    //ViewVue
+    ProfessionalExperienceView,
 },
   props: {
     iconsHidden: {
