@@ -14,17 +14,14 @@
             @reload="$emit('reload')"
           />
         </li>
-        <b-modal
-          :id="`edit-contract-${contract.guid}`"
-          title="Editar contrato"
-          ok-title="Guardar"
-        >
-          <input type="text" v-model="contract.name" /> <br />
-        </b-modal>
+        <edit-modal
+          :modalTitle="'Contrato'"
+          :componentData="contract"
+        />
         <delete-modal
-          :modal-title="'Contrato'"
+          :modalTitle="'Contrato'"
           :message="'el contrato'"
-          :component-data="contract"
+          :componentData="contract"
           @remove="splice(contract)"
         />
       </div>
@@ -38,6 +35,7 @@ import { Component } from "../../Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import EditModal from "../Modal/EditModal.vue";
 
 export default {
   name: "ContractsView",
@@ -45,7 +43,8 @@ export default {
     ContractView,
     DeleteModal,
     DeleteLink,
-    EditLink
+    EditLink,
+    EditModal
 },
   props: {
     contracts: {

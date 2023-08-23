@@ -8,22 +8,10 @@
       <social-media-view :socialMediaData="socialMediaData" />
       <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${socialMediaData.guid}`)"/>
       <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${socialMediaData.guid}`)"/>
-      <b-modal
-        :id="`edit-${socialMediaData.guid}`"
-        title="Editar red social"
-        ok-title="Guardar"
-        @ok="edit(socialMediaData)"
-      >
-        <label>Url:</label>
-        <input type="text" v-model="socialMediaData.name" /> <br />
-        <label>Tipo:</label>
-        <b-form-select
-          disabled
-          :options="types"
-          v-model="socialMediaData.type"
-        ></b-form-select>
-        <br />
-      </b-modal>
+      <edit-modal
+        :modalTitle="'red social'"
+        :componentData="socialMediaData"
+      />
       <delete-modal
         :modal-title="'Red social'"
         :message="'la red social'"
@@ -62,6 +50,7 @@
 import SocialMediaView from "./SocialMediaView.vue";
 import { SocialMediaType, Component } from "../../Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
+import EditModal from "../Modal/EditModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
@@ -73,7 +62,8 @@ export default {
     DeleteModal,
     AddLink,
     DeleteLink,
-    EditLink
+    EditLink,
+    EditModal
 },
   props: {
     iconsHidden: {

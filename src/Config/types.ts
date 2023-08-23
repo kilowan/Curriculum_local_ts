@@ -116,3 +116,9 @@ export enum ComponentType {
   Value = 11,
   End = 12,
 }
+export enum ElementType {
+  Text = 1,
+  Treselect = 2,
+  Date = 3,
+  Datepicker = 4
+}
