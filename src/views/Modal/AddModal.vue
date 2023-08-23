@@ -75,7 +75,7 @@ export default {
   },
   data(): any {
     return {
-      newComponent: Component,
+      newComponent: {} as Component,
     };
   },
   methods: {

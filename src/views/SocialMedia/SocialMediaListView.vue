@@ -1,11 +1,11 @@
 <template>
   <div>
     <div
-      v-for="socialMediaData in socialMediaList"
+      v-for="socialMediaData in input"
       v-bind:key="socialMediaData.guid"
       class="d-flex"
     >
-      <social-media-view :socialMediaData="socialMediaData" />
+      <social-media-view :input="socialMediaData" />
       <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${socialMediaData.guid}`)"/>
       <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${socialMediaData.guid}`)"/>
       <edit-modal
@@ -27,20 +27,26 @@
       @ok="add(socialmedia)"
       @ok-prevent="socialmedia.name == ''"
     >
-      <label>Tipo</label>
-      <b-form-select :options="types" v-model="socialmedia.type" /> <br />
-      <div v-if="socialmedia.type === 1">
-        <label>Id linkedin</label>
-        <input type="text" v-model="socialmedia.name" />
-      </div>
-      <div v-else-if="socialmedia.type === 2">
-        <label>Id infojobs</label>
-        <input type="text" v-model="socialmedia.name" />
-      </div>
-      <div v-else>
-        <label>Id github</label>
-        <input type="text" v-model="socialmedia.name" />
-      </div>
+    <label>Tipo</label>
+    <b-form-select :options="types" v-model="socialmedia.type" /> <br />
+    <KeyValue 
+      v-if="socialmedia.type === 1"
+      :type="1" 
+      :field="'Id linkedin'" 
+      :value="socialmedia.name"
+    />
+    <KeyValue 
+      v-else-if="socialmedia.type === 2"
+      :type="1" 
+      :field="'Id infojobs'" 
+      :value="socialmedia.name"
+    />
+    <KeyValue 
+      v-else
+      :type="1" 
+      :field="'Id github'" 
+      :value="socialmedia.name"
+    />
       <br /> </b-modal
     ><br />
   </div>
@@ -54,6 +60,7 @@ import EditModal from "../Modal/EditModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import KeyValue from "@/components/KeyValue.vue";
 
 export default {
   name: "SocialMediaListView",
@@ -63,7 +70,8 @@ export default {
     AddLink,
     DeleteLink,
     EditLink,
-    EditModal
+    EditModal,
+    KeyValue
 },
   props: {
     iconsHidden: {
@@ -71,6 +79,10 @@ export default {
       required: true,
       default: false,
     },
+    input: {
+      type: Array,
+      required: true
+    }
   },
   data(): any {
     return {
@@ -79,22 +91,24 @@ export default {
         { value: SocialMediaType.Infojobs, text: "Infojobs", disabled: false },
         { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
       ],
-      socialmedia: Component,
-      count: 3,
-      socialMediaList: new Array<Component>(),
+      socialmedia: {} as Component,
+      count: 3
     };
   },
   methods: {
     add(socialMedia: Component): void {
       socialMedia.guid = crypto.randomUUID();
-      this.socialMediaList.push(socialMedia);
+      this.input.push(socialMedia);
       var type = this.types.find(
         (element: any) => element.value === socialMedia.type
       );
       if (type !== undefined) type.disabled = true;
-      this.$emit("update", this.socialMediaList);
+      this.$emit("update", this.input);
       this.socialmedia = {} as Component;
       this.count--;
+    },
+    select(type: number) {
+      this.componentData.type = type;
     },
     splice(element: Component): void {
       let type = this.types.find(
@@ -102,9 +116,9 @@ export default {
       );
       if (type !== undefined) type.disabled = false;
 
-      this.socialMediaList.splice(this.socialMediaList.indexOf(element), 1);
+      this.input.splice(this.input.indexOf(element), 1);
       this.count++;
-      this.$emit("update", this.socialMediaList);
+      this.$emit("update", this.input);
     }
   },
 };

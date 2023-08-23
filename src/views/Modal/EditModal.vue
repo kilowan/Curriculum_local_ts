@@ -51,7 +51,7 @@
     />
     <KeyValue 
       v-if="componentData.graduationDate != undefined" 
-      :type="4" 
+      :type="3" 
       :field="'Graduación'" 
       :value="componentData.graduationDate" 
     />
