@@ -30,25 +30,10 @@
     <label>Tipo</label>
     <b-form-select :options="types" v-model="socialmedia.type" /> <br />
     <KeyValue 
-      v-if="socialmedia.type === 1"
       :type="1" 
-      :field="'Id linkedin'" 
-      :value="socialmedia.name"
-    />
-    <KeyValue 
-      v-else-if="socialmedia.type === 2"
-      :type="1" 
-      :field="'Id infojobs'" 
-      :value="socialmedia.name"
-    />
-    <KeyValue 
-      v-else
-      :type="1" 
-      :field="'Id github'" 
-      :value="socialmedia.name"
-    />
-      <br /> </b-modal
-    ><br />
+      :field="socialmedia.type === 1?'Id linkedin':socialmedia.type === 2?'Id infojobs':'Id github'" 
+      :value="socialmedia.name"/><br />
+    </b-modal><br />
   </div>
 </template>
 
