@@ -26,11 +26,11 @@
 
 <script lang="ts">
 import ContentView from "./ContentView.vue";
-import { Component } from "../../Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import { Component } from "@/Config/Base/Component/Component";
 
 export default {
   name: "ContentsView",

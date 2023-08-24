@@ -13,9 +13,10 @@
 </template>
 
 <script lang="ts">
+import { Component } from "@/Config/Base/Component/Component";
 import ContentsView from "../Content/ContentListView.vue";
-import { Component, ComponentType } from "../../Config/types";
 import AddLink from "@/components/AddLink.vue";
+import { ComponentType } from "@/Config/Base/Enums";
 
 export default {
   name: "ComplementaryExperienceView",

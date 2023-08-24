@@ -30,12 +30,12 @@
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
 import ProjectView from "./ProjectView.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import { Component } from "@/Config/Base/Component/Component";
 
 export default {
   name: "ProjectListView",

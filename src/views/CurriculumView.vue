@@ -4,35 +4,35 @@
       <h1 class="fn">
         <input
           type="text"
-          v-model="curriculum.fullName"
-          placeholder="Nombre completo"
+          v-model="curriculum.fullName.value"
+          :placeholder="curriculum.fullName.field"
         />
       </h1>
       <div>
         <b-icon icon="telephone-fill" aria-hidden="true" />
         <input
           type="text"
-          v-model="curriculum.phoneNumber"
-          placeholder="Teléfono"
+          v-model="curriculum.phoneNumber.value"
+          :placeholder="curriculum.phoneNumber.field"
         /><br />
       </div>
       <b-icon icon="envelope" aria-hidden="true" />
       <input
         type="text"
-        v-model="curriculum.email"
-        placeholder="Email"
+        v-model="curriculum.email.value"
+        :placeholder="curriculum.email.field"
       />
     </div>
     <div v-else id="contact-info" class="vcard">
-      <h1 class="fn">{{ curriculum.fullName }}</h1>
+      <h1 class="fn">{{ curriculum.fullName.value }}</h1>
       <div>
         <b-icon icon="telephone-fill" aria-hidden="true" />
-        <span>{{ curriculum.phoneNumber }}</span
+        <span>{{ curriculum.phoneNumber.value }}</span
         ><br />
       </div>
       <div>
         <b-icon icon="envelope" aria-hidden="true" />
-        <a :href="'mailto:' + curriculum.email">{{ curriculum.email }}</a
+        <a :href="'mailto:' + curriculum.email.value">{{ curriculum.email.value }}</a
         ><br />
       </div>
     </div>
@@ -45,10 +45,10 @@
     <div id="objective">
       <textarea
         v-if="!active"
-        v-model="curriculum.description"
-        placeholder="Descripción"
+        v-model="curriculum.description.value"
+        :placeholder="curriculum.description.field"
       />
-      <p v-else>{{ curriculum.description }}</p>
+      <p v-else>{{ curriculum.description.value }}</p>
     </div>
     <div class="clear"></div>
     <dl></dl>
@@ -106,7 +106,6 @@
 <script lang="ts">
 //import jsPDF from 'jspdf';
 //declare const html2canvas: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>;
-import { CurriculumDetail, Component, Module, ComponentType } from "../Config/types";
 import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
 import OtherListView from "./Other/OtherListView.vue";
 //import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceListView.vue";
@@ -115,6 +114,14 @@ import LanguageListView from "./Language/LanguageView.vue";
 import SocialMediaListView from "./SocialMedia/SocialMediaListView.vue";
 import FileReaderData from "../components/FileReaderData.vue";
 import ModuleView from "./Module/ModuleView.vue";
+import { CurriculumDetail } from "@/Config/CurriculumDetail/CurriculumDetail";
+import { Component } from "@/Config/Base/Component/Component";
+import { Module } from "@/Config/Base/Module/Module";
+import { ExperienceModule } from "@/Config/Experience/Module/ExperienceModule";
+import { LanguageModule } from "@/Config/Language/Module/LanguageModule";
+import { TrainingModule } from "@/Config/Training/Module/TrainingModule";
+import { ComponentType } from "@/Config/Base/Enums";
+import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 
 export default {
   name: "CurriculumView",
@@ -321,15 +328,15 @@ export default {
     this.curriculum = 
     new CurriculumDetail(
       crypto.randomUUID(), 
-      '', //fullName
-      '', //description
-      '', //phoneNumber
-      '', //email
+      new FieldValue('Nombre completo', ''), //fullName
+      new FieldValue('Descripción', ''), //description
+      new FieldValue('Teléfono', ''), //phoneNumber
+      new FieldValue('Email', ''), //email
+      new ExperienceModule(crypto.randomUUID(), 'experience', 'experiencia', ComponentType.Experience, 'Experiencia'),
+      new LanguageModule(crypto.randomUUID(), 'languages', 'idiomas', ComponentType.Languages, 'Idiomas'),
+      new TrainingModule(crypto.randomUUID(), 'academic', 'academica', ComponentType.Academic, 'Formación'), 
       [
-        new Module(crypto.randomUUID(), 'experience', 'experiencia', ComponentType.Experience, 'Experiencia'), 
-        new Module(crypto.randomUUID(), 'academic', 'academica', ComponentType.Academic, 'Formación'), 
         new Module(crypto.randomUUID(), 'complementary', 'complementaria', ComponentType.Skills, 'Skills'), 
-        new Module(crypto.randomUUID(), 'languages', 'idiomas', ComponentType.Languages, 'Idiomas'),
         new Module(crypto.randomUUID(), 'other', 'otros', ComponentType.Other, 'Otros datos')
       ]);
   },

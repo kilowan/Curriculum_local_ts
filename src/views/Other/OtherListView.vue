@@ -42,13 +42,15 @@
 
 <script lang="ts">
 import otherView from "./OtherView.vue";
-import { Component, Module, ComponentType } from "@/Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import HideLink from "@/components/HideLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import { Module } from "@/Config/Base/Module/Module";
+import { ComponentType } from "@/Config/Base/Enums";
+import { Component } from "@/Config/Base/Component/Component";
 
 export default {
   name: "OtherListView",

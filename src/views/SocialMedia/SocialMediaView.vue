@@ -27,8 +27,9 @@
 </template>
 
 <script lang="ts">
-import { SocialMediaType } from "../../Config/types";
-import { Component } from "../../Config/types";
+import { Component } from '@/Config/Base/Component/Component';
+import { SocialMediaType } from '@/Config/Base/Enums';
+
 
 export default {
   name: "SocialMediaView",

@@ -19,8 +19,9 @@
 
 <script lang="ts">
 import AddLink from "@/components/AddLink.vue";
-import { Component, ComponentType } from "../../Config/types";
 import ProjectListView from "./ProjectListView.vue";
+import { Component } from "@/Config/Base/Component/Component";
+import { ComponentType } from "@/Config/Base/Enums";
 export default {
   name: "ContractView",
   components: {

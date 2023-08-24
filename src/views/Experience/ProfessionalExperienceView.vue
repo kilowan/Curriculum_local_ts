@@ -1,10 +1,10 @@
 <template>
   <div v-if="company != undefined">
     <ul>
-      <li>Centro/Lugar: {{ company.place }}</li>
-      <li>Fecha inicio: {{ formatDate(company.initDate) }}</li>
+      <li>{{ company.place.field }}: {{ company.place.value }}</li>
+      <li>{{ company.initDate.field }}: {{ formatDate(company.initDate.value) }}</li>
       <li v-if="company.finishDate">
-        Fecha Fin: {{ formatDate(company.finishDate) }}
+        {{ company.finishDate.field }}: {{ formatDate(company.finishDate.value) }}
       </li>
       <contract-list-view
         :contracts="company.childrens"
@@ -23,8 +23,9 @@
 
 <script lang="ts">
 import AddLink from "@/components/AddLink.vue";
-import { Component, ComponentType } from "../../Config/types";
 import ContractListView from "./ContractListView.vue";
+import { Component } from "@/Config/Base/Component/Component";
+import { ComponentType } from "@/Config/Base/Enums";
 
 export default {
   name: "ProfessionalExperienceView",

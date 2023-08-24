@@ -17,7 +17,8 @@
 </template>
 
 <script lang="ts">
-import { Component } from "../../Config/types";
+import { Component } from '@/Config/Base/Component/Component';
+
 
 export default {
   name: "View",

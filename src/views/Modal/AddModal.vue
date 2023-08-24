@@ -59,7 +59,9 @@
 </template>
 
 <script lang="ts">
-import { Component, ComponentType } from "@/Config/types";
+import { Component } from '@/Config/Base/Component/Component';
+import { ComponentType } from '@/Config/Base/Enums';
+
 
 export default {
   name: "AddModal",
