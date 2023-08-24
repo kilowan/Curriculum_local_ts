@@ -32,13 +32,13 @@
 </template>
 
 <script lang="ts">
-import { Component } from "@/Config/types";
 import AddModal from "../Modal/AddModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import { Component } from "@/Config/Base/Component/Component";
 
 export default {
   name: "OtherView",

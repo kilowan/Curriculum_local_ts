@@ -35,7 +35,7 @@
       <AddLink v-if="!iconsHidden" :text="input.name" @click="$bvModal.show(`add-${input.guid}`)"/>
     </dd>
     <dd class="clear"></dd>
-    <AddModal
+    <AddNewModal
       :guid="input.guid"
       :modalTitle="input.name"
       :componentDataType="input.childrensDataType"
@@ -45,8 +45,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Module, ComponentType } from "../../Config/types";
-import AddModal from "../Modal/AddModal.vue";
+import AddNewModal from "../Modal/AddNewModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "../../components/AddLink.vue";
@@ -54,11 +53,14 @@ import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
 import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
+import { Module } from "@/Config/Base/Module/Module";
+import { Component } from "@/Config/Base/Component/Component";
+import { ComponentType } from "@/Config/Base/Enums";
 
 export default {
   name: "ModuleView",
   components: {
-    AddModal,
+    AddNewModal,
     EditModal,
     DeleteModal,
     AddLink,

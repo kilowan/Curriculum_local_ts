@@ -31,11 +31,11 @@
 
 <script lang="ts">
 import ContractView from "./ContractView.vue";
-import { Component } from "../../Config/types";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import EditModal from "../Modal/EditModal.vue";
+import { Component } from "@/Config/Base/Component/Component";
 
 export default {
   name: "ContractsView",

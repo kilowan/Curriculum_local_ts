@@ -28,7 +28,7 @@
       <AddLink v-if="!iconsHidden" :text="'idioma'" @click="$bvModal.show(`add-${guid}`)"/>
     </dd>
     <dd class="clear"></dd>
-    <AddModal
+    <AddNewModal
       :guid="guid"
       :componentDataType="4"
       @save="save($event)"
@@ -37,19 +37,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Module } from "../../Config/types";
-import AddModal from "../Modal/AddModal.vue";
+import AddNewModal from "../Modal/AddNewModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import HideLink from "@/components/HideLink.vue";
 import EditLink from "@/components/EditLink.vue";
+import { Component } from "@/Config/Base/Component/Component";
+import { LanguageModule } from "@/Config/Language/Module/LanguageModule";
 
 export default {
   name: "LanguagesView",
   components: {
-    AddModal,
+    AddNewModal,
     EditModal,
     DeleteModal,
     AddLink,
@@ -63,7 +64,7 @@ export default {
       required: true,
     },
     input: {
-      type: Module,
+      type: LanguageModule,
       required: true
     }
   },
@@ -72,7 +73,7 @@ export default {
       hide: false,
       add: false,
       languageLevelList: [],
-      language: Component,
+      language: {} as Component,
       guid: crypto.randomUUID(),
     };
   },

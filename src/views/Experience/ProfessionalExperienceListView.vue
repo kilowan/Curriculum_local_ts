@@ -34,7 +34,7 @@
       <AddLink v-if="!iconsHidden" :text="'experiencia'" @click="$bvModal.show(`add-${input.guid}`)"/>
     </dd>
     <dd class="clear"></dd>
-    <AddModal
+    <AddNewModal
       :guid="input.guid"
       :componentDataType="1"
       @save="save($event)"
@@ -43,21 +43,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Module } from "../../Config/types";
 import ProfessionalExperienceView from "./ProfessionalExperienceView.vue";
-import AddModal from "../Modal/AddModal.vue";
+import AddNewModal from "../Modal/AddNewModal.vue";
 import EditModal from "../Modal/EditModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import HideLink from "@/components/HideLink.vue";
+import { ExperienceModule } from "@/Config/Experience/Module/ExperienceModule";
+import { Experience } from "@/Config/Experience/Experience";
 
 export default {
   name: "ProfessionalExperienceListView",
   components: {
     ProfessionalExperienceView,
-    AddModal,
+    AddNewModal,
     EditModal,
     DeleteModal,
     AddLink,
@@ -71,39 +72,27 @@ export default {
       required: true
     },
     input: {
-      type: Module,
+      type: ExperienceModule,
       required: true
     }
   },
   data(): any {
     return {
-      add: false,
       hide: false
     };
   },
   methods: {
-    cancel(): void {
-      this.add = false;
-    },
-    options(): any {
-      return [
-        { value: 1, text: "personal" },
-        { value: 2, text: "professional" },
-      ];
-    },
-    save(experience: Component): void {
+    save(experience: Experience): void {
       this.$nextTick(() => {
-        let data = new Component(experience.guid, experience.childrensDataType, experience.name);
+        let data = new Experience(experience.guid, experience.name, experience.childrensDataType);
         data.initDate = experience.initDate;
         data.finishDate = experience.finishDate;
-        data.graduationDate = experience.graduationDate;
         data.place = experience.place;
         this.input.childrens.push(data);
         this.$emit("update", this.input);
-        this.experience = {} as Component;
       });
     },
-    splice(element: Component): void {
+    splice(element: Experience): void {
       this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("update", this.input);
     }

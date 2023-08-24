@@ -12,25 +12,25 @@
     </div>
     <ul>
       <li v-if="edit">
-        <label>Centro/ Lugar:</label>
-        <input type="text" v-model="academic.place" />
+        <label>{{ academic.place.field }}:</label>
+        <input type="text" v-model="academic.place.value" />
       </li>
-      <li v-else>Centro/ Lugar: {{ academic.place }}</li>
+      <li v-else>{{ academic.place.field }}: {{ academic.place.value }}</li>
       <div v-if="academic.graduationDate">
         <li v-if="edit">
-          <label>Graduación:</label>
+          <label>{{ academic.graduationDate.field }}:</label>
           <input
             type="date"
-            v-model="academic.graduationDate"
+            v-model="academic.graduationDate.value"
             min="2015-01-01"
             max="2030-12-31"
           />
         </li>
         <li v-else>
-          Graduación: {{ formatDate(academic.graduationDate) }}
+          {{ academic.graduationDate.field }}: {{ formatDate(academic.graduationDate.value) }}
         </li>
       </div>
-      <strong v-if="contents.length > 0" class="m-2">Contenido:</strong>
+      <strong v-if="contents.length > 0" class="m-2">{{ academic.childrensTitle }}:</strong>
       <contents-view
         :contents="contents"
         :iconsHidden="iconsHidden"
@@ -47,12 +47,13 @@
 </template>
 
 <script lang="ts">
+import { Component } from "@/Config/Base/Component/Component";
 import ContentsView from "../Content/ContentListView.vue";
-import { Component, ComponentType } from "../../Config/types";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import SaveLink from "@/components/SaveLink.vue";
+import { ComponentType } from "@/Config/Base/Enums";
 
 export default {
   name: "AcademicTrainingView",

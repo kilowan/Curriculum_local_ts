@@ -14,15 +14,9 @@
       :value="componentData.type" 
     />
     <KeyValue 
-      v-if="componentData.name != undefined && modalTitle == 'red social'" 
+      v-if="componentData.name != undefined" 
       :type="1" 
-      :field="'Url'" 
-      :value="componentData.name" 
-    />
-    <KeyValue 
-      v-if="componentData.name != undefined && modalTitle != 'red social'" 
-      :type="1" 
-      :field="'Nombre'" 
+      :field="modalTitle == 'red social'?'Url':'Nombre'" 
       :value="componentData.name" 
     />
     <KeyValue 
@@ -59,8 +53,9 @@
 </template>
 
 <script lang="ts">
+import { Component } from "@/Config/Base/Component/Component";
+import { SocialMediaType } from "@/Config/Base/Enums";
 import KeyValue from "@/components/KeyValue.vue";
-import { Component, SocialMediaType } from "../../Config/types";
 export default {
     name: "EditModal",
     props: {

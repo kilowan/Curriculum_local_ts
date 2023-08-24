@@ -31,7 +31,7 @@
       <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show(`add-${input.guid}`)"/>
     </dd>
     <dd class="clear"></dd>
-    <AddModal
+    <AddNewModal
       :guid="input.guid"
       :componentDataType="input.childrensDataType"
       @save="save($event)"
@@ -40,12 +40,14 @@
 </template>
 
 <script lang="ts">
-import { Component, ComponentType, Module } from "../../Config/types";
 import AcademicTrainingView from "./AcademicTrainingView.vue";
 import AddLink from "@/components/AddLink.vue";
 import HideLink from "@/components/HideLink.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
-import AddModal from "../Modal/AddModal.vue";
+import AddNewModal from "../Modal/AddModal.vue";
+import { TrainingModule } from "@/Config/Training/Module/TrainingModule";
+import { ComponentType } from "@/Config/Base/Enums";
+import { Training } from "@/Config/Training/Training";
 
 export default {
   name: "AcademicTrainingListView",
@@ -54,7 +56,7 @@ export default {
     AddLink,
     HideLink,
     DeleteModal,
-    AddModal
+    AddNewModal
 },
   props: {
     iconsHidden: {
@@ -62,28 +64,26 @@ export default {
       required: true,
     },
     input: {
-      type: Module,
+      type: TrainingModule,
       required: true
     }
   },
   data(): any {
     return {
       hide: false,
-      add: false
+      deleteModalMessage: "la experiencia",
+      modalTitle: "Experiencia",
+      guid: crypto.randomUUID(),
     };
   },
   methods: {
-    splice(element: Component): void {
+    splice(element: Training): void {
       this.input.splice(this.input.indexOf(element), 1);
       this.$emit("update", this.input);
     },
-    cancel(): void {
-      this.add = false;
-    },
-    save(input: Component): void {
+    save(input: Training): void {
       this.$nextTick(() => {
         this.input.push(input);
-        this.cancel();
         this.$emit("update", this.input);
       });
     },
@@ -109,6 +109,69 @@ export default {
           return ComponentType.Value;
       }
     }
+  },
+  computed: {
+    getModalTitle(): any {
+      return this.modalTitle;
+    },
+  },
+  created(): void {
+    this.$nextTick(() => {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Academic:
+          this.deleteModalMessage = "la formación";
+          this.modalTitle = "Formación";
+          break;
+
+        case ComponentType.Experience:
+          this.deleteModalMessage = "la experiencia";
+          this.modalTitle = "Experiencia";
+          break;
+
+        case ComponentType.Languages:
+          this.deleteModalMessage = "el idioma";
+          this.modalTitle = "Idioma";
+          break;
+
+        case ComponentType.Other:
+          this.deleteModalMessage = "el elemento";
+          this.modalTitle = "Elemento";
+          break;
+
+        case ComponentType.Skills:
+          this.deleteModalMessage = "la skill";
+          this.modalTitle = "Skill";
+          break;
+
+        case ComponentType.Description:
+          this.deleteModalMessage = "la descripción";
+          this.modalTitle = "Descripcion";
+          break;
+
+        case ComponentType.Content:
+          this.deleteModalMessage = "el contenido";
+          this.modalTitle = "Contenido";
+          break;
+
+        case ComponentType.Contract:
+          this.deleteModalMessage = "el contrato";
+          this.modalTitle = "Contrato";
+          break;
+
+        case ComponentType.SubContent:
+          this.deleteModalMessage = "el subcontenido";
+          this.modalTitle = "SubContenido";
+          break;
+
+        case ComponentType.Project:
+          this.deleteModalMessage = "el proyecto";
+          this.modalTitle = "Proyecto";
+          break;
+
+        default:
+          break;
+      }
+    });
   },
 };
 </script>
