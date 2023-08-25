@@ -1,6 +1,6 @@
 <template>
-    <div v-if="contents != undefined">
-      <li v-for="content in contents" v-bind:key="content.guid">
+    <div v-if="input != undefined">
+      <li v-for="content in input" v-bind:key="content.guid">
         {{ content.name }}
         <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${content.guid}`)"/>
         <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${content.guid}`)"/>
@@ -11,13 +11,13 @@
           @reload="reload"
         />
         <delete-modal
-          :modalTitle="'Contenido'"
-          :message="'el contenido'"
+          :modalTitle="getModalTitle"
+          :message="deleteModalMessage"
           :componentData="content"
           @remove="splice(content)"
         />
         <edit-modal
-          :modalTitle="'Contenido'"
+          :modalTitle="getModalTitle"
           :componentData="content"
         />
       </li>
@@ -31,6 +31,7 @@ import EditModal from "../Modal/EditModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import { Component } from "@/Config/Base/Component/Component";
+import { ComponentType } from "@/Config/Base/Enums";
 
 export default {
   name: "ContentsView",
@@ -42,7 +43,7 @@ export default {
     EditLink
 },
   props: {
-    contents: {
+    input: {
       type: Array,
       required: true,
     },
@@ -53,17 +54,82 @@ export default {
   },
   data(): any {
     return {
-      element: ""
+      element: "",
+      deleteModalMessage: "la experiencia",
+      modalTitle: "Experiencia",
     };
   },
   methods: {
     splice(element: Component): void {
-      this.contents.splice(this.contents.indexOf(element), 1);
+      this.input.splice(this.input.indexOf(element), 1);
       this.$emit("reload");
     },
     reload(){
       this.$emit('reload');
     }
-  }
+  },
+  computed: {
+    getModalTitle(): any {
+      return this.modalTitle;
+    },
+  },
+  created(): void {
+    this.$nextTick(() => {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Academic:
+          this.deleteModalMessage = "la formación";
+          this.modalTitle = "Formación";
+          break;
+
+        case ComponentType.Experience:
+          this.deleteModalMessage = "la experiencia";
+          this.modalTitle = "Experiencia";
+          break;
+
+        case ComponentType.Languages:
+          this.deleteModalMessage = "el idioma";
+          this.modalTitle = "Idioma";
+          break;
+
+        case ComponentType.Other:
+          this.deleteModalMessage = "el elemento";
+          this.modalTitle = "Elemento";
+          break;
+
+        case ComponentType.Skills:
+          this.deleteModalMessage = "la skill";
+          this.modalTitle = "Skill";
+          break;
+
+        case ComponentType.Description:
+          this.deleteModalMessage = "la descripción";
+          this.modalTitle = "Descripcion";
+          break;
+
+        case ComponentType.Content:
+          this.deleteModalMessage = "el contenido";
+          this.modalTitle = "Contenido";
+          break;
+
+        case ComponentType.Contract:
+          this.deleteModalMessage = "el contrato";
+          this.modalTitle = "Contrato";
+          break;
+
+        case ComponentType.SubContent:
+          this.deleteModalMessage = "el subcontenido";
+          this.modalTitle = "SubContenido";
+          break;
+
+        case ComponentType.Project:
+          this.deleteModalMessage = "el proyecto";
+          this.modalTitle = "Proyecto";
+          break;
+
+        default:
+          break;
+      }
+    });
+  },
 };
 </script>

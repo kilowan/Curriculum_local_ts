@@ -11,15 +11,15 @@
           <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${description.guid}`)"/>
         </li>
         <EditModal
-          :modalTitle="'descripción'"
+          :modalTitle="getModalTitle"
           :componentData="description"
           :componentDataType="10"
           @cancel="cancel"
         />
         <DeleteModal
-          :modalTitle="'Descripción'"
+          :modalTitle="getModalTitle"
+          :message="deleteModalMessage"
           :componentData="description"
-          :message="'la descripción'"
           @remove="splice(description)"
         />
       </div>
@@ -29,7 +29,7 @@
       <b-button @click="save(desc)">Guardar</b-button>
       <b-button @click="cancel">Cancelar</b-button>
     </div>
-    <AddLink v-if="!add && !iconsHidden" :text="'descripción'" @click="add = true"/>
+    <AddLink v-if="!add && !iconsHidden" :text="getModalTitle" @click="add = true"/>
   </div>
 </template>
 
@@ -68,7 +68,9 @@ export default {
   data(): any {
     return {
       add: false,
-      desc: ""
+      desc: "",
+      deleteModalMessage: "la experiencia",
+      modalTitle: "Experiencia"
     };
   },
   methods: {
@@ -88,6 +90,69 @@ export default {
       this.project.childrens.splice(this.project.childrens.indexOf(element), 1);
       this.$emit("reload");
     }
-  }
+  },
+  computed: {
+    getModalTitle(): any {
+      return this.modalTitle;
+    },
+  },
+  created(): void {
+    this.$nextTick(() => {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Academic:
+          this.deleteModalMessage = "la formación";
+          this.modalTitle = "Formación";
+          break;
+
+        case ComponentType.Experience:
+          this.deleteModalMessage = "la experiencia";
+          this.modalTitle = "Experiencia";
+          break;
+
+        case ComponentType.Languages:
+          this.deleteModalMessage = "el idioma";
+          this.modalTitle = "Idioma";
+          break;
+
+        case ComponentType.Other:
+          this.deleteModalMessage = "el elemento";
+          this.modalTitle = "Elemento";
+          break;
+
+        case ComponentType.Skills:
+          this.deleteModalMessage = "la skill";
+          this.modalTitle = "Skill";
+          break;
+
+        case ComponentType.Description:
+          this.deleteModalMessage = "la descripción";
+          this.modalTitle = "Descripcion";
+          break;
+
+        case ComponentType.Content:
+          this.deleteModalMessage = "el contenido";
+          this.modalTitle = "Contenido";
+          break;
+
+        case ComponentType.Contract:
+          this.deleteModalMessage = "el contrato";
+          this.modalTitle = "Contrato";
+          break;
+
+        case ComponentType.SubContent:
+          this.deleteModalMessage = "el subcontenido";
+          this.modalTitle = "SubContenido";
+          break;
+
+        case ComponentType.Project:
+          this.deleteModalMessage = "el proyecto";
+          this.modalTitle = "Proyecto";
+          break;
+
+        default:
+          break;
+      }
+    });
+  },
 };
 </script>

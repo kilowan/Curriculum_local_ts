@@ -1,10 +1,10 @@
 <template>
   <div v-if="!hide">
-    <dt id="academica">
-      Formación
+    <dt :id="input.dtId">
+      {{ input.name }}
       <HideLink v-if="!iconsHidden" @click="hide = true"/>
     </dt>
-    <dd id="academic">
+    <dd :id="input.ddId">
       <ul v-if="input != undefined">
         <div
           v-for="academic in input.childrens"
@@ -13,7 +13,7 @@
           <li>
             <academic-training-view
               :guid="academic.guid"
-              :academic="academic"
+              :input="academic"
               :iconsHidden="iconsHidden"
               :academicIndex="academic.guid"
               @delete="$bvModal.show(`delete-${$event}`)"
@@ -28,7 +28,7 @@
           />
         </div>
       </ul>
-      <AddLink v-if="!iconsHidden" :text="'formación'" @click="$bvModal.show(`add-${input.guid}`)"/>
+      <AddLink v-if="!iconsHidden" :text="getModalTitle" @click="$bvModal.show(`add-${input.guid}`)"/>
     </dd>
     <dd class="clear"></dd>
     <AddNewModal
