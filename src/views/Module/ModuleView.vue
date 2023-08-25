@@ -19,7 +19,7 @@
               @reload="$emit('update', input)"
             />
           </li>
-          <EditModal
+          <EditNewModal
             :modalTitle="input.name"
             :componentData="element"
             :componentDataType="element.childrensDataType"
@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import AddNewModal from "../Modal/AddNewModal.vue";
-import EditModal from "../Modal/EditModal.vue";
+import EditNewModal from "../Modal/EditNewModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "../../components/AddLink.vue";
 import DeleteLink from "../../components/DeleteLink.vue";
@@ -61,7 +61,7 @@ export default {
   name: "ModuleView",
   components: {
     AddNewModal,
-    EditModal,
+    EditNewModal,
     DeleteModal,
     AddLink,
     DeleteLink,
@@ -93,14 +93,8 @@ export default {
     },
     save(experience: Component): void {
       this.$nextTick(() => {
-        let data = new Component(experience.guid, experience.childrensDataType, experience.name);
-        data.initDate = experience.initDate;
-        data.finishDate = experience.finishDate;
-        data.graduationDate = experience.graduationDate;
-        data.place = experience.place;
-        this.input.childrens.push(data);
+        this.input.childrens.push(experience);
         this.$emit("update", this.input);
-        this.experience = {} as Component;
       });
     },
     splice(element: Component): void {

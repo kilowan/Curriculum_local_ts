@@ -53,11 +53,34 @@ export default {
   },
   methods: {
     save(project: string): void {
-      let data = new Component(crypto.randomUUID(), ComponentType.Description, project);
+      let data = new Component(crypto.randomUUID(), this.getChildrensType(), project);
       this.contract.childrens.push(data);
       this.$emit("reload");
       this.projectData = "";
       this.add = false;
+    },
+    getChildrensType(): ComponentType {
+      switch (this.contract.childrensDataType) {
+        case ComponentType.Experience:
+          return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
+
+        case ComponentType.Academic:
+        case ComponentType.Skills:
+          return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
+
+        default:
+          return ComponentType.Value;
+      }
     }
   },
   computed: {
@@ -67,7 +90,7 @@ export default {
   },
   created(): void {
     this.$nextTick(() => {
-      switch (this.input.childrensDataType) {
+      switch (this.contract.childrensDataType) {
         case ComponentType.Academic:
           //this.deleteModalMessage = "la formación";
           this.modalTitle = "Formación";

@@ -111,6 +111,7 @@ export default {
           return ComponentType.Description;
 
         case ComponentType.Academic:
+        case ComponentType.Skills:
           return ComponentType.Content;
 
         case ComponentType.Content:

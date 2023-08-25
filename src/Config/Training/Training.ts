@@ -7,6 +7,7 @@ export class Training implements ITraining {
     this.guid = guid;
     this.name = name;
     this.childrensDataType = childrensDataType;
+    this.childrens = new Array<Component>();
   }
   guid: string;
   name: string;

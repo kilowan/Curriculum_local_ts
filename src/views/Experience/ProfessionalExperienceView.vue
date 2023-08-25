@@ -7,6 +7,7 @@
         {{ company.finishDate.field }}: {{ formatDate(company.finishDate.value) }}
       </li>
       <contract-list-view
+        v-if="company.childrens.length > 0"
         :contracts="company.childrens"
         :childrensTitle="company.childrensTitle"
         :iconsHidden="iconsHidden"
@@ -14,6 +15,7 @@
       />
       <div v-if="add">
         <input class="m-2" type="text" v-model="contractData" />
+        <input class="m-2" type="text" v-model="title" placeholder="title"/>
         <b-button class="m-2" @click="save(contractData)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
@@ -51,7 +53,8 @@ export default {
   data(): any {
     return {
       add: false,
-      contractData: "",
+      contractData: '',
+      title: '',
       //deleteModalMessage: "la experiencia",
       modalTitle: "Experiencia",
     };
@@ -59,18 +62,43 @@ export default {
   methods: {
     save(contract: string): void {
       this.$nextTick(() => {
-        let data = new Component(crypto.randomUUID(), ComponentType.Project, contract);
+        let data = new Component(crypto.randomUUID(), this.getChildrensType(), contract);
+        data.childrensTitle = this.title;
         this.company.childrens.push(data);
         this.cancel();
         this.$emit("reload");
       });
     },
     cancel(): void {
-      this.contractData = "";
+      this.contractData = '';
+      this.title = '';
       this.add = false;
     },
     formatDate(date: string): string {
       return new Date(date).toLocaleDateString();
+    },
+    getChildrensType(): ComponentType {
+      switch (this.company.childrensDataType) {
+        case ComponentType.Experience:
+          return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
+
+        case ComponentType.Academic:
+        case ComponentType.Skills:
+          return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
+
+        default:
+          return ComponentType.Value;
+      }
     }
   },
   computed: {
@@ -80,7 +108,7 @@ export default {
   },
   created(): void {
     this.$nextTick(() => {
-      switch (this.input.childrensDataType) {
+      switch (this.company.childrensDataType) {
         case ComponentType.Academic:
           //this.deleteModalMessage = "la formación";
           this.modalTitle = "Formación";

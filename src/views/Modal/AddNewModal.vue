@@ -6,18 +6,18 @@
     @ok="save"
     @cancel="cancel"
   >
-    <label>Field</label><input type="text" v-model="name" placeholder="value"/>
+    <label>Name</label><input type="text" v-model="name" placeholder="value"/>
     <br />
     <input
       v-if="componentDataType === 4"
       type="text"
-      placeholder="field"
+      placeholder="level"
       v-model="level.field"
     />
     <input
       v-if="componentDataType === 4"
       type="text"
-      placeholder="value"
+      placeholder="level"
       v-model="level.value"
     />
     <br />
@@ -26,7 +26,7 @@
         componentDataType === 2 || componentDataType === 1
       "
       type="text"
-      placeholder="field"
+      placeholder="place"
       v-model="place.field"
     />
     <input
@@ -34,14 +34,14 @@
         componentDataType === 2 || componentDataType === 1
       "
       type="text"
-      placeholder="value"
+      placeholder="place"
       v-model="place.value"
     />
     <br />
     <input
       v-if="componentDataType === 1"
       type="text"
-      placeholder="field"
+      placeholder="initDate"
       v-model="initDate.field"
     />
     <input
@@ -55,7 +55,7 @@
     <input
       v-if="componentDataType === 1"
       type="text"
-      placeholder="field"
+      placeholder="finishDate"
       v-model="finishDate.field"
     />
     <input
@@ -68,7 +68,7 @@
     <input
       v-if="componentDataType === 2"
       type="text"
-      placeholder="field"
+      placeholder="graduationDate"
       v-model="graduationDate.field"
     />
     <input
@@ -77,6 +77,14 @@
       v-model="graduationDate.value"
       min="2015-01-01"
       max="2030-12-31"
+    />
+    <br />
+    <label v-if="componentDataType === 2 || componentDataType === 8 || componentDataType === 1">Título</label>
+    <input
+    v-if="componentDataType === 2 || componentDataType === 8 || componentDataType === 1"
+      type="text"
+      placeholder="childrensTitle"
+      v-model="childrensTitle"
     />
     <br />
   </b-modal>
@@ -107,6 +115,7 @@ export default {
     return {
       childrensDataType: ComponentType,
       name: '',
+      childrensTitle: '',
       place: { field: '', value: '' } as FieldValue,
       initDate: { field: '', value: '' } as FieldValue,
       finishDate: { field: '', value: '' } as FieldValue,
@@ -119,6 +128,7 @@ export default {
     cancel(): void {
       this.childrensDataType = {} as ComponentType;
       this.name = '',
+      this.childrensTitle = '';
       this.place = { field: '', value: '' } as FieldValue;
       this.initDate = { field: '', value: '' } as FieldValue;
       this.finishDate = { field: '', value: '' } as FieldValue;
@@ -159,7 +169,7 @@ export default {
         this.name,
         this.getChildrensType()
       );
-      exp.childrensDataType = this.childrensDataType;
+      exp.childrensTitle = this.childrensTitle;
       exp.place = this.place;
       exp.initDate = this.initDate;
       exp.finishDate = this.finishDate;
@@ -171,8 +181,8 @@ export default {
         this.name,
         this.getChildrensType()
       );
-      exp.childrensDataType = this.childrensDataType;
       exp.place = this.place;
+      exp.childrensTitle = this.childrensTitle;
       exp.graduationDate = this.graduationDate;
       return exp;
     },
@@ -203,6 +213,7 @@ export default {
           return ComponentType.Contract;
 
         case ComponentType.Academic:
+        case ComponentType.Skills:
           return ComponentType.Content;
 
         default:

@@ -44,7 +44,7 @@ import AcademicTrainingView from "./AcademicTrainingView.vue";
 import AddLink from "@/components/AddLink.vue";
 import HideLink from "@/components/HideLink.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
-import AddNewModal from "../Modal/AddModal.vue";
+import AddNewModal from "../Modal/AddNewModal.vue";
 import { TrainingModule } from "@/Config/Training/Module/TrainingModule";
 import { ComponentType } from "@/Config/Base/Enums";
 import { Training } from "@/Config/Training/Training";
@@ -78,12 +78,12 @@ export default {
   },
   methods: {
     splice(element: Training): void {
-      this.input.splice(this.input.indexOf(element), 1);
+      this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("update", this.input);
     },
     save(input: Training): void {
       this.$nextTick(() => {
-        this.input.push(input);
+        this.input.childrens.push(input);
         this.$emit("update", this.input);
       });
     },
@@ -99,6 +99,7 @@ export default {
           return ComponentType.Description;
 
         case ComponentType.Academic:
+        case ComponentType.Skills:
           return ComponentType.Content;
 
         case ComponentType.Content:

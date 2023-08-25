@@ -12,13 +12,13 @@
     </div>
     <ul>
       <li v-if="edit">
-        <label>{{ input.place.field }}:</label>
+        <input type="text" v-model="input.place.field" />
         <input type="text" v-model="input.place.value" />
       </li>
       <li v-else>{{ input.place.field }}: {{ input.place.value }}</li>
       <div v-if="input.graduationDate">
         <li v-if="edit">
-          <label>{{ input.graduationDate.field }}:</label>
+          <input type="text" v-model="input.graduationDate.field" />
           <input
             type="date"
             v-model="input.graduationDate.value"
@@ -42,6 +42,7 @@
       </li>
       <div v-if="add">
         <input class="m-2" type="text" v-model="element" />
+        <input class="m-2" type="text" v-model="title" placeholder="title"/>
         <b-button class="m-2" @click="save(element)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
@@ -86,20 +87,25 @@ export default {
   data(): any {
     return {
       add: false,
-      element: "",
+      element: '',
+      title: '',
       edit: false,
+      //deleteModalMessage: "la experiencia",
+      modalTitle: ''
     };
   },
   methods: {
     cancel(): void {
-      this.element = "";
+      this.element = '';
+      this.title = ''
       this.add = false;
       this.edit = false;
     },
-    save(content: string): void {
+    save(): void {
       this.$nextTick(() => {
-        if (content !== "") {
-          let data = new Component(crypto.randomUUID(), ComponentType.Content, content);
+        if (this.element !== "") {
+          let data = new Component(crypto.randomUUID(), this.getChildrensType(), this.element);
+          data.childrensTitle = this.title;
           this.input.childrens.push(data);
         }
         
@@ -110,6 +116,92 @@ export default {
     formatDate(date: string): number {
       return new Date(date).getFullYear();
     },
-  }
+    getChildrensType(): ComponentType {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Experience:
+          return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
+
+        case ComponentType.Academic:
+        case ComponentType.Skills:
+          return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
+
+        default:
+          return ComponentType.Value;
+      }
+    }
+  },
+  computed: {
+    getModalTitle(): any {
+      return this.modalTitle;
+    },
+  },
+  created(): void {
+    this.$nextTick(() => {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Academic:
+          //this.deleteModalMessage = "la formación";
+          this.modalTitle = "Formación";
+          break;
+
+        case ComponentType.Experience:
+          //this.deleteModalMessage = "la experiencia";
+          this.modalTitle = "Experiencia";
+          break;
+
+        case ComponentType.Languages:
+          //this.deleteModalMessage = "el idioma";
+          this.modalTitle = "Idioma";
+          break;
+
+        case ComponentType.Other:
+          this.deleteModalMessage = "el elemento";
+          this.modalTitle = "Elemento";
+          break;
+
+        case ComponentType.Skills:
+          //this.deleteModalMessage = "la skill";
+          this.modalTitle = "Skill";
+          break;
+
+        case ComponentType.Description:
+          //this.deleteModalMessage = "la descripción";
+          this.modalTitle = "Descripcion";
+          break;
+
+        case ComponentType.Content:
+          //this.deleteModalMessage = "el contenido";
+          this.modalTitle = "Contenido";
+          break;
+
+        case ComponentType.Contract:
+          //this.deleteModalMessage = "el contrato";
+          this.modalTitle = "Contrato";
+          break;
+
+        case ComponentType.SubContent:
+          //this.deleteModalMessage = "el subcontenido";
+          this.modalTitle = "SubContenido";
+          break;
+
+        case ComponentType.Project:
+          //this.deleteModalMessage = "el proyecto";
+          this.modalTitle = "Proyecto";
+          break;
+
+        default:
+          break;
+      }
+    });
+  },
 };
 </script>

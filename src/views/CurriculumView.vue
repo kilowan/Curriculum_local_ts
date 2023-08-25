@@ -249,12 +249,12 @@ export default {
       this.exportable = true;
       this.EditMode();
     },
-    updateAcademic(media: Module): void {
+    updateAcademic(media: TrainingModule): void {
       this.curriculum.academicTraining = media;
       this.exportable = true;
       this.EditMode();
     },
-    updateLanguage(language: Module): void {
+    updateLanguage(language: LanguageModule): void {
       this.curriculum.languageList = language;
       this.exportable = true;
       this.EditMode();
@@ -264,7 +264,7 @@ export default {
       this.exportable = true;
       this.EditMode();
     },
-    updateExperience(experience: Module): void {
+    updateExperience(experience: ExperienceModule): void {
       this.$nextTick(() => {
         this.curriculum.experience = experience;
         this.exportable = true;
