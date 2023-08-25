@@ -1,47 +1,51 @@
 <template>
-  <div v-if="academic != undefined">
+  <div v-if="input != undefined">
     <div v-if="edit && !iconsHidden">
-      <input type="text" v-model="academic.name" />
+      <input type="text" v-model="input.name" />
       <SaveLink v-if="!iconsHidden" @click="edit = false"/>
-      <DeleteLink @click="$emit('delete', academic.guid)"/>
+      <DeleteLink @click="$emit('delete', input.guid)"/>
     </div>
     <div v-else>
-      {{ academic.name }}
+      {{ input.name }}
       <EditLink v-if="!iconsHidden" @click="edit = true"/>
-      <DeleteLink @click="$emit('delete', academic.guid)"/>
+      <DeleteLink @click="$emit('delete', input.guid)"/>
     </div>
     <ul>
       <li v-if="edit">
-        <label>{{ academic.place.field }}:</label>
-        <input type="text" v-model="academic.place.value" />
+        <label>{{ input.place.field }}:</label>
+        <input type="text" v-model="input.place.value" />
       </li>
-      <li v-else>{{ academic.place.field }}: {{ academic.place.value }}</li>
-      <div v-if="academic.graduationDate">
+      <li v-else>{{ input.place.field }}: {{ input.place.value }}</li>
+      <div v-if="input.graduationDate">
         <li v-if="edit">
-          <label>{{ academic.graduationDate.field }}:</label>
+          <label>{{ input.graduationDate.field }}:</label>
           <input
             type="date"
-            v-model="academic.graduationDate.value"
+            v-model="input.graduationDate.value"
             min="2015-01-01"
             max="2030-12-31"
           />
         </li>
         <li v-else>
-          {{ academic.graduationDate.field }}: {{ formatDate(academic.graduationDate.value) }}
+          {{ input.graduationDate.field }}: {{ formatDate(input.graduationDate.value) }}
         </li>
       </div>
-      <strong v-if="contents.length > 0" class="m-2">{{ academic.childrensTitle }}:</strong>
-      <contents-view
-        :contents="contents"
-        :iconsHidden="iconsHidden"
-        @reload="$emit('reload')"
-      />
+      <li  v-if="input.childrens != undefined && input.childrens.length > 0">
+        <strong class="m-2">{{ input.childrensTitle }}:</strong>
+        <ul>
+          <contents-view
+            :input="input.childrens"
+            :iconsHidden="iconsHidden"
+            @reload="$emit('reload')"
+          />
+        </ul>
+      </li>
       <div v-if="add">
         <input class="m-2" type="text" v-model="element" />
         <b-button class="m-2" @click="save(element)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <AddLink v-if="!iconsHidden && !add" :text="'contenido'" @click="add = true"/>
+      <AddLink v-if="!iconsHidden && !add" :text="getModalTitle" @click="add = true"/>
     </ul>
   </div>
 </template>
@@ -54,6 +58,7 @@ import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import SaveLink from "@/components/SaveLink.vue";
 import { ComponentType } from "@/Config/Base/Enums";
+import { Training } from "@/Config/Training/Training";
 
 export default {
   name: "AcademicTrainingView",
@@ -65,8 +70,8 @@ export default {
     SaveLink
 },
   props: {
-    academic: {
-      type: Component,
+    input: {
+      type: Training,
       required: true,
     },
     iconsHidden: {
@@ -80,7 +85,6 @@ export default {
   },
   data(): any {
     return {
-      contents: new Array<Component>(),
       add: false,
       element: "",
       edit: false,
@@ -96,8 +100,7 @@ export default {
       this.$nextTick(() => {
         if (content !== "") {
           let data = new Component(crypto.randomUUID(), ComponentType.Content, content);
-          this.academic.childrens.push(data);
-          this.contents.push(data);
+          this.input.childrens.push(data);
         }
         
         this.cancel();

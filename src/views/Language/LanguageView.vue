@@ -1,10 +1,10 @@
 <template>
   <div v-if="!hide">
-    <dt id="idiomas" class="idiomas">
-      Idiomas
+    <dt :id="input.dtId" class="idiomas">
+      {{ input.name }}
       <HideLink v-if="!iconsHidden" @click="(hide = true), $emit('hide')"/>
     </dt>
-    <dd id="languages">
+    <dd :id="input.ddId">
       <ul>
         <div v-for="language in input.childrens" v-bind:key="language.guid">
           <li>
@@ -13,19 +13,19 @@
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${language.guid}`)"/>
           </li>
           <EditModal
-            :modalTitle="'Idioma'"
+            :modalTitle="getModalTitle"
             :componentData="language"
             :componentDataType="4"
           />
           <DeleteModal
-            :modalTitle="'idioma'"
-            :message="'el idioma'"
+            :modalTitle="getModalTitle"
+            :message="deleteModalMessage"
             :componentData="language"
             @remove="splice(language)"
           />
         </div>
       </ul>
-      <AddLink v-if="!iconsHidden" :text="'idioma'" @click="$bvModal.show(`add-${guid}`)"/>
+      <AddLink v-if="!iconsHidden" :text="getModalTitle" @click="$bvModal.show(`add-${guid}`)"/>
     </dd>
     <dd class="clear"></dd>
     <AddNewModal
@@ -46,6 +46,7 @@ import HideLink from "@/components/HideLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import { Component } from "@/Config/Base/Component/Component";
 import { LanguageModule } from "@/Config/Language/Module/LanguageModule";
+import { ComponentType } from "@/Config/Base/Enums";
 
 export default {
   name: "LanguagesView",
@@ -75,6 +76,8 @@ export default {
       languageLevelList: [],
       language: {} as Component,
       guid: crypto.randomUUID(),
+      deleteModalMessage: "la experiencia",
+      modalTitle: "Experiencia"
     };
   },
   methods: {
@@ -96,6 +99,69 @@ export default {
         this.language = {} as Component;
       });
     },
+  },
+  computed: {
+    getModalTitle(): any {
+      return this.modalTitle;
+    },
+  },
+  created(): void {
+    this.$nextTick(() => {
+      switch (this.input.childrensDataType) {
+        case ComponentType.Academic:
+          this.deleteModalMessage = "la formación";
+          this.modalTitle = "Formación";
+          break;
+
+        case ComponentType.Experience:
+          this.deleteModalMessage = "la experiencia";
+          this.modalTitle = "Experiencia";
+          break;
+
+        case ComponentType.Languages:
+          this.deleteModalMessage = "el idioma";
+          this.modalTitle = "Idioma";
+          break;
+
+        case ComponentType.Other:
+          this.deleteModalMessage = "el elemento";
+          this.modalTitle = "Elemento";
+          break;
+
+        case ComponentType.Skills:
+          this.deleteModalMessage = "la skill";
+          this.modalTitle = "Skill";
+          break;
+
+        case ComponentType.Description:
+          this.deleteModalMessage = "la descripción";
+          this.modalTitle = "Descripcion";
+          break;
+
+        case ComponentType.Content:
+          this.deleteModalMessage = "el contenido";
+          this.modalTitle = "Contenido";
+          break;
+
+        case ComponentType.Contract:
+          this.deleteModalMessage = "el contrato";
+          this.modalTitle = "Contrato";
+          break;
+
+        case ComponentType.SubContent:
+          this.deleteModalMessage = "el subcontenido";
+          this.modalTitle = "SubContenido";
+          break;
+
+        case ComponentType.Project:
+          this.deleteModalMessage = "el proyecto";
+          this.modalTitle = "Proyecto";
+          break;
+
+        default:
+          break;
+      }
+    });
   },
 };
 </script>
