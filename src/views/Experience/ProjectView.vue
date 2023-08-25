@@ -80,7 +80,7 @@ export default {
     },
     save(description: string): void {
       this.$nextTick(() => {
-        let element = new Component(crypto.randomUUID(), ComponentType.End, description);
+        let element = new Component(crypto.randomUUID(), this.getChildrensType(), description);
         this.project.childrens.push(element);
         this.cancel();
         this.$emit("reload");
@@ -89,6 +89,29 @@ export default {
     splice(element: Component): void {
       this.project.childrens.splice(this.project.childrens.indexOf(element), 1);
       this.$emit("reload");
+    },
+    getChildrensType(): ComponentType {
+      switch (this.project.childrensDataType) {
+        case ComponentType.Experience:
+          return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
+
+          case ComponentType.Academic:
+        case ComponentType.Skills:
+        return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
+
+        default:
+          return ComponentType.Value;
+      }
     }
   },
   computed: {
@@ -98,7 +121,7 @@ export default {
   },
   created(): void {
     this.$nextTick(() => {
-      switch (this.input.childrensDataType) {
+      switch (this.project.childrensDataType) {
         case ComponentType.Academic:
           this.deleteModalMessage = "la formación";
           this.modalTitle = "Formación";

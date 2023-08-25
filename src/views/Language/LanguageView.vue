@@ -8,11 +8,11 @@
       <ul>
         <div v-for="language in input.childrens" v-bind:key="language.guid">
           <li>
-            <strong>{{ language.name }}:</strong> {{ language.level }}
+            <strong>{{ language.name }}:</strong> {{ language.level.value }}
             <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${language.guid}`)"/>
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${language.guid}`)"/>
           </li>
-          <EditModal
+          <EditNewModal
             :modalTitle="getModalTitle"
             :componentData="language"
             :componentDataType="4"
@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import AddNewModal from "../Modal/AddNewModal.vue";
-import EditModal from "../Modal/EditModal.vue";
+import EditNewModal from "../Modal/EditNewModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
@@ -52,7 +52,7 @@ export default {
   name: "LanguagesView",
   components: {
     AddNewModal,
-    EditModal,
+    EditNewModal,
     DeleteModal,
     AddLink,
     DeleteLink,

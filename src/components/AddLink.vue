@@ -1,5 +1,6 @@
 <template>
-  <ELink :hidden="hidden" :icon="'plus-circle-fill'" :text="`Añadir ${text}`" @click="$emit('click')"/>
+  <ELink v-if="text != undefined" :hidden="hidden" :icon="'plus-circle-fill'" :text="`Añadir ${text}`" @click="$emit('click')"/>
+  <ELink v-else :hidden="hidden" :icon="'plus-circle-fill'" :text="'Añadir'" @click="$emit('click')"/>
 </template>
 
 <script lang="ts">
