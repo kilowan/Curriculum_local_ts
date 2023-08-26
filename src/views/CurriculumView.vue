@@ -65,18 +65,18 @@
         :iconsHidden="active"
         @update="updateAcademic($event)"
       />
-      <skill-list-view
+      <module-view
         :input="curriculum.skillList"
         :iconsHidden="active"
         @update="updateSkills($event)"
       />
-      <language-list-view
+      <module-view
         v-if="curriculum.languageList"
         :iconsHidden="active"
         :input="curriculum.languageList"
         @update="updateLanguage($event)"
       />
-      <other-list-view
+      <module-view
         v-if="curriculum.otherData"
         :iconsHidden="active"
         :input="curriculum.otherData"
@@ -105,11 +105,6 @@
 <script lang="ts">
 //import jsPDF from 'jspdf';
 //declare const html2canvas: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>;
-//import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
-import OtherListView from "./Other/OtherListView.vue";
-//import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceListView.vue";
-import SkillListView from "./Skill/SkillListView.vue";
-import LanguageListView from "./Language/LanguageView.vue";
 import SocialMediaListView from "./SocialMedia/SocialMediaListView.vue";
 import FileReaderData from "../components/FileReaderData.vue";
 import ModuleView from "./Module/ModuleView.vue";
@@ -125,11 +120,6 @@ import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 export default {
   name: "CurriculumView",
   components: {
-    //AcademicTrainingListView,
-    OtherListView,
-    //ProfessionalExperienceListView,
-    SkillListView,
-    LanguageListView,
     SocialMediaListView,
     FileReaderData,
     ModuleView

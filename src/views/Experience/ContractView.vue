@@ -4,6 +4,7 @@
       v-if="contract.childrens != undefined"
       :projects="contract.childrens"
       :childrensTitle="contract.childrensTitle"
+      :childrensDataType="contract.childrensDataType"
       :iconsHidden="iconsHidden"
       @reload="$emit('reload')"
     />
