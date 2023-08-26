@@ -10,6 +10,7 @@
         v-if="company.childrens.length > 0"
         :contracts="company.childrens"
         :childrensTitle="company.childrensTitle"
+        :childrensDataType="company.childrensDataType"
         :iconsHidden="iconsHidden"
         @reload="$emit('reload')"
       />

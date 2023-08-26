@@ -56,6 +56,10 @@ export default {
       type: String,
       required: true,
     },
+    childrensDataType: {
+      type: Number,
+      required: true,
+    },
     iconsHidden: {
       type: Boolean,
       required: true,
@@ -81,7 +85,7 @@ export default {
   },
   created(): void {
     this.$nextTick(() => {
-      switch (this.input.childrensDataType) {
+      switch (this.childrensDataType) {
         case ComponentType.Academic:
           this.deleteModalMessage = "la formación";
           this.modalTitle = "Formación";
