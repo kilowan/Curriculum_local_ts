@@ -59,11 +59,11 @@ export default {
         }
     },
     data(): any {
-        return { types: [
-                { value: SocialMediaType.Linkedin, text: "Linkedin", disabled: false },
-                { value: SocialMediaType.Infojobs, text: "Infojobs", disabled: false },
-                { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
-            ] };
+      return { types: [
+        { value: SocialMediaType.Linkedin, text: "Linkedin", disabled: false },
+        { value: SocialMediaType.Infojobs, text: "Infojobs", disabled: false },
+        { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
+      ] };
     },
     components: { KeyValue }
 };

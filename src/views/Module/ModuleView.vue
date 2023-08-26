@@ -8,13 +8,26 @@
       <ul>
         <div v-for="element in input.childrens" v-bind:key="element.guid">
           <li>
-            {{ element.name }}
+            <strong>{{ element.name }}</strong>
             <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${element.guid}`)"/>
             <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${element.guid}`)"/>
             <professional-experience-view
-              v-if="element != undefined"
+              v-if="element != undefined && checkExperience(input.childrensDataType)"
               :guid="element.guid"
               :company="element"
+              :iconsHidden="iconsHidden"
+              @reload="$emit('update', input)"
+            />
+            <academic-training-view
+              v-if="element != undefined && checkAcademic(input.childrensDataType)"
+              :guid="element.guid"
+              :input="element"
+              :iconsHidden="iconsHidden"
+              @reload="$emit('update', input)"
+            />
+            <skill-view
+              v-if="element != undefined && checkSkills(input.childrensDataType)"
+              :input="element"
               :iconsHidden="iconsHidden"
               @reload="$emit('update', input)"
             />
@@ -53,6 +66,7 @@ import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
 import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
+import AcademicTrainingView from "../AcademicTraining/AcademicTrainingView.vue";
 import { Module } from "@/Config/Base/Module/Module";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
@@ -68,6 +82,7 @@ export default {
     EditLink,
     HideLink,
     ProfessionalExperienceView,
+    AcademicTrainingView
 },
   props: {
     iconsHidden: {
@@ -100,6 +115,18 @@ export default {
     splice(element: Component): void {
       this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("update", this.input);
+    },
+    checkExperience(input: ComponentType): boolean {
+      return input == ComponentType.Experience;
+    },
+    checkAcademic(input: ComponentType): boolean {
+      return input == ComponentType.Academic;
+    },
+    checkLanguage(input: ComponentType): boolean {
+      return input == ComponentType.Languages;
+    },
+    checkSkills(input: ComponentType): boolean {
+      return input == ComponentType.Skills;
     }
   },
   created(): void {
