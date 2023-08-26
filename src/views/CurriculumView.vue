@@ -60,13 +60,12 @@
         :input="curriculum.experience"
         @update="updateExperience($event)"
       />
-      <academic-training-list-view
+      <module-view
         :input="curriculum.academicTraining"
         :iconsHidden="active"
         @update="updateAcademic($event)"
       />
       <skill-list-view
-        v-if="curriculum.skillList"
         :input="curriculum.skillList"
         :iconsHidden="active"
         @update="updateSkills($event)"
@@ -106,7 +105,7 @@
 <script lang="ts">
 //import jsPDF from 'jspdf';
 //declare const html2canvas: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>;
-import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
+//import AcademicTrainingListView from "./AcademicTraining/AcademicTrainingListView.vue";
 import OtherListView from "./Other/OtherListView.vue";
 //import ProfessionalExperienceListView from "./Experience/ProfessionalExperienceListView.vue";
 import SkillListView from "./Skill/SkillListView.vue";
@@ -126,7 +125,7 @@ import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 export default {
   name: "CurriculumView",
   components: {
-    AcademicTrainingListView,
+    //AcademicTrainingListView,
     OtherListView,
     //ProfessionalExperienceListView,
     SkillListView,

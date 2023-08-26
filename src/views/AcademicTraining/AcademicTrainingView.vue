@@ -1,36 +1,11 @@
 <template>
   <div v-if="input != undefined">
-    <div v-if="edit && !iconsHidden">
-      <input type="text" v-model="input.name" />
-      <SaveLink v-if="!iconsHidden" @click="edit = false"/>
-      <DeleteLink @click="$emit('delete', input.guid)"/>
-    </div>
-    <div v-else>
-      {{ input.name }}
-      <EditLink v-if="!iconsHidden" @click="edit = true"/>
-      <DeleteLink @click="$emit('delete', input.guid)"/>
-    </div>
     <ul>
-      <li v-if="edit">
-        <input type="text" v-model="input.place.field" />
-        <input type="text" v-model="input.place.value" />
-      </li>
-      <li v-else>{{ input.place.field }}: {{ input.place.value }}</li>
-      <div v-if="input.graduationDate">
-        <li v-if="edit">
-          <input type="text" v-model="input.graduationDate.field" />
-          <input
-            type="date"
-            v-model="input.graduationDate.value"
-            min="2015-01-01"
-            max="2030-12-31"
-          />
-        </li>
-        <li v-else>
-          {{ input.graduationDate.field }}: {{ formatDate(input.graduationDate.value) }}
-        </li>
-      </div>
-      <li  v-if="input.childrens != undefined && input.childrens.length > 0">
+      <li>{{ input.place.field }}: {{ input.place.value }}</li>
+      <li v-if="input.graduationDate">
+		    {{ input.graduationDate.field }}: {{ formatDate(input.graduationDate.value) }}
+	    </li>
+      <li v-if="input.childrens != undefined && input.childrens.length > 0">
         <strong class="m-2">{{ input.childrensTitle }}:</strong>
         <ul>
           <contents-view
@@ -55,9 +30,6 @@
 import { Component } from "@/Config/Base/Component/Component";
 import ContentsView from "../Content/ContentListView.vue";
 import AddLink from "@/components/AddLink.vue";
-import DeleteLink from "@/components/DeleteLink.vue";
-import EditLink from "@/components/EditLink.vue";
-import SaveLink from "@/components/SaveLink.vue";
 import { ComponentType } from "@/Config/Base/Enums";
 import { Training } from "@/Config/Training/Training";
 
@@ -65,10 +37,7 @@ export default {
   name: "AcademicTrainingView",
   components: {
     ContentsView,
-    AddLink,
-    DeleteLink,
-    EditLink,
-    SaveLink
+    AddLink
 },
   props: {
     input: {
