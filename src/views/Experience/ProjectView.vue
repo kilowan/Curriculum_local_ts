@@ -7,8 +7,14 @@
       >
         <li>
           {{ description.name }}
-          <EditLink v-if="!iconsHidden" @click="editing(description)" />
-          <DeleteLink v-if="!iconsHidden" @click="deleting(description)" />
+          <EditLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${description.guid}`)"
+          />
+          <DeleteLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${description.guid}`)"
+          />
         </li>
         <EditModal
           :modalTitle="getModalTitle"
