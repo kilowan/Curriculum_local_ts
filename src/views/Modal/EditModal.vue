@@ -55,6 +55,7 @@
 <script lang="ts">
 import { Component } from "@/Config/Base/Component/Component";
 import { SocialMediaType } from "@/Config/Base/Enums";
+import { Option } from "@/Config/Base/Option";
 import KeyValue from "@/components/KeyValue.vue";
 export default {
   name: "EditModal",
@@ -71,9 +72,9 @@ export default {
   data(): any {
     return {
       types: [
-        { value: SocialMediaType.Linkedin, text: "Linkedin", disabled: false },
-        { value: SocialMediaType.Infojobs, text: "Infojobs", disabled: false },
-        { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
+        new Option(SocialMediaType.Linkedin, "Linkedin", false),
+        new Option(SocialMediaType.Infojobs, "Infojobs", false),
+        new Option(SocialMediaType.GitHub, "GitHub", false),
       ],
     };
   },

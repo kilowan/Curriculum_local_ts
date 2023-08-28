@@ -27,6 +27,7 @@
 <script lang="ts">
 import { Component } from "@/Config/Base/Component/Component";
 import { SocialMediaType } from "@/Config/Base/Enums";
+import { Option } from "@/Config/Base/Option";
 
 export default {
   name: "SocialMediaView",
@@ -39,9 +40,9 @@ export default {
   data(): any {
     return {
       sociamMediaTypes: [
-        { value: SocialMediaType.Linkedin, text: "Linkedin" },
-        { value: SocialMediaType.Infojobs, text: "Infojobs" },
-        { value: SocialMediaType.GitHub, text: "GitHub" },
+        new Option(SocialMediaType.Linkedin, "Linkedin", false),
+        new Option(SocialMediaType.Infojobs, "Infojobs", false),
+        new Option(SocialMediaType.GitHub, "GitHub", false),
       ],
     };
   },

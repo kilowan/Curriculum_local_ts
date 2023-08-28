@@ -8,7 +8,7 @@
       <ul>
         <div v-for="element in input.childrens" v-bind:key="element.guid">
           <li>
-            <div v-if="checkLanguage(input.childrensDataType)">
+            <div v-if="input.childrensDataType == 4">
               <strong>{{ element.name }}:</strong> {{ element.level.value }}
             </div>
             <div v-else>
@@ -24,7 +24,7 @@
               <professional-experience-view
                 v-if="
                   element != undefined &&
-                  checkExperience(input.childrensDataType)
+                  input.childrensDataType == 1
                 "
                 :guid="element.guid"
                 :company="element"
@@ -33,7 +33,7 @@
               />
               <academic-training-view
                 v-if="
-                  element != undefined && checkAcademic(input.childrensDataType)
+                  element != undefined && input.childrensDataType == 2
                 "
                 :guid="element.guid"
                 :input="element"
@@ -42,7 +42,7 @@
               />
               <skill-view
                 v-if="
-                  element != undefined && checkSkills(input.childrensDataType)
+                  element != undefined && input.childrensDataType == 3
                 "
                 :input="element"
                 :iconsHidden="iconsHidden"
@@ -50,7 +50,7 @@
               />
               <other-view
                 v-if="
-                  element != undefined && checkOther(input.childrensDataType)
+                  element != undefined && input.childrensDataType == 5
                 "
                 :input="element"
                 :iconsHidden="iconsHidden"
@@ -149,21 +149,6 @@ export default {
     splice(element: Component): void {
       this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("update", this.input);
-    },
-    checkExperience(input: ComponentType): boolean {
-      return input == ComponentType.Experience;
-    },
-    checkAcademic(input: ComponentType): boolean {
-      return input == ComponentType.Academic;
-    },
-    checkLanguage(input: ComponentType): boolean {
-      return input == ComponentType.Languages;
-    },
-    checkSkills(input: ComponentType): boolean {
-      return input == ComponentType.Skills;
-    },
-    checkOther(input: ComponentType): boolean {
-      return input == ComponentType.Other;
     },
   },
   created(): void {
