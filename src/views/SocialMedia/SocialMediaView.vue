@@ -15,21 +15,18 @@
     <b-icon icon="link" aria-hidden="true" />
     <a
       :href="
-        'https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=' +
-        input.name
+        'https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=' + input.name
       "
       >{{
-        "https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=" +
-        input.name
+        "https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=" + input.name
       }}</a
     >
   </div>
 </template>
 
 <script lang="ts">
-import { Component } from '@/Config/Base/Component/Component';
-import { SocialMediaType } from '@/Config/Base/Enums';
-
+import { Component } from "@/Config/Base/Component/Component";
+import { SocialMediaType } from "@/Config/Base/Enums";
 
 export default {
   name: "SocialMediaView",
@@ -39,7 +36,7 @@ export default {
       required: true,
     },
   },
-  data() {
+  data(): any {
     return {
       sociamMediaTypes: [
         { value: SocialMediaType.Linkedin, text: "Linkedin" },

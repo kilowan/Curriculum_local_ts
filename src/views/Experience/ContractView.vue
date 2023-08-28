@@ -2,6 +2,7 @@
   <div>
     <project-list-view
       v-if="contract.childrens != undefined"
+      :guid="contract.guid"
       :projects="contract.childrens"
       :childrensTitle="contract.childrensTitle"
       :childrensDataType="contract.childrensDataType"
@@ -14,7 +15,11 @@
       <b-button class="m-2">Cancelar</b-button>
     </div>
     <div>
-      <AddLink v-if="!add && !iconsHidden" :text="getModalTitle" @click="add = true"/>
+      <AddLink
+        v-if="!add && !iconsHidden"
+        :text="getModalTitle"
+        @click="add = true"
+      />
     </div>
   </div>
 </template>
@@ -28,8 +33,8 @@ export default {
   name: "ContractView",
   components: {
     ProjectListView,
-    AddLink
-},
+    AddLink,
+  },
   props: {
     iconsHidden: {
       type: Boolean,
@@ -54,7 +59,11 @@ export default {
   },
   methods: {
     save(project: string): void {
-      let data = new Component(crypto.randomUUID(), this.getChildrensType(), project);
+      let data = new Component(
+        crypto.randomUUID(),
+        this.getChildrensType(),
+        project
+      );
       this.contract.childrens.push(data);
       this.$emit("reload");
       this.projectData = "";
@@ -82,7 +91,7 @@ export default {
         default:
           return ComponentType.Value;
       }
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

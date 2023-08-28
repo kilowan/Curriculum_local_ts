@@ -17,12 +17,12 @@ export default {
     },
     hidden: {
       type: Boolean,
-      default: false
+      default: false,
     },
     text: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
 };
 </script>

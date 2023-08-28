@@ -1,10 +1,9 @@
 <template>
-  <ELink :hidden="hidden" :icon="'eye-slash-fill'" @click="$emit('click')"/>
+  <ELink :hidden="hidden" :icon="'eye-slash-fill'" @click="$emit('click')" />
 </template>
 
 <script lang="ts">
-
-import ELink from './ELink.vue';
+import ELink from "./ELink.vue";
 
 export default {
   name: "HideLink",
@@ -12,13 +11,13 @@ export default {
     return {};
   },
   components: {
-    ELink
+    ELink,
   },
   props: {
     hidden: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 };
 </script>

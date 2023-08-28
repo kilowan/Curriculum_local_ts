@@ -6,7 +6,7 @@
     @ok="save"
     @cancel="cancel"
   >
-    <label>Name</label><input type="text" v-model="name" placeholder="value"/>
+    <label>Name</label><input type="text" v-model="name" placeholder="value" />
     <br />
     <input
       v-if="componentDataType === 4"
@@ -22,17 +22,13 @@
     />
     <br />
     <input
-      v-if="
-        componentDataType === 2 || componentDataType === 1
-      "
+      v-if="componentDataType === 2 || componentDataType === 1"
       type="text"
       placeholder="place"
       v-model="place.field"
     />
     <input
-      v-if="
-        componentDataType === 2 || componentDataType === 1
-      "
+      v-if="componentDataType === 2 || componentDataType === 1"
       type="text"
       placeholder="place"
       v-model="place.value"
@@ -79,9 +75,20 @@
       max="2030-12-31"
     />
     <br />
-    <label v-if="componentDataType === 2 || componentDataType === 8 || componentDataType === 1">Título</label>
+    <label
+      v-if="
+        componentDataType === 2 ||
+        componentDataType === 8 ||
+        componentDataType === 1
+      "
+      >Título</label
+    >
     <input
-    v-if="componentDataType === 2 || componentDataType === 8 || componentDataType === 1"
+      v-if="
+        componentDataType === 2 ||
+        componentDataType === 8 ||
+        componentDataType === 1
+      "
       type="text"
       placeholder="childrensTitle"
       v-model="childrensTitle"
@@ -91,13 +98,12 @@
 </template>
 
 <script lang="ts">
-import { Component } from '@/Config/Base/Component/Component';
-import { ComponentType } from '@/Config/Base/Enums';
-import { FieldValue } from '@/Config/Base/FieldValue/FieldValue';
-import { Experience } from '@/Config/Experience/Experience';
-import { Language } from '@/Config/Language/Language';
-import { Training } from '@/Config/Training/Training';
-
+import { Component } from "@/Config/Base/Component/Component";
+import { ComponentType } from "@/Config/Base/Enums";
+import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
+import { Experience } from "@/Config/Experience/Experience";
+import { Language } from "@/Config/Language/Language";
+import { Training } from "@/Config/Training/Training";
 
 export default {
   name: "AddNewModal",
@@ -109,31 +115,30 @@ export default {
     componentDataType: {
       type: Number,
       required: true,
-    }
+    },
   },
   data(): any {
     return {
       childrensDataType: ComponentType,
-      name: '',
-      childrensTitle: '',
-      place: { field: '', value: '' } as FieldValue,
-      initDate: { field: '', value: '' } as FieldValue,
-      finishDate: { field: '', value: '' } as FieldValue,
-      graduationDate: { field: '', value: '' } as FieldValue,
+      name: "",
+      childrensTitle: "",
+      place: { field: "", value: "" } as FieldValue,
+      initDate: { field: "", value: "" } as FieldValue,
+      finishDate: { field: "", value: "" } as FieldValue,
+      graduationDate: { field: "", value: "" } as FieldValue,
       childrens: [] as Array<Component>,
-      level: { field: '', value: '' } as FieldValue
+      level: { field: "", value: "" } as FieldValue,
     };
   },
   methods: {
     cancel(): void {
       this.childrensDataType = {} as ComponentType;
-      this.name = '',
-      this.childrensTitle = '';
-      this.place = { field: '', value: '' } as FieldValue;
-      this.initDate = { field: '', value: '' } as FieldValue;
-      this.finishDate = { field: '', value: '' } as FieldValue;
-      this.graduationDate = { field: '', value: '' } as FieldValue;
-      this.level = { field: '', value: '' } as FieldValue;
+      (this.name = ""), (this.childrensTitle = "");
+      this.place = { field: "", value: "" } as FieldValue;
+      this.initDate = { field: "", value: "" } as FieldValue;
+      this.finishDate = { field: "", value: "" } as FieldValue;
+      this.graduationDate = { field: "", value: "" } as FieldValue;
+      this.level = { field: "", value: "" } as FieldValue;
       this.childrens = [] as Array<Component>;
     },
     save(): void {
@@ -187,24 +192,20 @@ export default {
       return exp;
     },
     createLanguage(): Language {
-      return new Language(
-        crypto.randomUUID(),
-        this.name,
-        this.level
-      );
+      return new Language(crypto.randomUUID(), this.name, this.level);
     },
     getTitle(): string {
       switch (this.componentDataType) {
         case ComponentType.Experience:
-          return 'Añadir Experiencia';
+          return "Añadir Experiencia";
 
         case ComponentType.Academic:
-          return 'Añadir Formación';
+          return "Añadir Formación";
 
         case ComponentType.Languages:
-          return 'Añadir Idioma';
+          return "Añadir Idioma";
         default:
-          return 'Añadir';
+          return "Añadir";
       }
     },
     getChildrensType(): ComponentType {
@@ -219,7 +220,7 @@ export default {
         default:
           return ComponentType.Value;
       }
-    }
+    },
   },
 };
 </script>

@@ -4,8 +4,14 @@
       <div v-for="element in elements" v-bind:key="element.guid">
         <li>
           {{ element.name }}
-          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${element.guid}`)"/>
-          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${element.guid}`)"/>
+          <EditLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${element.guid}`)"
+          />
+          <DeleteLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${element.guid}`)"
+          />
           <professional-experience-view
             :guid="element.guid"
             :company="element"
@@ -26,7 +32,11 @@
         />
       </div>
     </ul>
-    <AddLink v-if="!iconsHidden" :text="input.name" @click="$bvModal.show(`add-${input.guid}`)"/>
+    <AddLink
+      v-if="!iconsHidden"
+      :text="input.name"
+      @click="$bvModal.show(`add-${input.guid}`)"
+    />
     <AddModal
       :guid="guid"
       :modalTitle="modalTitle"
@@ -56,27 +66,27 @@ export default {
     AddLink,
     DeleteLink,
     EditLink,
-    AddModal
-},
+    AddModal,
+  },
   props: {
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
     elements: {
       type: Array,
-      required: true
+      required: true,
     },
     childrensDataType: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data(): any {
     return {
       deleteModalMessage: "la experiencia",
       modalTitle: "Experiencia",
-      guid: crypto.randomUUID()
+      guid: crypto.randomUUID(),
     };
   },
   methods: {
@@ -86,8 +96,8 @@ export default {
     save(element: Component): void {
       this.$nextTick(() => {
         let data = new Component(
-          element.guid, 
-          this.getChildrensType(), 
+          element.guid,
+          this.getChildrensType(),
           element.name
         );
         data.initDate = element.initDate;
@@ -124,7 +134,7 @@ export default {
         default:
           return ComponentType.Value;
       }
-    }
+    },
   },
   created(): void {
     this.$nextTick(() => {

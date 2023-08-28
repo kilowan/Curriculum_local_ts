@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from '@/Config/Base/Component/Component';
+import { Component } from "@/Config/Base/Component/Component";
 
 export default {
   name: "DeleteModal",

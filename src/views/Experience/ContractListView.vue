@@ -5,8 +5,14 @@
       <div v-for="contract in contracts" v-bind:key="contract.guid">
         <li>
           {{ contract.name }}
-          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${contract.guid}`)"/>
-          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${contract.guid}`)"/>
+          <EditLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${contract.guid}`)"
+          />
+          <DeleteLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${contract.guid}`)"
+          />
           <contract-view
             :guid="contract.guid"
             :iconsHidden="iconsHidden"
@@ -14,10 +20,7 @@
             @reload="$emit('reload')"
           />
         </li>
-        <edit-modal
-          :modalTitle="getModalTitle"
-          :componentData="contract"
-        />
+        <edit-modal :modalTitle="getModalTitle" :componentData="contract" />
         <delete-modal
           :modalTitle="getModalTitle"
           :message="deleteModalMessage"
@@ -45,9 +48,13 @@ export default {
     DeleteModal,
     DeleteLink,
     EditLink,
-    EditModal
-},
+    EditModal,
+  },
   props: {
+    guid: {
+      type: String,
+      required: true,
+    },
     contracts: {
       type: Array,
       required: true,
@@ -76,7 +83,7 @@ export default {
     splice(element: Component): void {
       this.contracts.splice(this.contracts.indexOf(element), 1);
       this.$emit("reload");
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

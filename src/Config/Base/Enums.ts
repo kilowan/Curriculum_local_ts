@@ -21,5 +21,5 @@ export enum ElementType {
   Text = 1,
   Treselect = 2,
   Date = 3,
-  Datepicker = 4
+  Datepicker = 4,
 }

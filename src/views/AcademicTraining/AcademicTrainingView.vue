@@ -3,8 +3,9 @@
     <ul>
       <li>{{ input.place.field }}: {{ input.place.value }}</li>
       <li v-if="input.graduationDate">
-		    {{ input.graduationDate.field }}: {{ formatDate(input.graduationDate.value) }}
-	    </li>
+        {{ input.graduationDate.field }}:
+        {{ formatDate(input.graduationDate.value) }}
+      </li>
       <li v-if="input.childrens != undefined && input.childrens.length > 0">
         <strong class="m-2">{{ input.childrensTitle }}:</strong>
         <ul>
@@ -17,11 +18,15 @@
       </li>
       <div v-if="add">
         <input class="m-2" type="text" v-model="element" />
-        <input class="m-2" type="text" v-model="title" placeholder="title"/>
+        <input class="m-2" type="text" v-model="title" placeholder="title" />
         <b-button class="m-2" @click="save(element)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <AddLink v-if="!iconsHidden && !add" :text="getModalTitle" @click="add = true"/>
+      <AddLink
+        v-if="!iconsHidden && !add"
+        :text="getModalTitle"
+        @click="add = true"
+      />
     </ul>
   </div>
 </template>
@@ -37,8 +42,8 @@ export default {
   name: "AcademicTrainingView",
   components: {
     ContentsView,
-    AddLink
-},
+    AddLink,
+  },
   props: {
     input: {
       type: Training,
@@ -56,28 +61,32 @@ export default {
   data(): any {
     return {
       add: false,
-      element: '',
-      title: '',
+      element: "",
+      title: "",
       edit: false,
       //deleteModalMessage: "la experiencia",
-      modalTitle: ''
+      modalTitle: "",
     };
   },
   methods: {
     cancel(): void {
-      this.element = '';
-      this.title = ''
+      this.element = "";
+      this.title = "";
       this.add = false;
       this.edit = false;
     },
     save(): void {
       this.$nextTick(() => {
         if (this.element !== "") {
-          let data = new Component(crypto.randomUUID(), this.getChildrensType(), this.element);
+          let data = new Component(
+            crypto.randomUUID(),
+            this.getChildrensType(),
+            this.element
+          );
           data.childrensTitle = this.title;
           this.input.childrens.push(data);
         }
-        
+
         this.cancel();
         this.$emit("reload");
       });
@@ -107,7 +116,7 @@ export default {
         default:
           return ComponentType.Value;
       }
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

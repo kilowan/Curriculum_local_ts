@@ -1,5 +1,5 @@
 <template>
-  <input type="file" @change="readFile($event, result)" />
+  <input type="file" @change="readFile($event?.target?.files, result)" />
 </template>
 
 <script lang="ts">
@@ -9,11 +9,11 @@ export default {
     return {};
   },
   methods: {
-    result(data: any): void {
+    result(data: string): void {
       this.$emit("output", data);
     },
-    readFile(fileInput: any, callback: any): void {
-      var file = fileInput.target.files[0];
+    readFile(files: FileList, callback: any): void {
+      var file = files[0];
       var reader = new FileReader();
 
       reader.onload = function () {

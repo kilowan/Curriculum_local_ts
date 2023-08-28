@@ -2,38 +2,56 @@
   <div v-if="!hide">
     <dt :id="input.dtId" :class="input.dtId">
       {{ input.name }}
-      <HideLink v-if="!iconsHidden" @click="hide = true"/>
+      <HideLink v-if="!iconsHidden" @click="hide = true" />
     </dt>
     <dd :id="input.ddId">
       <ul>
         <div v-for="element in input.childrens" v-bind:key="element.guid">
           <li>
-            <div v-if="checkLanguage(input.childrensDataType)"><strong>{{ element.name }}:</strong> {{ element.level.value }}</div>
-            <div v-else><strong>{{ element.name }}</strong>
-              <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${element.guid}`)"/>
-              <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${element.guid}`)"/>
+            <div v-if="checkLanguage(input.childrensDataType)">
+              <strong>{{ element.name }}:</strong> {{ element.level.value }}
+            </div>
+            <div v-else>
+              <strong>{{ element.name }}</strong>
+              <EditLink
+                v-if="!iconsHidden"
+                @click="$bvModal.show(`edit-${element.guid}`)"
+              />
+              <DeleteLink
+                v-if="!iconsHidden"
+                @click="$bvModal.show(`delete-${element.guid}`)"
+              />
               <professional-experience-view
-                v-if="element != undefined && checkExperience(input.childrensDataType)"
+                v-if="
+                  element != undefined &&
+                  checkExperience(input.childrensDataType)
+                "
                 :guid="element.guid"
                 :company="element"
                 :iconsHidden="iconsHidden"
                 @reload="$emit('update', input)"
               />
               <academic-training-view
-                v-if="element != undefined && checkAcademic(input.childrensDataType)"
+                v-if="
+                  element != undefined && checkAcademic(input.childrensDataType)
+                "
                 :guid="element.guid"
                 :input="element"
                 :iconsHidden="iconsHidden"
                 @reload="$emit('update', input)"
               />
               <skill-view
-                v-if="element != undefined && checkSkills(input.childrensDataType)"
+                v-if="
+                  element != undefined && checkSkills(input.childrensDataType)
+                "
                 :input="element"
                 :iconsHidden="iconsHidden"
                 @reload="$emit('update', input)"
               />
               <other-view
-                v-if="element != undefined && checkOther(input.childrensDataType)"
+                v-if="
+                  element != undefined && checkOther(input.childrensDataType)
+                "
                 :input="element"
                 :iconsHidden="iconsHidden"
                 @reload="$emit('reload', input)"
@@ -53,7 +71,11 @@
           />
         </div>
       </ul>
-      <AddLink v-if="!iconsHidden" :text="input.name" @click="$bvModal.show(`add-${input.guid}`)"/>
+      <AddLink
+        v-if="!iconsHidden"
+        :text="input.name"
+        @click="$bvModal.show(`add-${input.guid}`)"
+      />
     </dd>
     <dd class="clear"></dd>
     <AddNewModal
@@ -94,24 +116,24 @@ export default {
     ProfessionalExperienceView,
     AcademicTrainingView,
     SkillView,
-    OtherView
-},
+    OtherView,
+  },
   props: {
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
     input: {
       type: Module,
-      required: true
-    }
+      required: true,
+    },
   },
   data(): any {
     return {
       add: false,
       hide: false,
       deleteModalMessage: "la experiencia",
-      modalTitle: "Experiencia"
+      modalTitle: "Experiencia",
     };
   },
   methods: {
@@ -142,7 +164,7 @@ export default {
     },
     checkOther(input: ComponentType): boolean {
       return input == ComponentType.Other;
-    }
+    },
   },
   created(): void {
     this.$nextTick(() => {

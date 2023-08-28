@@ -1,9 +1,15 @@
 <template>
   <ul>
     <li v-if="input.place">Centro/Lugar: {{ input.place }}</li>
-    <li v-if="input.initDate">Fecha inicio: {{ formatDate(input.initDate) }}</li>
-    <li v-if="input.finishDate">Fecha Fin: {{ formatDate(input.finishDate) }}</li>
-    <li v-if="input.graduationDate">Graduación: {{ formatDate(input.graduationDate) }}</li>
+    <li v-if="input.initDate">
+      Fecha inicio: {{ formatDate(input.initDate) }}
+    </li>
+    <li v-if="input.finishDate">
+      Fecha Fin: {{ formatDate(input.finishDate) }}
+    </li>
+    <li v-if="input.graduationDate">
+      Graduación: {{ formatDate(input.graduationDate) }}
+    </li>
     <div>
       <component-list-view
         :name="input.guid"
@@ -25,7 +31,7 @@ import { ComponentType } from "@/Config/Base/Enums";
 export default {
   name: "ComponentView",
   components: {
-    ComponentListView
+    ComponentListView,
   },
   props: {
     input: {
@@ -39,7 +45,7 @@ export default {
     iconsHidden: {
       type: Boolean,
       required: true,
-    }
+    },
   },
   data(): any {
     return {
@@ -112,6 +118,6 @@ export default {
           break;
       }
     });
-  }
+  },
 };
 </script>

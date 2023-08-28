@@ -5,35 +5,63 @@
     :title="`Editar ${modalTitle}`"
     ok-title="Guardar"
   >
-    <KeyValue 
-      v-if="componentData.name != undefined" 
-      :type="1" 
-      :field="'Nombre'" 
-      :value="componentData.name" 
+    <KeyValue
+      v-if="componentData.name != undefined"
+      :type="1"
+      :field="'Nombre'"
+      :value="componentData.name"
     />
-    <input v-if="componentData.level != undefined" type="text" v-model="componentData.level.field" />
-    <input v-if="componentData.level != undefined" type="text" v-model="componentData.level.value" />
-    <input v-if="componentData.place != undefined" type="text" v-model="componentData.place.field" />
-    <input v-if="componentData.place != undefined" type="text" v-model="componentData.place.value" />
-    <input v-if="componentData.initDate != undefined" type="text" v-model="componentData.initDate.field" />
     <input
-      v-if="componentData.initDate != undefined" 
+      v-if="componentData.level != undefined"
+      type="text"
+      v-model="componentData.level.field"
+    />
+    <input
+      v-if="componentData.level != undefined"
+      type="text"
+      v-model="componentData.level.value"
+    />
+    <input
+      v-if="componentData.place != undefined"
+      type="text"
+      v-model="componentData.place.field"
+    />
+    <input
+      v-if="componentData.place != undefined"
+      type="text"
+      v-model="componentData.place.value"
+    />
+    <input
+      v-if="componentData.initDate != undefined"
+      type="text"
+      v-model="componentData.initDate.field"
+    />
+    <input
+      v-if="componentData.initDate != undefined"
       type="date"
       v-model="componentData.initDate.value"
       min="2015-01-01"
       max="2030-12-31"
     />
-    <input v-if="componentData.finishDate != undefined" type="text" v-model="componentData.finishDate.field" />
     <input
-      v-if="componentData.finishDate != undefined" 
+      v-if="componentData.finishDate != undefined"
+      type="text"
+      v-model="componentData.finishDate.field"
+    />
+    <input
+      v-if="componentData.finishDate != undefined"
       type="date"
       v-model="componentData.finishDate.value"
       min="2015-01-01"
       max="2030-12-31"
     />
-    <input v-if="componentData.graduationDate != undefined" type="text" v-model="componentData.graduationDate.field" />
     <input
-      v-if="componentData.graduationDate != undefined" 
+      v-if="componentData.graduationDate != undefined"
+      type="text"
+      v-model="componentData.graduationDate.field"
+    />
+    <input
+      v-if="componentData.graduationDate != undefined"
       type="date"
       v-model="componentData.graduationDate.value"
       min="2015-01-01"
@@ -47,24 +75,26 @@ import { Component } from "@/Config/Base/Component/Component";
 import { SocialMediaType } from "@/Config/Base/Enums";
 import KeyValue from "@/components/KeyValue.vue";
 export default {
-    name: "EditNewModal",
-    props: {
-        componentData: {
-            type: Component,
-            required: true,
-        },
-        modalTitle: {
-            type: String,
-            required: true,
-        }
+  name: "EditNewModal",
+  props: {
+    componentData: {
+      type: Component,
+      required: true,
     },
-    data(): any {
-      return { types: [
+    modalTitle: {
+      type: String,
+      required: true,
+    },
+  },
+  data(): any {
+    return {
+      types: [
         { value: SocialMediaType.Linkedin, text: "Linkedin", disabled: false },
         { value: SocialMediaType.Infojobs, text: "Infojobs", disabled: false },
         { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
-      ] };
-    },
-    components: { KeyValue }
+      ],
+    };
+  },
+  components: { KeyValue },
 };
 </script>

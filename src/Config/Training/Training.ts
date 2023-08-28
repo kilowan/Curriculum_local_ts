@@ -1,6 +1,6 @@
-import { ITraining } from "./ITraining"
-import { FieldValue } from "../Base/FieldValue/FieldValue"
-import { Component } from "../Base/Component/Component"
+import { ITraining } from "./ITraining";
+import { FieldValue } from "../Base/FieldValue/FieldValue";
+import { Component } from "../Base/Component/Component";
 import { ComponentType } from "../Base/Enums";
 export class Training implements ITraining {
   constructor(guid: string, name: string, childrensDataType: ComponentType) {

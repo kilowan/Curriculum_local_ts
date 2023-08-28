@@ -1,9 +1,15 @@
 <template>
   <ul v-if="input != undefined">
     <li v-if="input.place">Centro/Lugar: {{ input.place }}</li>
-    <li v-if="input.initDate">Fecha inicio: {{ formatDate(input.initDate) }}</li>
-    <li v-if="input.finishDate">Fecha Fin: {{ formatDate(input.finishDate) }}</li>
-    <li v-if="input.graduationDate">Graduación: {{ formatDate(input.graduationDate) }}</li>
+    <li v-if="input.initDate">
+      Fecha inicio: {{ formatDate(input.initDate) }}
+    </li>
+    <li v-if="input.finishDate">
+      Fecha Fin: {{ formatDate(input.finishDate) }}
+    </li>
+    <li v-if="input.graduationDate">
+      Graduación: {{ formatDate(input.graduationDate) }}
+    </li>
     <!--list-->
     <!--<List
       :elements="company.childrens"
@@ -17,24 +23,22 @@
 </template>
 
 <script lang="ts">
-import { Component } from '@/Config/Base/Component/Component';
-
+import { Component } from "@/Config/Base/Component/Component";
 
 export default {
   name: "View",
   props: {
     iconsHidden: {
       type: Boolean,
-      required: true
+      required: true,
     },
     input: {
       type: Component,
-      required: true
-    }
+      required: true,
+    },
   },
   data(): any {
-    return {
-    };
+    return {};
   },
 };
 </script>

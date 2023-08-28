@@ -1,8 +1,14 @@
-import { IModule } from "./IModule"
-import { ComponentType } from "../Enums"
-import { Component } from "../Component/Component"
+import { IModule } from "./IModule";
+import { ComponentType } from "../Enums";
+import { Component } from "../Component/Component";
 export class Module implements IModule {
-  constructor(guid: string, ddId: string, dtId: string, childrensDataType: ComponentType, name: string) {
+  constructor(
+    guid: string,
+    ddId: string,
+    dtId: string,
+    childrensDataType: ComponentType,
+    name: string
+  ) {
     this.guid = guid;
     this.name = name;
     this.ddId = ddId;

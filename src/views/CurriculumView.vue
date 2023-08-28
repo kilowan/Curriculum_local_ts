@@ -32,7 +32,9 @@
       </div>
       <div>
         <b-icon icon="envelope" aria-hidden="true" />
-        <a :href="'mailto:' + curriculum.email.value">{{ curriculum.email.value }}</a
+        <a :href="'mailto:' + curriculum.email.value">{{
+          curriculum.email.value
+        }}</a
         ><br />
       </div>
     </div>
@@ -122,7 +124,7 @@ export default {
   components: {
     SocialMediaListView,
     FileReaderData,
-    ModuleView
+    ModuleView,
   },
   data(): any {
     return {
@@ -159,7 +161,8 @@ export default {
     },
     ParseLegacy(input: CurriculumDetail): void {
       if (input.guid == undefined) input.guid = crypto.randomUUID();
-      if (input.academicTraining != null) this.ParseModule(input.academicTraining);
+      if (input.academicTraining != null)
+        this.ParseModule(input.academicTraining);
       if (input.experience != null) this.ParseModule(input.experience);
       if (input.languageList != null) this.ParseModule(input.languageList);
       if (input.otherData != null) this.ParseModule(input.otherData);
@@ -314,20 +317,50 @@ export default {
     },
   },
   mounted(): void {
-    this.curriculum = 
-    new CurriculumDetail(
-      crypto.randomUUID(), 
-      new FieldValue('Nombre completo', ''), //fullName
-      new FieldValue('Descripción', ''), //description
-      new FieldValue('Teléfono', ''), //phoneNumber
-      new FieldValue('Email', ''), //email
-      new ExperienceModule(crypto.randomUUID(), 'experience', 'experiencia', ComponentType.Experience, 'Experiencia'),
-      new LanguageModule(crypto.randomUUID(), 'languages', 'idiomas', ComponentType.Languages, 'Idiomas'),
-      new TrainingModule(crypto.randomUUID(), 'academic', 'academica', ComponentType.Academic, 'Formación'), 
+    this.curriculum = new CurriculumDetail(
+      crypto.randomUUID(),
+      new FieldValue("Nombre completo", ""), //fullName
+      new FieldValue("Descripción", ""), //description
+      new FieldValue("Teléfono", ""), //phoneNumber
+      new FieldValue("Email", ""), //email
+      new ExperienceModule(
+        crypto.randomUUID(),
+        "experience",
+        "experiencia",
+        ComponentType.Experience,
+        "Experiencia"
+      ),
+      new LanguageModule(
+        crypto.randomUUID(),
+        "languages",
+        "idiomas",
+        ComponentType.Languages,
+        "Idiomas"
+      ),
+      new TrainingModule(
+        crypto.randomUUID(),
+        "academic",
+        "academica",
+        ComponentType.Academic,
+        "Formación"
+      ),
       [
-        new Module(crypto.randomUUID(), 'complementary', 'complementaria', ComponentType.Skills, 'Skills'), 
-        new Module(crypto.randomUUID(), 'other', 'otros', ComponentType.Other, 'Otros datos')
-      ]);
+        new Module(
+          crypto.randomUUID(),
+          "complementary",
+          "complementaria",
+          ComponentType.Skills,
+          "Skills"
+        ),
+        new Module(
+          crypto.randomUUID(),
+          "other",
+          "otros",
+          ComponentType.Other,
+          "Otros datos"
+        ),
+      ]
+    );
   },
 };
 </script>

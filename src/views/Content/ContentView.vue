@@ -4,8 +4,14 @@
       <div v-for="sub in input.childrens" v-bind:key="sub.guid">
         <li>
           {{ sub.name }}
-          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${sub.guid}`)"/>
-          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${sub.guid}`)"/>
+          <EditLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${sub.guid}`)"
+          />
+          <DeleteLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${sub.guid}`)"
+          />
         </li>
         <DeleteModal
           :componentData="sub"
@@ -13,19 +19,15 @@
           :message="deleteModalMessage"
           @remove="splice(sub)"
         />
-        <EditModal
-          :modalTitle="getModalTitle"
-          :componentData="sub"
-          :componentDataType="7"
-        />
+        <EditModal :modalTitle="getModalTitle" :componentData="sub" />
       </div>
-      <AddLink v-if="!iconsHidden" :text="getModalTitle" @click="$bvModal.show(`add-${guid}`)"/>
+      <AddLink
+        v-if="!iconsHidden"
+        :text="getModalTitle"
+        @click="$bvModal.show(`add-${guid}`)"
+      />
     </ul>
-    <AddModal
-      :guid="guid"
-      :componentDataType="7"
-      @save="push($event)"
-    />
+    <AddModal :guid="guid" :componentDataType="7" @save="push($event)" />
   </div>
 </template>
 
@@ -47,8 +49,8 @@ export default {
     DeleteModal,
     AddLink,
     DeleteLink,
-    EditLink
-},
+    EditLink,
+  },
   props: {
     iconsHidden: {
       type: Boolean,
@@ -73,10 +75,16 @@ export default {
       this.$emit("reload");
     },
     push(subContent: Component): void {
-      this.input.childrens.push(new Component(crypto.randomUUID(), subContent.childrensDataType, subContent.name));
+      this.input.childrens.push(
+        new Component(
+          crypto.randomUUID(),
+          subContent.childrensDataType,
+          subContent.name
+        )
+      );
       this.$emit("reload");
       this.subcontent = "";
-    }
+    },
   },
   computed: {
     getModalTitle(): any {
