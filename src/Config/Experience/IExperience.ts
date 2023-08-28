@@ -1,7 +1,7 @@
+import { IElement } from "../Base/Element/IElement";
 import { ComponentType } from "../Base/Enums";
 import { FieldValue } from "../Base/FieldValue/FieldValue";
-import { IModule } from "../Base/Module/IModule";
-export interface IExperience extends IModule {
+export interface IExperience extends IElement {
   place?: FieldValue;
   initDate?: FieldValue;
   finishDate?: FieldValue;

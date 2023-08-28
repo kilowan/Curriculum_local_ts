@@ -1,10 +1,10 @@
 import { Component } from "../Base/Component/Component";
 import { Module } from "../Base/Module/Module";
 import { ICurriculumDetail } from "./ICurriculumDetail";
-import { ExperienceModule } from "../Experience/Module/ExperienceModule";
-import { LanguageModule } from "../Language/Module/LanguageModule";
-import { TrainingModule } from "../Training/Module/TrainingModule";
 import { FieldValue } from "../Base/FieldValue/FieldValue";
+import { Experience } from "../Experience/Experience";
+import { Language } from "../Language/Language";
+import { Training } from "../Training/Training";
 export class CurriculumDetail implements ICurriculumDetail {
   constructor(
     guid: string,
@@ -12,10 +12,10 @@ export class CurriculumDetail implements ICurriculumDetail {
     description: FieldValue,
     phoneNumber: FieldValue,
     email: FieldValue,
-    experience: ExperienceModule,
-    language: LanguageModule,
-    training: TrainingModule,
-    modules: Array<Module>
+    experience: Module<Experience>,
+    language: Module<Language>,
+    training: Module<Training>,
+    modules: Array<Module<Component>>
   ) {
     this.guid = guid;
     this.fullName = fullName;
@@ -35,10 +35,10 @@ export class CurriculumDetail implements ICurriculumDetail {
   description: FieldValue;
   phoneNumber: FieldValue;
   email: FieldValue;
-  experience: ExperienceModule;
-  skillList: Module;
-  academicTraining: TrainingModule;
-  languageList: LanguageModule;
+  experience: Module<Experience>;
+  skillList: Module<Component>;
+  academicTraining: Module<Training>;
+  languageList: Module<Language>;
   socialMedia: Array<Component>;
-  otherData: Module;
+  otherData: Module<Component>;
 }
