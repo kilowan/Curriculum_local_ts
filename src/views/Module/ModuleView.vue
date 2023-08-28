@@ -10,6 +10,14 @@
           <li>
             <div v-if="input.childrensDataType == 4">
               <strong>{{ element.name }}:</strong> {{ element.level.value }}
+              <EditLink
+                v-if="!iconsHidden"
+                @click="$bvModal.show(`edit-${element.guid}`)"
+              />
+              <DeleteLink
+                v-if="!iconsHidden"
+                @click="$bvModal.show(`delete-${element.guid}`)"
+              />
             </div>
             <div v-else>
               <strong>{{ element.name }}</strong>

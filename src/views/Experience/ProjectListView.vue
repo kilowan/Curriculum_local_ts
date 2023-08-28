@@ -4,6 +4,7 @@
     <ul>
       <div v-for="project in projects" v-bind:key="project.guid">
         <li>
+          <label @click="hide = !hide, $emit('reload')">{{ project.name }}</label>
           {{ project.name }}
           <EditLink
             v-if="!iconsHidden"
@@ -14,6 +15,7 @@
             @click="$bvModal.show(`delete-${project.guid}`)"
           />
           <project-view
+            v-show="!hide"
             :guid="project.guid"
             :project="project"
             :iconsHidden="iconsHidden"
@@ -76,6 +78,7 @@ export default {
     return {
       deleteModalMessage: "la experiencia",
       modalTitle: "Experiencia",
+      hide: false,
     };
   },
   methods: {
