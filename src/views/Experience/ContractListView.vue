@@ -4,7 +4,7 @@
     <ul>
       <div v-for="contract in contracts" v-bind:key="contract.guid">
         <li>
-          {{ contract.name }}
+          <label @click="hide = !hide, $emit('reload')">{{ contract.name }}</label>
           <EditLink
             v-if="!iconsHidden"
             @click="$bvModal.show(`edit-${contract.guid}`)"
@@ -14,6 +14,7 @@
             @click="$bvModal.show(`delete-${contract.guid}`)"
           />
           <contract-view
+            v-show="!hide"
             :guid="contract.guid"
             :iconsHidden="iconsHidden"
             :contract="contract"
@@ -77,6 +78,7 @@ export default {
       projectData: "",
       deleteModalMessage: "la experiencia",
       modalTitle: "Experiencia",
+      hide: false,
     };
   },
   methods: {
