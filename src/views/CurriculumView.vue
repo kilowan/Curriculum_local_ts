@@ -113,11 +113,11 @@ import ModuleView from "./Module/ModuleView.vue";
 import { CurriculumDetail } from "@/Config/CurriculumDetail/CurriculumDetail";
 import { Component } from "@/Config/Base/Component/Component";
 import { Module } from "@/Config/Base/Module/Module";
-import { ExperienceModule } from "@/Config/Experience/Module/ExperienceModule";
-import { LanguageModule } from "@/Config/Language/Module/LanguageModule";
-import { TrainingModule } from "@/Config/Training/Module/TrainingModule";
 import { ComponentType } from "@/Config/Base/Enums";
 import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
+import { Training } from "@/Config/Training/Training";
+import { Language } from "@/Config/Language/Language";
+import { Experience } from "@/Config/Experience/Experience";
 
 export default {
   name: "CurriculumView",
@@ -178,7 +178,7 @@ export default {
         this.ParseComponent(element)
       );
     },
-    ParseModule(input: Module): void {
+    ParseModule(input: Module<Component>): void {
       if (input.guid == undefined) input.guid = crypto.randomUUID();
       input.childrens?.forEach((element: Component) =>
         this.ParseComponent(element)
@@ -236,27 +236,27 @@ export default {
       };
       reader.readAsDataURL(contenidoEnBlob);
     },
-    updateSkills(skills: Module): void {
+    updateSkills(skills: Module<Component>): void {
       this.curriculum.skillList = skills;
       this.exportable = true;
       this.EditMode();
     },
-    updateAcademic(media: TrainingModule): void {
+    updateAcademic(media: Module<Training>): void {
       this.curriculum.academicTraining = media;
       this.exportable = true;
       this.EditMode();
     },
-    updateLanguage(language: LanguageModule): void {
+    updateLanguage(language: Module<Language>): void {
       this.curriculum.languageList = language;
       this.exportable = true;
       this.EditMode();
     },
-    updateOther(media: Module): void {
+    updateOther(media: Module<Component>): void {
       this.curriculum.otherData = media;
       this.exportable = true;
       this.EditMode();
     },
-    updateExperience(experience: ExperienceModule): void {
+    updateExperience(experience: Module<Experience>): void {
       this.$nextTick(() => {
         this.curriculum.experience = experience;
         this.exportable = true;
@@ -323,21 +323,21 @@ export default {
       new FieldValue("Descripción", ""), //description
       new FieldValue("Teléfono", ""), //phoneNumber
       new FieldValue("Email", ""), //email
-      new ExperienceModule(
+      new Module<Experience>(
         crypto.randomUUID(),
         "experience",
         "experiencia",
         ComponentType.Experience,
         "Experiencia"
       ),
-      new LanguageModule(
+      new Module<Language>(
         crypto.randomUUID(),
         "languages",
         "idiomas",
         ComponentType.Languages,
         "Idiomas"
       ),
-      new TrainingModule(
+      new Module<Training>(
         crypto.randomUUID(),
         "academic",
         "academica",
