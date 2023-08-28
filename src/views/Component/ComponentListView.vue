@@ -1,12 +1,18 @@
 <template>
   <div>
-    <div v-if="elements !=undefined && elements.length > 0">
+    <div v-if="elements != undefined && elements.length > 0">
       <ul>
         <div v-for="data in elements" v-bind:key="data.guid">
           <li>
             {{ data.name }}
-            <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${data.guid}`)"/>
-            <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${data.guid}`)"/>
+            <EditLink
+              v-if="!iconsHidden"
+              @click="$bvModal.show(`edit-${data.guid}`)"
+            />
+            <DeleteLink
+              v-if="!iconsHidden"
+              @click="$bvModal.show(`delete-${data.guid}`)"
+            />
           </li>
           <component-view
             :name="data.guid"
@@ -21,10 +27,7 @@
             :component-data="data"
             @remove="splice(data)"
           />
-          <edit-modal
-            :modalTitle="getModalTitle"
-            :componentData="data"
-          />
+          <edit-modal :modalTitle="getModalTitle" :componentData="data" />
         </div>
         <AddModal
           :guid="guid"
@@ -34,7 +37,11 @@
         />
       </ul>
     </div>
-    <AddLink v-if="!iconsHidden" :text="modalTitle" @click="$bvModal.show(`add-${guid}`)"/>
+    <AddLink
+      v-if="!iconsHidden"
+      :text="modalTitle"
+      @click="$bvModal.show(`add-${guid}`)"
+    />
   </div>
 </template>
 
@@ -45,7 +52,7 @@ import DeleteModal from "../Modal/DeleteModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
-import ComponentView from "./ComponentView.vue";
+//import ComponentView from "./ComponentView.vue";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
 
@@ -57,9 +64,9 @@ export default {
     AddLink,
     DeleteLink,
     EditLink,
-    ComponentView,
-    AddModal
-},
+    //ComponentView,
+    AddModal,
+  },
   props: {
     elements: {
       type: Array,
@@ -96,7 +103,7 @@ export default {
     },
     formatDate(date: string): string {
       return new Date(date).toLocaleDateString();
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

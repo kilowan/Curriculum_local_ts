@@ -1,27 +1,24 @@
 <template>
-    <div v-if="input != undefined">
-      <li v-for="content in input" v-bind:key="content.guid">
-        {{ content.name }}
-        <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${content.guid}`)"/>
-        <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${content.guid}`)"/>
-        <content-view
-          :guid="content"
-          :input="content"
-          :iconsHidden="iconsHidden"
-          @reload="reload"
-        />
-        <delete-modal
-          :modalTitle="getModalTitle"
-          :message="deleteModalMessage"
-          :componentData="content"
-          @remove="splice(content)"
-        />
-        <edit-modal
-          :modalTitle="getModalTitle"
-          :componentData="content"
-        />
-      </li>
-    </div>
+  <div v-if="input != undefined">
+    <li v-for="content in input" v-bind:key="content.guid">
+      {{ content.name }}
+      <EditLink v-if="!iconsHidden" @click="editing(content)" />
+      <DeleteLink v-if="!iconsHidden" @click="deleting(content)" />
+      <content-view
+        :guid="content"
+        :input="content"
+        :iconsHidden="iconsHidden"
+        @reload="reload"
+      />
+      <delete-modal
+        :modalTitle="getModalTitle"
+        :message="deleteModalMessage"
+        :componentData="content"
+        @remove="splice(content)"
+      />
+      <edit-modal :modalTitle="getModalTitle" :componentData="content" />
+    </li>
+  </div>
 </template>
 
 <script lang="ts">
@@ -40,8 +37,8 @@ export default {
     DeleteModal,
     EditModal,
     DeleteLink,
-    EditLink
-},
+    EditLink,
+  },
   props: {
     input: {
       type: Array,
@@ -64,12 +61,12 @@ export default {
       this.input.splice(this.input.indexOf(element), 1);
       this.$emit("reload");
     },
-    reload(){
-      this.$emit('reload');
-    }
+    reload(): void {
+      this.$emit("reload");
+    },
   },
   computed: {
-    getModalTitle(): any {
+    getModalTitle(): string {
       return this.modalTitle;
     },
   },

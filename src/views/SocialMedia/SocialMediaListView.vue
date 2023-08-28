@@ -6,12 +6,15 @@
       class="d-flex"
     >
       <social-media-view :input="socialMediaData" />
-      <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${socialMediaData.guid}`)"/>
-      <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${socialMediaData.guid}`)"/>
-      <edit-modal
-        :modalTitle="'red social'"
-        :componentData="socialMediaData"
+      <EditLink
+        v-if="!iconsHidden"
+        @click="$bvModal.show(`edit-${socialMediaData.guid}`)"
       />
+      <DeleteLink
+        v-if="!iconsHidden"
+        @click="$bvModal.show(`delete-${socialMediaData.guid}`)"
+      />
+      <edit-modal :modalTitle="'red social'" :componentData="socialMediaData" />
       <delete-modal
         :modal-title="'Red social'"
         :message="'la red social'"
@@ -19,7 +22,12 @@
         @remove="splice(socialMediaData)"
       />
     </div>
-    <AddLink v-if="!iconsHidden" :hidden="count === 0" :text="'Red social'" @click="$bvModal.show('add-social-media')"/>
+    <AddLink
+      v-if="!iconsHidden"
+      :hidden="count === 0"
+      :text="'Red social'"
+      @click="$bvModal.show('add-social-media')"
+    />
     <b-modal
       :id="'add-social-media'"
       title="Añadir Red Social"
@@ -27,13 +35,21 @@
       @ok="add(socialmedia)"
       @ok-prevent="socialmedia.name == ''"
     >
-    <label>Tipo</label>
-    <b-form-select :options="types" v-model="socialmedia.type" /> <br />
-    <KeyValue 
-      :type="1" 
-      :field="socialmedia.type === 1?'Id linkedin':socialmedia.type === 2?'Id infojobs':'Id github'" 
-      :value="socialmedia.name"/><br />
-    </b-modal><br />
+      <label>Tipo</label>
+      <b-form-select :options="types" v-model="socialmedia.type" /> <br />
+      <KeyValue
+        :type="1"
+        :field="
+          socialmedia.type === 1
+            ? 'Id linkedin'
+            : socialmedia.type === 2
+            ? 'Id infojobs'
+            : 'Id github'
+        "
+        :value="socialmedia.name"
+      /><br />
+    </b-modal>
+    <br />
   </div>
 </template>
 
@@ -57,8 +73,8 @@ export default {
     DeleteLink,
     EditLink,
     EditModal,
-    KeyValue
-},
+    KeyValue,
+  },
   props: {
     iconsHidden: {
       type: Boolean,
@@ -67,8 +83,8 @@ export default {
     },
     input: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data(): any {
     return {
@@ -78,7 +94,8 @@ export default {
         { value: SocialMediaType.GitHub, text: "GitHub", disabled: false },
       ],
       socialmedia: {} as Component,
-      count: 3
+      count: 3,
+      guid: crypto.randomUUID(),
     };
   },
   methods: {
@@ -105,7 +122,7 @@ export default {
       this.input.splice(this.input.indexOf(element), 1);
       this.count++;
       this.$emit("update", this.input);
-    }
+    },
   },
 };
 </script>

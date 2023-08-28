@@ -1,4 +1,4 @@
-import { IFieldValue } from "./IFieldValue"
+import { IFieldValue } from "./IFieldValue";
 export class FieldValue implements IFieldValue {
   constructor(field: string, value: string) {
     this.field = field;

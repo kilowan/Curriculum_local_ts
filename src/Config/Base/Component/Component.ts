@@ -1,5 +1,5 @@
-import { IComponent } from "./IComponent"
-import { ComponentType } from "../Enums"
+import { IComponent } from "./IComponent";
+import { ComponentType } from "../Enums";
 export class Component implements IComponent {
   constructor(guid: string, childrensDataType: ComponentType, name: string) {
     this.guid = guid;

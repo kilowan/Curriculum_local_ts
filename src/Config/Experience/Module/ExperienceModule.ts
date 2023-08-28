@@ -1,8 +1,14 @@
-import { IExperienceModule } from "./IExperienceModule"
-import { ComponentType } from "../../Base/Enums"
-import { Experience } from "../Experience"
+import { IExperienceModule } from "./IExperienceModule";
+import { ComponentType } from "../../Base/Enums";
+import { Experience } from "../Experience";
 export class ExperienceModule implements IExperienceModule {
-  constructor(guid: string, ddId: string, dtId: string, childrensDataType: ComponentType, name: string) {
+  constructor(
+    guid: string,
+    ddId: string,
+    dtId: string,
+    childrensDataType: ComponentType,
+    name: string
+  ) {
     this.guid = guid;
     this.name = name;
     this.ddId = ddId;

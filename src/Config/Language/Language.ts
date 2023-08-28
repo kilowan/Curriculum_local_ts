@@ -1,5 +1,5 @@
 import { FieldValue } from "../Base/FieldValue/FieldValue";
-import { ILanguage } from "./ILanguage"
+import { ILanguage } from "./ILanguage";
 export class Language implements ILanguage {
   constructor(guid: string, name: string, level: FieldValue) {
     this.guid = guid;

@@ -15,16 +15,11 @@
       v-model="newComponent.level"
     />
     <br />
-    <label
-      v-if="
-        componentDataType === 2 || componentDataType === 1
-      "
+    <label v-if="componentDataType === 2 || componentDataType === 1"
       >Centro/Lugar:</label
     >
     <input
-      v-if="
-        componentDataType === 2 || componentDataType === 1
-      "
+      v-if="componentDataType === 2 || componentDataType === 1"
       type="text"
       v-model="newComponent.place"
     />
@@ -59,9 +54,8 @@
 </template>
 
 <script lang="ts">
-import { Component } from '@/Config/Base/Component/Component';
-import { ComponentType } from '@/Config/Base/Enums';
-
+import { Component } from "@/Config/Base/Component/Component";
+import { ComponentType } from "@/Config/Base/Enums";
 
 export default {
   name: "AddModal",
@@ -73,7 +67,7 @@ export default {
     componentDataType: {
       type: Number,
       required: true,
-    }
+    },
   },
   data(): any {
     return {
@@ -105,30 +99,30 @@ export default {
     getTitle(): string {
       switch (this.componentDataType) {
         case ComponentType.Experience:
-          return 'Añadir Experiencia';
+          return "Añadir Experiencia";
 
         case ComponentType.Contract:
-          return 'Añadir Contrato';
+          return "Añadir Contrato";
 
         case ComponentType.Project:
-          return 'Añadir Proyecto';
+          return "Añadir Proyecto";
 
         case ComponentType.Academic:
-          return 'Añadir Formación';
+          return "Añadir Formación";
 
         case ComponentType.Content:
-          return 'Añadir Contenido';
+          return "Añadir Contenido";
 
         case ComponentType.SubContent:
-          return 'Añadir Subcontenido';
+          return "Añadir Subcontenido";
 
         case ComponentType.Other:
-          return 'Añadir Otros Datos';
+          return "Añadir Otros Datos";
 
         case ComponentType.Value:
-          return 'Añadir Valor';
+          return "Añadir Valor";
         default:
-          return 'Añadir';
+          return "Añadir";
       }
     },
     getChildrensType(): ComponentType {
@@ -153,7 +147,7 @@ export default {
         default:
           return ComponentType.Value;
       }
-    }
+    },
   },
 };
 </script>

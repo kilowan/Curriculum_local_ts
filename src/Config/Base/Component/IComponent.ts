@@ -1,4 +1,4 @@
-import { IModule } from "../Module/IModule"
+import { IModule } from "../Module/IModule";
 import { Component } from "./Component";
 export interface IComponent extends IModule {
   place?: string;

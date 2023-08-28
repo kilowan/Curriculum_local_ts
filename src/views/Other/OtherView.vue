@@ -4,8 +4,14 @@
       <div v-for="value in input.childrens" v-bind:key="value.guid">
         <li v-if="!hide">
           {{ value.name }}
-          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${value.guid}`)"/>
-          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${value.guid}`)"/>
+          <EditLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${value.guid}`)"
+          />
+          <DeleteLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${value.guid}`)"
+          />
         </li>
         <EditModal
           :modalTitle="getModalTitle"
@@ -20,14 +26,10 @@
         />
       </div>
       <div v-if="!iconsHidden">
-        <AddLink :text="getModalTitle" @click="$bvModal.show(`add-${guid}`)"/>
+        <AddLink :text="getModalTitle" @click="$bvModal.show(`add-${guid}`)" />
       </div>
     </ul>
-    <AddModal
-      :guid="guid"
-      :componentDataType="11"
-      @save="save($event)"
-    />
+    <AddModal :guid="guid" :componentDataType="11" @save="save($event)" />
   </div>
 </template>
 
@@ -49,8 +51,8 @@ export default {
     DeleteModal,
     AddLink,
     DeleteLink,
-    EditLink
-},
+    EditLink,
+  },
   props: {
     input: {
       type: Component,
@@ -68,7 +70,7 @@ export default {
       add: false,
       valueNew: "",
       deleteModalMessage: "la experiencia",
-      modalTitle: "Experiencia"
+      modalTitle: "Experiencia",
     };
   },
   methods: {
@@ -78,7 +80,11 @@ export default {
     },
     save(value: Component): void {
       this.$nextTick(() => {
-        let component = new Component(value.guid, value.childrensDataType, value.name);
+        let component = new Component(
+          value.guid,
+          value.childrensDataType,
+          value.name
+        );
         this.input.childrens.push(component);
         this.values.push(component);
         this.cancel();
@@ -88,7 +94,7 @@ export default {
     splice(element: Component): void {
       this.input.childrens.splice(this.input.childrens.indexOf(element), 1);
       this.$emit("reload");
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

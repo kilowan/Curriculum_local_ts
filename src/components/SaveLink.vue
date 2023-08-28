@@ -1,10 +1,9 @@
 <template>
-  <ELink :hidden="hidden" :icon="'hdd'" @click="$emit('click')"/>
+  <ELink :hidden="hidden" :icon="'hdd'" @click="$emit('click')" />
 </template>
 
 <script lang="ts">
-
-import ELink from './ELink.vue';
+import ELink from "./ELink.vue";
 
 export default {
   name: "SaveLink",
@@ -12,13 +11,13 @@ export default {
     return {};
   },
   components: {
-    ELink
+    ELink,
   },
   props: {
     hidden: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 };
 </script>

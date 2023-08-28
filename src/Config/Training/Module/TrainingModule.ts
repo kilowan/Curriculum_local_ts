@@ -1,8 +1,14 @@
-import { ITrainingModule } from "./ITrainingModule"
-import { ComponentType } from "../../Base/Enums"
-import { Training } from "../Training"
+import { ITrainingModule } from "./ITrainingModule";
+import { ComponentType } from "../../Base/Enums";
+import { Training } from "../Training";
 export class TrainingModule implements ITrainingModule {
-  constructor(guid: string, ddId: string, dtId: string, childrensDataType: ComponentType, name: string) {
+  constructor(
+    guid: string,
+    ddId: string,
+    dtId: string,
+    childrensDataType: ComponentType,
+    name: string
+  ) {
     this.guid = guid;
     this.name = name;
     this.ddId = ddId;

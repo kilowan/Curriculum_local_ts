@@ -8,7 +8,11 @@
     <input v-if="add" class="m-2" type="text" v-model="element" />
     <b-button v-if="add" class="m-2" @click="save(element)">Guardar</b-button>
     <b-button v-if="add" class="m-2" @click="cancel">Cancelar</b-button>
-    <AddLink v-if="!iconsHidden && !add" :text="getModalTitle" @click="add = true"/>
+    <AddLink
+      v-if="!iconsHidden && !add"
+      :text="getModalTitle"
+      @click="add = true"
+    />
   </ul>
 </template>
 
@@ -22,8 +26,8 @@ export default {
   name: "ComplementaryExperienceView",
   components: {
     ContentsView,
-    AddLink
-},
+    AddLink,
+  },
   props: {
     input: {
       type: Component,
@@ -50,15 +54,12 @@ export default {
     save(content: string): void {
       this.$nextTick(() => {
         this.input.childrens.push(
-          new Component(
-            crypto.randomUUID(), 
-            ComponentType.SubContent, 
-            content
-          ));
+          new Component(crypto.randomUUID(), ComponentType.SubContent, content)
+        );
         this.cancel();
         this.$emit("reload");
       });
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

@@ -5,7 +5,8 @@
       v-if="type == 2"
       :disabled="disabled"
       :options="options"
-      v-model="value">
+      v-model="value"
+    >
     </b-form-select>
     <input v-if="type == 1" type="text" v-model="value" />
     <input
@@ -16,11 +17,11 @@
       max="2030-12-31"
     />
     <b-form-datepicker
-        v-if="type == 4"
-        v-model="value"
-        min="2015-01-01"
-        max="2030-12-31"
-      ></b-form-datepicker>
+      v-if="type == 4"
+      v-model="value"
+      min="2015-01-01"
+      max="2030-12-31"
+    ></b-form-datepicker>
   </div>
 </template>
 
@@ -30,29 +31,28 @@ export default {
   data(): any {
     return {};
   },
-  components: {
-  },
+  components: {},
   props: {
     field: {
       type: String,
-      required: true
+      required: true,
     },
     value: {
       type: [String, Number],
-      required: true
+      required: true,
     },
     type: {
       type: Number,
-      required: true
+      required: true,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     options: {
       type: Array,
-      required: false
-    }
+      required: false,
+    },
   },
 };
 </script>

@@ -5,8 +5,14 @@
       <div v-for="project in projects" v-bind:key="project.guid">
         <li>
           {{ project.name }}
-          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${project.guid}`)"/>
-          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${project.guid}`)"/>
+          <EditLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`edit-${project.guid}`)"
+          />
+          <DeleteLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${project.guid}`)"
+          />
           <project-view
             :guid="project.guid"
             :project="project"
@@ -14,10 +20,7 @@
             @reload="$emit('reload')"
           />
         </li>
-        <edit-modal
-          :modalTitle="getModalTitle"
-          :componentData="project"
-        />
+        <edit-modal :modalTitle="getModalTitle" :componentData="project" />
         <delete-modal
           :modalTitle="getModalTitle"
           :message="deleteModalMessage"
@@ -45,9 +48,13 @@ export default {
     EditModal,
     DeleteModal,
     DeleteLink,
-    EditLink
-},
+    EditLink,
+  },
   props: {
+    guid: {
+      type: String,
+      required: true,
+    },
     projects: {
       type: Array,
       required: true,
@@ -75,7 +82,7 @@ export default {
     splice(element: Component): void {
       this.projects.splice(this.projects.indexOf(element), 1);
       this.$emit("reload");
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

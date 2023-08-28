@@ -7,8 +7,8 @@
       >
         <li>
           {{ description.name }}
-          <EditLink v-if="!iconsHidden" @click="$bvModal.show(`edit-${description.guid}`)"/>
-          <DeleteLink v-if="!iconsHidden" @click="$bvModal.show(`delete-${description.guid}`)"/>
+          <EditLink v-if="!iconsHidden" @click="editing(description)" />
+          <DeleteLink v-if="!iconsHidden" @click="deleting(description)" />
         </li>
         <EditModal
           :modalTitle="getModalTitle"
@@ -29,7 +29,11 @@
       <b-button @click="save(desc)">Guardar</b-button>
       <b-button @click="cancel">Cancelar</b-button>
     </div>
-    <AddLink v-if="!add && !iconsHidden" :text="getModalTitle" @click="add = true"/>
+    <AddLink
+      v-if="!add && !iconsHidden"
+      :text="getModalTitle"
+      @click="add = true"
+    />
   </div>
 </template>
 
@@ -49,8 +53,8 @@ export default {
     DeleteModal,
     AddLink,
     DeleteLink,
-    EditLink
-},
+    EditLink,
+  },
   props: {
     project: {
       type: Component,
@@ -70,7 +74,7 @@ export default {
       add: false,
       desc: "",
       deleteModalMessage: "la experiencia",
-      modalTitle: "Experiencia"
+      modalTitle: "Experiencia",
     };
   },
   methods: {
@@ -80,7 +84,11 @@ export default {
     },
     save(description: string): void {
       this.$nextTick(() => {
-        let element = new Component(crypto.randomUUID(), this.getChildrensType(), description);
+        let element = new Component(
+          crypto.randomUUID(),
+          this.getChildrensType(),
+          description
+        );
         this.project.childrens.push(element);
         this.cancel();
         this.$emit("reload");
@@ -101,9 +109,9 @@ export default {
         case ComponentType.Project:
           return ComponentType.Description;
 
-          case ComponentType.Academic:
+        case ComponentType.Academic:
         case ComponentType.Skills:
-        return ComponentType.Content;
+          return ComponentType.Content;
 
         case ComponentType.Content:
         case ComponentType.Other:
@@ -112,7 +120,7 @@ export default {
         default:
           return ComponentType.Value;
       }
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

@@ -2,12 +2,16 @@
   <div v-if="company != undefined">
     <ul>
       <li>{{ company.place.field }}: {{ company.place.value }}</li>
-      <li>{{ company.initDate.field }}: {{ formatDate(company.initDate.value) }}</li>
+      <li>
+        {{ company.initDate.field }}: {{ formatDate(company.initDate.value) }}
+      </li>
       <li v-if="company.finishDate">
-        {{ company.finishDate.field }}: {{ formatDate(company.finishDate.value) }}
+        {{ company.finishDate.field }}:
+        {{ formatDate(company.finishDate.value) }}
       </li>
       <contract-list-view
         v-if="company.childrens.length > 0"
+        :guid="company.guid"
         :contracts="company.childrens"
         :childrensTitle="company.childrensTitle"
         :childrensDataType="company.childrensDataType"
@@ -16,11 +20,11 @@
       />
       <div v-if="add">
         <input class="m-2" type="text" v-model="contractData" />
-        <input class="m-2" type="text" v-model="title" placeholder="title"/>
+        <input class="m-2" type="text" v-model="title" placeholder="title" />
         <b-button class="m-2" @click="save(contractData)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <AddLink v-if="!iconsHidden" :text="getModalTitle" @click="add = true"/>
+      <AddLink v-if="!iconsHidden" :text="getModalTitle" @click="add = true" />
     </ul>
   </div>
 </template>
@@ -35,8 +39,8 @@ export default {
   name: "ProfessionalExperienceView",
   components: {
     ContractListView,
-    AddLink
-},
+    AddLink,
+  },
   props: {
     company: {
       type: Component,
@@ -54,8 +58,8 @@ export default {
   data(): any {
     return {
       add: false,
-      contractData: '',
-      title: '',
+      contractData: "",
+      title: "",
       //deleteModalMessage: "la experiencia",
       modalTitle: "Experiencia",
     };
@@ -63,7 +67,11 @@ export default {
   methods: {
     save(contract: string): void {
       this.$nextTick(() => {
-        let data = new Component(crypto.randomUUID(), this.getChildrensType(), contract);
+        let data = new Component(
+          crypto.randomUUID(),
+          this.getChildrensType(),
+          contract
+        );
         data.childrensTitle = this.title;
         this.company.childrens.push(data);
         this.cancel();
@@ -71,8 +79,8 @@ export default {
       });
     },
     cancel(): void {
-      this.contractData = '';
-      this.title = '';
+      this.contractData = "";
+      this.title = "";
       this.add = false;
     },
     formatDate(date: string): string {
@@ -100,7 +108,7 @@ export default {
         default:
           return ComponentType.Value;
       }
-    }
+    },
   },
   computed: {
     getModalTitle(): any {

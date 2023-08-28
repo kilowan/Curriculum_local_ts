@@ -1,7 +1,7 @@
-import { ExperienceModule } from "../Experience/Module/ExperienceModule"
-import { IElement } from "../Base/Element/IElement"
-import { Module } from "../Base/Module/Module"
-import { Component } from "../Base/Component/Component"
+import { ExperienceModule } from "../Experience/Module/ExperienceModule";
+import { IElement } from "../Base/Element/IElement";
+import { Module } from "../Base/Module/Module";
+import { Component } from "../Base/Component/Component";
 import { LanguageModule } from "../Language/Module/LanguageModule";
 import { TrainingModule } from "../Training/Module/TrainingModule";
 import { FieldValue } from "../Base/FieldValue/FieldValue";
