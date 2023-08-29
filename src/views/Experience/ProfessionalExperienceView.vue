@@ -9,7 +9,29 @@
         {{ company.finishDate.field }}:
         {{ formatDate(company.finishDate.value) }}
       </li>
-      <contract-list-view
+      <list-view 
+        :key="company.guid"
+        :guid="company.guid"
+        :elements="company.childrens"
+        :childrensTitle="company.childrensTitle"
+        :childrensDataType="company.childrensDataType"
+        :parentComponent="company"
+        :iconsHidden="iconsHidden"
+        @reload="$emit('reload')"
+      />
+      <!--<li>
+        <strong class="m-2">{{ childrensTitle }}:</strong>
+        <ul>
+          <content-list-view 
+            :key="company.guid"
+            :guid="company.guid"
+            :input="company.childrens"
+            :iconsHidden="iconsHidden"
+            @reload="$emit('reload')"
+          />
+        </ul>
+      </li>-->
+      <!--<contract-list-view
         v-if="company.childrens.length > 0"
         :guid="company.guid"
         :contracts="company.childrens"
@@ -17,31 +39,39 @@
         :childrensDataType="company.childrensDataType"
         :iconsHidden="iconsHidden"
         @reload="$emit('reload')"
-      />
+      />-->
       <div v-if="add">
         <input class="m-2" type="text" v-model="contractData" />
         <input class="m-2" type="text" v-model="title" placeholder="title" />
         <b-button class="m-2" @click="save(contractData)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <AddLink v-if="!iconsHidden" :text="getModalTitle" @click="add = true" />
+      <AddLink v-if="!iconsHidden" :type="company.childrensDataType" @click="add = true" />
     </ul>
   </div>
 </template>
 
 <script lang="ts">
 import AddLink from "@/components/AddLink.vue";
-import ContractListView from "./ContractListView.vue";
+//import ContractListView from "./ContractListView.vue";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
+//import ContentListView from "../Content/ContentListView.vue";
+import ListView from "../ListView.vue";
 
 export default {
   name: "ProfessionalExperienceView",
   components: {
-    ContractListView,
+    //ContractListView,
+    //ContentListView,
+    ListView,
     AddLink,
   },
   props: {
+    childrensTitle: {
+      type: String,
+      required: true,
+    },
     company: {
       type: Component,
       required: true,

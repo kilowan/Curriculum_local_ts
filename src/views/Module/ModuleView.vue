@@ -29,11 +29,25 @@
                 v-if="!iconsHidden"
                 @click="$bvModal.show(`delete-${element.guid}`)"
               />
+              <!--<ListView
+              v-if="
+                  element != undefined &&
+                  input.childrensDataType == 1
+                "
+                :guid="element.guid"
+                :key="element.guid"
+                :elements="element.childrens"
+                :childrensTitle="element.childrensTitle"
+                :childrensDataType="element.childrensDataType"
+                :iconsHidden="iconsHidden"
+                @reload="$emit('update', input)"
+              />-->
               <professional-experience-view
                 v-if="
                   element != undefined &&
                   input.childrensDataType == 1
                 "
+                :childrensTitle="element.childrensTitle"
                 :guid="element.guid"
                 :company="element"
                 :iconsHidden="iconsHidden"
@@ -79,9 +93,9 @@
           />
         </div>
       </ul>
-      <AddLink
+      <AddNewLink
         v-if="!iconsHidden"
-        :text="input.name"
+        :type="input.childrensDataType"
         @click="$bvModal.show(`add-${input.guid}`)"
       />
     </dd>
@@ -99,7 +113,7 @@
 import AddNewModal from "../Modal/AddNewModal.vue";
 import EditNewModal from "../Modal/EditNewModal.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
-import AddLink from "../../components/AddLink.vue";
+import AddNewLink from "../../components/AddLink.vue";
 import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
@@ -110,6 +124,7 @@ import SkillView from "../Skill/SkillView.vue";
 import { Module } from "@/Config/Base/Module/Module";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
+//import ListView from "../ListView.vue";
 
 export default {
   name: "ModuleView",
@@ -117,7 +132,7 @@ export default {
     AddNewModal,
     EditNewModal,
     DeleteModal,
-    AddLink,
+    AddNewLink,
     DeleteLink,
     EditLink,
     HideLink,
@@ -125,6 +140,7 @@ export default {
     AcademicTrainingView,
     SkillView,
     OtherView,
+    //ListView
   },
   props: {
     iconsHidden: {

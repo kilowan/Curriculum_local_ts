@@ -16,6 +16,7 @@ export enum ComponentType {
   Description = 10,
   Value = 11,
   End = 12,
+  SocialMedia = 13,
 }
 export enum ElementType {
   Text = 1,
