@@ -64,6 +64,10 @@ export default {
       type: String,
       required: true,
     },
+    parentComponent: {
+      type: Component,
+      required: false,
+    },
     componentDataType: {
       type: Number,
       required: true,
@@ -92,6 +96,7 @@ export default {
         component.graduationDate = this.newComponent?.graduationDate;
         //component.childrensTitle = this.getChildrensTitle();
         component.childrens = new Array<Component>();
+        if(this.parentComponent) this.parentComponent.childrens.push(component);
         this.cancel();
         this.$emit("save", component);
       });
