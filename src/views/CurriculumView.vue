@@ -1,5 +1,5 @@
 <template>
-  <div id="page-wrap" class="main">
+  <div v-if="mounted" id="page-wrap" class="main">
     <div v-if="!active" id="contact-info" class="vcard">
       <h1 class="fn">
         <input
@@ -131,7 +131,51 @@ export default {
       active: false,
       add: false,
       description: "",
-      curriculum: {} as CurriculumDetail,
+      mounted: false,
+      curriculum: new CurriculumDetail(
+        crypto.randomUUID(),
+        new FieldValue("Nombre completo", ""), //fullName
+        new FieldValue("Descripción", ""), //description
+        new FieldValue("Teléfono", ""), //phoneNumber
+        new FieldValue("Email", ""), //email
+        new Module<Experience>(
+          crypto.randomUUID(),
+          "experience",
+          "experiencia",
+          ComponentType.Experience,
+          "Experiencia"
+        ),
+        new Module<Language>(
+          crypto.randomUUID(),
+          "languages",
+          "idiomas",
+          ComponentType.Languages,
+          "Idiomas"
+        ),
+        new Module<Training>(
+          crypto.randomUUID(),
+          "academic",
+          "academica",
+          ComponentType.Academic,
+          "Formación"
+        ),
+        [
+          new Module(
+            crypto.randomUUID(),
+            "complementary",
+            "complementaria",
+            ComponentType.Skills,
+            "Skills"
+          ),
+          new Module(
+            crypto.randomUUID(),
+            "other",
+            "otros",
+            ComponentType.Other,
+            "Otros datos"
+          ),
+        ]
+      ),
       iconsHidden: false,
       reader: {} as FileReader,
       isRead: false,
@@ -317,50 +361,7 @@ export default {
     },
   },
   mounted(): void {
-    this.curriculum = new CurriculumDetail(
-      crypto.randomUUID(),
-      new FieldValue("Nombre completo", ""), //fullName
-      new FieldValue("Descripción", ""), //description
-      new FieldValue("Teléfono", ""), //phoneNumber
-      new FieldValue("Email", ""), //email
-      new Module<Experience>(
-        crypto.randomUUID(),
-        "experience",
-        "experiencia",
-        ComponentType.Experience,
-        "Experiencia"
-      ),
-      new Module<Language>(
-        crypto.randomUUID(),
-        "languages",
-        "idiomas",
-        ComponentType.Languages,
-        "Idiomas"
-      ),
-      new Module<Training>(
-        crypto.randomUUID(),
-        "academic",
-        "academica",
-        ComponentType.Academic,
-        "Formación"
-      ),
-      [
-        new Module(
-          crypto.randomUUID(),
-          "complementary",
-          "complementaria",
-          ComponentType.Skills,
-          "Skills"
-        ),
-        new Module(
-          crypto.randomUUID(),
-          "other",
-          "otros",
-          ComponentType.Other,
-          "Otros datos"
-        ),
-      ]
-    );
+    this.mounted = true;
   },
 };
 </script>
