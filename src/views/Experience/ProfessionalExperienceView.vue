@@ -1,15 +1,17 @@
 <template>
   <div v-if="company != undefined">
     <ul>
-      <li>{{ company.place.field }}: {{ company.place.value }}</li>
-      <li>
+      <li v-if="company.place">
+        {{ company.place.field }}: {{ company.place.value }}
+      </li>
+      <li v-if="company.initDate">
         {{ company.initDate.field }}: {{ formatDate(company.initDate.value) }}
       </li>
       <li v-if="company.finishDate">
         {{ company.finishDate.field }}:
         {{ formatDate(company.finishDate.value) }}
       </li>
-      <list-view 
+      <list-view
         :key="company.guid"
         :guid="company.guid"
         :elements="company.childrens"
@@ -19,53 +21,32 @@
         :iconsHidden="iconsHidden"
         @reload="$emit('reload')"
       />
-      <!--<li>
-        <strong class="m-2">{{ childrensTitle }}:</strong>
-        <ul>
-          <content-list-view 
-            :key="company.guid"
-            :guid="company.guid"
-            :input="company.childrens"
-            :iconsHidden="iconsHidden"
-            @reload="$emit('reload')"
-          />
-        </ul>
-      </li>-->
-      <!--<contract-list-view
-        v-if="company.childrens.length > 0"
-        :guid="company.guid"
-        :contracts="company.childrens"
-        :childrensTitle="company.childrensTitle"
-        :childrensDataType="company.childrensDataType"
-        :iconsHidden="iconsHidden"
-        @reload="$emit('reload')"
-      />-->
       <div v-if="add">
         <input class="m-2" type="text" v-model="contractData" />
         <input class="m-2" type="text" v-model="title" placeholder="title" />
         <b-button class="m-2" @click="save(contractData)">Guardar</b-button>
         <b-button class="m-2" @click="cancel">Cancelar</b-button>
       </div>
-      <AddLink v-if="!iconsHidden" :type="company.childrensDataType" @click="add = true" />
+      <AddNewLink
+        v-if="!iconsHidden"
+        :type="company.childrensDataType"
+        @click="add = true"
+      />
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import AddLink from "@/components/AddLink.vue";
-//import ContractListView from "./ContractListView.vue";
+import AddNewLink from "@/components/AddNewLink.vue";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
-//import ContentListView from "../Content/ContentListView.vue";
 import ListView from "../ListView.vue";
 
 export default {
   name: "ProfessionalExperienceView",
   components: {
-    //ContractListView,
-    //ContentListView,
     ListView,
-    AddLink,
+    AddNewLink,
   },
   props: {
     childrensTitle: {

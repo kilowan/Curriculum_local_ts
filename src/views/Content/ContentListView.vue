@@ -1,7 +1,7 @@
 <template>
   <div v-if="input != undefined">
     <li v-for="content in input" v-bind:key="content.guid">
-      <label @click="hide = !hide, $emit('reload')">{{ content.name }}</label>
+      <label @click="(hide = !hide), $emit('reload')">{{ content.name }}</label>
       <EditLink v-if="!iconsHidden" @click="editing(content)" />
       <DeleteLink v-if="!iconsHidden" @click="deleting(content)" />
       <content-view

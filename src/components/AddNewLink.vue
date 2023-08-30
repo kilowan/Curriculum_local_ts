@@ -1,16 +1,9 @@
 <template>
   <ELink
-    v-if="text != undefined"
+    v-show="type != undefined"
     :hidden="hidden"
     :icon="'plus-circle-fill'"
     :text="`Añadir ${text}`"
-    @click="$emit('click')"
-  />
-  <ELink
-    v-else
-    :hidden="hidden"
-    :icon="'plus-circle-fill'"
-    :text="'Añadir'"
     @click="$emit('click')"
   />
 </template>
@@ -37,7 +30,7 @@ export default {
     type: {
       type: Number,
       required: false,
-    }
+    },
   },
   created(): void {
     this.$nextTick(() => {
@@ -90,6 +83,6 @@ export default {
           break;
       }
     });
-  }
+  },
 };
 </script>

@@ -6,7 +6,19 @@
     @ok="save"
     @cancel="cancel"
   >
-    <label>Nombre</label> <input type="text" v-model="newComponent.name" />
+    <b-form-textarea
+      v-if="componentDataType === 10"
+      v-model="newComponent.name"
+      placeholder="description"
+      rows="6"
+      max-rows="16"
+    />
+    <label v-if="componentDataType == !10">Nombre</label>
+    <input
+      v-if="componentDataType == !10"
+      type="text"
+      v-model="newComponent.name"
+    />
     <br />
     <label v-if="componentDataType === 4">Nivel</label>
     <input
@@ -96,7 +108,8 @@ export default {
         component.graduationDate = this.newComponent?.graduationDate;
         //component.childrensTitle = this.getChildrensTitle();
         component.childrens = new Array<Component>();
-        if(this.parentComponent) this.parentComponent.childrens.push(component);
+        if (this.parentComponent)
+          this.parentComponent.childrens.push(component);
         this.cancel();
         this.$emit("save", component);
       });

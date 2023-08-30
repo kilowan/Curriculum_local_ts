@@ -73,7 +73,7 @@
 <script lang="ts">
 import { Component } from "@/Config/Base/Component/Component";
 import { SocialMediaType } from "@/Config/Base/Enums";
-import { Option } from "@/Config/Base/Option"; 
+import { Option } from "@/Config/Base/Option";
 import KeyValue from "@/components/KeyValue.vue";
 export default {
   name: "EditNewModal",
