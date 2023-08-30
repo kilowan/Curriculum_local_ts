@@ -29,38 +29,38 @@
                 v-if="!iconsHidden"
                 @click="$bvModal.show(`delete-${element.guid}`)"
               />
-              <professional-experience-view
+              <!--Experience Fields-->
+              <experience-view
+                v-if="element != undefined && input.childrensDataType == 1"
+                :input="element"
+              />
+              <!--Training Fields-->
+              <training-view
+                v-if="element != undefined && input.childrensDataType == 2"
+                :input="element"
+              />
+              <list-view
                 v-if="
                   element != undefined &&
-                  input.childrensDataType == 1
+                  (input.childrensDataType == 1 || input.childrensDataType == 2)
                 "
+                :key="element.guid"
                 :childrensTitle="element.childrensTitle"
                 :guid="element.guid"
-                :company="element"
+                :elements="element.childrens"
                 :iconsHidden="iconsHidden"
-                @reload="$emit('update', input)"
-              />
-              <academic-training-view
-                v-if="
-                  element != undefined && input.childrensDataType == 2
-                "
-                :guid="element.guid"
-                :input="element"
-                :iconsHidden="iconsHidden"
+                :parentComponent="element"
+                :childrensDataType="element.childrensDataType"
                 @reload="$emit('update', input)"
               />
               <skill-view
-                v-if="
-                  element != undefined && input.childrensDataType == 3
-                "
+                v-if="element != undefined && input.childrensDataType == 3"
                 :input="element"
                 :iconsHidden="iconsHidden"
                 @reload="$emit('update', input)"
               />
               <other-view
-                v-if="
-                  element != undefined && input.childrensDataType == 5
-                "
+                v-if="element != undefined && input.childrensDataType == 5"
                 :input="element"
                 :iconsHidden="iconsHidden"
                 @reload="$emit('reload', input)"
@@ -86,11 +86,11 @@
         @click="$bvModal.show(`add-${input.guid}`)"
       />
       <AddNewModal
-      :guid="input.guid"
-      :modalTitle="input.name"
-      :componentDataType="input.childrensDataType"
-      @save="save($event)"
-    />
+        :guid="input.guid"
+        :modalTitle="input.name"
+        :componentDataType="input.childrensDataType"
+        @save="save($event)"
+      />
     </dd>
     <dd class="clear"></dd>
   </div>
@@ -104,8 +104,9 @@ import AddNewLink from "../../components/AddNewLink.vue";
 import DeleteLink from "../../components/DeleteLink.vue";
 import EditLink from "../../components/EditLink.vue";
 import HideLink from "../../components/HideLink.vue";
-import ProfessionalExperienceView from "../Experience/ProfessionalExperienceView.vue";
-import AcademicTrainingView from "../AcademicTraining/AcademicTrainingView.vue";
+import ListView from "../ListView.vue";
+import ExperienceView from "../Experience/ExperienceView.vue";
+import TrainingView from "../AcademicTraining/TrainingView.vue";
 import OtherView from "../Other/OtherView.vue";
 import SkillView from "../Skill/SkillView.vue";
 import { Module } from "@/Config/Base/Module/Module";
@@ -122,10 +123,11 @@ export default {
     DeleteLink,
     EditLink,
     HideLink,
-    ProfessionalExperienceView,
-    AcademicTrainingView,
+    ExperienceView,
+    TrainingView,
     SkillView,
     OtherView,
+    ListView,
   },
   props: {
     iconsHidden: {

@@ -1,21 +1,12 @@
 <template>
-  <div v-if="childrensTitle">
-    <strong v-if="elements.length > 0" class="m-2">{{ childrensTitle }}:</strong>
-    <ul>
-      <div v-for="element in elements" v-bind:key="element.guid">
-        <li>
-          <div v-if="element.childrensDataType == 4">
-            <strong>{{ element.name }}:</strong> {{ element.level.value }}
-            <EditLink
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`edit-${element.guid}`)"
-            />
-            <DeleteLink
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-${element.guid}`)"
-            />
-          </div>
-          <div v-else>
+  <ul v-if="childrensTitle">
+    <li v-if="elements.length > 0">
+      <strong v-if="elements && elements.length > 0" class="m-2"
+        >{{ childrensTitle }}:</strong
+      >
+      <ul>
+        <div v-for="element in elements" v-bind:key="element.guid">
+          <li>
             <label @click="(hide = !hide), $emit('reload')">{{
               element.name
             }}</label>
@@ -27,69 +18,46 @@
               v-if="!iconsHidden"
               @click="$bvModal.show(`delete-${element.guid}`)"
             />
-            <ul>
-              <li v-if="element.place">
-                {{ element.place.field }}: {{ element.place.value }}
-              </li>
-              <li v-if="element.initDate">
-                {{ element.initDate.field }}:
-                {{ formatDate(element.initDate.value) }}
-              </li>
-              <li v-if="element.finishDate">
-                {{ element.finishDate.field }}:
-                {{ formatDate(element.finishDate.value) }}
-              </li>
-              <list-view
-                v-show="!hide"
-                v-if="element.childrens.length > 0"
-                :guid="element.guid"
-                :key="element.guid"
-                :elements="element.childrens"
-                :childrensTitle="element.childrensTitle"
-                :childrensDataType="element.childrensDataType"
-                :parentComponent="parentComponent"
-                :iconsHidden="iconsHidden"
-                @reload="$emit('reload')"
-              />
-            </ul>
-          </div>
-          <AddNewLink
-            v-if="!iconsHidden && element.childrensDataType != 12"
-            :type="element.childrensDataType"
-            @click="$bvModal.show(`add-${element.guid}`)"
-          />
-          <AddModal
-            :guid="element.guid"
+            <list-view
+              v-show="!hide"
+              v-if="element && element.childrens.length > 0"
+              :guid="element.guid"
+              :key="element.guid"
+              :elements="element.childrens"
+              :childrensTitle="element.childrensTitle"
+              :childrensDataType="element.childrensDataType"
+              :parentComponent="element"
+              :iconsHidden="iconsHidden"
+              @reload="$emit('reload')"
+            />
+          </li>
+          <edit-modal :modalTitle="getModalTitle" :componentData="element" />
+          <delete-modal
             :modalTitle="getModalTitle"
-            :componentDataType="element.childrensDataType"
-            :parentComponent="element"
-            @save="save($event)"
+            :message="deleteModalMessage"
+            :componentData="element"
+            @remove="splice(element)"
           />
-        </li>
-        <edit-modal :modalTitle="getModalTitle" :componentData="element" />
-        <delete-modal
-          :modalTitle="getModalTitle"
-          :message="deleteModalMessage"
-          :componentData="element"
-          @remove="splice(element)"
-        />
-      </div>
-    </ul>
-  </div>
-  <div v-else>
+        </div>
+      </ul>
+    </li>
+    <AddNewLink
+      v-show="!iconsHidden"
+      v-if="childrensDataType != 11 && childrensDataType != undefined"
+      :type="childrensDataType"
+      @click="$bvModal.show(`add-${guid}`)"
+    />
+    <AddModal
+      :guid="guid"
+      :modalTitle="getModalTitle"
+      :componentDataType="childrensDataType"
+      :parentComponent="parentComponent"
+      @save="save($event)"
+    />
+  </ul>
+  <ul v-else>
     <div v-for="element in elements" v-bind:key="element.guid">
-      <div v-if="element.childrensDataType == 4">
-        <strong>{{ element.name }}:</strong> {{ element.level.value }}
-        <EditLink
-          v-if="!iconsHidden"
-          @click="$bvModal.show(`edit-${element.guid}`)"
-        />
-        <DeleteLink
-          v-if="!iconsHidden"
-          @click="$bvModal.show(`delete-${element.guid}`)"
-        />
-      </div>
-      <div v-else>
+      <li>
         <label @click="(hide = !hide), $emit('reload')">{{
           element.name
         }}</label>
@@ -101,48 +69,18 @@
           v-if="!iconsHidden"
           @click="$bvModal.show(`delete-${element.guid}`)"
         />
-        <ul>
-          <li v-if="element.place">
-            {{ element.place.field }}: {{ element.place.value }}
-          </li>
-          <li v-if="element.initDate">
-            {{ element.initDate.field }}:
-            {{ formatDate(element.initDate.value) }}
-          </li>
-          <!--<li v-if="element.finishDate">
-            {{ element.finishDate.field }}:
-            {{ formatDate(element.finishDate.value) }}
-          </li>-->
-          <list-view
-            v-show="!hide"
-            v-if="element.childrens.length > 0"
-            :guid="element.guid"
-            :key="element.guid"
-            :elements="element.childrens"
-            :childrensTitle="element.childrensTitle"
-            :childrensDataType="element.childrensDataType"
-            :parentComponent="element"
-            :iconsHidden="iconsHidden"
-            @reload="$emit('reload')"
-          />
-        </ul>
-      </div>
-      <AddNewLink
-        v-if="
-          !iconsHidden &&
-          element.childrensDataType != undefined &&
-          element.childrensDataType != 11
-        "
-        :type="element.childrensDataType"
-        @click="$bvModal.show(`add-${element.guid}`)"
-      />
-      <AddModal
-        :guid="element.guid"
-        :modalTitle="getModalTitle"
-        :componentDataType="element.childrensDataType"
-        :parentComponent="element"
-        @save="save($event)"
-      />
+        <list-view
+          v-show="!hide"
+          :guid="element.guid"
+          :key="element.guid"
+          :elements="element.childrens"
+          :childrensTitle="element.childrensTitle"
+          :childrensDataType="element.childrensDataType"
+          :parentComponent="element"
+          :iconsHidden="iconsHidden"
+          @reload="$emit('reload')"
+        />
+      </li>
       <edit-modal :modalTitle="getModalTitle" :componentData="element" />
       <delete-modal
         :modalTitle="getModalTitle"
@@ -151,11 +89,23 @@
         @remove="splice(element)"
       />
     </div>
-  </div>
+    <AddNewLink
+      v-show="!iconsHidden"
+      v-if="childrensDataType != 11 && childrensDataType != undefined"
+      :type="childrensDataType"
+      @click="$bvModal.show(`add-${guid}`)"
+    />
+    <AddModal
+      :guid="guid"
+      :modalTitle="getModalTitle"
+      :componentDataType="childrensDataType"
+      :parentComponent="parentComponent"
+      @save="save($event)"
+    />
+  </ul>
 </template>
 
 <script lang="ts">
-//import ContractView from "./Experience/ContractView.vue";
 import DeleteModal from "./Modal/DeleteModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
@@ -168,7 +118,6 @@ import { ComponentType } from "@/Config/Base/Enums";
 export default {
   name: "ListView",
   components: {
-    //ContractView,
     DeleteModal,
     DeleteLink,
     EditLink,
@@ -191,7 +140,7 @@ export default {
     },
     childrensTitle: {
       type: String,
-      required: true,
+      required: false,
     },
     childrensDataType: {
       type: Number,
