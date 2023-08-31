@@ -109,7 +109,7 @@
 //declare const html2canvas: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>;
 import SocialMediaListView from "./SocialMedia/SocialMediaListView.vue";
 import FileReaderData from "../components/FileReaderData.vue";
-import ModuleView from "./Module/ModuleView.vue";
+import ModuleView from "./ModuleView.vue";
 import { CurriculumDetail } from "@/Config/CurriculumDetail/CurriculumDetail";
 import { Component } from "@/Config/Base/Component/Component";
 import { Module } from "@/Config/Base/Module/Module";

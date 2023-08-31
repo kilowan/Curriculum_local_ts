@@ -81,7 +81,7 @@
           @reload="$emit('reload')"
         />
       </li>
-      <edit-modal :modalTitle="getModalTitle" :componentData="element" />
+      <edit-modal :modalTitle="getModalTitle" :componentData="element" :childrensDataType="element.childrensDataType" />
       <delete-modal
         :modalTitle="getModalTitle"
         :message="deleteModalMessage"

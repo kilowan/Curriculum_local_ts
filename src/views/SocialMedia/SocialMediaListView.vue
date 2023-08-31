@@ -7,11 +7,11 @@
     >
       <social-media-view :input="socialMediaData" />
       <EditLink
-        v-if="!iconsHidden"
+        v-show="!iconsHidden"
         @click="$bvModal.show(`edit-${socialMediaData.guid}`)"
       />
       <DeleteLink
-        v-if="!iconsHidden"
+        v-show="!iconsHidden"
         @click="$bvModal.show(`delete-${socialMediaData.guid}`)"
       />
       <edit-modal :modalTitle="'red social'" :componentData="socialMediaData" />
@@ -23,7 +23,7 @@
       />
     </div>
     <AddLink
-      v-if="!iconsHidden"
+      v-show="!iconsHidden"
       :hidden="count === 0"
       :text="'Red social'"
       @click="$bvModal.show('add-social-media')"

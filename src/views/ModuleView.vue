@@ -7,70 +7,58 @@
     <dd :id="input.ddId">
       <ul>
         <div v-for="element in input.childrens" v-bind:key="element.guid">
-          <li>
-            <div v-if="input.childrensDataType == 4">
-              <strong>{{ element.name }}:</strong> {{ element.level.value }}
-              <EditLink
-                v-if="!iconsHidden"
-                @click="$bvModal.show(`edit-${element.guid}`)"
-              />
-              <DeleteLink
-                v-if="!iconsHidden"
-                @click="$bvModal.show(`delete-${element.guid}`)"
-              />
-            </div>
-            <div v-else>
-              <strong>{{ element.name }}</strong>
-              <EditLink
-                v-if="!iconsHidden"
-                @click="$bvModal.show(`edit-${element.guid}`)"
-              />
-              <DeleteLink
-                v-if="!iconsHidden"
-                @click="$bvModal.show(`delete-${element.guid}`)"
-              />
-              <!--Experience Fields-->
-              <experience-view
-                v-if="element != undefined && input.childrensDataType == 1"
-                :input="element"
-              />
-              <!--Training Fields-->
-              <training-view
-                v-if="element != undefined && input.childrensDataType == 2"
-                :input="element"
-              />
-              <list-view
-                v-if="
-                  element != undefined &&
-                  (input.childrensDataType == 1 || input.childrensDataType == 2)
-                "
-                :key="element.guid"
-                :childrensTitle="element.childrensTitle"
-                :guid="element.guid"
-                :elements="element.childrens"
-                :iconsHidden="iconsHidden"
-                :parentComponent="element"
-                :childrensDataType="element.childrensDataType"
-                @reload="$emit('update', input)"
-              />
-              <skill-view
-                v-if="element != undefined && input.childrensDataType == 3"
-                :input="element"
-                :iconsHidden="iconsHidden"
-                @reload="$emit('update', input)"
-              />
-              <other-view
-                v-if="element != undefined && input.childrensDataType == 5"
-                :input="element"
-                :iconsHidden="iconsHidden"
-                @reload="$emit('reload', input)"
-              />
-            </div>
-          </li>
+          <!--Language Fields-->
+          <Language-view
+            v-if="element != undefined && input.childrensDataType == 4"
+            :input="element"
+            :iconsHidden="iconsHidden"
+            @edit="$bvModal.show(`edit-${element.guid}`)"
+            @delete="$bvModal.show(`delete-${element.guid}`)"
+          />
+          <!--Experience Fields-->
+          <experience-view
+            v-if="element != undefined && input.childrensDataType == 1"
+            :input="element"
+            :iconsHidden="iconsHidden"
+            @edit="$bvModal.show(`edit-${element.guid}`)"
+            @delete="$bvModal.show(`delete-${element.guid}`)"
+          />
+          <!--Training Fields-->
+          <training-view
+            v-if="element != undefined && input.childrensDataType == 2"
+            :input="element"
+            :iconsHidden="iconsHidden"
+            @edit="$bvModal.show(`edit-${element.guid}`)"
+            @delete="$bvModal.show(`delete-${element.guid}`)"
+          />
+          <!--Other Fields-->
+          <other-view
+            v-if="element != undefined && input.childrensDataType == 5"
+            :input="element"
+            :iconsHidden="iconsHidden"
+            @edit="$bvModal.show(`edit-${element.guid}`)"
+            @delete="$bvModal.show(`delete-${element.guid}`)"
+          />
+          <list-view
+            v-if="
+              element != undefined &&
+              (input.childrensDataType == 1 ||
+                input.childrensDataType == 2 ||
+                input.childrensDataType == 3)
+            "
+            :key="element.guid"
+            :childrensTitle="element.childrensTitle"
+            :guid="element.guid"
+            :elements="element.childrens"
+            :iconsHidden="iconsHidden"
+            :parentComponent="element"
+            :childrensDataType="element.childrensDataType"
+            @reload="$emit('update', input)"
+          />
           <EditNewModal
             :modalTitle="input.name"
             :componentData="element"
-            :componentDataType="element.childrensDataType"
+            :childrensDataType="input.childrensDataType"
           />
           <DeleteModal
             :modalTitle="input.name"
@@ -97,18 +85,16 @@
 </template>
 
 <script lang="ts">
-import AddNewModal from "../Modal/AddNewModal.vue";
-import EditNewModal from "../Modal/EditNewModal.vue";
-import DeleteModal from "../Modal/DeleteModal.vue";
-import AddNewLink from "../../components/AddNewLink.vue";
-import DeleteLink from "../../components/DeleteLink.vue";
-import EditLink from "../../components/EditLink.vue";
-import HideLink from "../../components/HideLink.vue";
-import ListView from "../ListView.vue";
-import ExperienceView from "../Experience/ExperienceView.vue";
-import TrainingView from "../AcademicTraining/TrainingView.vue";
-import OtherView from "../Other/OtherView.vue";
-import SkillView from "../Skill/SkillView.vue";
+import AddNewModal from "./Modal/AddNewModal.vue";
+import EditNewModal from "./Modal/EditNewModal.vue";
+import DeleteModal from "./Modal/DeleteModal.vue";
+import AddNewLink from "./../components/AddNewLink.vue";
+import HideLink from "./../components/HideLink.vue";
+import ListView from "./ListView.vue";
+import ExperienceView from "./ExperienceView.vue";
+import TrainingView from "./TrainingView.vue";
+import LanguageView from "./LanguageView.vue";
+import OtherView from "./OtherView.vue";
 import { Module } from "@/Config/Base/Module/Module";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
@@ -120,14 +106,12 @@ export default {
     EditNewModal,
     DeleteModal,
     AddNewLink,
-    DeleteLink,
-    EditLink,
+    LanguageView,
     HideLink,
     ExperienceView,
     TrainingView,
-    SkillView,
-    OtherView,
     ListView,
+    OtherView,
   },
   props: {
     iconsHidden: {
