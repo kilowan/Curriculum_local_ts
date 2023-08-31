@@ -1,14 +1,14 @@
 <template>
   <ul v-if="!edit">
     <li>
-      <strong>{{ input.name }}</strong>
+      <strong>{{ name.value }}</strong>
       <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
       <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
       <ul>
-        <li>{{ input.place.field }}: {{ input.place.value }}</li>
-        <li v-if="input.graduationDate">
-          {{ input.graduationDate.field }}:
-          {{ formatDate(input.graduationDate.value) }}
+        <li>{{ place.field }}: {{ place.value }}</li>
+        <li v-if="graduationDate">
+          {{ graduationDate.field }}:
+          {{ formatDate(graduationDate.value) }}
         </li>
       </ul>
     </li>
@@ -16,35 +16,55 @@
   <ul v-else>
     <!--name-->
     <label>Name:</label>
-    <input type="text" placeholder="name" v-model="input.name" />
+    <input type="text" placeholder="name" v-model="name.value" /><br />
     <!--place-->
-    <input type="text" placeholder="place" v-model="input.place.field" />
-    <input type="text" placeholder="place" v-model="input.place.value" />
+    <input type="text" placeholder="place" v-model="place.field" />
+    <input type="text" placeholder="place" v-model="place.value" /><br />
     <!--graduationDate-->
     <input
       type="text"
       placeholder="graduationDate"
-      v-model="input.graduationDate.field"
+      v-model="graduationDate.field"
     />
     <input
       type="date"
-      v-model="input.graduationDate.value"
+      v-model="graduationDate.value"
       min="2015-01-01"
       max="2030-12-31"
+    />
+    <!--childrensTitle-->
+    <label>Título:</label>
+    <b-form-textarea
+      placeholder="childrensTitle"
+      v-model="childrensTitle.value"
+      rows="3"
+      max-rows="5"
     />
   </ul>
 </template>
 
 <script lang="ts">
-import { Training } from "@/Config/Training/Training";
 import DeleteLink from "../components/DeleteLink.vue";
 import EditLink from "../components/EditLink.vue";
+import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 
 export default {
   name: "TrainingView",
   props: {
-    input: {
-      type: Training,
+    name: {
+      type: FieldValue,
+      required: true,
+    },
+    place: {
+      type: FieldValue,
+      required: true,
+    },
+    graduationDate: {
+      type: FieldValue,
+      required: true,
+    },
+    childrensTitle: {
+      type: FieldValue,
       required: true,
     },
     edit: {

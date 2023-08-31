@@ -6,94 +6,43 @@
     @ok="save"
     @cancel="cancel"
   >
-    <label>Name</label><input type="text" v-model="name" placeholder="value" />
-    <br />
-    <input
-      v-if="componentDataType === 4"
-      type="text"
-      placeholder="level"
-      v-model="level.field"
+    <!--Language Fields-->
+    <language-view
+      v-if="childrensDataType === 4"
+      :name="name"
+      :level="level"
+      :iconsHidden="false"
+      :edit="true"
     />
-    <input
-      v-if="componentDataType === 4"
-      type="text"
-      placeholder="level"
-      v-model="level.value"
+    <!--Experience Fields-->
+    <experience-view
+      v-else-if="childrensDataType === 1"
+      :name="name"
+      :place="place"
+      :initDate="initDate"
+      :finishDate="finishDate"
+      :childrensTitle="childrensTitle"
+      :iconsHidden="false"
+      :edit="true"
     />
-    <br />
-    <input
-      v-if="componentDataType === 2 || componentDataType === 1"
-      type="text"
-      placeholder="place"
-      v-model="place.field"
+    <!--Training Fields-->
+    <training-view
+      v-else-if="childrensDataType === 2"
+      :name="name"
+      :place="place"
+      :graduationDate="graduationDate"
+      :childrensTitle="childrensTitle"
+      :iconsHidden="false"
+      :edit="true"
     />
-    <input
-      v-if="componentDataType === 2 || componentDataType === 1"
-      type="text"
-      placeholder="place"
-      v-model="place.value"
+    <!--Other Fields-->
+    <other-view
+      v-else-if="childrensDataType === 5"
+      :name="name"
+      :iconsHidden="false"
+      :edit="true"
     />
-    <br />
-    <input
-      v-if="componentDataType === 1"
-      type="text"
-      placeholder="initDate"
-      v-model="initDate.field"
-    />
-    <input
-      v-if="componentDataType === 1"
-      type="date"
-      v-model="initDate.value"
-      min="2015-01-01"
-      max="2030-12-31"
-    />
-    <br />
-    <input
-      v-if="componentDataType === 1"
-      type="text"
-      placeholder="finishDate"
-      v-model="finishDate.field"
-    />
-    <input
-      v-if="componentDataType === 1"
-      type="date"
-      v-model="finishDate.value"
-      min="2015-01-01"
-      max="2030-12-31"
-    />
-    <input
-      v-if="componentDataType === 2"
-      type="text"
-      placeholder="graduationDate"
-      v-model="graduationDate.field"
-    />
-    <input
-      v-if="componentDataType === 2"
-      type="date"
-      v-model="graduationDate.value"
-      min="2015-01-01"
-      max="2030-12-31"
-    />
-    <br />
-    <label
-      v-if="
-        componentDataType === 2 ||
-        componentDataType === 8 ||
-        componentDataType === 1
-      "
-      >Título</label
-    >
-    <input
-      v-if="
-        componentDataType === 2 ||
-        componentDataType === 8 ||
-        componentDataType === 1
-      "
-      type="text"
-      placeholder="childrensTitle"
-      v-model="childrensTitle"
-    />
-    <br />
+    <b-form-textarea v-else v-model="name.value" rows="6" max-rows="16" />
   </b-modal>
 </template>
 
@@ -104,24 +53,37 @@ import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 import { Experience } from "@/Config/Experience/Experience";
 import { Language } from "@/Config/Language/Language";
 import { Training } from "@/Config/Training/Training";
+import LanguageView from "../LanguageView.vue";
+import ExperienceView from "../ExperienceView.vue";
+import TrainingView from "../TrainingView.vue";
+import OtherView from "../OtherView.vue";
 
 export default {
   name: "AddNewModal",
+  components: {
+    LanguageView,
+    ExperienceView,
+    TrainingView,
+    OtherView,
+  },
   props: {
     guid: {
       type: String,
       required: true,
     },
-    componentDataType: {
+    childrensDataType: {
       type: Number,
       required: true,
+    },
+    parentComponent: {
+      type: Component,
+      required: false,
     },
   },
   data(): any {
     return {
-      childrensDataType: ComponentType,
-      name: "",
-      childrensTitle: "",
+      name: { field: "", value: "" } as FieldValue,
+      childrensTitle: { field: "", value: "" } as FieldValue,
       place: { field: "", value: "" } as FieldValue,
       initDate: { field: "", value: "" } as FieldValue,
       finishDate: { field: "", value: "" } as FieldValue,
@@ -132,8 +94,8 @@ export default {
   },
   methods: {
     cancel(): void {
-      this.childrensDataType = {} as ComponentType;
-      (this.name = ""), (this.childrensTitle = "");
+      this.childrensTitle = { field: "", value: "" } as FieldValue;
+      this.name = { field: "", value: "" } as FieldValue;
       this.place = { field: "", value: "" } as FieldValue;
       this.initDate = { field: "", value: "" } as FieldValue;
       this.finishDate = { field: "", value: "" } as FieldValue;
@@ -148,7 +110,7 @@ export default {
           this.getChildrensType(),
           this.name
         );
-        switch (this.componentDataType) {
+        switch (this.childrensDataType) {
           case ComponentType.Experience:
             component = this.createExperience();
             break;
@@ -164,6 +126,9 @@ export default {
           default:
             break;
         }
+
+        if (this.parentComponent)
+          this.parentComponent.childrens.push(component);
         this.cancel();
         this.$emit("save", component);
       });
@@ -195,27 +160,52 @@ export default {
       return new Language(crypto.randomUUID(), this.name, this.level);
     },
     getTitle(): string {
-      switch (this.componentDataType) {
+      switch (this.childrensDataType) {
         case ComponentType.Experience:
           return "Añadir Experiencia";
+
+        case ComponentType.Contract:
+          return "Añadir Contrato";
+
+        case ComponentType.Project:
+          return "Añadir Proyecto";
 
         case ComponentType.Academic:
           return "Añadir Formación";
 
-        case ComponentType.Languages:
-          return "Añadir Idioma";
+        case ComponentType.Content:
+          return "Añadir Contenido";
+
+        case ComponentType.SubContent:
+          return "Añadir Subcontenido";
+
+        case ComponentType.Other:
+          return "Añadir Otros Datos";
+
+        case ComponentType.Value:
+          return "Añadir Valor";
         default:
           return "Añadir";
       }
     },
     getChildrensType(): ComponentType {
-      switch (this.componentDataType) {
+      switch (this.childrensDataType) {
         case ComponentType.Experience:
           return ComponentType.Contract;
+
+        case ComponentType.Contract:
+          return ComponentType.Project;
+
+        case ComponentType.Project:
+          return ComponentType.Description;
 
         case ComponentType.Academic:
         case ComponentType.Skills:
           return ComponentType.Content;
+
+        case ComponentType.Content:
+        case ComponentType.Other:
+          return ComponentType.SubContent;
 
         default:
           return ComponentType.Value;

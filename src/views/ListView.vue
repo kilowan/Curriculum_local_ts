@@ -2,13 +2,13 @@
   <ul v-if="childrensTitle">
     <li v-if="elements.length > 0">
       <strong v-if="elements && elements.length > 0" class="m-2"
-        >{{ childrensTitle }}:</strong
+        >{{ childrensTitle.value }}:</strong
       >
       <ul>
         <div v-for="element in elements" v-bind:key="element.guid">
           <li>
             <label @click="(hide = !hide), $emit('reload')">{{
-              element.name
+              element.name.value
             }}</label>
             <EditLink
               v-show="!iconsHidden"
@@ -31,10 +31,10 @@
               @reload="$emit('reload')"
             />
           </li>
-          <edit-new-modal 
-            :modalTitle="getModalTitle" 
-            :componentData="element" 
-            :childrensDataType="element.childrensDataType" 
+          <EditNewModal
+            :modalTitle="getModalTitle"
+            :componentData="element"
+            :childrensDataType="element.childrensDataType"
           />
           <delete-modal
             :modalTitle="getModalTitle"
@@ -47,11 +47,11 @@
     </li>
     <AddNewLink
       v-show="!iconsHidden"
-      v-if="childrensDataType != 11 && childrensDataType != undefined"
+      v-if="childrensDataType != 11"
       :type="childrensDataType"
       @click="$bvModal.show(`add-${guid}`)"
     />
-    <AddModal
+    <AddNewModal
       :guid="guid"
       :modalTitle="getModalTitle"
       :childrensDataType="childrensDataType"
@@ -63,7 +63,7 @@
     <div v-for="element in elements" v-bind:key="element.guid">
       <li>
         <label @click="(hide = !hide), $emit('reload')">{{
-          element.name
+          element.name.value
         }}</label>
         <EditLink
           v-if="!iconsHidden"
@@ -85,7 +85,11 @@
           @reload="$emit('reload')"
         />
       </li>
-      <edit-new-modal :modalTitle="getModalTitle" :componentData="element" :childrensDataType="element.childrensDataType" />
+      <EditNewModal
+        :modalTitle="getModalTitle"
+        :componentData="element"
+        :childrensDataType="element.childrensDataType"
+      />
       <delete-modal
         :modalTitle="getModalTitle"
         :message="deleteModalMessage"
@@ -99,7 +103,7 @@
       :type="childrensDataType"
       @click="$bvModal.show(`add-${guid}`)"
     />
-    <AddModal
+    <AddNewModal
       :guid="guid"
       :modalTitle="getModalTitle"
       :childrensDataType="childrensDataType"
@@ -114,10 +118,11 @@ import DeleteModal from "./Modal/DeleteModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import EditNewModal from "./Modal/EditNewModal.vue";
-import AddModal from "./Modal/AddModal.vue";
+import AddNewModal from "./Modal/AddNewModal.vue";
 import AddNewLink from "@/components/AddNewLink.vue";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
+import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 
 export default {
   name: "ListView",
@@ -127,7 +132,7 @@ export default {
     EditLink,
     EditNewModal,
     AddNewLink,
-    AddModal,
+    AddNewModal,
   },
   props: {
     guid: {
@@ -143,7 +148,7 @@ export default {
       required: true,
     },
     childrensTitle: {
-      type: String,
+      type: FieldValue,
       required: false,
     },
     childrensDataType: {
@@ -171,10 +176,10 @@ export default {
       this.$nextTick(() => {
         let data = new Component(
           crypto.randomUUID(),
-          this.getChildrensType(),
-          contract
+          this.getChildrensType,
+          new FieldValue(contract)
         );
-        data.childrensTitle = this.title;
+        //data.childrensTitle = this.getModalTitle();
         this.company.childrens.push(data);
         this.cancel();
         this.$emit("reload");

@@ -33,7 +33,7 @@
       title="Añadir Red Social"
       ok-title="Guardar"
       @ok="add(socialmedia)"
-      @ok-prevent="socialmedia.name == ''"
+      @ok-prevent="socialmedia.name.value == ''"
     >
       <label>Tipo</label>
       <b-form-select :options="types" v-model="socialmedia.type" /> <br />
@@ -46,7 +46,7 @@
             ? 'Id infojobs'
             : 'Id github'
         "
-        :value="socialmedia.name"
+        :value="socialmedia.name.value"
       /><br />
     </b-modal>
     <br />
