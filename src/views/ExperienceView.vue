@@ -48,6 +48,14 @@
       v-model="input.finishDate.value"
       min="2015-01-01"
       max="2030-12-31"
+    /><br />
+    <!--childrensTitle-->
+    <label>Título:</label>
+    <b-form-textarea
+      placeholder="childrensTitle"
+      v-model="input.childrensTitle"
+      rows="3"
+      max-rows="5"
     />
   </ul>
 </template>

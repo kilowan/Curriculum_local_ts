@@ -4,11 +4,14 @@
     <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
     <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
   </li>
-  <li v-else>
-    <!--name-->
-    <input type="text" placeholder="name" v-model="input.name.field" />
-    <input type="text" placeholder="name" v-model="input.name.value" />
-  </li>
+  <!--name-->
+  <b-form-textarea
+    v-else
+    placeholder="name"
+    v-model="input.name"
+    rows="3"
+    max-rows="5"
+  />
 </template>
 
 <script lang="ts">

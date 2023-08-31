@@ -15,8 +15,8 @@
   </ul>
   <ul v-else>
     <!--name-->
-    <input type="text" placeholder="name" v-model="input.name.field" />
-    <input type="text" placeholder="name" v-model="input.name.value" />
+    <label>Name:</label>
+    <input type="text" placeholder="name" v-model="input.name" />
     <!--place-->
     <input type="text" placeholder="place" v-model="input.place.field" />
     <input type="text" placeholder="place" v-model="input.place.value" />

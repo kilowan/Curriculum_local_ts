@@ -76,7 +76,7 @@
       <AddNewModal
         :guid="input.guid"
         :modalTitle="input.name"
-        :componentDataType="input.childrensDataType"
+        :childrensDataType="input.childrensDataType"
         @save="save($event)"
       />
     </dd>

@@ -9,8 +9,8 @@
   </ul>
   <ul v-else>
     <!--name-->
-    <input type="text" placeholder="name" v-model="input.name.field" />
-    <input type="text" placeholder="name" v-model="input.name.value" />
+    <label>Name:</label>
+    <input type="text" placeholder="name" v-model="input.name" /><br />
     <!--level-->
     <input type="text" placeholder="level" v-model="input.level.field" />
     <input type="text" placeholder="level" v-model="input.level.value" />

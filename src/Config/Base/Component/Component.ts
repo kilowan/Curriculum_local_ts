@@ -18,5 +18,4 @@ export class Component implements IComponent {
   type?: number;
   childrens: Array<Component>;
   childrensDataType: ComponentType;
-  componentDataType?: string;
 }

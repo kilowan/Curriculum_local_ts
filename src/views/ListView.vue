@@ -31,7 +31,11 @@
               @reload="$emit('reload')"
             />
           </li>
-          <edit-modal :modalTitle="getModalTitle" :componentData="element" />
+          <edit-new-modal 
+            :modalTitle="getModalTitle" 
+            :componentData="element" 
+            :childrensDataType="element.childrensDataType" 
+          />
           <delete-modal
             :modalTitle="getModalTitle"
             :message="deleteModalMessage"
@@ -50,7 +54,7 @@
     <AddModal
       :guid="guid"
       :modalTitle="getModalTitle"
-      :componentDataType="childrensDataType"
+      :childrensDataType="childrensDataType"
       :parentComponent="parentComponent"
       @save="save($event)"
     />
@@ -81,7 +85,7 @@
           @reload="$emit('reload')"
         />
       </li>
-      <edit-modal :modalTitle="getModalTitle" :componentData="element" :childrensDataType="element.childrensDataType" />
+      <edit-new-modal :modalTitle="getModalTitle" :componentData="element" :childrensDataType="element.childrensDataType" />
       <delete-modal
         :modalTitle="getModalTitle"
         :message="deleteModalMessage"
@@ -98,7 +102,7 @@
     <AddModal
       :guid="guid"
       :modalTitle="getModalTitle"
-      :componentDataType="childrensDataType"
+      :childrensDataType="childrensDataType"
       :parentComponent="parentComponent"
       @save="save($event)"
     />
@@ -109,7 +113,7 @@
 import DeleteModal from "./Modal/DeleteModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
-import EditModal from "./Modal/EditModal.vue";
+import EditNewModal from "./Modal/EditNewModal.vue";
 import AddModal from "./Modal/AddModal.vue";
 import AddNewLink from "@/components/AddNewLink.vue";
 import { Component } from "@/Config/Base/Component/Component";
@@ -121,7 +125,7 @@ export default {
     DeleteModal,
     DeleteLink,
     EditLink,
-    EditModal,
+    EditNewModal,
     AddNewLink,
     AddModal,
   },

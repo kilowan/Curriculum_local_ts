@@ -14,24 +14,36 @@
     />
     <!--Experience Fields-->
     <experience-view
-      v-if="childrensDataType === 1"
+      v-else-if="childrensDataType === 1"
       :input="componentData"
       :iconsHidden="false"
       :edit="true"
     />
     <!--Training Fields-->
     <training-view
-      v-if="childrensDataType === 2"
+      v-else-if="childrensDataType === 2"
       :input="componentData"
       :iconsHidden="false"
       :edit="true"
     />
     <!--Other Fields-->
     <other-view
-      v-if="childrensDataType === 5"
+      v-else-if="childrensDataType === 5"
       :input="componentData"
       :iconsHidden="false"
       :edit="true"
+    />
+    <project-view
+      v-else-if="childrensDataType === 9"
+      :input="componentData"
+      :iconsHidden="false"
+      :edit="true"
+    />
+    <b-form-textarea
+      v-else
+      v-model="componentData.name"
+      rows="6"
+      max-rows="16"
     />
   </b-modal>
 </template>
@@ -42,6 +54,7 @@ import LanguageView from "../LanguageView.vue";
 import ExperienceView from "../ExperienceView.vue";
 import TrainingView from "../TrainingView.vue";
 import OtherView from "../OtherView.vue";
+import ProjectView from "../ProjectView.vue";
 export default {
   name: "EditNewModal",
   components: {
@@ -49,7 +62,8 @@ export default {
     ExperienceView,
     TrainingView,
     OtherView,
-  },
+    ProjectView
+},
   props: {
     componentData: {
       type: Component,
