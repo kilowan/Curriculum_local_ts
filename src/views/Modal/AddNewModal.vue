@@ -105,11 +105,7 @@ export default {
     },
     save(): void {
       this.$nextTick(() => {
-        let component = new Component(
-          crypto.randomUUID(),
-          this.getChildrensType(),
-          this.name
-        );
+        let component = {} as Component;
         switch (this.childrensDataType) {
           case ComponentType.Experience:
             component = this.createExperience();
@@ -124,6 +120,7 @@ export default {
             break;
 
           default:
+          component = this.createComponent();
             break;
         }
 
@@ -136,7 +133,7 @@ export default {
     createExperience(): Experience {
       let exp = new Experience(
         crypto.randomUUID(),
-        this.name,
+        new FieldValue(this.name.value),
         this.getChildrensType()
       );
       exp.childrensTitle = this.childrensTitle;
@@ -148,7 +145,7 @@ export default {
     createTraining(): Training {
       let exp = new Training(
         crypto.randomUUID(),
-        this.name,
+        new FieldValue(this.name.value),
         this.getChildrensType()
       );
       exp.place = this.place;
@@ -158,6 +155,13 @@ export default {
     },
     createLanguage(): Language {
       return new Language(crypto.randomUUID(), this.name, this.level);
+    },
+    createComponent(): Component {
+      return new Component(
+        crypto.randomUUID(), 
+        this.getChildrensType(), 
+        new FieldValue(this.name.value
+      ));
     },
     getTitle(): string {
       switch (this.childrensDataType) {
