@@ -5,78 +5,51 @@
     :title="`Editar ${modalTitle}`"
     ok-title="Guardar"
   >
-    <KeyValue
-      v-if="componentData.name != undefined"
-      :type="1"
-      :field="'Nombre'"
-      :value="componentData.name"
+    <!--Language Fields-->
+    <Language-view
+      v-if="childrensDataType === 4"
+      :input="componentData"
+      :iconsHidden="false"
+      :edit="true"
     />
-    <input
-      v-if="componentData.level != undefined"
-      type="text"
-      v-model="componentData.level.field"
+    <!--Experience Fields-->
+    <experience-view
+      v-if="childrensDataType === 1"
+      :input="componentData"
+      :iconsHidden="false"
+      :edit="true"
     />
-    <input
-      v-if="componentData.level != undefined"
-      type="text"
-      v-model="componentData.level.value"
+    <!--Training Fields-->
+    <training-view
+      v-if="childrensDataType === 2"
+      :input="componentData"
+      :iconsHidden="false"
+      :edit="true"
     />
-    <input
-      v-if="componentData.place != undefined"
-      type="text"
-      v-model="componentData.place.field"
-    />
-    <input
-      v-if="componentData.place != undefined"
-      type="text"
-      v-model="componentData.place.value"
-    />
-    <input
-      v-if="componentData.initDate != undefined"
-      type="text"
-      v-model="componentData.initDate.field"
-    />
-    <input
-      v-if="componentData.initDate != undefined"
-      type="date"
-      v-model="componentData.initDate.value"
-      min="2015-01-01"
-      max="2030-12-31"
-    />
-    <input
-      v-if="componentData.finishDate != undefined"
-      type="text"
-      v-model="componentData.finishDate.field"
-    />
-    <input
-      v-if="componentData.finishDate != undefined"
-      type="date"
-      v-model="componentData.finishDate.value"
-      min="2015-01-01"
-      max="2030-12-31"
-    />
-    <input
-      v-if="componentData.graduationDate != undefined"
-      type="text"
-      v-model="componentData.graduationDate.field"
-    />
-    <input
-      v-if="componentData.graduationDate != undefined"
-      type="date"
-      v-model="componentData.graduationDate.value"
-      min="2015-01-01"
-      max="2030-12-31"
+    <!--Other Fields-->
+    <other-view
+      v-if="childrensDataType === 5"
+      :input="componentData"
+      :iconsHidden="false"
+      :edit="true"
     />
   </b-modal>
 </template>
 
 <script lang="ts">
 import { Component } from "@/Config/Base/Component/Component";
-import { SocialMediaType } from "@/Config/Base/Enums";
-import { Option } from "@/Config/Base/Option";
-import KeyValue from "@/components/KeyValue.vue";
+import LanguageView from "../LanguageView.vue";
+import ExperienceView from "../ExperienceView.vue";
+import TrainingView from "../TrainingView.vue";
+import OtherView from "../OtherView.vue";
 export default {
   name: "EditNewModal",
+  components: {
+    LanguageView,
+    ExperienceView,
+    TrainingView,
+    OtherView,
+  },
   props: {
     componentData: {
       type: Component,
@@ -86,16 +59,13 @@ export default {
       type: String,
       required: true,
     },
+    childrensDataType: {
+      type: Number,
+      required: true,
+    },
   },
   data(): any {
-    return {
-      types: [
-        new Option(SocialMediaType.Linkedin, "Linkedin", false),
-        new Option(SocialMediaType.Infojobs, "Infojobs", false),
-        new Option(SocialMediaType.GitHub, "GitHub", false),
-      ],
-    };
+    return {};
   },
-  components: { KeyValue },
 };
 </script>
