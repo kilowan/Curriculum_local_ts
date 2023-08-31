@@ -20,7 +20,6 @@
             />
             <list-view
               v-show="!hide"
-              v-if="element && element.childrens.length > 0"
               :guid="element.guid"
               :key="element.guid"
               :elements="element.childrens"
@@ -56,7 +55,7 @@
       :modalTitle="getModalTitle"
       :childrensDataType="childrensDataType"
       :parentComponent="parentComponent"
-      @save="save($event)"
+      @save="$emit('reload')"
     />
   </ul>
   <ul v-else>
@@ -108,7 +107,7 @@
       :modalTitle="getModalTitle"
       :childrensDataType="childrensDataType"
       :parentComponent="parentComponent"
-      @save="save($event)"
+      @save="$emit('reload')"
     />
   </ul>
 </template>
@@ -171,19 +170,6 @@ export default {
     splice(element: Component): void {
       this.elements.splice(this.elements.indexOf(element), 1);
       this.$emit("reload");
-    },
-    save(contract: string): void {
-      this.$nextTick(() => {
-        let data = new Component(
-          crypto.randomUUID(),
-          this.getChildrensType,
-          new FieldValue(contract)
-        );
-        //data.childrensTitle = this.getModalTitle();
-        this.company.childrens.push(data);
-        this.cancel();
-        this.$emit("reload");
-      });
     },
   },
   computed: {
