@@ -1,60 +1,17 @@
 <template>
   <div v-if="mounted" id="page-wrap" class="main">
-    <div v-if="!active" id="contact-info" class="vcard">
-      <h1 class="fn">
-        <input
-          type="text"
-          v-model="curriculum.fullName.value"
-          :placeholder="curriculum.fullName.field"
-        />
-      </h1>
-      <div>
-        <b-icon icon="telephone-fill" aria-hidden="true" />
-        <input
-          type="text"
-          v-model="curriculum.phoneNumber.value"
-          :placeholder="curriculum.phoneNumber.field"
-        /><br />
-      </div>
-      <b-icon icon="envelope" aria-hidden="true" />
-      <input
-        type="text"
-        v-model="curriculum.email.value"
-        :placeholder="curriculum.email.field"
-      />
-    </div>
-    <div v-else id="contact-info" class="vcard">
-      <h1 class="fn">{{ curriculum.fullName.value }}</h1>
-      <div>
-        <b-icon icon="telephone-fill" aria-hidden="true" />
-        <span>{{ curriculum.phoneNumber.value }}</span
-        ><br />
-      </div>
-      <div>
-        <b-icon icon="envelope" aria-hidden="true" />
-        <a :href="'mailto:' + curriculum.email.value">{{
-          curriculum.email.value
-        }}</a
-        ><br />
-      </div>
-    </div>
-    <social-media-list-view
-      v-if="curriculum.socialMedia"
-      :input="curriculum.socialMedia"
-      :iconsHidden="active"
+    <personal-data-view 
+      :fullName="curriculum.fullName"
+      :phoneNumber="curriculum.phoneNumber"
+      :email="curriculum.email"
+      :socialMedia="curriculum.socialMedia"
+      :description="curriculum.description"
+      :active="active"
       @update="updateSocialMedia($event)"
     />
-    <div id="objective">
-      <textarea
-        v-if="!active"
-        v-model="curriculum.description.value"
-        :placeholder="curriculum.description.field"
-      />
-      <p v-else>{{ curriculum.description.value }}</p>
-    </div>
-    <div class="clear"></div>
-    <dl></dl>
+    <br/>
     <dd class="clear"></dd>
+    <br/>
     <dl>
       <module-view
         v-if="curriculum.experience"
@@ -107,7 +64,6 @@
 <script lang="ts">
 //import jsPDF from 'jspdf';
 //declare const html2canvas: (element: HTMLElement, options?: Partial<Options>) => Promise<HTMLCanvasElement>;
-import SocialMediaListView from "./SocialMedia/SocialMediaListView.vue";
 import FileReaderData from "../components/FileReaderData.vue";
 import ModuleView from "./ModuleView.vue";
 import { CurriculumDetail } from "@/Config/CurriculumDetail/CurriculumDetail";
@@ -118,13 +74,14 @@ import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 import { Training } from "@/Config/Training/Training";
 import { Language } from "@/Config/Language/Language";
 import { Experience } from "@/Config/Experience/Experience";
+import PersonalDataView from "./PersonalDataView.vue";
 
 export default {
   name: "CurriculumView",
   components: {
-    SocialMediaListView,
     FileReaderData,
     ModuleView,
+    PersonalDataView,
   },
   data(): any {
     return {
