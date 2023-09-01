@@ -75,6 +75,7 @@ import { Training } from "@/Config/Training/Training";
 import { Language } from "@/Config/Language/Language";
 import { Experience } from "@/Config/Experience/Experience";
 import PersonalDataView from "./PersonalDataView.vue";
+import { SocialMedia } from "@/Config/SocialMedia/SocialMedia";
 
 export default {
   name: "CurriculumView",
@@ -169,9 +170,9 @@ export default {
       if (input.otherData != null) this.ParseModule(input.otherData);
       if (input.skillList != null) this.ParseModule(input.skillList);
       if (input.socialMedia != null)
-        input.socialMedia.forEach((element: Component) =>
-          this.ParseComponent(element)
-        );
+        input.socialMedia.forEach((element: SocialMedia) => {
+          if (element.guid == undefined) element.guid = crypto.randomUUID();
+        });
     },
     ParseComponent(input: Component): void {
       if (input.guid == undefined) input.guid = crypto.randomUUID();
