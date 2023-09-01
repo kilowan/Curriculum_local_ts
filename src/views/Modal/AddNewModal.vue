@@ -6,9 +6,17 @@
     @ok="save"
     @cancel="cancel"
   >
+    <!--Skills Fields-->
+    <skills-view
+      v-if="childrensDataType === 3"
+      :name="name"
+      :childrensTitle="childrensTitle"
+      :iconsHidden="false"
+      :edit="true"
+    />
     <!--social media Fields-->
     <social-media-view
-      v-if="childrensDataType === 13"
+      v-else-if="childrensDataType === 13"
       :name="name"
       :type="type"
       :edit="true"
@@ -66,6 +74,7 @@ import ExperienceView from "../ExperienceView.vue";
 import TrainingView from "../TrainingView.vue";
 import OtherView from "../OtherView.vue";
 import SocialMediaView from "../SocialMedia/SocialMediaView.vue";
+import SkillsView from "../SkillsView.vue";
 
 export default {
   name: "AddNewModal",
@@ -75,6 +84,7 @@ export default {
     TrainingView,
     OtherView,
     SocialMediaView,
+    SkillsView,
   },
   props: {
     guid: {
@@ -135,6 +145,10 @@ export default {
             component = this.createMedia();
             break;
 
+          case ComponentType.Skills:
+            component = this.createSkill();
+            break;
+
           default:
             component = this.createComponent();
             break;
@@ -168,6 +182,15 @@ export default {
       exp.childrensTitle = this.childrensTitle;
       exp.graduationDate = this.graduationDate;
       return exp;
+    },
+    createSkill(): Component {
+      let skill = new Component(
+        crypto.randomUUID(), 
+        this.getChildrensType(), 
+        this.name
+      );
+      skill.childrensTitle = this.childrensTitle;
+      return skill;
     },
     createLanguage(): Language {
       return new Language(crypto.randomUUID(), this.name, this.level);
@@ -210,6 +233,9 @@ export default {
 
         case ComponentType.Other:
           return "Añadir Otros Datos";
+
+          case ComponentType.Skills:
+          return "Añadir skill";
 
         case ComponentType.SocialMedia:
           return "Añadir red social";

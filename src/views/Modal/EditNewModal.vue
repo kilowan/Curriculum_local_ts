@@ -5,9 +5,17 @@
     :title="`Editar ${modalTitle}`"
     ok-title="Guardar"
   >
-    <!--social media Fields-->
+    <!--Skills Fields-->
+    <skills-view
+      v-if="childrensDataType === 3"
+      :name="componentData.name"
+      :childrensTitle="componentData.childrensTitle"
+      :iconsHidden="false"
+      :edit="true"
+    />
+  <!--social media Fields-->
     <social-media-view
-      v-if="childrensDataType === 13"
+      v-else-if="childrensDataType === 13"
       :name="componentData.name"
       :type="componentData.type"
       :edit="true"
@@ -72,6 +80,7 @@ import TrainingView from "../TrainingView.vue";
 import OtherView from "../OtherView.vue";
 import ProjectView from "../ProjectView.vue";
 import SocialMediaView from "../SocialMedia/SocialMediaView.vue";
+import SkillsView from "../SkillsView.vue";
 export default {
   name: "EditNewModal",
   components: {
@@ -81,6 +90,7 @@ export default {
     OtherView,
     ProjectView,
     SocialMediaView,
+    SkillsView,
   },
   props: {
     componentData: {
