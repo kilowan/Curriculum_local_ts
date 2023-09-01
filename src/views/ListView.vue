@@ -29,16 +29,16 @@
             @reload="$emit('reload')"
           />
           <EditNewModal
-          :modalTitle="getModalTitle"
-          :componentData="element"
-          :childrensDataType="element.childrensDataType"
-        />
-        <delete-modal
-          :modalTitle="getModalTitle"
-          :message="deleteModalMessage"
-          :componentData="element"
-          @remove="splice(element)"
-        />
+            :modalTitle="getModalTitle"
+            :componentData="element"
+            :childrensDataType="element.childrensDataType"
+          />
+          <delete-modal
+            :modalTitle="getModalTitle"
+            :message="deleteModalMessage"
+            :componentData="element"
+            @remove="splice(element)"
+          />
         </li>
       </ul>
     </li>

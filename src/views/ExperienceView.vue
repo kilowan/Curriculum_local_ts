@@ -10,7 +10,7 @@
       </li>
       <li v-if="finishDate">
         {{ finishDate.field }}:
-        {{ finishDate.value? formatDate(finishDate.value): 'Actualidad' }}
+        {{ finishDate.value ? formatDate(finishDate.value) : "Actualidad" }}
       </li>
     </ul>
   </li>
