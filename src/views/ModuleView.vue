@@ -7,6 +7,15 @@
     <dd :id="input.ddId">
       <ul>
         <div v-for="element in input.childrens" v-bind:key="element.guid">
+          <!--Skills Fields-->
+          <skills-view
+            v-if="element != undefined && input.childrensDataType == 3"
+            :name="element.name"
+            :childrensTitle="element.childrensTitle"
+            :iconsHidden="iconsHidden"
+            @edit="$bvModal.show(`edit-${element.guid}`)"
+            @delete="$bvModal.show(`delete-${element.guid}`)"
+          />
           <!--Language Fields-->
           <Language-view
             v-if="element != undefined && input.childrensDataType == 4"
@@ -106,6 +115,7 @@ import OtherView from "./OtherView.vue";
 import { Module } from "@/Config/Base/Module/Module";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
+import SkillsView from "./SkillsView.vue";
 
 export default {
   name: "ModuleView",
@@ -120,7 +130,8 @@ export default {
     TrainingView,
     ListView,
     OtherView,
-  },
+    SkillsView,
+},
   props: {
     iconsHidden: {
       type: Boolean,
