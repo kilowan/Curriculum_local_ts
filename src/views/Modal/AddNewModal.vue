@@ -185,8 +185,8 @@ export default {
     },
     createSkill(): Component {
       let skill = new Component(
-        crypto.randomUUID(), 
-        this.getChildrensType(), 
+        crypto.randomUUID(),
+        this.getChildrensType(),
         this.name
       );
       skill.childrensTitle = this.childrensTitle;
@@ -197,9 +197,9 @@ export default {
     },
     createMedia(): Component {
       let media = new Component(
-        crypto.randomUUID(), 
-        this.getChildrensType(), 
-        new FieldValue<string>(this.name.value),
+        crypto.randomUUID(),
+        this.getChildrensType(),
+        new FieldValue<string>(this.name.value)
       );
       media.type = new FieldValue<number>(this.type.value);
       return media;
@@ -234,7 +234,7 @@ export default {
         case ComponentType.Other:
           return "Añadir Otros Datos";
 
-          case ComponentType.Skills:
+        case ComponentType.Skills:
           return "Añadir skill";
 
         case ComponentType.SocialMedia:

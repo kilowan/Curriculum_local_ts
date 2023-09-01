@@ -1,19 +1,17 @@
 <template>
-  <ul v-if="!edit">
-    <li>
-      <strong>{{ name.value }}</strong>
-      <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
-      <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
-      <ul>
-        <li>{{ place.field }}: {{ place.value }}</li>
-        <li v-if="graduationDate">
-          {{ graduationDate.field }}:
-          {{ formatDate(graduationDate.value) }}
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <ul v-else>
+  <li v-if="!edit">
+    <strong>{{ name.value }}</strong>
+    <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
+    <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
+    <ul>
+      <li>{{ place.field }}: {{ place.value }}</li>
+      <li v-if="graduationDate">
+        {{ graduationDate.field }}:
+        {{ formatDate(graduationDate.value) }}
+      </li>
+    </ul>
+  </li>
+  <div v-else>
     <!--name-->
     <label>Name:</label>
     <input type="text" placeholder="name" v-model="name.value" /><br />
@@ -40,7 +38,7 @@
       rows="3"
       max-rows="5"
     />
-  </ul>
+  </div>
 </template>
 
 <script lang="ts">

@@ -17,9 +17,9 @@
         v-show="!iconsHidden"
         @click="$bvModal.show(`delete-${socialMediaData.guid}`)"
       />
-      <edit-new-modal 
-        :modalTitle="'red social'" 
-        :componentData="socialMediaData" 
+      <edit-new-modal
+        :modalTitle="'red social'"
+        :componentData="socialMediaData"
         :childrensDataType="13"
       />
       <delete-modal

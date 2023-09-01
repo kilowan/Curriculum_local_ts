@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!edit">
+  <li v-if="!edit">
     <strong class="m-2">{{ name.value }}:</strong>
     <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
     <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
-  </div>
+  </li>
   <div v-else>
     <!--name-->
     <label>Name:</label>

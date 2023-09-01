@@ -18,11 +18,7 @@
       /><br />
       <!--email-->
       <b-icon icon="envelope" aria-hidden="true" />
-      <input
-        type="text"
-        v-model="email.value"
-        :placeholder="email.field"
-      />
+      <input type="text" v-model="email.value" :placeholder="email.field" />
     </div>
     <div v-else>
       <h1 class="fn">{{ fullName.value }}</h1>
@@ -33,7 +29,8 @@
       </div>
       <div>
         <b-icon icon="envelope" aria-hidden="true" />
-        <a :href="`mailto:${email.value}`">{{ email.value }}</a><br />
+        <a :href="`mailto:${email.value}`">{{ email.value }}</a
+        ><br />
       </div>
     </div>
     <!--social media-->
@@ -46,12 +43,12 @@
     <!--description-->
     <div id="objective">
       <b-form-textarea
-      v-if="!active"
-      :placeholder="description.field? description.field: 'Description'"
-      v-model="description.value"
-      rows="3"
-      max-rows="5"
-    />
+        v-if="!active"
+        :placeholder="description.field ? description.field : 'Description'"
+        v-model="description.value"
+        rows="3"
+        max-rows="5"
+      />
       <p v-else>{{ description.value }}</p>
     </div>
   </div>

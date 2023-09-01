@@ -5,85 +5,83 @@
       <HideLink v-if="!iconsHidden" @click="hide = true" />
     </dt>
     <dd :id="input.ddId">
-      <ul>
-        <div v-for="element in input.childrens" v-bind:key="element.guid">
-          <!--Skills Fields-->
-          <skills-view
-            v-if="element != undefined && input.childrensDataType == 3"
-            :name="element.name"
-            :childrensTitle="element.childrensTitle"
-            :iconsHidden="iconsHidden"
-            @edit="$bvModal.show(`edit-${element.guid}`)"
-            @delete="$bvModal.show(`delete-${element.guid}`)"
-          />
-          <!--Language Fields-->
-          <Language-view
-            v-if="element != undefined && input.childrensDataType == 4"
-            :name="element.name"
-            :level="element.level"
-            :iconsHidden="iconsHidden"
-            @edit="$bvModal.show(`edit-${element.guid}`)"
-            @delete="$bvModal.show(`delete-${element.guid}`)"
-          />
-          <!--Experience Fields-->
-          <experience-view
-            v-if="element != undefined && input.childrensDataType == 1"
-            :name="element.name"
-            :place="element.place"
-            :initDate="element.initDate"
-            :finishDate="element.finishDate"
-            :childrensTitle="element.childrensTitle"
-            :iconsHidden="iconsHidden"
-            @edit="$bvModal.show(`edit-${element.guid}`)"
-            @delete="$bvModal.show(`delete-${element.guid}`)"
-          />
-          <!--Training Fields-->
-          <training-view
-            v-if="element != undefined && input.childrensDataType == 2"
-            :name="element.name"
-            :place="element.place"
-            :graduationDate="element.graduationDate"
-            :childrensTitle="element.childrensTitle"
-            :iconsHidden="iconsHidden"
-            @edit="$bvModal.show(`edit-${element.guid}`)"
-            @delete="$bvModal.show(`delete-${element.guid}`)"
-          />
-          <!--Other Fields-->
-          <other-view
-            v-if="element != undefined && input.childrensDataType == 5"
-            :name="element.name"
-            :iconsHidden="iconsHidden"
-            @edit="$bvModal.show(`edit-${element.guid}`)"
-            @delete="$bvModal.show(`delete-${element.guid}`)"
-          />
-          <list-view
-            v-if="
-              element != undefined &&
-              (input.childrensDataType == 1 ||
-                input.childrensDataType == 2 ||
-                input.childrensDataType == 3)
-            "
-            :key="element.guid"
-            :childrensTitle="element.childrensTitle"
-            :guid="element.guid"
-            :elements="element.childrens"
-            :iconsHidden="iconsHidden"
-            :parentComponent="element"
-            :childrensDataType="element.childrensDataType"
-            @reload="$emit('update', input)"
-          />
-          <EditNewModal
-            :modalTitle="input.name"
-            :componentData="element"
-            :childrensDataType="input.childrensDataType"
-          />
-          <DeleteModal
-            :modalTitle="input.name"
-            :message="deleteModalMessage"
-            :componentData="element"
-            @remove="splice($event)"
-          />
-        </div>
+      <ul v-for="element in input.childrens" v-bind:key="element.guid">
+        <!--Skills Fields-->
+        <skills-view
+          v-if="element != undefined && input.childrensDataType == 3"
+          :name="element.name"
+          :childrensTitle="element.childrensTitle"
+          :iconsHidden="iconsHidden"
+          @edit="$bvModal.show(`edit-${element.guid}`)"
+          @delete="$bvModal.show(`delete-${element.guid}`)"
+        />
+        <!--Language Fields-->
+        <Language-view
+          v-if="element != undefined && input.childrensDataType == 4"
+          :name="element.name"
+          :level="element.level"
+          :iconsHidden="iconsHidden"
+          @edit="$bvModal.show(`edit-${element.guid}`)"
+          @delete="$bvModal.show(`delete-${element.guid}`)"
+        />
+        <!--Experience Fields-->
+        <experience-view
+          v-if="element != undefined && input.childrensDataType == 1"
+          :name="element.name"
+          :place="element.place"
+          :initDate="element.initDate"
+          :finishDate="element.finishDate"
+          :childrensTitle="element.childrensTitle"
+          :iconsHidden="iconsHidden"
+          @edit="$bvModal.show(`edit-${element.guid}`)"
+          @delete="$bvModal.show(`delete-${element.guid}`)"
+        />
+        <!--Training Fields-->
+        <training-view
+          v-if="element != undefined && input.childrensDataType == 2"
+          :name="element.name"
+          :place="element.place"
+          :graduationDate="element.graduationDate"
+          :childrensTitle="element.childrensTitle"
+          :iconsHidden="iconsHidden"
+          @edit="$bvModal.show(`edit-${element.guid}`)"
+          @delete="$bvModal.show(`delete-${element.guid}`)"
+        />
+        <!--Other Fields-->
+        <other-view
+          v-if="element != undefined && input.childrensDataType == 5"
+          :name="element.name"
+          :iconsHidden="iconsHidden"
+          @edit="$bvModal.show(`edit-${element.guid}`)"
+          @delete="$bvModal.show(`delete-${element.guid}`)"
+        />
+        <list-view
+          v-if="
+            element != undefined &&
+            (input.childrensDataType == 1 ||
+              input.childrensDataType == 2 ||
+              input.childrensDataType == 3)
+          "
+          :key="element.guid"
+          :childrensTitle="element.childrensTitle"
+          :guid="element.guid"
+          :elements="element.childrens"
+          :iconsHidden="iconsHidden"
+          :parentComponent="element"
+          :childrensDataType="element.childrensDataType"
+          @reload="$emit('update', input)"
+        />
+        <EditNewModal
+          :modalTitle="input.name"
+          :componentData="element"
+          :childrensDataType="input.childrensDataType"
+        />
+        <DeleteModal
+          :modalTitle="input.name"
+          :message="deleteModalMessage"
+          :componentData="element"
+          @remove="splice($event)"
+        />
       </ul>
       <AddNewLink
         v-if="!iconsHidden"
@@ -131,7 +129,7 @@ export default {
     ListView,
     OtherView,
     SkillsView,
-},
+  },
   props: {
     iconsHidden: {
       type: Boolean,

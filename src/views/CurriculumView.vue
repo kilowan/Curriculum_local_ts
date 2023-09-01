@@ -1,6 +1,6 @@
 <template>
   <div v-if="mounted" id="page-wrap" class="main">
-    <personal-data-view 
+    <personal-data-view
       :fullName="curriculum.fullName"
       :phoneNumber="curriculum.phoneNumber"
       :email="curriculum.email"
@@ -9,9 +9,9 @@
       :active="active"
       @update="updateSocialMedia($event)"
     />
-    <br/>
+    <br />
     <dd class="clear"></dd>
-    <br/>
+    <br />
     <dl>
       <module-view
         v-if="curriculum.experience"
