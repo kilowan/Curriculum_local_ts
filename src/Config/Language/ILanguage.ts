@@ -1,6 +1,6 @@
 import { IElement } from "../Base/Element/IElement";
 import { FieldValue } from "../Base/FieldValue/FieldValue";
 export interface ILanguage extends IElement {
-  name: FieldValue;
-  level: FieldValue;
+  name: FieldValue<string>;
+  level: FieldValue<string>;
 }

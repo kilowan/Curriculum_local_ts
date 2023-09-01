@@ -5,7 +5,7 @@ import { ComponentType } from "../Base/Enums";
 export class Experience implements IExperience {
   constructor(
     guid: string,
-    name: FieldValue,
+    name: FieldValue<string>,
     childrensDataType: ComponentType
   ) {
     this.guid = guid;
@@ -14,11 +14,11 @@ export class Experience implements IExperience {
     this.childrens = new Array<Component>();
   }
   guid: string;
-  name: FieldValue;
-  place?: FieldValue;
-  initDate?: FieldValue;
-  finishDate?: FieldValue;
-  childrensTitle?: FieldValue;
+  name: FieldValue<string>;
+  place?: FieldValue<string>;
+  initDate?: FieldValue<string>;
+  finishDate?: FieldValue<string>;
+  childrensTitle?: FieldValue<string>;
   childrensDataType: ComponentType;
   childrens: Array<Component>;
 }

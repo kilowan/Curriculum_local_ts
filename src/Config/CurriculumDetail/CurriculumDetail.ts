@@ -8,10 +8,10 @@ import { Training } from "../Training/Training";
 export class CurriculumDetail implements ICurriculumDetail {
   constructor(
     guid: string,
-    fullName: FieldValue,
-    description: FieldValue,
-    phoneNumber: FieldValue,
-    email: FieldValue,
+    fullName: FieldValue<string>,
+    description: FieldValue<string>,
+    phoneNumber: FieldValue<string>,
+    email: FieldValue<string>,
     experience: Module<Experience>,
     language: Module<Language>,
     training: Module<Training>,
@@ -31,10 +31,10 @@ export class CurriculumDetail implements ICurriculumDetail {
   }
 
   guid: string;
-  fullName: FieldValue;
-  description: FieldValue;
-  phoneNumber: FieldValue;
-  email: FieldValue;
+  fullName: FieldValue<string>;
+  description: FieldValue<string>;
+  phoneNumber: FieldValue<string>;
+  email: FieldValue<string>;
   experience: Module<Experience>;
   skillList: Module<Component>;
   academicTraining: Module<Training>;

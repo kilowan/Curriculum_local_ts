@@ -134,10 +134,10 @@ export default {
       mounted: false,
       curriculum: new CurriculumDetail(
         crypto.randomUUID(),
-        new FieldValue("", "Nombre completo"), //fullName
-        new FieldValue("", "Descripción"), //description
-        new FieldValue("", "Teléfono"), //phoneNumber
-        new FieldValue("", "Email"), //email
+        new FieldValue<string>("", "Nombre completo"), //fullName
+        new FieldValue<string>("", "Descripción"), //description
+        new FieldValue<string>("", "Teléfono"), //phoneNumber
+        new FieldValue<string>("", "Email"), //email
         new Module<Experience>(
           crypto.randomUUID(),
           "experience",

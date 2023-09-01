@@ -5,7 +5,7 @@ import { ComponentType } from "../Base/Enums";
 export class Training implements ITraining {
   constructor(
     guid: string,
-    name: FieldValue,
+    name: FieldValue<string>,
     childrensDataType: ComponentType
   ) {
     this.guid = guid;
@@ -14,10 +14,10 @@ export class Training implements ITraining {
     this.childrens = new Array<Component>();
   }
   guid: string;
-  name: FieldValue;
-  place?: FieldValue;
-  graduationDate?: FieldValue;
-  childrensTitle?: FieldValue;
+  name: FieldValue<string>;
+  place?: FieldValue<string>;
+  graduationDate?: FieldValue<string>;
+  childrensTitle?: FieldValue<string>;
   childrens?: Array<Component>;
   childrensDataType: ComponentType;
 }

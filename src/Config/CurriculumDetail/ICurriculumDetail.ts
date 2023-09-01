@@ -6,10 +6,10 @@ import { Experience } from "../Experience/Experience";
 import { Training } from "../Training/Training";
 import { Language } from "../Language/Language";
 export interface ICurriculumDetail extends IElement {
-  fullName?: FieldValue;
-  description: FieldValue;
-  phoneNumber: FieldValue;
-  email: FieldValue;
+  fullName?: FieldValue<string>;
+  description: FieldValue<string>;
+  phoneNumber: FieldValue<string>;
+  email: FieldValue<string>;
   experience: Module<Experience>;
   skillList: Module<Component>;
   academicTraining: Module<Training>;
