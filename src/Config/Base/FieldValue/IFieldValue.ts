@@ -1,4 +1,4 @@
-export interface IFieldValue {
+export interface IFieldValue<T> {
   field?: string;
-  value: string;
+  value: T;
 }

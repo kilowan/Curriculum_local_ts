@@ -5,16 +5,23 @@
       v-bind:key="socialMediaData.guid"
       class="d-flex"
     >
-      <social-media-view :input="socialMediaData" />
-      <EditLink
+      <social-media-view
+        :name="socialMediaData.name"
+        :type="socialMediaData.type"
+      />
+      <edit-link
         v-show="!iconsHidden"
         @click="$bvModal.show(`edit-${socialMediaData.guid}`)"
       />
-      <DeleteLink
+      <delete-link
         v-show="!iconsHidden"
         @click="$bvModal.show(`delete-${socialMediaData.guid}`)"
       />
-      <edit-modal :modalTitle="'red social'" :componentData="socialMediaData" />
+      <edit-new-modal 
+        :modalTitle="'red social'" 
+        :componentData="socialMediaData" 
+        :childrensDataType="13"
+      />
       <delete-modal
         :modal-title="'Red social'"
         :message="'la red social'"
@@ -22,30 +29,18 @@
         @remove="splice(socialMediaData)"
       />
     </div>
-    <AddLink
+    <add-new-link
       v-show="!iconsHidden"
       :hidden="count === 0"
-      :text="'Red social'"
-      @click="$bvModal.show('add-social-media')"
+      :type="13"
+      @click="$bvModal.show(`add-${guid}`)"
     />
-    <b-modal
-      :id="'add-social-media'"
-      title="Añadir Red Social"
-      ok-title="Guardar"
-      @ok="add(socialmedia)"
-      @ok-prevent="socialmedia.name.value == ''"
-    >
-      <label>Tipo</label>
-      <b-form-select :options="types" v-model="socialmedia.type" /> <br />
-      <label>{{ socialmedia.type === 1? 
-        'Id linkedin': socialmedia.type === 2? 
-        'Id infojobs': 'Id github' }}:
-      </label>
-      <input 
-        type="text" 
-        v-model="socialmedia.name" 
-      /><br />
-    </b-modal>
+    <add-new-modal
+      :guid="guid"
+      :modalTitle="'Red social'"
+      :childrensDataType="13"
+      @save="add($event)"
+    />
     <br />
   </div>
 </template>
@@ -53,8 +48,9 @@
 <script lang="ts">
 import SocialMediaView from "./SocialMediaView.vue";
 import DeleteModal from "../Modal/DeleteModal.vue";
-import EditModal from "../Modal/EditModal.vue";
-import AddLink from "@/components/AddLink.vue";
+import EditNewModal from "../Modal/EditNewModal.vue";
+import AddNewModal from "../Modal/AddNewModal.vue";
+import AddNewLink from "@/components/AddNewLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import { SocialMediaType } from "@/Config/Base/Enums";
@@ -66,10 +62,11 @@ export default {
   components: {
     SocialMediaView,
     DeleteModal,
-    AddLink,
+    AddNewLink,
     DeleteLink,
     EditLink,
-    EditModal,
+    EditNewModal,
+    AddNewModal,
   },
   props: {
     iconsHidden: {
@@ -96,7 +93,6 @@ export default {
   },
   methods: {
     add(socialMedia: Component): void {
-      socialMedia.guid = crypto.randomUUID();
       this.input.push(socialMedia);
       var type = this.types.find(
         (element: any) => element.value === socialMedia.type
@@ -105,9 +101,6 @@ export default {
       this.$emit("update", this.input);
       this.socialmedia = {} as Component;
       this.count--;
-    },
-    select(type: number) {
-      this.componentData.type = type;
     },
     splice(element: Component): void {
       let type = this.types.find(

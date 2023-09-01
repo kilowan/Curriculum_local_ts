@@ -1,11 +1,11 @@
 import { IComponent } from "./IComponent";
-import { ComponentType } from "../Enums";
+import { ComponentType, SocialMediaType } from "../Enums";
 import { FieldValue } from "../FieldValue/FieldValue";
 export class Component implements IComponent {
   constructor(
     guid: string,
     childrensDataType: ComponentType,
-    name: FieldValue
+    name: FieldValue<string>
   ) {
     this.guid = guid;
     this.name = name;
@@ -13,14 +13,14 @@ export class Component implements IComponent {
     this.childrensDataType = childrensDataType;
   }
   guid: string;
-  name: FieldValue;
+  name: FieldValue<string>;
   place?: string;
   initDate?: string;
   finishDate?: string;
   graduationDate?: string;
-  childrensTitle?: FieldValue;
+  childrensTitle?: FieldValue<string>;
   level?: string;
-  type?: number;
+  type?: FieldValue<number>;
   childrens: Array<Component>;
   childrensDataType: ComponentType;
 }

@@ -6,9 +6,17 @@
     @ok="save"
     @cancel="cancel"
   >
+    <!--social media Fields-->
+    <social-media-view
+      v-if="childrensDataType === 13"
+      :name="name"
+      :type="type"
+      :edit="true"
+      :add="true"
+    />
     <!--Language Fields-->
     <language-view
-      v-if="childrensDataType === 4"
+      v-else-if="childrensDataType === 4"
       :name="name"
       :level="level"
       :iconsHidden="false"
@@ -57,6 +65,7 @@ import LanguageView from "../LanguageView.vue";
 import ExperienceView from "../ExperienceView.vue";
 import TrainingView from "../TrainingView.vue";
 import OtherView from "../OtherView.vue";
+import SocialMediaView from "../SocialMedia/SocialMediaView.vue";
 
 export default {
   name: "AddNewModal",
@@ -65,6 +74,7 @@ export default {
     ExperienceView,
     TrainingView,
     OtherView,
+    SocialMediaView,
   },
   props: {
     guid: {
@@ -82,26 +92,28 @@ export default {
   },
   data(): any {
     return {
-      name: { field: "", value: "" } as FieldValue,
-      childrensTitle: { field: "", value: "" } as FieldValue,
-      place: { field: "", value: "" } as FieldValue,
-      initDate: { field: "", value: "" } as FieldValue,
-      finishDate: { field: "", value: "" } as FieldValue,
-      graduationDate: { field: "", value: "" } as FieldValue,
+      name: { field: "", value: "" } as FieldValue<string>,
+      childrensTitle: { field: "", value: "" } as FieldValue<string>,
+      place: { field: "", value: "" } as FieldValue<string>,
+      initDate: { field: "", value: "" } as FieldValue<string>,
+      finishDate: { field: "", value: "" } as FieldValue<string>,
+      graduationDate: { field: "", value: "" } as FieldValue<string>,
       childrens: [] as Array<Component>,
-      level: { field: "", value: "" } as FieldValue,
+      level: { field: "", value: "" } as FieldValue<string>,
+      type: { field: undefined, value: 0 } as FieldValue<number>,
     };
   },
   methods: {
     cancel(): void {
-      this.childrensTitle = { field: "", value: "" } as FieldValue;
-      this.name = { field: "", value: "" } as FieldValue;
-      this.place = { field: "", value: "" } as FieldValue;
-      this.initDate = { field: "", value: "" } as FieldValue;
-      this.finishDate = { field: "", value: "" } as FieldValue;
-      this.graduationDate = { field: "", value: "" } as FieldValue;
-      this.level = { field: "", value: "" } as FieldValue;
+      this.childrensTitle = { field: "", value: "" } as FieldValue<string>;
+      this.name = { field: "", value: "" } as FieldValue<string>;
+      this.place = { field: "", value: "" } as FieldValue<string>;
+      this.initDate = { field: "", value: "" } as FieldValue<string>;
+      this.finishDate = { field: "", value: "" } as FieldValue<string>;
+      this.graduationDate = { field: "", value: "" } as FieldValue<string>;
+      this.level = { field: "", value: "" } as FieldValue<string>;
       this.childrens = [] as Array<Component>;
+      this.type = { field: undefined, value: 0 } as FieldValue<number>;
     },
     save(): void {
       this.$nextTick(() => {
@@ -119,8 +131,12 @@ export default {
             component = this.createLanguage();
             break;
 
+          case ComponentType.SocialMedia:
+            component = this.createMedia();
+            break;
+
           default:
-          component = this.createComponent();
+            component = this.createComponent();
             break;
         }
 
@@ -133,7 +149,7 @@ export default {
     createExperience(): Experience {
       let exp = new Experience(
         crypto.randomUUID(),
-        new FieldValue(this.name.value),
+        new FieldValue<string>(this.name.value),
         this.getChildrensType()
       );
       exp.childrensTitle = this.childrensTitle;
@@ -145,7 +161,7 @@ export default {
     createTraining(): Training {
       let exp = new Training(
         crypto.randomUUID(),
-        new FieldValue(this.name.value),
+        new FieldValue<string>(this.name.value),
         this.getChildrensType()
       );
       exp.place = this.place;
@@ -156,12 +172,21 @@ export default {
     createLanguage(): Language {
       return new Language(crypto.randomUUID(), this.name, this.level);
     },
-    createComponent(): Component {
-      return new Component(
+    createMedia(): Component {
+      let media = new Component(
         crypto.randomUUID(), 
         this.getChildrensType(), 
-        new FieldValue(this.name.value
-      ));
+        new FieldValue<string>(this.name.value),
+      );
+      media.type = new FieldValue<number>(this.type.value);
+      return media;
+    },
+    createComponent(): Component {
+      return new Component(
+        crypto.randomUUID(),
+        this.getChildrensType(),
+        this.name
+      );
     },
     getTitle(): string {
       switch (this.childrensDataType) {
@@ -185,6 +210,9 @@ export default {
 
         case ComponentType.Other:
           return "Añadir Otros Datos";
+
+        case ComponentType.SocialMedia:
+          return "Añadir red social";
 
         case ComponentType.Value:
           return "Añadir Valor";
