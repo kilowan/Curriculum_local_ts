@@ -5,20 +5,20 @@
       v-if="type == 2"
       :disabled="disabled"
       :options="options"
-      v-model="value"
+      v-model="value.value"
     >
     </b-form-select>
-    <input v-if="type == 1" type="text" v-model="value" />
+    <input v-if="type == 1" type="text" v-model="value.value" />
     <input
       v-if="type == 3"
       type="date"
-      v-model="value"
+      v-model="value.value"
       min="2015-01-01"
       max="2030-12-31"
     />
     <b-form-datepicker
       v-if="type == 4"
-      v-model="value"
+      v-model="value.value"
       min="2015-01-01"
       max="2030-12-31"
     ></b-form-datepicker>
@@ -26,6 +26,8 @@
 </template>
 
 <script lang="ts">
+import { FieldValue } from '@/Config/Base/FieldValue/FieldValue';
+
 export default {
   name: "KeyValue",
   data(): any {
@@ -38,7 +40,7 @@ export default {
       required: true,
     },
     value: {
-      type: [String, Number],
+      type: FieldValue,
       required: true,
     },
     type: {

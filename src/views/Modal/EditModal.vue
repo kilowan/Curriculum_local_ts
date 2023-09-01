@@ -14,10 +14,10 @@
       :value="componentData.type"
     />
     <KeyValue
-      v-if="componentData.name.value != undefined"
+      v-if="componentData.name != undefined"
       :type="1"
       :field="modalTitle == 'red social' ? 'Url' : 'Nombre'"
-      :value="componentData.name.value"
+      :value="componentData.name"
     />
     <KeyValue
       v-if="componentData.level != undefined"
