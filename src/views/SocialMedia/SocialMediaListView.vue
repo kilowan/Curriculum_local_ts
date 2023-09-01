@@ -33,20 +33,17 @@
       title="Añadir Red Social"
       ok-title="Guardar"
       @ok="add(socialmedia)"
-      @ok-prevent="socialmedia.name == ''"
+      @ok-prevent="socialmedia.name.value == ''"
     >
       <label>Tipo</label>
       <b-form-select :options="types" v-model="socialmedia.type" /> <br />
-      <KeyValue
-        :type="1"
-        :field="
-          socialmedia.type === 1
-            ? 'Id linkedin'
-            : socialmedia.type === 2
-            ? 'Id infojobs'
-            : 'Id github'
-        "
-        :value="socialmedia.name"
+      <label>{{ socialmedia.type === 1? 
+        'Id linkedin': socialmedia.type === 2? 
+        'Id infojobs': 'Id github' }}:
+      </label>
+      <input 
+        type="text" 
+        v-model="socialmedia.name" 
       /><br />
     </b-modal>
     <br />
@@ -60,7 +57,6 @@ import EditModal from "../Modal/EditModal.vue";
 import AddLink from "@/components/AddLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
-import KeyValue from "@/components/KeyValue.vue";
 import { SocialMediaType } from "@/Config/Base/Enums";
 import { Component } from "@/Config/Base/Component/Component";
 import { Option } from "@/Config/Base/Option";
@@ -74,7 +70,6 @@ export default {
     DeleteLink,
     EditLink,
     EditModal,
-    KeyValue,
   },
   props: {
     iconsHidden: {

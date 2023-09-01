@@ -10,7 +10,8 @@
           <!--Language Fields-->
           <Language-view
             v-if="element != undefined && input.childrensDataType == 4"
-            :input="element"
+            :name="element.name"
+            :level="element.level"
             :iconsHidden="iconsHidden"
             @edit="$bvModal.show(`edit-${element.guid}`)"
             @delete="$bvModal.show(`delete-${element.guid}`)"
@@ -18,7 +19,11 @@
           <!--Experience Fields-->
           <experience-view
             v-if="element != undefined && input.childrensDataType == 1"
-            :input="element"
+            :name="element.name"
+            :place="element.place"
+            :initDate="element.initDate"
+            :finishDate="element.finishDate"
+            :childrensTitle="element.childrensTitle"
             :iconsHidden="iconsHidden"
             @edit="$bvModal.show(`edit-${element.guid}`)"
             @delete="$bvModal.show(`delete-${element.guid}`)"
@@ -26,7 +31,10 @@
           <!--Training Fields-->
           <training-view
             v-if="element != undefined && input.childrensDataType == 2"
-            :input="element"
+            :name="element.name"
+            :place="element.place"
+            :graduationDate="element.graduationDate"
+            :childrensTitle="element.childrensTitle"
             :iconsHidden="iconsHidden"
             @edit="$bvModal.show(`edit-${element.guid}`)"
             @delete="$bvModal.show(`delete-${element.guid}`)"
@@ -34,7 +42,7 @@
           <!--Other Fields-->
           <other-view
             v-if="element != undefined && input.childrensDataType == 5"
-            :input="element"
+            :name="element.name"
             :iconsHidden="iconsHidden"
             @edit="$bvModal.show(`edit-${element.guid}`)"
             @delete="$bvModal.show(`delete-${element.guid}`)"
@@ -76,7 +84,7 @@
       <AddNewModal
         :guid="input.guid"
         :modalTitle="input.name"
-        :componentDataType="input.childrensDataType"
+        :childrensDataType="input.childrensDataType"
         @save="save($event)"
       />
     </dd>

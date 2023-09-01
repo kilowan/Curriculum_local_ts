@@ -7,7 +7,8 @@
   >
     <div style="text-align: center; margin: 0 auto; width: 380px">
       <h1>
-        ¿Seguro que quieres eliminar {{ message }} {{ componentData.name }}?
+        ¿Seguro que quieres eliminar {{ message }}
+        {{ componentData.name.value }}?
       </h1>
     </div>
   </b-modal>

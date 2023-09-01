@@ -1,19 +1,17 @@
 <template>
   <ul v-if="!edit">
     <li>
-      <strong>{{ input.name }}</strong>
+      <strong>{{ name.value }}</strong>
       <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
       <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
       <ul>
-        <li v-if="input.place">
-          {{ input.place.field }}: {{ input.place.value }}
+        <li v-if="place">{{ place.field }}: {{ place.value }}</li>
+        <li v-if="initDate">
+          {{ initDate.field }}: {{ formatDate(initDate.value) }}
         </li>
-        <li v-if="input.initDate">
-          {{ input.initDate.field }}: {{ formatDate(input.initDate.value) }}
-        </li>
-        <li v-if="input.finishDate">
-          {{ input.finishDate.field }}:
-          {{ formatDate(input.finishDate.value) }}
+        <li v-if="finishDate">
+          {{ finishDate.field }}:
+          {{ formatDate(finishDate.value) }}
         </li>
       </ul>
     </li>
@@ -21,47 +19,63 @@
   <ul v-else>
     <!--name-->
     <label>Nombre:</label>
-    <input type="text" placeholder="name" v-model="input.name" />
+    <input type="text" placeholder="name" v-model="name.value" />
     <!--place-->
-    <input type="text" placeholder="place" v-model="input.place.field" />
-    <input type="text" placeholder="place" v-model="input.place.value" />
+    <input type="text" placeholder="place" v-model="place.field" />
+    <input type="text" placeholder="place" v-model="place.value" />
     <!--initDate-->
-    <input
-      type="text"
-      placeholder="initDate"
-      v-model="input.initDate.field"
-    />
+    <input type="text" placeholder="initDate" v-model="initDate.field" />
     <input
       type="date"
-      v-model="input.initDate.value"
+      v-model="initDate.value"
       min="2015-01-01"
       max="2030-12-31"
     />
     <!--finishDate-->
-    <input
-      type="text"
-      placeholder="finishDate"
-      v-model="input.finishDate.field"
-    />
+    <input type="text" placeholder="finishDate" v-model="finishDate.field" />
     <input
       type="date"
-      v-model="input.finishDate.value"
+      v-model="finishDate.value"
       min="2015-01-01"
       max="2030-12-31"
+    /><br />
+    <!--childrensTitle-->
+    <label>Título:</label>
+    <b-form-textarea
+      placeholder="childrensTitle"
+      v-model="childrensTitle.value"
+      rows="3"
+      max-rows="5"
     />
   </ul>
 </template>
 
 <script lang="ts">
-import { Experience } from "@/Config/Experience/Experience";
+import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 import DeleteLink from "../components/DeleteLink.vue";
 import EditLink from "../components/EditLink.vue";
 
 export default {
   name: "ExperienceView",
   props: {
-    input: {
-      type: Experience,
+    name: {
+      type: FieldValue,
+      required: true,
+    },
+    place: {
+      type: FieldValue,
+      required: true,
+    },
+    initDate: {
+      type: FieldValue,
+      required: true,
+    },
+    finishDate: {
+      type: FieldValue,
+      required: true,
+    },
+    childrensTitle: {
+      type: FieldValue,
       required: true,
     },
     edit: {

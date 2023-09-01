@@ -1,20 +1,23 @@
 <template>
   <li v-if="!edit">
-    {{ input.name }}
+    {{ name.value }}
     <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
     <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
   </li>
-  <li v-else>
-    <!--name-->
-    <input type="text" placeholder="name" v-model="input.name.field" />
-    <input type="text" placeholder="name" v-model="input.name.value" />
-  </li>
+  <!--name-->
+  <b-form-textarea
+    v-else
+    placeholder="name"
+    v-model="name.value"
+    rows="3"
+    max-rows="5"
+  />
 </template>
 
 <script lang="ts">
+import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
-import { Component } from "@/Config/Base/Component/Component";
 
 export default {
   name: "OtherView",
@@ -23,8 +26,8 @@ export default {
     EditLink,
   },
   props: {
-    input: {
-      type: Component,
+    name: {
+      type: FieldValue,
       required: true,
     },
     edit: {

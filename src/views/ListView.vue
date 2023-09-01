@@ -2,13 +2,13 @@
   <ul v-if="childrensTitle">
     <li v-if="elements.length > 0">
       <strong v-if="elements && elements.length > 0" class="m-2"
-        >{{ childrensTitle }}:</strong
+        >{{ childrensTitle.value }}:</strong
       >
       <ul>
         <div v-for="element in elements" v-bind:key="element.guid">
           <li>
             <label @click="(hide = !hide), $emit('reload')">{{
-              element.name
+              element.name.value
             }}</label>
             <EditLink
               v-show="!iconsHidden"
@@ -20,7 +20,6 @@
             />
             <list-view
               v-show="!hide"
-              v-if="element && element.childrens.length > 0"
               :guid="element.guid"
               :key="element.guid"
               :elements="element.childrens"
@@ -31,7 +30,11 @@
               @reload="$emit('reload')"
             />
           </li>
-          <edit-modal :modalTitle="getModalTitle" :componentData="element" />
+          <EditNewModal
+            :modalTitle="getModalTitle"
+            :componentData="element"
+            :childrensDataType="element.childrensDataType"
+          />
           <delete-modal
             :modalTitle="getModalTitle"
             :message="deleteModalMessage"
@@ -43,23 +46,23 @@
     </li>
     <AddNewLink
       v-show="!iconsHidden"
-      v-if="childrensDataType != 11 && childrensDataType != undefined"
+      v-if="childrensDataType != 11"
       :type="childrensDataType"
       @click="$bvModal.show(`add-${guid}`)"
     />
-    <AddModal
+    <AddNewModal
       :guid="guid"
       :modalTitle="getModalTitle"
-      :componentDataType="childrensDataType"
+      :childrensDataType="childrensDataType"
       :parentComponent="parentComponent"
-      @save="save($event)"
+      @save="$emit('reload')"
     />
   </ul>
   <ul v-else>
     <div v-for="element in elements" v-bind:key="element.guid">
       <li>
         <label @click="(hide = !hide), $emit('reload')">{{
-          element.name
+          element.name.value
         }}</label>
         <EditLink
           v-if="!iconsHidden"
@@ -81,7 +84,11 @@
           @reload="$emit('reload')"
         />
       </li>
-      <edit-modal :modalTitle="getModalTitle" :componentData="element" :childrensDataType="element.childrensDataType" />
+      <EditNewModal
+        :modalTitle="getModalTitle"
+        :componentData="element"
+        :childrensDataType="element.childrensDataType"
+      />
       <delete-modal
         :modalTitle="getModalTitle"
         :message="deleteModalMessage"
@@ -95,12 +102,12 @@
       :type="childrensDataType"
       @click="$bvModal.show(`add-${guid}`)"
     />
-    <AddModal
+    <AddNewModal
       :guid="guid"
       :modalTitle="getModalTitle"
-      :componentDataType="childrensDataType"
+      :childrensDataType="childrensDataType"
       :parentComponent="parentComponent"
-      @save="save($event)"
+      @save="$emit('reload')"
     />
   </ul>
 </template>
@@ -109,11 +116,12 @@
 import DeleteModal from "./Modal/DeleteModal.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
-import EditModal from "./Modal/EditModal.vue";
-import AddModal from "./Modal/AddModal.vue";
+import EditNewModal from "./Modal/EditNewModal.vue";
+import AddNewModal from "./Modal/AddNewModal.vue";
 import AddNewLink from "@/components/AddNewLink.vue";
 import { Component } from "@/Config/Base/Component/Component";
 import { ComponentType } from "@/Config/Base/Enums";
+import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 
 export default {
   name: "ListView",
@@ -121,9 +129,9 @@ export default {
     DeleteModal,
     DeleteLink,
     EditLink,
-    EditModal,
+    EditNewModal,
     AddNewLink,
-    AddModal,
+    AddNewModal,
   },
   props: {
     guid: {
@@ -139,7 +147,7 @@ export default {
       required: true,
     },
     childrensTitle: {
-      type: String,
+      type: FieldValue,
       required: false,
     },
     childrensDataType: {
@@ -162,19 +170,6 @@ export default {
     splice(element: Component): void {
       this.elements.splice(this.elements.indexOf(element), 1);
       this.$emit("reload");
-    },
-    save(contract: string): void {
-      this.$nextTick(() => {
-        let data = new Component(
-          crypto.randomUUID(),
-          this.getChildrensType(),
-          contract
-        );
-        data.childrensTitle = this.title;
-        this.company.childrens.push(data);
-        this.cancel();
-        this.$emit("reload");
-      });
     },
   },
   computed: {

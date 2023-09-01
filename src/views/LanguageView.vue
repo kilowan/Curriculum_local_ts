@@ -1,32 +1,36 @@
 <template>
   <ul v-if="!edit">
-    <strong>{{ input.name }}:</strong>
+    <strong>{{ name.value }}:</strong>
     {{
-      input.level.value
+      level.value
     }}
     <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
     <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
   </ul>
   <ul v-else>
     <!--name-->
-    <input type="text" placeholder="name" v-model="input.name.field" />
-    <input type="text" placeholder="name" v-model="input.name.value" />
+    <label>Name:</label>
+    <input type="text" placeholder="name" v-model="name.value" /><br />
     <!--level-->
-    <input type="text" placeholder="level" v-model="input.level.field" />
-    <input type="text" placeholder="level" v-model="input.level.value" />
+    <input type="text" placeholder="level" v-model="level.field" />
+    <input type="text" placeholder="level" v-model="level.value" />
   </ul>
 </template>
 
 <script lang="ts">
-import { Experience } from "@/Config/Experience/Experience";
+import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 
 export default {
   name: "LanguageView",
   props: {
-    input: {
-      type: Experience,
+    name: {
+      type: FieldValue,
+      required: true,
+    },
+    level: {
+      type: FieldValue,
       required: true,
     },
     edit: {

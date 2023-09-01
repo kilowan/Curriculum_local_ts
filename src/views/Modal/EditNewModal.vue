@@ -8,30 +8,51 @@
     <!--Language Fields-->
     <Language-view
       v-if="childrensDataType === 4"
-      :input="componentData"
+      :name="componentData.name"
+      :level="componentData.level"
       :iconsHidden="false"
       :edit="true"
     />
     <!--Experience Fields-->
     <experience-view
-      v-if="childrensDataType === 1"
-      :input="componentData"
+      v-else-if="childrensDataType === 1"
+      :name="componentData.name"
+      :place="componentData.place"
+      :initDate="componentData.initDate"
+      :finishDate="componentData.finishDate"
+      :childrensTitle="componentData.childrensTitle"
       :iconsHidden="false"
       :edit="true"
     />
     <!--Training Fields-->
     <training-view
-      v-if="childrensDataType === 2"
-      :input="componentData"
+      v-else-if="childrensDataType === 2"
+      :name="componentData.name"
+      :place="componentData.place"
+      :graduationDate="componentData.graduationDate"
+      :childrensTitle="componentData.childrensTitle"
       :iconsHidden="false"
       :edit="true"
     />
     <!--Other Fields-->
     <other-view
-      v-if="childrensDataType === 5"
-      :input="componentData"
+      v-else-if="childrensDataType === 5"
+      :name="componentData.name"
       :iconsHidden="false"
       :edit="true"
+    />
+    <project-view
+      v-else-if="childrensDataType === 9"
+      :name="componentData.name"
+      :childrensTitle="componentData.childrensTitle"
+      :iconsHidden="false"
+      :edit="true"
+    />
+    <b-form-textarea
+      v-else
+      v-model="componentData.name.value"
+      rows="6"
+      max-rows="16"
     />
   </b-modal>
 </template>
@@ -42,6 +63,7 @@ import LanguageView from "../LanguageView.vue";
 import ExperienceView from "../ExperienceView.vue";
 import TrainingView from "../TrainingView.vue";
 import OtherView from "../OtherView.vue";
+import ProjectView from "../ProjectView.vue";
 export default {
   name: "EditNewModal",
   components: {
@@ -49,6 +71,7 @@ export default {
     ExperienceView,
     TrainingView,
     OtherView,
+    ProjectView,
   },
   props: {
     componentData: {

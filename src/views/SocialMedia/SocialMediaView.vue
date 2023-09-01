@@ -1,24 +1,26 @@
 <template>
   <div v-if="input.type === 1">
     <b-icon icon="linkedin" aria-hidden="true" />
-    <a :href="'https://www.linkedin.com/in/' + input.name + '/'">{{
-      "https://www.linkedin.com/in/" + input.name + "/"
+    <a :href="'https://www.linkedin.com/in/' + input.name.value + '/'">{{
+      "https://www.linkedin.com/in/" + input.name.value + "/"
     }}</a>
   </div>
   <div v-else-if="input.type === 3">
     <b-icon icon="github" aria-hidden="true" />
-    <a :href="'https://github.com/' + input.name + '/'">{{
-      "https://github.com/" + input.name + "/"
+    <a :href="'https://github.com/' + input.name.value + '/'">{{
+      "https://github.com/" + input.name.value + "/"
     }}</a>
   </div>
   <div v-else>
     <b-icon icon="link" aria-hidden="true" />
     <a
       :href="
-        'https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=' + input.name
+        'https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=' +
+        input.name.value
       "
       >{{
-        "https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=" + input.name
+        "https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=" +
+        input.name.value
       }}</a
     >
   </div>
