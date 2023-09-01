@@ -5,31 +5,29 @@
         >{{ childrensTitle.value }}:</strong
       >
       <ul>
-        <div v-for="element in elements" v-bind:key="element.guid">
-          <li>
-            <label @click="(hide = !hide), $emit('reload')">{{
-              element.name.value
-            }}</label>
-            <EditLink
-              v-show="!iconsHidden"
-              @click="$bvModal.show(`edit-${element.guid}`)"
-            />
-            <DeleteLink
-              v-if="!iconsHidden"
-              @click="$bvModal.show(`delete-${element.guid}`)"
-            />
-            <list-view
-              v-show="!hide"
-              :guid="element.guid"
-              :key="element.guid"
-              :elements="element.childrens"
-              :childrensTitle="element.childrensTitle"
-              :childrensDataType="element.childrensDataType"
-              :parentComponent="element"
-              :iconsHidden="iconsHidden"
-              @reload="$emit('reload')"
-            />
-          </li>
+        <li v-for="element in elements" v-bind:key="element.guid">
+          <label @click="(hide = !hide), $emit('reload')">{{
+            element.name.value
+          }}</label>
+          <EditLink
+            v-show="!iconsHidden"
+            @click="$bvModal.show(`edit-${element.guid}`)"
+          />
+          <DeleteLink
+            v-if="!iconsHidden"
+            @click="$bvModal.show(`delete-${element.guid}`)"
+          />
+          <list-view
+            v-show="!hide"
+            :guid="element.guid"
+            :key="element.guid"
+            :elements="element.childrens"
+            :childrensTitle="element.childrensTitle"
+            :childrensDataType="element.childrensDataType"
+            :parentComponent="element"
+            :iconsHidden="iconsHidden"
+            @reload="$emit('reload')"
+          />
           <EditNewModal
             :modalTitle="getModalTitle"
             :componentData="element"
@@ -41,12 +39,12 @@
             :componentData="element"
             @remove="splice(element)"
           />
-        </div>
+        </li>
       </ul>
     </li>
     <AddNewLink
       v-show="!iconsHidden"
-      v-if="childrensDataType != 11"
+      v-if="childrensDataType != 11 && childrensDataType != undefined"
       :type="childrensDataType"
       @click="$bvModal.show(`add-${guid}`)"
     />
@@ -59,31 +57,29 @@
     />
   </ul>
   <ul v-else>
-    <div v-for="element in elements" v-bind:key="element.guid">
-      <li>
-        <label @click="(hide = !hide), $emit('reload')">{{
-          element.name.value
-        }}</label>
-        <EditLink
-          v-if="!iconsHidden"
-          @click="$bvModal.show(`edit-${element.guid}`)"
-        />
-        <DeleteLink
-          v-if="!iconsHidden"
-          @click="$bvModal.show(`delete-${element.guid}`)"
-        />
-        <list-view
-          v-show="!hide"
-          :guid="element.guid"
-          :key="element.guid"
-          :elements="element.childrens"
-          :childrensTitle="element.childrensTitle"
-          :childrensDataType="element.childrensDataType"
-          :parentComponent="element"
-          :iconsHidden="iconsHidden"
-          @reload="$emit('reload')"
-        />
-      </li>
+    <li v-for="element in elements" v-bind:key="element.guid">
+      <label @click="(hide = !hide), $emit('reload')">{{
+        element.name.value
+      }}</label>
+      <EditLink
+        v-if="!iconsHidden"
+        @click="$bvModal.show(`edit-${element.guid}`)"
+      />
+      <DeleteLink
+        v-if="!iconsHidden"
+        @click="$bvModal.show(`delete-${element.guid}`)"
+      />
+      <list-view
+        v-show="!hide"
+        :guid="element.guid"
+        :key="element.guid"
+        :elements="element.childrens"
+        :childrensTitle="element.childrensTitle"
+        :childrensDataType="element.childrensDataType"
+        :parentComponent="element"
+        :iconsHidden="iconsHidden"
+        @reload="$emit('reload')"
+      />
       <EditNewModal
         :modalTitle="getModalTitle"
         :componentData="element"
@@ -95,7 +91,7 @@
         :componentData="element"
         @remove="splice(element)"
       />
-    </div>
+    </li>
     <AddNewLink
       v-show="!iconsHidden"
       v-if="childrensDataType != 11 && childrensDataType != undefined"

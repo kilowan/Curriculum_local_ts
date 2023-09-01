@@ -1,35 +1,28 @@
 <template>
   <div v-if="!edit">
-  <div v-if="type.value == 1">
-    <b-icon icon="linkedin" aria-hidden="true" />
-    <a :href="`${linkedin + name.value}/`">
-      {{ linkedin + name.value }}/
-    </a>
-  </div>
-  <div v-else-if="type.value == 3">
-    <b-icon icon="github" aria-hidden="true" />
-    <a :href="`${github + name.value}/`">
-      {{ github + name.value }}/
-    </a>
+    <div v-if="type.value == 1">
+      <b-icon icon="linkedin" aria-hidden="true" />
+      <a :href="`${linkedin + name.value}/`"> {{ linkedin + name.value }}/ </a>
+    </div>
+    <div v-else-if="type.value == 3">
+      <b-icon icon="github" aria-hidden="true" />
+      <a :href="`${github + name.value}/`"> {{ github + name.value }}/ </a>
+    </div>
+    <div v-else>
+      <b-icon icon="link" aria-hidden="true" />
+      <a :href="infojobs + name.value">
+        {{ infojobs + name.value }}
+      </a>
+    </div>
   </div>
   <div v-else>
-    <b-icon icon="link" aria-hidden="true" />
-    <a :href="infojobs + name.value">
-      {{ infojobs + name.value }}
-    </a>
-  </div>
-</div>
-<div v-else>
-  <label>Tipo: </label>
-    <b-form-select
-      :disabled="!add"
-      :options="types"
-      v-model="type.value"
-    >
-    </b-form-select><br />
+    <label>Tipo: </label>
+    <b-form-select :disabled="!add" :options="types" v-model="type.value">
+    </b-form-select
+    ><br />
     <label>Url:</label>
     <input type="text" v-model="name.value" />
-</div>
+  </div>
 </template>
 
 <script lang="ts">

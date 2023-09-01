@@ -10,6 +10,9 @@ export class Language implements ILanguage {
     this.name = name;
     this.level = level;
   }
+  setGuid(guid: string): void {
+    this.guid = guid;
+  }
   guid: string;
   name: FieldValue<string>;
   level: FieldValue<string>;

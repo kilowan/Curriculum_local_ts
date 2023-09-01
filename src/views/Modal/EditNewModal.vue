@@ -13,7 +13,7 @@
       :iconsHidden="false"
       :edit="true"
     />
-  <!--social media Fields-->
+    <!--social media Fields-->
     <social-media-view
       v-else-if="childrensDataType === 13"
       :name="componentData.name"

@@ -1,6 +1,6 @@
 <template>
   <div v-if="mounted" id="page-wrap" class="main">
-    <personal-data-view 
+    <personal-data-view
       :fullName="curriculum.fullName"
       :phoneNumber="curriculum.phoneNumber"
       :email="curriculum.email"
@@ -9,9 +9,9 @@
       :active="active"
       @update="updateSocialMedia($event)"
     />
-    <br/>
+    <br />
     <dd class="clear"></dd>
-    <br/>
+    <br />
     <dl>
       <module-view
         v-if="curriculum.experience"
@@ -75,6 +75,7 @@ import { Training } from "@/Config/Training/Training";
 import { Language } from "@/Config/Language/Language";
 import { Experience } from "@/Config/Experience/Experience";
 import PersonalDataView from "./PersonalDataView.vue";
+import { SocialMedia } from "@/Config/SocialMedia/SocialMedia";
 
 export default {
   name: "CurriculumView",
@@ -161,7 +162,7 @@ export default {
       });
     },
     ParseLegacy(input: CurriculumDetail): void {
-      if (input.guid == undefined) input.guid = crypto.randomUUID();
+      if (input.guid == undefined) input.setGuid(crypto.randomUUID());
       if (input.academicTraining != null)
         this.ParseModule(input.academicTraining);
       if (input.experience != null) this.ParseModule(input.experience);
@@ -169,18 +170,18 @@ export default {
       if (input.otherData != null) this.ParseModule(input.otherData);
       if (input.skillList != null) this.ParseModule(input.skillList);
       if (input.socialMedia != null)
-        input.socialMedia.forEach((element: Component) =>
-          this.ParseComponent(element)
-        );
+        input.socialMedia.forEach((element: SocialMedia) => {
+          if (element.guid == undefined) element.setGuid(crypto.randomUUID());
+        });
     },
     ParseComponent(input: Component): void {
-      if (input.guid == undefined) input.guid = crypto.randomUUID();
+      if (input.guid == undefined) input.setGuid(crypto.randomUUID());
       input.childrens?.forEach((element: Component) =>
         this.ParseComponent(element)
       );
     },
     ParseModule(input: Module<Component>): void {
-      if (input.guid == undefined) input.guid = crypto.randomUUID();
+      if (input.guid == undefined) input.setGuid(crypto.randomUUID());
       input.childrens?.forEach((element: Component) =>
         this.ParseComponent(element)
       );

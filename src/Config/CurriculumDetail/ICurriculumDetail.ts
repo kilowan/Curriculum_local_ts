@@ -5,6 +5,7 @@ import { FieldValue } from "../Base/FieldValue/FieldValue";
 import { Experience } from "../Experience/Experience";
 import { Training } from "../Training/Training";
 import { Language } from "../Language/Language";
+import { SocialMedia } from "../SocialMedia/SocialMedia";
 export interface ICurriculumDetail extends IElement {
   fullName?: FieldValue<string>;
   description: FieldValue<string>;
@@ -14,6 +15,6 @@ export interface ICurriculumDetail extends IElement {
   skillList: Module<Component>;
   academicTraining: Module<Training>;
   languageList: Module<Language>;
-  socialMedia: Array<Component>;
+  socialMedia: Array<SocialMedia>;
   otherData: Module<Component>;
 }

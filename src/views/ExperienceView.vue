@@ -1,28 +1,26 @@
 <template>
-  <ul v-if="!edit">
-    <li>
-      <strong>{{ name.value }}</strong>
-      <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
-      <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
-      <ul>
-        <li v-if="place">{{ place.field }}: {{ place.value }}</li>
-        <li v-if="initDate">
-          {{ initDate.field }}: {{ formatDate(initDate.value) }}
-        </li>
-        <li v-if="finishDate">
-          {{ finishDate.field }}:
-          {{ formatDate(finishDate.value) }}
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <ul v-else>
+  <li v-if="!edit">
+    <strong>{{ name.value }}</strong>
+    <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
+    <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
+    <ul>
+      <li v-if="place">{{ place.field }}: {{ place.value }}</li>
+      <li v-if="initDate">
+        {{ initDate.field }}: {{ formatDate(initDate.value) }}
+      </li>
+      <li v-if="finishDate">
+        {{ finishDate.field }}:
+        {{ finishDate.value ? formatDate(finishDate.value) : "Actualidad" }}
+      </li>
+    </ul>
+  </li>
+  <div v-else>
     <!--name-->
     <label>Nombre:</label>
-    <input type="text" placeholder="name" v-model="name.value" />
+    <input type="text" placeholder="name" v-model="name.value" /><br />
     <!--place-->
     <input type="text" placeholder="place" v-model="place.field" />
-    <input type="text" placeholder="place" v-model="place.value" />
+    <input type="text" placeholder="place" v-model="place.value" /><br />
     <!--initDate-->
     <input type="text" placeholder="initDate" v-model="initDate.field" />
     <input
@@ -30,7 +28,7 @@
       v-model="initDate.value"
       min="2015-01-01"
       max="2030-12-31"
-    />
+    /><br />
     <!--finishDate-->
     <input type="text" placeholder="finishDate" v-model="finishDate.field" />
     <input
@@ -47,7 +45,7 @@
       rows="3"
       max-rows="5"
     />
-  </ul>
+  </div>
 </template>
 
 <script lang="ts">

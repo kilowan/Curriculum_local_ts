@@ -1,15 +1,16 @@
 import { IElement } from "../Element/IElement";
-import { SocialMediaType } from "../Enums";
+import { ComponentType, SocialMediaType } from "../Enums";
 import { FieldValue } from "../FieldValue/FieldValue";
 import { Component } from "./Component";
 export interface IComponent extends IElement {
   name: FieldValue<string>;
-  place?: string;
-  initDate?: string;
-  finishDate?: string;
-  graduationDate?: string;
-  childrens: Array<Component>;
+  place?: FieldValue<string>;
+  initDate?: FieldValue<string>;
+  finishDate?: FieldValue<string>;
+  graduationDate?: FieldValue<string>;
+  childrens?: Array<Component>;
   childrensTitle?: FieldValue<string>;
-  level?: string;
-  type?: FieldValue<number>;
+  childrensDataType?: ComponentType;
+  level?: FieldValue<string>;
+  type?: FieldValue<SocialMediaType>;
 }

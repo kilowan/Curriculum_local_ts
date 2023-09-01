@@ -1,20 +1,18 @@
 <template>
-  <ul v-if="!edit">
+  <li v-if="!edit">
     <strong>{{ name.value }}:</strong>
-    {{
-      level.value
-    }}
+    {{ level.value }}
     <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
     <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
-  </ul>
-  <ul v-else>
+  </li>
+  <div v-else>
     <!--name-->
     <label>Name:</label>
     <input type="text" placeholder="name" v-model="name.value" /><br />
     <!--level-->
     <input type="text" placeholder="level" v-model="level.field" />
     <input type="text" placeholder="level" v-model="level.value" />
-  </ul>
+  </div>
 </template>
 
 <script lang="ts">

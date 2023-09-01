@@ -5,6 +5,7 @@ import { FieldValue } from "../Base/FieldValue/FieldValue";
 import { Experience } from "../Experience/Experience";
 import { Language } from "../Language/Language";
 import { Training } from "../Training/Training";
+import { SocialMedia } from "../SocialMedia/SocialMedia";
 export class CurriculumDetail implements ICurriculumDetail {
   constructor(
     guid: string,
@@ -26,10 +27,12 @@ export class CurriculumDetail implements ICurriculumDetail {
     this.skillList = modules[0];
     this.academicTraining = training;
     this.languageList = language;
-    this.socialMedia = new Array<Component>();
+    this.socialMedia = new Array<SocialMedia>();
     this.otherData = modules[1];
   }
-
+  setGuid(guid: string): void {
+    this.guid = guid;
+  }
   guid: string;
   fullName: FieldValue<string>;
   description: FieldValue<string>;
@@ -39,6 +42,6 @@ export class CurriculumDetail implements ICurriculumDetail {
   skillList: Module<Component>;
   academicTraining: Module<Training>;
   languageList: Module<Language>;
-  socialMedia: Array<Component>;
+  socialMedia: Array<SocialMedia>;
   otherData: Module<Component>;
 }

@@ -17,9 +17,9 @@
         v-show="!iconsHidden"
         @click="$bvModal.show(`delete-${socialMediaData.guid}`)"
       />
-      <edit-new-modal 
-        :modalTitle="'red social'" 
-        :componentData="socialMediaData" 
+      <edit-new-modal
+        :modalTitle="'red social'"
+        :componentData="socialMediaData"
         :childrensDataType="13"
       />
       <delete-modal
@@ -54,8 +54,8 @@ import AddNewLink from "@/components/AddNewLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
 import { SocialMediaType } from "@/Config/Base/Enums";
-import { Component } from "@/Config/Base/Component/Component";
 import { Option } from "@/Config/Base/Option";
+import { SocialMedia } from "@/Config/SocialMedia/SocialMedia";
 
 export default {
   name: "SocialMediaListView",
@@ -86,23 +86,23 @@ export default {
         new Option(SocialMediaType.Infojobs, "Infojobs", false),
         new Option(SocialMediaType.GitHub, "GitHub", false),
       ],
-      socialmedia: {} as Component,
+      socialmedia: {} as SocialMedia,
       count: 3,
       guid: crypto.randomUUID(),
     };
   },
   methods: {
-    add(socialMedia: Component): void {
+    add(socialMedia: SocialMedia): void {
       this.input.push(socialMedia);
       var type = this.types.find(
         (element: any) => element.value === socialMedia.type
       );
       if (type !== undefined) type.disabled = true;
       this.$emit("update", this.input);
-      this.socialmedia = {} as Component;
+      this.socialmedia = {} as SocialMedia;
       this.count--;
     },
-    splice(element: Component): void {
+    splice(element: SocialMedia): void {
       let type = this.types.find(
         (element: any) => element.value === element.type
       );
