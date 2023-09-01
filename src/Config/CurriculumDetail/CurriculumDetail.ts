@@ -30,7 +30,9 @@ export class CurriculumDetail implements ICurriculumDetail {
     this.socialMedia = new Array<SocialMedia>();
     this.otherData = modules[1];
   }
-
+  setGuid(guid: string): void {
+    this.guid = guid;
+  }
   guid: string;
   fullName: FieldValue<string>;
   description: FieldValue<string>;

@@ -13,6 +13,9 @@ export class Training implements ITraining {
     this.childrensDataType = childrensDataType;
     this.childrens = new Array<Component>();
   }
+  setGuid(guid: string): void {
+    this.guid = guid;
+  }
   guid: string;
   name: FieldValue<string>;
   place?: FieldValue<string>;

@@ -15,6 +15,9 @@ export class Module<T> implements IModule<T> {
     this.childrens = new Array<T>();
     this.childrensDataType = childrensDataType;
   }
+  setGuid(guid: string): void {
+    this.guid = guid;
+  }
   guid: string;
   name: string;
   ddId: string;

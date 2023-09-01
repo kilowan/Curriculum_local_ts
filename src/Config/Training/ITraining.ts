@@ -1,7 +1,7 @@
 import { FieldValue } from "../Base/FieldValue/FieldValue";
-import { IElement } from "../Base/Element/IElement";
 import { ComponentType } from "../Base/Enums";
-export interface ITraining extends IElement {
+import { IComponent } from "../Base/Component/IComponent";
+export interface ITraining extends IComponent {
   name: FieldValue<string>;
   place?: FieldValue<string>;
   graduationDate?: FieldValue<string>;

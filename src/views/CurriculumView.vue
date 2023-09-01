@@ -162,7 +162,7 @@ export default {
       });
     },
     ParseLegacy(input: CurriculumDetail): void {
-      if (input.guid == undefined) input.guid = crypto.randomUUID();
+      if (input.guid == undefined) input.setGuid(crypto.randomUUID());
       if (input.academicTraining != null)
         this.ParseModule(input.academicTraining);
       if (input.experience != null) this.ParseModule(input.experience);
@@ -171,17 +171,17 @@ export default {
       if (input.skillList != null) this.ParseModule(input.skillList);
       if (input.socialMedia != null)
         input.socialMedia.forEach((element: SocialMedia) => {
-          if (element.guid == undefined) element.guid = crypto.randomUUID();
+          if (element.guid == undefined) element.setGuid(crypto.randomUUID());
         });
     },
     ParseComponent(input: Component): void {
-      if (input.guid == undefined) input.guid = crypto.randomUUID();
+      if (input.guid == undefined) input.setGuid(crypto.randomUUID());
       input.childrens?.forEach((element: Component) =>
         this.ParseComponent(element)
       );
     },
     ParseModule(input: Module<Component>): void {
-      if (input.guid == undefined) input.guid = crypto.randomUUID();
+      if (input.guid == undefined) input.setGuid(crypto.randomUUID());
       input.childrens?.forEach((element: Component) =>
         this.ParseComponent(element)
       );
