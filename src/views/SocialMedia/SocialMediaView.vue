@@ -33,6 +33,7 @@ const infojobs = "https://www.infojobs.net/candidate/my-infojobs.xhtml?dgv=";
 import { SocialMediaType } from "@/Config/Base/Enums";
 import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 import { Option } from "@/Config/Base/Option";
+import { SocialMedia } from "@/Config/SocialMedia/SocialMedia";
 
 export default {
   name: "SocialMediaView",
@@ -53,6 +54,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    list: {
+      type: Array,
+      required: false,
+    },
   },
   data(): any {
     return {
@@ -64,6 +69,21 @@ export default {
       linkedin: linkedin,
       github: github,
       infojobs: infojobs,
+    };
+  },
+  methods: {
+    getValue(value: string): string{
+      return value;
+    }
+  },
+  mounted() {
+    if(this.list && this.list.length > 0 && this.add) {
+      this.list.forEach((media: SocialMedia) => {
+        this.types = this.types.map((option: Option) => {
+          if(option.value === media.type.value) option.disabled = true;
+          return option;
+        });
+      });
     };
   },
 };
