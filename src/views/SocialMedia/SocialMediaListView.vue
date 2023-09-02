@@ -30,8 +30,7 @@
       />
     </div>
     <add-new-link
-      v-show="!iconsHidden"
-      :hidden="count === 0"
+      v-show="!iconsHidden && input.length < 3"
       :type="13"
       @click="$bvModal.show(`add-${guid}`)"
     />
@@ -39,6 +38,7 @@
       :guid="guid"
       :modalTitle="'Red social'"
       :childrensDataType="13"
+      :list="input"
       @save="add($event)"
     />
     <br />
@@ -81,35 +81,19 @@ export default {
   },
   data(): any {
     return {
-      types: [
-        new Option(SocialMediaType.Linkedin, "Linkedin", false),
-        new Option(SocialMediaType.Infojobs, "Infojobs", false),
-        new Option(SocialMediaType.GitHub, "GitHub", false),
-      ],
       socialmedia: {} as SocialMedia,
-      count: 3,
       guid: crypto.randomUUID(),
     };
   },
   methods: {
     add(socialMedia: SocialMedia): void {
       this.input.push(socialMedia);
-      var type = this.types.find(
-        (element: any) => element.value === socialMedia.type
-      );
-      if (type !== undefined) type.disabled = true;
       this.$emit("update", this.input);
       this.socialmedia = {} as SocialMedia;
-      this.count--;
     },
     splice(element: SocialMedia): void {
-      let type = this.types.find(
-        (element: any) => element.value === element.type
-      );
-      if (type !== undefined) type.disabled = false;
 
       this.input.splice(this.input.indexOf(element), 1);
-      this.count++;
       this.$emit("update", this.input);
     },
   },

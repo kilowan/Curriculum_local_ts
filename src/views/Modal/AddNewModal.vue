@@ -21,6 +21,7 @@
       :type="type"
       :edit="true"
       :add="true"
+      :list="list"
     />
     <!--Language Fields-->
     <language-view
@@ -97,6 +98,10 @@ export default {
     },
     parentComponent: {
       type: Component,
+      required: false,
+    },
+    list: {
+      type: Array,
       required: false,
     },
   },
