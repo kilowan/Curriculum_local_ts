@@ -2,8 +2,8 @@
   <li v-if="!edit">
     <strong>{{ name.value }}:</strong>
     {{ level.value }}
-    <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
-    <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
+    <edit-link v-if="!iconsHidden" @click="$emit('edit')" />
+    <delete-link v-if="!iconsHidden" @click="$emit('delete')" />
   </li>
   <div v-else>
     <!--name-->

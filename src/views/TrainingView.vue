@@ -1,8 +1,8 @@
 <template>
   <li v-if="!edit">
     <strong>{{ name.value }}</strong>
-    <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
-    <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
+    <edit-link v-if="!iconsHidden" @click="$emit('edit')" />
+    <delete-link v-if="!iconsHidden" @click="$emit('delete')" />
     <ul>
       <li>{{ place.field }}: {{ place.value }}</li>
       <li v-if="graduationDate">

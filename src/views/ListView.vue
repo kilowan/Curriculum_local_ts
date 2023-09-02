@@ -9,11 +9,11 @@
           <label @click="(hide = !hide), $emit('reload')">{{
             element.name.value
           }}</label>
-          <EditLink
+          <edit-link
             v-show="!iconsHidden"
             @click="$bvModal.show(`edit-${element.guid}`)"
           />
-          <DeleteLink
+          <delete-link
             v-if="!iconsHidden"
             @click="$bvModal.show(`delete-${element.guid}`)"
           />
@@ -28,7 +28,7 @@
             :iconsHidden="iconsHidden"
             @reload="$emit('reload')"
           />
-          <EditNewModal
+          <edit-new-modal
             :modalTitle="getModalTitle"
             :componentData="element"
             :childrensDataType="element.childrensDataType"
@@ -42,13 +42,13 @@
         </li>
       </ul>
     </li>
-    <AddNewLink
+    <add-new-link
       v-show="!iconsHidden"
       v-if="childrensDataType != 11 && childrensDataType != undefined"
       :type="childrensDataType"
       @click="$bvModal.show(`add-${guid}`)"
     />
-    <AddNewModal
+    <add-new-modal
       :guid="guid"
       :modalTitle="getModalTitle"
       :childrensDataType="childrensDataType"
@@ -61,11 +61,11 @@
       <label @click="(hide = !hide), $emit('reload')">{{
         element.name.value
       }}</label>
-      <EditLink
+      <edit-link
         v-if="!iconsHidden"
         @click="$bvModal.show(`edit-${element.guid}`)"
       />
-      <DeleteLink
+      <delete-link
         v-if="!iconsHidden"
         @click="$bvModal.show(`delete-${element.guid}`)"
       />
@@ -80,7 +80,7 @@
         :iconsHidden="iconsHidden"
         @reload="$emit('reload')"
       />
-      <EditNewModal
+      <edit-new-modal
         :modalTitle="getModalTitle"
         :componentData="element"
         :childrensDataType="element.childrensDataType"
@@ -92,13 +92,13 @@
         @remove="splice(element)"
       />
     </li>
-    <AddNewLink
+    <add-new-link
       v-show="!iconsHidden"
       v-if="childrensDataType != 11 && childrensDataType != undefined"
       :type="childrensDataType"
       @click="$bvModal.show(`add-${guid}`)"
     />
-    <AddNewModal
+    <add-new-modal
       :guid="guid"
       :modalTitle="getModalTitle"
       :childrensDataType="childrensDataType"

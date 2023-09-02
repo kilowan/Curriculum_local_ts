@@ -71,24 +71,24 @@
           :childrensDataType="element.childrensDataType"
           @reload="$emit('update', input)"
         />
-        <EditNewModal
+        <edit-new-modal
           :modalTitle="input.name"
           :componentData="element"
           :childrensDataType="input.childrensDataType"
         />
-        <DeleteModal
+        <delete-modal
           :modalTitle="input.name"
           :message="deleteModalMessage"
           :componentData="element"
           @remove="splice($event)"
         />
       </ul>
-      <AddNewLink
+      <add-new-link
         v-if="!iconsHidden"
         :type="input.childrensDataType"
         @click="$bvModal.show(`add-${input.guid}`)"
       />
-      <AddNewModal
+      <add-new-modal
         :guid="input.guid"
         :modalTitle="input.name"
         :childrensDataType="input.childrensDataType"

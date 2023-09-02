@@ -1,8 +1,8 @@
 <template>
   <li v-if="!edit">
     {{ name.value }}
-    <EditLink v-if="!iconsHidden" @click="$emit('edit')" />
-    <DeleteLink v-if="!iconsHidden" @click="$emit('delete')" />
+    <edit-link v-if="!iconsHidden" @click="$emit('edit')" />
+    <delete-link v-if="!iconsHidden" @click="$emit('delete')" />
   </li>
   <!--name-->
   <b-form-textarea
