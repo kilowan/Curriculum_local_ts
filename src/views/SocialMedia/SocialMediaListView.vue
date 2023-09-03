@@ -92,7 +92,6 @@ export default {
       this.socialmedia = {} as SocialMedia;
     },
     splice(element: SocialMedia): void {
-
       this.input.splice(this.input.indexOf(element), 1);
       this.$emit("update", this.input);
     },

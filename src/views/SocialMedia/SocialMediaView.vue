@@ -72,19 +72,19 @@ export default {
     };
   },
   methods: {
-    getValue(value: string): string{
+    getValue(value: string): string {
       return value;
-    }
+    },
   },
   mounted() {
-    if(this.list && this.list.length > 0 && this.add) {
+    if (this.list && this.list.length > 0 && this.add) {
       this.list.forEach((media: SocialMedia) => {
         this.types = this.types.map((option: Option) => {
-          if(option.value === media.type.value) option.disabled = true;
+          if (option.value === media.type.value) option.disabled = true;
           return option;
         });
       });
-    };
+    }
   },
 };
 </script>

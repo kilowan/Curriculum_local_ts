@@ -156,7 +156,7 @@ export default {
         var json = JSON.parse(input);
         this.curriculum = json;
         this.ParseLegacy(this.curriculum);
-        if(json.photo) this.curriculum.photo = json.photo;
+        if (json.photo) this.curriculum.photo = json.photo;
         this.curriculum.description = json.description;
         this.curriculum.phoneNumber = json.phoneNumber;
         this.curriculum.email = json.email;

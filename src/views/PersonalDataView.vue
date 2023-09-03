@@ -1,74 +1,74 @@
 <template>
   <div>
-  <img 
-    v-if="photo != undefined || image != undefined" 
-    id="pic"
-    :src="photo? photo.data: image.data" 
-    :alt="photo? photo.name: image.name" 
-    @click="removeImage()" 
-  />
-  <file-reader-data 
-    v-else
-    v-show="!active"
-    type="img"
-    @output="file($event)" 
-    id="pic" 
-    accept=".jpg,.jpeg,.png"
-  />
-  <div id="contact-info" class="vcard">
-    <div v-if="!active">
-      <!--name-->
-      <h1 class="fn">
+    <img
+      v-if="photo != undefined || image != undefined"
+      id="pic"
+      :src="photo ? photo.data : image.data"
+      :alt="photo ? photo.name : image.name"
+      @click="removeImage()"
+    />
+    <file-reader-data
+      v-else
+      v-show="!active"
+      type="img"
+      @output="file($event)"
+      id="pic"
+      accept=".jpg,.jpeg,.png"
+    />
+    <div id="contact-info" class="vcard">
+      <div v-if="!active">
+        <!--name-->
+        <h1 class="fn">
+          <input
+            type="text"
+            v-model="fullName.value"
+            :placeholder="fullName.field"
+          />
+        </h1>
+        <!--phoneNumber-->
+        <b-icon icon="telephone-fill" aria-hidden="true" />
         <input
           type="text"
-          v-model="fullName.value"
-          :placeholder="fullName.field"
-        />
-      </h1>
-      <!--phoneNumber-->
-      <b-icon icon="telephone-fill" aria-hidden="true" />
-      <input
-        type="text"
-        v-model="phoneNumber.value"
-        :placeholder="phoneNumber.field"
-      /><br />
-      <!--email-->
-      <b-icon icon="envelope" aria-hidden="true" />
-      <input type="text" v-model="email.value" :placeholder="email.field" />
-    </div>
-    <div v-else>
-      <h1 class="fn">{{ fullName.value }}</h1>
-      <div>
-        <b-icon icon="telephone-fill" aria-hidden="true" />
-        <span>{{ phoneNumber.value }}</span
-        ><br />
-      </div>
-      <div>
+          v-model="phoneNumber.value"
+          :placeholder="phoneNumber.field"
+        /><br />
+        <!--email-->
         <b-icon icon="envelope" aria-hidden="true" />
-        <a :href="`mailto:${email.value}`">{{ email.value }}</a
-        ><br />
+        <input type="text" v-model="email.value" :placeholder="email.field" />
       </div>
-    </div>
-    <!--social media-->
-    <social-media-list-view
-      v-if="socialMedia"
-      :input="socialMedia"
-      :iconsHidden="active"
-      @update="$emit('update', $event)"
-    />
-    <!--description-->
-    <div id="objective">
-      <b-form-textarea
-        v-if="!active"
-        :placeholder="description.field ? description.field : 'Description'"
-        v-model="description.value"
-        rows="3"
-        max-rows="5"
+      <div v-else>
+        <h1 class="fn">{{ fullName.value }}</h1>
+        <div>
+          <b-icon icon="telephone-fill" aria-hidden="true" />
+          <span>{{ phoneNumber.value }}</span
+          ><br />
+        </div>
+        <div>
+          <b-icon icon="envelope" aria-hidden="true" />
+          <a :href="`mailto:${email.value}`">{{ email.value }}</a
+          ><br />
+        </div>
+      </div>
+      <!--social media-->
+      <social-media-list-view
+        v-if="socialMedia"
+        :input="socialMedia"
+        :iconsHidden="active"
+        @update="$emit('update', $event)"
       />
-      <p v-else>{{ description.value }}</p>
+      <!--description-->
+      <div id="objective">
+        <b-form-textarea
+          v-if="!active"
+          :placeholder="description.field ? description.field : 'Description'"
+          v-model="description.value"
+          rows="3"
+          max-rows="5"
+        />
+        <p v-else>{{ description.value }}</p>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -104,7 +104,7 @@ export default {
       type: Array,
       required: true,
     },
-    photo : {
+    photo: {
       type: Image,
       required: false,
     },
@@ -122,16 +122,16 @@ export default {
     file(input: Image): void {
       this.image = input;
       this.$nextTick(() => {
-        this.$emit('loaded', input);
+        this.$emit("loaded", input);
       });
     },
-    removeImage():void {
+    removeImage(): void {
       this.image = undefined;
-      this.$emit('removeImage');
-    }
+      this.$emit("removeImage");
+    },
   },
   mounted() {
-    if(this.photo != undefined) {
+    if (this.photo != undefined) {
       this.image = this.photo;
     }
   },

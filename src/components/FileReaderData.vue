@@ -1,11 +1,9 @@
 <template>
-  <div
-    class="dropzone-container"
-  >
-    <input 
-      type="file" 
+  <div class="dropzone-container">
+    <input
+      type="file"
       :accept="accept"
-      @change="readFile($event?.target?.files, type, result)" 
+      @change="readFile($event?.target?.files, type, result)"
     />
     <!--<input
       type="file"
@@ -21,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Image } from '@/Config/Base/Image';
+import { Image } from "@/Config/Base/Image";
 export default {
   name: "FileReaderData",
   data(): any {
@@ -29,19 +27,19 @@ export default {
       image: {} as Image,
     };
   },
-  props:{
-    type:{
+  props: {
+    type: {
       type: String,
-      required: true
+      required: true,
     },
-    accept:{
+    accept: {
       type: String,
-      required: true
+      required: true,
     },
   },
   methods: {
     result(data: any): void {
-      if(this.type === 'text') this.$emit("output", data);
+      if (this.type === "text") this.$emit("output", data);
       else {
         this.image.data = data;
         this.$emit("output", this.image);
@@ -55,10 +53,10 @@ export default {
         callback(reader.result);
       };
 
-      if(type === 'text')reader.readAsText(file);
-      else { 
+      if (type === "text") reader.readAsText(file);
+      else {
         this.image = new Image(file.type, file.name);
-        reader.readAsDataURL(file); 
+        reader.readAsDataURL(file);
       }
     },
     onChange() {
@@ -82,19 +80,20 @@ export default {
 </script>
 <style>
 .dropzone-container {
-    padding: 4rem;
-    background: #f7fafc;
-    border: 1px solid #e2e8f0;
-}.file-label {
-    font-size: 20px;
-    display: block;
-    cursor: pointer;
+  padding: 4rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+}
+.file-label {
+  font-size: 20px;
+  display: block;
+  cursor: pointer;
 }
 .hidden-input {
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    width: 1px;
-    height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  height: 1px;
 }
 </style>
