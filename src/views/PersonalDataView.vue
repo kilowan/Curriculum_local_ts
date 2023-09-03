@@ -1,6 +1,6 @@
 <template>
   <div>
-  <img v-if="photo != undefined || image != ''" :src="image? image: photo.data" alt="Photo of juan" id="pic" />
+  <img v-if="photo != undefined || image != ''" :src="photo? photo.data: image" @click="removeImage()" alt="Photo of juan" id="pic" />
   <file-reader-data 
     v-else
     v-show="!active"
@@ -119,6 +119,10 @@ export default {
         this.$emit('loaded', input);
       });
     },
+    removeImage():void {
+      this.image = '';
+      this.$emit('removeImage');
+    }
   },
   mounted() {
     if(this.photo != undefined) {
