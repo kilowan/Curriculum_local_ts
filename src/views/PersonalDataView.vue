@@ -1,6 +1,12 @@
 <template>
   <div>
-  <img v-if="photo != undefined || image != ''" :src="photo? photo.data: image" @click="removeImage()" alt="Photo of juan" id="pic" />
+  <img 
+    v-if="photo != undefined || image != undefined" 
+    id="pic"
+    :src="photo? photo.data: image.data" 
+    :alt="photo? photo.name: image.name" 
+    @click="removeImage()" 
+  />
   <file-reader-data 
     v-else
     v-show="!active"
@@ -109,24 +115,24 @@ export default {
   },
   data(): any {
     return {
-      image: '',
+      image: undefined,
     };
   },
   methods: {
     file(input: Image): void {
-      this.image = input.data;
+      this.image = input;
       this.$nextTick(() => {
         this.$emit('loaded', input);
       });
     },
     removeImage():void {
-      this.image = '';
+      this.image = undefined;
       this.$emit('removeImage');
     }
   },
   mounted() {
     if(this.photo != undefined) {
-      this.image = this.photo.data;
+      this.image = this.photo;
     }
   },
 };
