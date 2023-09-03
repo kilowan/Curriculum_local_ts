@@ -1,4 +1,14 @@
 <template>
+  <div>
+  <img v-if="photo != undefined || image != ''" :src="image? image: photo.data" alt="Photo of juan" id="pic" />
+  <file-reader-data 
+    v-else
+    v-show="!active"
+    type="img"
+    @output="file($event)" 
+    id="pic" 
+    accept=".jpg,.jpeg,.png"
+  />
   <div id="contact-info" class="vcard">
     <div v-if="!active">
       <!--name-->
@@ -52,16 +62,20 @@
       <p v-else>{{ description.value }}</p>
     </div>
   </div>
+</div>
 </template>
 
 <script lang="ts">
 import { FieldValue } from "@/Config/Base/FieldValue/FieldValue";
 import SocialMediaListView from "./SocialMedia/SocialMediaListView.vue";
+import FileReaderData from "@/components/FileReaderData.vue";
+import { Image } from "../Config/Base/Image";
 
 export default {
   name: "PersonalDataView",
   components: {
     SocialMediaListView,
+    FileReaderData,
   },
   props: {
     fullName: {
@@ -84,13 +98,32 @@ export default {
       type: Array,
       required: true,
     },
+    photo : {
+      type: Image,
+      required: false,
+    },
     active: {
       type: Boolean,
       default: false,
     },
   },
   data(): any {
-    return {};
+    return {
+      image: '',
+    };
+  },
+  methods: {
+    file(input: Image): void {
+      this.image = input.data;
+      this.$nextTick(() => {
+        this.$emit('loaded', input);
+      });
+    },
+  },
+  mounted() {
+    if(this.photo != undefined) {
+      this.image = this.photo.data;
+    }
   },
 };
 </script>

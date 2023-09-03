@@ -6,6 +6,7 @@ import { Experience } from "../Experience/Experience";
 import { Language } from "../Language/Language";
 import { Training } from "../Training/Training";
 import { SocialMedia } from "../SocialMedia/SocialMedia";
+import { Image } from "../Base/Image";
 export class CurriculumDetail implements ICurriculumDetail {
   constructor(
     guid: string,
@@ -38,6 +39,7 @@ export class CurriculumDetail implements ICurriculumDetail {
   description: FieldValue<string>;
   phoneNumber: FieldValue<string>;
   email: FieldValue<string>;
+  photo?: Image;
   experience: Module<Experience>;
   skillList: Module<Component>;
   academicTraining: Module<Training>;

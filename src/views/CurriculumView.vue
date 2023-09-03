@@ -6,8 +6,10 @@
       :email="curriculum.email"
       :socialMedia="curriculum.socialMedia"
       :description="curriculum.description"
+      :photo="curriculum.photo"
       :active="active"
       @update="updateSocialMedia($event)"
+      @loaded="loaded($event)"
     />
     <br />
     <dd class="clear"></dd>
@@ -55,8 +57,7 @@
         @click="getFile(curriculum)"
         >Exportar</b-button
       >
-      <file-reader-data v-if="imp" type="file" @output="file($event)" />
-      <b-button v-if="!imp" class="m-2" @click="imp = true">Importar</b-button>
+      <file-reader-data accept=".json" type="text" @output="file($event)" />
     </div>
   </div>
 </template>
@@ -76,6 +77,7 @@ import { Language } from "@/Config/Language/Language";
 import { Experience } from "@/Config/Experience/Experience";
 import PersonalDataView from "./PersonalDataView.vue";
 import { SocialMedia } from "@/Config/SocialMedia/SocialMedia";
+import { Image } from "@/Config/Base/Image";
 
 export default {
   name: "CurriculumView",
@@ -142,11 +144,15 @@ export default {
     };
   },
   methods: {
+    loaded(input: Image) {
+      this.curriculum.photo = input;
+    },
     file(input: string): void {
       this.$nextTick(() => {
         var json = JSON.parse(input);
         this.curriculum = json;
         this.ParseLegacy(this.curriculum);
+        if(json.photo) this.curriculum.photo = json.photo;
         this.curriculum.description = json.description;
         this.curriculum.phoneNumber = json.phoneNumber;
         this.curriculum.email = json.email;
