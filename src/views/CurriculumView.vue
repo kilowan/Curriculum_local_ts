@@ -9,6 +9,7 @@
       :photo="curriculum.photo"
       :active="active"
       @update="updateSocialMedia($event)"
+      @removeImage="removeImage()"
       @loaded="loaded($event)"
     />
     <br />
@@ -146,6 +147,9 @@ export default {
   methods: {
     loaded(input: Image) {
       this.curriculum.photo = input;
+    },
+    removeImage(): void {
+      this.curriculum.photo = undefined;
     },
     file(input: string): void {
       this.$nextTick(() => {
