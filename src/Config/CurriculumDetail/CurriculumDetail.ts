@@ -34,6 +34,20 @@ export class CurriculumDetail implements ICurriculumDetail {
   setGuid(guid: string): void {
     this.guid = guid;
   }
+  import(input: CurriculumDetail): void {
+    this.guid = input.guid;
+    this.fullName = input.fullName;
+    this.description = input.description;
+    this.phoneNumber = input.phoneNumber;
+    this.email = input.email;
+    this.experience = input.experience;
+    this.skillList = input.skillList;
+    this.academicTraining = input.academicTraining;
+    this.languageList = input.languageList;
+    this.socialMedia = input.socialMedia;
+    this.otherData = input.otherData;
+    if(input.photo) this.photo = input.photo;
+  }
   guid: string;
   fullName: FieldValue<string>;
   description: FieldValue<string>;
