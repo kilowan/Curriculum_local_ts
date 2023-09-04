@@ -1,12 +1,12 @@
 <template>
   <div v-if="mounted" id="page-wrap" class="main">
     <personal-data-view
+      ref="personal"
       :fullName="curriculum.fullName"
       :phoneNumber="curriculum.phoneNumber"
       :email="curriculum.email"
       :socialMedia="curriculum.socialMedia"
       :description="curriculum.description"
-      :photo="curriculum.photo"
       :active="active"
       @update="updateSocialMedia($event)"
       @removeImage="removeImage()"
@@ -146,27 +146,21 @@ export default {
   },
   methods: {
     loaded(input: Image) {
-      this.curriculum.photo = input;
+      this.$nextTick(() => {
+        this.curriculum.photo = input;
+      });
     },
     removeImage(): void {
-      this.curriculum.photo = undefined;
+      this.$nextTick(() => {
+        this.curriculum.photo = {} as Image;
+      });
     },
     file(input: string): void {
       this.$nextTick(() => {
         var json = JSON.parse(input);
-        this.curriculum = json;
         this.ParseLegacy(this.curriculum);
-        if (json.photo) this.curriculum.photo = json.photo;
-        this.curriculum.description = json.description;
-        this.curriculum.phoneNumber = json.phoneNumber;
-        this.curriculum.email = json.email;
-        this.curriculum.fullName = json.fullName;
-        this.curriculum.otherData = json.otherData;
-        this.curriculum.academicTraining = json.academicTraining;
-        this.curriculum.skillList = json.skillList;
-        this.curriculum.experience = json.experience;
-        this.curriculum.socialMedia = json.socialMedia;
-        this.curriculum.languageList = json.languageList;
+        this.curriculum.import(json);
+        this.$refs.personal.image = json.photo;
         this.exportable = true;
         this.EditMode();
       });

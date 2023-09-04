@@ -53,8 +53,6 @@ import AddNewModal from "../Modal/AddNewModal.vue";
 import AddNewLink from "@/components/AddNewLink.vue";
 import DeleteLink from "@/components/DeleteLink.vue";
 import EditLink from "@/components/EditLink.vue";
-import { SocialMediaType } from "@/Config/Base/Enums";
-import { Option } from "@/Config/Base/Option";
 import { SocialMedia } from "@/Config/SocialMedia/SocialMedia";
 
 export default {

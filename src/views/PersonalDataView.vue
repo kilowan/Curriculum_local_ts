@@ -1,10 +1,10 @@
 <template>
   <div>
     <img
-      v-if="photo != undefined || image != undefined"
+      v-if="image != undefined"
       id="pic"
-      :src="photo ? photo.data : image.data"
-      :alt="photo ? photo.name : image.name"
+      :src="image.data"
+      :alt="image.name"
       @click="removeImage()"
     />
     <file-reader-data
@@ -103,10 +103,6 @@ export default {
     socialMedia: {
       type: Array,
       required: true,
-    },
-    photo: {
-      type: Image,
-      required: false,
     },
     active: {
       type: Boolean,
